@@ -2,8 +2,6 @@
 
 import { useEffect, useMemo, useRef, useState } from 'react';
 
-import { useRouter } from 'next/router';
-
 import { Spinner } from '@/components/common/ui/Spinner';
 import { buildChartUrl } from '@/utils/common';
 
@@ -12,8 +10,6 @@ type Props = {
 };
 
 export const ChartTradingView = ({ symbol }: Props) => {
-    const router = useRouter();
-
     const [status, setStatus] = useState<string>('loading');
     const [reloadKey, setReloadKey] = useState(0);
     const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -22,9 +18,9 @@ export const ChartTradingView = ({ symbol }: Props) => {
     const activeUrlRef = useRef('');
 
     const chartUrl = useMemo(() => {
-        if (!router.isReady || !symbol) return '';
+        if (!symbol) return '';
         return buildChartUrl(symbol.toUpperCase());
-    }, [symbol, router.isReady]);
+    }, [symbol]);
 
     if (chartUrl && !initialUrlRef.current) {
         initialUrlRef.current = chartUrl;

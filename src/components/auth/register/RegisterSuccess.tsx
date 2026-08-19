@@ -1,18 +1,11 @@
 'use client';
 
-import { useEffect } from 'react';
-
 import Image from 'next/image';
 
 import { useAuthFlowStore } from '@/stores/auth/useAuthFlowStore';
-import { trackRegisterSuccess } from '@/utils/analytics';
 
 export const RegisterSuccess = () => {
     const { closeAuthDialog } = useAuthFlowStore();
-
-    useEffect(() => {
-        trackRegisterSuccess();
-    }, []);
 
     return (
         <section className="flex w-full gap-4 rounded-xl items-stretch justify-center text-primary py-2">

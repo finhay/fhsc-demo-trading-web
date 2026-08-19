@@ -24,7 +24,7 @@ type Props = {
                 handleChange: (value: string) => void;
                 handleBlur: () => void;
             }) => React.ReactNode;
-        }) => JSX.Element | null;
+        }) => React.ReactNode | Promise<React.ReactNode>;
         getFieldValue: (name: DateField) => string;
         setFieldValue: (name: DateField, value: string) => void;
     };

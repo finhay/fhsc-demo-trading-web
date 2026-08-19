@@ -1,17 +1,13 @@
-import { AppSeo } from '@/components/common/AppSeo';
 import { MarketIndexTicker } from '@/components/common/header/MarketIndexTicker';
 import { NavBar } from '@/components/common/header/navigation/NavBar';
 
 type Props = {
     children: React.ReactNode;
-    title: string;
-    metaDescription: string;
 };
 
-export const DefaultLayout = ({ children, title, metaDescription }: Props) => {
+export const DefaultLayout = ({ children }: Props) => {
     return (
         <div className="h-screen flex flex-col">
-            <AppSeo title={title} metaDescription={metaDescription} />
             <header className="sticky top-0 z-40 shrink-0">
                 <MarketIndexTicker />
                 <NavBar />

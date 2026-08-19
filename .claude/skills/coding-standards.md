@@ -23,10 +23,10 @@ Quy tắc code cho FHSC Demo Trading — bám theo các page và component đang
 
 Thư viện chuyên dụng, chỉ dùng đúng chỗ: `swiper` (carousel chỉ số), `react-qr-code` +
 `react-otp-input` (xác thực lệnh & đăng nhập), `@dnd-kit` (kéo thả watchlist),
-`react-google-recaptcha` (OTP), `react-pdf` (hợp đồng), `next-seo` (`AppSeo`),
-`nprogress` (route progress).
+`react-google-recaptcha` (OTP), `react-pdf` (hợp đồng).
 
-> **Không có trong dự án**: React Query, react-hook-form, Zod, shadcn/ui, lodash, highcharts.
+> **Không có trong dự án**: React Query, react-hook-form, Zod, shadcn/ui, lodash, highcharts,
+> next-seo, nprogress, và mọi thư viện SEO / analytics / tracking (GA, GTM).
 > Cần helper nhỏ thì dùng **Native JavaScript**.
 
 ---
@@ -67,11 +67,13 @@ interface User {
 
 ### Export
 
-**Page** (`pages/`) → `export default function`:
+**Page** (`app/**/page.tsx`) → `export default function` + `export const metadata`:
 
 ```typescript
-export default function GiaoDich() {
-    return <DefaultLayout>...</DefaultLayout>;
+export const metadata: Metadata = { title: 'Giao dịch', description: 'Giao dịch' };
+
+export default function Page() {
+    return <TradeView />;
 }
 ```
 

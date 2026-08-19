@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
+import { usePathname } from 'next/navigation';
 
 import { NavAuth } from '@/components/common/header/navigation/NavAuth';
 import { StatusBadge } from '@/components/common/header/network-status/StatusBadge';
@@ -29,8 +29,7 @@ export const NavBar = () => {
               hour12: false,
           })
         : '';
-    const router = useRouter();
-    const route = String(router.route);
+    const route = usePathname();
 
     const isRouteActive = (item: (typeof HEADER_ROUTES)[number]) =>
         'partialMatch' in item && item.partialMatch

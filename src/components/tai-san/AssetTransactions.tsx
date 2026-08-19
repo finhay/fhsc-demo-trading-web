@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from 'react';
 
-import Image from 'next/image';
+import { RiInformationLine } from 'react-icons/ri';
 
 import { EmptyState } from '@/components/common/feature/EmptyState';
 import { Skeleton } from '@/components/common/ui/Skeleton';
@@ -99,12 +99,7 @@ export const AssetTransactions = () => {
                                                             }
                                                             className="flex shrink-0"
                                                         >
-                                                            <Image
-                                                                src="/market/ic-information-line.svg"
-                                                                width={16}
-                                                                height={16}
-                                                                alt=""
-                                                            />
+                                                            <RiInformationLine className="size-4 text-secondary" />
                                                         </Tooltip>
                                                     )}
                                                 </div>

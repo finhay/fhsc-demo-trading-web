@@ -95,17 +95,6 @@ export const SUB_ACCOUNT_PERMISSION = {
 
 export const INDEX_LIST = ['VNINDEX', 'VN30', 'HNXINDEX', 'HNX30', 'UPCOMINDEX'];
 
-export const MARKET_TITLE_DISPLAY_NAME_MAP: Record<string, string> = {
-    HOSE: 'VNINDEX',
-    VN30: 'VN30',
-    HNX: 'HNXINDEX',
-    HNX30: 'HNX30',
-    UPCOM: 'UPCOMINDEX',
-    'LO-LE-HOSE': 'VNINDEX',
-    'LO-LE-HNX': 'HNXINDEX',
-    'LO-LE-UPCOM': 'UPCOMINDEX',
-};
-
 export const QR_INTERVAL = {
     REGENERATE: 110000,
     POLL: 2000,

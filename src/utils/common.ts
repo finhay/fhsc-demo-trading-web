@@ -1,24 +1,12 @@
 import FingerprintJS from '@fingerprintjs/fingerprintjs';
 
-import {
-    ERROR_CODES,
-    INDEX_LIST,
-    MARKET_TITLE_DISPLAY_NAME_MAP,
-    NETWORK_HEALTH,
-    SUB_ACCOUNT_PERMISSION,
-} from '@/constants/common';
+import { ERROR_CODES, NETWORK_HEALTH, SUB_ACCOUNT_PERMISSION } from '@/constants/common';
 import { StockPriceMessage } from '@/proto/stock';
 import { getDeviceId, setDeviceId } from '@/services/localStorage';
 import type { SubAccount } from '@/types/accounts/profile';
 import type { WatchlistStockItem } from '@/types/accounts/watchlist';
-import type { BuildMarketPageTitleParams } from '@/types/pages/common';
-import { formatNumberVN } from '@/utils/format';
 
 let cachedDeviceId: string | null = null;
-
-export const getCurrentLocation = () => {
-    return typeof window !== 'undefined' ? window.location.href : '';
-};
 
 export const isSuccessApi = (error_code: string) => {
     return error_code === ERROR_CODES.SUCCESS;
@@ -146,27 +134,6 @@ export const getFlashBgFromColor = (textColorClass: string): string => {
     if (textColorClass.includes('text-blue')) return 'bg-blue/70';
     if (textColorClass.includes('text-purple')) return 'bg-purple/70';
     return 'bg-orange/70';
-};
-
-export const buildMarketPageTitle = ({
-    exchange,
-    marketIndexes,
-    pageSuffix,
-    fallbackTitle,
-    fallbackDisplayName = INDEX_LIST[0],
-}: BuildMarketPageTitleParams): string => {
-    const indexCode = MARKET_TITLE_DISPLAY_NAME_MAP[exchange] ?? INDEX_LIST[0];
-    const displayName = MARKET_TITLE_DISPLAY_NAME_MAP[exchange] ?? fallbackDisplayName;
-    const matchedIndex = (marketIndexes ?? []).find((item) => item?.index === indexCode);
-
-    if (!matchedIndex) {
-        return fallbackTitle;
-    }
-
-    const changePercent = Number(matchedIndex.changePercent ?? 0);
-    const changePercentSign = changePercent > 0 ? '+' : changePercent < 0 ? '-' : '';
-
-    return `${displayName} ${formatNumberVN(matchedIndex.indexValue)} ${changePercentSign}${formatNumberVN(Math.abs(changePercent))}% - ${pageSuffix}`;
 };
 
 type StockPriceMessageSource = {

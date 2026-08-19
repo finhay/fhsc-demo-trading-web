@@ -4,7 +4,7 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 
 First, run the development server:
 
-NodeJS version v18.13.0
+NodeJS version >= 20.9.0 (yêu cầu của Next.js 16)
 
 Add file .env.local to root directory
 
@@ -33,11 +33,9 @@ pnpm dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+This project uses the [App Router](https://nextjs.org/docs/app). You can start editing the home page by modifying `src/app/page.tsx` (its UI lives in `src/components/thi-truong/MarketView.tsx`). The page auto-updates as you edit the file.
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
-
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+[Route handlers](https://nextjs.org/docs/app/building-your-application/routing/route-handlers) live under `src/app/api/*/route.ts` and are mapped to `/api/*` — e.g. [http://localhost:3000/api/healthCheck](http://localhost:3000/api/healthCheck).
 
 This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
 

@@ -10,7 +10,7 @@ import {
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 
 import { DropdownWatchlist } from '@/components/common/feature/DropdownWatchlist';
 import { EmptyState } from '@/components/common/feature/EmptyState';
@@ -118,7 +118,7 @@ export const TradeWatchlist = () => {
 
     const handleSelectSymbol = useCallback(
         (symbol: string) => {
-            router.push({ pathname: '/giao-dich', query: { symbol } });
+            router.push(`/giao-dich?symbol=${symbol}`);
         },
         [router],
     );

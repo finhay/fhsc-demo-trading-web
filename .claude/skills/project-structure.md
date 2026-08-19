@@ -9,13 +9,16 @@ Design System (màu, typography, v.v.) xem [design-system.md](design-system.md).
 ## Luồng tổng quát
 
 ```
-src/pages/{route}/index.tsx
-    → DefaultLayout
-    → components/{feature}/… hoặc components/common/…
-    → (tuỳ chọn) stores/{feature}/use*Store.ts
-    → services/api/… (axios qua vnscService)
-    → types/… + utils/… + constants/…
+src/app/{route}/page.tsx          # Server Component — metadata + compose
+    → components/{feature}/{Feature}View.tsx   # 'use client' — toàn bộ UI/hook
+        → components/{feature}/… hoặc components/common/…
+        → (tuỳ chọn) stores/{feature}/use*Store.ts
+        → services/api/… (axios qua vnscService)
+        → types/… + utils/… + constants/…
 ```
+
+`DefaultLayout` (header + `<main>`), `Providers`, `AuthGuard`, `ToastContainer`, `AuthFlow`,
+`GlobalSpinner` đã nằm sẵn ở `src/app/layout.tsx` — page **không** tự bọc lại.
 
 - **API**: không gọi axios trực tiếp trong JSX; gói trong `src/services/api/`.
 - **Phản hồi API**: thường kiểm tra `error_code` với `isSuccessApi` từ `@/utils/common` (khi endpoint trả về chuẩn đó).
@@ -24,23 +27,47 @@ src/pages/{route}/index.tsx
 
 ## 1. Routes & page file
 
-| Quy tắc       | Chi tiết                                                                                                  |
-| ------------- | --------------------------------------------------------------------------------------------------------- |
-| Thư mục route | **kebab-case**, khớp URL: `bang-gia`, `giao-dich`, `tai-san`; dynamic dùng `[param]`                      |
-| Entry         | `index.tsx`; dynamic route dùng `[param]/index.tsx`                                                       |
-| Layout        | Bọc nội dung trong `DefaultLayout` từ `@/layouts/DefaultLayout`, truyền `title` và `metaDescription`      |
-| Text          | Viết thẳng chuỗi tiếng Việt trong component; map/label động đặt trong `const` cùng file hoặc `constants/` |
-| Client        | Thêm `'use client'` ở đầu file khi cần hook chỉ chạy client hoặc tương tác browser                        |
+| Quy tắc       | Chi tiết                                                                                                    |
+| ------------- | ----------------------------------------------------------------------------------------------------------- |
+| Thư mục route | **kebab-case**, khớp URL: `bang-gia`, `giao-dich`, `tai-san`; dynamic dùng `[param]`                        |
+| Entry         | `src/app/{route}/page.tsx` — **Server Component**, không có `'use client'`                                  |
+| Metadata      | `export const metadata: Metadata = { title, description }` — chỉ tên page cơ bản, **không** OG/canonical/SEO |
+| View          | UI thật đặt ở `src/components/{feature}/{Feature}View.tsx` với `'use client'`                               |
+| Loading       | Không cần tạo — `src/app/loading.tsx` (root) đã phủ mọi route con                                            |
+| Text          | Viết thẳng chuỗi tiếng Việt trong component; map/label động đặt trong `const` cùng file hoặc `constants/`   |
 
-Trang có thể **mỏng** (chỉ compose component + layout) hoặc **chứa fetch / useEffect** (ví dụ gọi API khởi tạo, reset store khi unmount) tùy feature.
+Vì sao tách `*View`: `page.tsx` phải là Server Component để `export const metadata`, còn UI cần
+hook / browser API nên phải `'use client'`. `page.tsx` giữ **mỏng** — chỉ metadata + render view.
 
-Trang `/` (`src/pages/index.tsx`) có thể import component từ namespace khác — không bắt buộc tên folder `pages` trùng tên folder `components`.
+```tsx
+// src/app/bang-gia/page.tsx
+import type { Metadata } from 'next';
+
+import { IBoardView } from '@/components/bang-gia/IBoardView';
+
+export const metadata: Metadata = { title: 'Bảng giá', description: 'Bảng giá' };
+
+export default function Page() {
+    return <IBoardView />;
+}
+```
+
+**Đọc query param**: dùng `useSearchParams()` từ `next/navigation` trong `*View.tsx`, và bọc view
+bằng `<Suspense>` trong `page.tsx` (xem `src/app/giao-dich/page.tsx`). App Router **không có**
+shallow routing — muốn sync URL mà không điều hướng thì dùng `window.history.replaceState(...)`.
+
+**Điều hướng**: `next/navigation` (`useRouter`, `usePathname`, `useSearchParams`, `redirect`) —
+**không** dùng `next/router`. `router.push` chỉ nhận string: `router.push(\`/giao-dich?symbol=${symbol}\`)`.
+
+⚠️ **Không** import `services/`, `stores/`, `hooks/lib/useToast` vào `page.tsx` / `layout.tsx`:
+access token nằm ở `localStorage`, các getter không guard `typeof window` nên sẽ throw trên server.
 
 ---
 
 ## 2. Components
 
 - Feature: `src/components/{feature}/` — trùng tên route: `thi-truong`, `bang-gia`, `giao-dich`, `tai-san`.
+- Entry view của mỗi route: `{Feature}View.tsx` ngay dưới folder feature (`MarketView`, `IBoardView`, `TradeView`, `AssetView`).
 - Dùng chung: `src/components/common/` (`ui/`, `header/`, `modal/`, `feature/`, …).
 - File component: **PascalCase**, tên file = tên export (`TradePanel.tsx` → `TradePanel`).
 - Không dùng `index.tsx` làm barrel cho component feature (import trực tiếp file).
@@ -121,7 +148,8 @@ Chỉ thêm khi thật sự cần; không bắt buộc mọi page.
 
 Áp theo độ phức tạp, tick những mục thực sự dùng:
 
-- [ ] `src/pages/{route}/index.tsx` (và `[param]/index.tsx` nếu có)
+- [ ] `src/app/{route}/page.tsx` (Server + `metadata`)
+- [ ] `src/components/{feature}/{Feature}View.tsx` — `'use client'`, chứa UI của route
 - [ ] `src/components/{feature}/…` (và/hoặc tái sử dụng `components/common/…`)
 - [ ] `src/services/api/…` — hàm gọi API mới nếu có
 - [ ] `src/types/…` — type cho request/response/UI
@@ -136,9 +164,9 @@ Chỉ thêm khi thật sự cần; không bắt buộc mọi page.
 
 ```
 src/
-├── pages/           # Next.js Page Router
-├── components/      # UI theo feature + common/
-├── layouts/
+├── app/             # Next.js App Router — layout/page/loading/not-found + api/
+├── components/      # UI theo feature + common/ (gồm {Feature}View.tsx của mỗi route)
+├── layouts/         # DefaultLayout — dùng ở app/layout.tsx
 ├── hooks/
 ├── stores/          # Zustand
 ├── services/        # interceptor, api/, mqtt

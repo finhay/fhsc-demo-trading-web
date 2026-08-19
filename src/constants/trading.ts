@@ -185,8 +185,6 @@ export const TRADE_UI_CONFIG = {
 } as const;
 
 export const TRADE_PAGE_META = {
-    TITLE: 'Giao dịch',
-    DESCRIPTION: 'Giao dịch',
     DEFAULT_SYMBOL: 'HPG',
 } as const;
 

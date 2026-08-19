@@ -11,7 +11,7 @@ import { useVirtualizer } from '@tanstack/react-virtual';
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 
 import { IBoardTableBody } from '@/components/bang-gia/table/IBoardTableBody';
 import { IBoardTableHeader } from '@/components/bang-gia/table/IBoardTableHeader';
@@ -131,12 +131,7 @@ export const IBoardTable = () => {
                     return (
                         <button
                             type="button"
-                            onClick={() =>
-                                router.push({
-                                    pathname: '/giao-dich',
-                                    query: { symbol: display.symbol },
-                                })
-                            }
+                            onClick={() => router.push(`/giao-dich?symbol=${display.symbol}`)}
                             className={`block w-full min-w-0 cursor-pointer truncate text-left font-tiny-highlight hover:underline ${colorClass}`}
                         >
                             {renderIboardValue(key, value)}

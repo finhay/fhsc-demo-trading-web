@@ -2,7 +2,7 @@
 
 import { FC } from 'react';
 
-import { useRouter } from 'next/router';
+import { usePathname, useRouter } from 'next/navigation';
 
 import { StockPriceStep } from '@/components/common/stock-info/chart/StockPriceStep';
 import { StockTransaction } from '@/components/common/stock-info/chart/StockTransaction';
@@ -14,16 +14,17 @@ type Props = {
 
 export const StockChartPanel: FC<Props> = ({ onClose }) => {
     const router = useRouter();
+    const pathname = usePathname();
     const { selectedStock } = useStockInfoStore();
 
-    const isTradePage = router.pathname === '/giao-dich';
+    const isTradePage = pathname === '/giao-dich';
     const showTradeButton = !isTradePage;
     const showFooter = showTradeButton || !!onClose;
 
     const handleTradeNow = () => {
         if (!selectedStock?.symbol) return;
 
-        router.push({ pathname: '/giao-dich', query: { symbol: selectedStock.symbol } });
+        router.push(`/giao-dich?symbol=${selectedStock.symbol}`);
     };
 
     return (
