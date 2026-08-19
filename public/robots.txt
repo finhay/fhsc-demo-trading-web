@@ -1,0 +1,10 @@
+# *
+User-agent: *
+Allow: /
+Disallow: /api/*
+
+# Host
+Host: https://invest.fhsc.com.vn
+
+# Sitemaps
+Sitemap: https://invest.fhsc.com.vn/sitemap.xml

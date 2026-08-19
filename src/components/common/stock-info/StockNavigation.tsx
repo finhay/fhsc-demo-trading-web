@@ -1,0 +1,88 @@
+'use client';
+
+import { FC, useEffect } from 'react';
+
+import { RiFullscreenExitLine, RiFullscreenLine } from 'react-icons/ri';
+
+import { STOCK_TYPE, TAB_INFORMATION } from '@/constants/trading';
+import { useTranslate } from '@/hooks/useTranslate';
+import { useStockInfoStore } from '@/stores/common/useStockInfoStore';
+import { useTradingStore } from '@/stores/trading/useTradingStore';
+import { getTabInformationLabel } from '@/utils/stock-info';
+
+const NON_STOCK_TAB_KEYS: string[] = ['CHART', 'STATISTICS'];
+
+type Props = {
+    hideFullscreenToggle?: boolean;
+};
+
+export const StockNavigation: FC<Props> = ({ hideFullscreenToggle = false }) => {
+    const trans = useTranslate();
+    const { selectedStock } = useStockInfoStore();
+    const { selectedTabInfor, setSelectedTabInfor, isChartFullscreen, toggleChartFullscreen } =
+        useTradingStore();
+
+    const isNonStock = !!selectedStock?.stockType && selectedStock.stockType !== STOCK_TYPE.STOCK;
+    const tabs = isNonStock
+        ? TAB_INFORMATION.filter(({ key }) => NON_STOCK_TAB_KEYS.includes(key))
+        : TAB_INFORMATION;
+
+    useEffect(() => {
+        if (isNonStock && !NON_STOCK_TAB_KEYS.includes(selectedTabInfor)) {
+            setSelectedTabInfor(TAB_INFORMATION[0].key);
+        }
+    }, [isNonStock, selectedTabInfor, setSelectedTabInfor]);
+
+    return (
+        <nav className="border-b border-tertiary" aria-label={trans.stockInfo.navigation.aria_nav}>
+            <div className="flex items-center justify-between px-3">
+                <ul
+                    role="tablist"
+                    aria-label={trans.stockInfo.navigation.aria_tablist}
+                    className="flex list-none items-center gap-6"
+                >
+                    {tabs.map(({ key }) => (
+                        <li
+                            key={key}
+                            role="presentation"
+                            className={`cursor-pointer transition-colors ${
+                                selectedTabInfor === key
+                                    ? 'font-body-3-highlight text-primary'
+                                    : 'font-body-3 text-secondary'
+                            }`}
+                            onClick={() => {
+                                setSelectedTabInfor(key);
+                            }}
+                        >
+                            {getTabInformationLabel(key, trans)}
+                            <span
+                                className={`mt-1.5 block h-0.5 w-full bg-quinary ${
+                                    selectedTabInfor === key ? '' : 'opacity-0'
+                                }`}
+                            />
+                        </li>
+                    ))}
+                </ul>
+                {!hideFullscreenToggle && (
+                    <button
+                        type="button"
+                        onClick={toggleChartFullscreen}
+                        aria-pressed={isChartFullscreen}
+                        aria-label={
+                            isChartFullscreen
+                                ? trans.stockInfo.navigation.fullscreen_exit
+                                : trans.stockInfo.navigation.fullscreen_expand
+                        }
+                        className="shrink-0 cursor-pointer"
+                    >
+                        {isChartFullscreen ? (
+                            <RiFullscreenExitLine size={20} className="text-primary" aria-hidden />
+                        ) : (
+                            <RiFullscreenLine size={20} className="text-primary" aria-hidden />
+                        )}
+                    </button>
+                )}
+            </div>
+        </nav>
+    );
+};

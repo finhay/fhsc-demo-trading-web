@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: products-demo-trading-web
+    namespace: products
+    labels:
+        app: products-demo-trading-web
+spec:
+    selector:
+        matchLabels:
+            app: products-demo-trading-web
+    replicas: 2
+    strategy:
+        type: RollingUpdate
+    template:
+        metadata:
+            labels:
+                app: products-demo-trading-web
+        spec:
+            containers:
+                - name: products-demo-trading-web
+                  image: registry.vnsc.vn/products-demo-trading-web:93
+                  imagePullPolicy: IfNotPresent
+                  ports:
+                      - containerPort: 3000
+                  resources:
+                      requests:
+                          cpu: 250m
+                          memory: 512Mi
+                      limits:
+                          cpu: 500m
+                          memory: 1024Mi
+                  volumeMounts:
+                      - name: tz-config
+                        mountPath: /etc/localtime
+            imagePullSecrets:
+                - name: vnsc-registry
+            volumes:
+                - name: tz-config
+                  hostPath:
+                      path: /usr/share/zoneinfo/Asia/Ho_Chi_Minh
+            nodeSelector:
+                web: 'true'
+---
+apiVersion: v1
+kind: Service
+metadata:
+    name: products-demo-trading-web
+    namespace: products
+spec:
+    selector:
+        app: products-demo-trading-web
+    ports:
+        - protocol: TCP
+          port: 3000
+          targetPort: 3000
+          nodePort: 32140
+    type: NodePort

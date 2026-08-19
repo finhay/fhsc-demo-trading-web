@@ -1,0 +1,24 @@
+{
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.codeActionsOnSave": {
+        "source.organizeImports": "explicit",
+        "source.removeUnusedImports": "explicit"
+    },
+    "[javascript]": {
+        "editor.formatOnSave": true
+    },
+    "[typescript]": {
+        "editor.formatOnSave": true
+    },
+    "scss.lint.unknownAtRules": "ignore",
+    "[typescriptreact]": {
+        "editor.formatOnSave": true,
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "files.associations": {
+        ".env": "properties",
+        ".env.*": "properties",
+        "*.env": "properties"
+    }
+}

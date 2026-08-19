@@ -1,0 +1,63 @@
+'use client';
+
+import { Dropdown, type DropdownOption } from '@/components/common/ui/Dropdown';
+import { useTranslate } from '@/hooks/useTranslate';
+
+export type EventTypeOption = {
+    eventType: string;
+    eventTypeName: string;
+};
+
+type Props = {
+    eventTypes: EventTypeOption[];
+    selectedEventType: string;
+    onSelectEventType: (value: string) => void;
+    rangeOptions: readonly DropdownOption[];
+    rangeValue: string;
+    onRangeChange: (value: string) => void;
+};
+
+export const StockEventNav = ({
+    eventTypes,
+    selectedEventType,
+    onSelectEventType,
+    rangeOptions,
+    rangeValue,
+    onRangeChange,
+}: Props) => {
+    const trans = useTranslate();
+
+    const tabs: EventTypeOption[] = [
+        { eventType: '', eventTypeName: trans.stockInfo.events.tab_all },
+        ...eventTypes,
+    ];
+
+    return (
+        <div className="flex items-center justify-between gap-4">
+            <ul role="tablist" className="flex list-none items-center gap-1">
+                {tabs.map((tab) => {
+                    const isSelected = selectedEventType === tab.eventType;
+
+                    return (
+                        <li key={tab.eventType || 'all'} role="presentation" className="flex">
+                            <button
+                                type="button"
+                                role="tab"
+                                aria-selected={isSelected}
+                                onClick={() => onSelectEventType(tab.eventType)}
+                                className={`cursor-pointer rounded-full px-3 py-1 whitespace-nowrap transition-colors ${
+                                    isSelected
+                                        ? 'bg-tertiary font-body-3-highlight text-primary'
+                                        : 'font-body-3 text-secondary'
+                                }`}
+                            >
+                                {tab.eventTypeName}
+                            </button>
+                        </li>
+                    );
+                })}
+            </ul>
+            <Dropdown options={rangeOptions} value={rangeValue} onChange={onRangeChange} />
+        </div>
+    );
+};

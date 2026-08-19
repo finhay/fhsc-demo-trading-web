@@ -1,0 +1,24 @@
+export type IndexRealtime = {
+    index: string;
+    indexValue: number;
+    change: number;
+    changePercent: number;
+    reference: number;
+    sessionInExchange: string;
+    name: string;
+    values: number[];
+    volumes: number[];
+    times: number[];
+    allQuantity: number;
+    allValue: number;
+    advances: number;
+    declines: number;
+    nochanges: number;
+    ceiling: number;
+    floor: number;
+    advancesArr?: number[];
+    declinesArr?: number[];
+    nochangesArr?: number[];
+    ceilings?: number[];
+    floors?: number[];
+};

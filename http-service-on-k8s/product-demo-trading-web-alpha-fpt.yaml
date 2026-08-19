@@ -1,0 +1,61 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+    name: products-demo-trading-web-alpha
+    namespace: products
+    labels:
+        app: products-demo-trading-web-alpha
+spec:
+    selector:
+        matchLabels:
+            app: products-demo-trading-web-alpha
+    replicas: 1
+    strategy:
+        type: RollingUpdate
+    template:
+        metadata:
+            labels:
+                app: products-demo-trading-web-alpha
+        spec:
+            containers:
+                - name: products-demo-trading-web-alpha
+                  image: registry.fke.fptcloud.com/fcd517fc-8bf2-48de-9b42-e8b5ffa1a535/products-demo-trading-web-alpha:5
+                  imagePullPolicy: IfNotPresent
+                  ports:
+                      - containerPort: 3000
+                  resources:
+                      requests:
+                          cpu: 250m
+                          memory: 512Mi
+                      limits:
+                          cpu: 250m
+                          memory: 512Mi
+                  volumeMounts:
+                      - name: tz-config
+                        mountPath: /etc/localtime
+            imagePullSecrets:
+                - name: vnsc-docker-registry-on-fci
+            volumes:
+                - name: tz-config
+                  hostPath:
+                      path: /usr/share/zoneinfo/Asia/Ho_Chi_Minh
+            nodeSelector:
+                web: 'true'
+---
+apiVersion: v1
+kind: Service
+metadata:
+    name: products-demo-trading-web-alpha
+    namespace: products
+spec:
+    selector:
+        app: products-demo-trading-web-alpha
+    ports:
+        - protocol: TCP
+          port: 3000
+          targetPort: 3000
+          nodePort: 32438
+    type:
+        NodePort
+
+        # kubectl -n products create secret docker-registry vnsc-docker-registry-on-fci --docker-server=registry.fke.fptcloud.com --docker-username=tuanna08 --docker-password=p8Zqd0sz1RYk9xh5kW8jJNVN0ck1g5gh --docker-email=it@finhay.com.vn

@@ -1,0 +1,169 @@
+'use client';
+
+import { useEffect, useState } from 'react';
+
+import ReCAPTCHA from 'react-google-recaptcha';
+import OTPInput from 'react-otp-input';
+
+import { useTranslate } from '@/hooks/useTranslate';
+import { useLoadingStore } from '@/stores/common/useLoadingStore';
+
+export type Props = {
+    width?: string;
+    identifier: string;
+    isIndividual?: boolean;
+    onClose?: () => void;
+    onSendOtp: (captchaToken: string) => Promise<{ success: boolean; remainSecond?: number }>;
+    onVerifyOtp: (otp: string) => Promise<void | boolean>;
+};
+
+export const OTPVerification = ({
+    width = 'w-full',
+    identifier,
+    isIndividual = true,
+    onSendOtp,
+    onVerifyOtp,
+}: Props) => {
+    const trans = useTranslate();
+    const { isLoading } = useLoadingStore();
+    const [otp, setOtp] = useState<string>('');
+    const [captchaToken, setCaptchaToken] = useState<string>('');
+    const [remainSecond, setRemainSecond] = useState<number>(0);
+    const [isResendOTP, setIsResendOTP] = useState<boolean>(false);
+
+    const isValidOTP = otp.length === 6;
+
+    useEffect(() => {
+        if (remainSecond <= 0) return;
+
+        const countdown = setInterval(() => {
+            setRemainSecond((prev) => prev - 1);
+        }, 1000);
+
+        return () => clearInterval(countdown);
+    }, [remainSecond]);
+
+    const handleCaptchaChange = async (token: string | null) => {
+        const newToken = token || '';
+        setCaptchaToken(newToken);
+        if (newToken && identifier) {
+            const result = await onSendOtp(newToken);
+            if (result.success && result.remainSecond) {
+                setRemainSecond(result.remainSecond);
+                setIsResendOTP(false);
+            }
+        }
+    };
+
+    const handleVerify = async () => {
+        await onVerifyOtp(otp);
+    };
+
+    const handleResendOTP = () => {
+        if (remainSecond > 0) return;
+        setIsResendOTP(true);
+    };
+
+    return (
+        <section className={`flex flex-col gap-4 ${width}`}>
+            {captchaToken && (
+                <p className="font-body-3 text-secondary w-full">
+                    {isIndividual
+                        ? trans.otp_verification.sent_via_phone
+                        : trans.otp_verification.sent_via_email}
+                    <br />
+                    {trans.otp_verification.please_verify}
+                </p>
+            )}
+            <div className="flex w-full flex-col gap-4">
+                {captchaToken ? (
+                    <>
+                        <div
+                            className="flex w-full justify-center px-1"
+                            role="group"
+                            aria-label={trans.otp_verification.enter_otp}
+                        >
+                            <OTPInput
+                                value={otp}
+                                onChange={setOtp}
+                                numInputs={6}
+                                containerStyle={{ gap: '16px', width: '100%' }}
+                                renderInput={(props) => (
+                                    <input
+                                        {...props}
+                                        className="bg-quaternary flex-1 h-14 rounded-xl text-center font-body-1-highlight text-primary outline-none transition-all focus:ring-2 focus:ring-highlight [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                                        inputMode="numeric"
+                                        pattern="[0-9]*"
+                                        type="text"
+                                        maxLength={1}
+                                    />
+                                )}
+                            />
+                        </div>
+                        <div className="font-body-3 flex w-full flex-col gap-2">
+                            <div className="flex items-start gap-1">
+                                <span className="text-secondary">
+                                    {trans.otp_verification.not_received}
+                                </span>
+                                <button
+                                    type="button"
+                                    onClick={handleResendOTP}
+                                    disabled={remainSecond > 0}
+                                    className={`font-body-3-highlight transition-colors ${
+                                        remainSecond > 0
+                                            ? 'text-tertiary cursor-not-allowed'
+                                            : 'text-highlight'
+                                    }`}
+                                >
+                                    {trans.otp_verification.resend_prefix}
+                                    {remainSecond}
+                                    {trans.otp_verification.resend_suffix}
+                                </button>
+                            </div>
+                            <div className="flex items-start gap-1">
+                                <span className="text-secondary">
+                                    {trans.otp_verification.need_support}
+                                </span>
+                                <a
+                                    href="tel:024777789096"
+                                    className="font-body-3-highlight text-highlight hover:underline"
+                                >
+                                    024 777 789 96
+                                </a>
+                            </div>
+                        </div>
+                        <button
+                            type="button"
+                            onClick={handleVerify}
+                            disabled={!isValidOTP || isLoading}
+                            className={`font-body-3-highlight w-full rounded-full px-4 py-2 transition-all ${
+                                isValidOTP && !isLoading
+                                    ? 'bg-highlight text-quaternary hover:opacity-90'
+                                    : 'bg-disabled text-disabled'
+                            }`}
+                        >
+                            {trans.otp_verification.verify}
+                        </button>
+                        {isResendOTP && (
+                            <div className="flex w-full justify-center">
+                                <ReCAPTCHA
+                                    sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY || ''}
+                                    onChange={handleCaptchaChange}
+                                    theme="dark"
+                                />
+                            </div>
+                        )}
+                    </>
+                ) : (
+                    <div className="flex w-full justify-center">
+                        <ReCAPTCHA
+                            sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY || ''}
+                            onChange={handleCaptchaChange}
+                            theme="dark"
+                        />
+                    </div>
+                )}
+            </div>
+        </section>
+    );
+};
