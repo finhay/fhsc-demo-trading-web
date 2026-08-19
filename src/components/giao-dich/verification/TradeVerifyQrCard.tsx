@@ -6,7 +6,6 @@ import QRCode from 'react-qr-code';
 
 import { useClickOutside } from '@/hooks/lib/useClickOutside';
 import { useTradeVerifyQr } from '@/hooks/trading/useTradeVerifyQr';
-import { useTranslate } from '@/hooks/useTranslate';
 import { useLoadingStore } from '@/stores/common/useLoadingStore';
 
 type Props = {
@@ -15,7 +14,6 @@ type Props = {
 };
 
 export const TradeVerifyQrCard = ({ onClose, onSuccess }: Props) => {
-    const trans = useTranslate();
     const { startLoading, stopLoading } = useLoadingStore();
     const cardRef = useClickOutside<HTMLElement>(onClose);
     const { qrId, generateQR } = useTradeVerifyQr({ onClose, onSuccess });
@@ -41,10 +39,12 @@ export const TradeVerifyQrCard = ({ onClose, onSuccess }: Props) => {
             <div className="flex min-w-0 flex-1 flex-col items-start justify-between gap-8 self-stretch">
                 <div className="flex w-full flex-col gap-1">
                     <h3 className="font-body-2-highlight text-primary">
-                        {trans.trading.qr_card.title}
+                        {'Ngày giao dịch bùng nổ?'}
                     </h3>
                     <p className="font-body-3 whitespace-pre-line text-primary">
-                        {trans.trading.qr_card.description}
+                        {
+                            'Không làm gián đoạn giao dịch,\nxác thực 1 lần cho tất cả các lệnh.\nMở ứng dụng trên điện thoại,\nquét mã để xác thực.'
+                        }
                     </p>
                 </div>
                 <button
@@ -52,7 +52,7 @@ export const TradeVerifyQrCard = ({ onClose, onSuccess }: Props) => {
                     onClick={onClose}
                     className="font-body-3-highlight flex w-full shrink-0 items-center justify-center rounded-full bg-highlight px-4 py-2 text-quaternary"
                 >
-                    {trans.trading.qr_card.btn_later}
+                    {'Để sau'}
                 </button>
             </div>
         </article>

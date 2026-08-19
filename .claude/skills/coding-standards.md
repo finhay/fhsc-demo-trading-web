@@ -6,41 +6,49 @@ Quy tắc code cho FHSC Demo Trading — bám theo các page và component đang
 
 ## Thư viện ưu tiên
 
-| Mục đích         | Thư viện                                        |
-| ---------------- | ----------------------------------------------- |
-| State Management | zustand                                         |
-| Form             | @tanstack/react-form                            |
-| Table            | @tanstack/react-table + @tanstack/react-virtual |
-| Debounce         | @tanstack/react-pacer (`useDebouncer`)          |
-| Hotkeys          | internal hook (`useHotkeys`)                    |
-| Date/Time        | dayjs                                           |
-| Charts           | highcharts                                      |
-| Icons            | react-icons (`fa6`, `fi`, `fc`)                 |
-| Toast            | useToastStore (internal)                        |
-| Styling          | Tailwind CSS + Design System                    |
+| Mục đích         | Thư viện                                               |
+| ---------------- | ------------------------------------------------------ |
+| State Management | zustand                                                |
+| HTTP             | axios qua `vnscService` (`@/services/interceptor`)     |
+| Form             | @tanstack/react-form                                   |
+| Table            | @tanstack/react-table + @tanstack/react-virtual        |
+| Debounce         | @tanstack/react-pacer (`useDebouncer`)                 |
+| Hotkeys          | internal hook (`@/hooks/lib/useHotkeys`)               |
+| Date/Time        | dayjs                                                  |
+| Charts           | echarts (qua `@/hooks/chart/useECharts*`)              |
+| Realtime         | mqtt + protobufjs (`@/hooks/useMQTT`, `@/proto/stock`) |
+| Icons            | react-icons (`fa6`, `fa`, `fi`, `fc`)                  |
+| Toast            | internal (`@/hooks/lib/useToast`)                      |
+| Styling          | Tailwind CSS + Design System                           |
 
-> **Lodash**: có trong `package.json` nhưng không dùng cho code mới — dùng **Native JavaScript**.
+Thư viện chuyên dụng, chỉ dùng đúng chỗ: `swiper` (carousel chỉ số), `react-qr-code` +
+`react-otp-input` (xác thực lệnh & đăng nhập), `@dnd-kit` (kéo thả watchlist),
+`react-google-recaptcha` (OTP), `react-pdf` (hợp đồng), `next-seo` (`AppSeo`),
+`nprogress` (route progress).
+
+> **Không có trong dự án**: React Query, react-hook-form, Zod, shadcn/ui, lodash, highcharts.
+> Cần helper nhỏ thì dùng **Native JavaScript**.
 
 ---
 
 ## Naming Conventions
 
-| Loại              | Convention                                     | Ví dụ                                   |
-| ----------------- | ---------------------------------------------- | --------------------------------------- |
-| Folders           | kebab-case                                     | `bang-gia/`, `tai-san/`                 |
-| Component files   | PascalCase                                     | `TradePanel.tsx`, `IBoardTable.tsx`     |
-| Hook files        | camelCase                                      | `useTranslate.ts`, `useClickOutside.ts` |
-| Other files       | camelCase                                      | `useIpoStore.ts`, `assets.ts`           |
-| Components        | PascalCase                                     | `TradePanel`, `AssetPortfolioTable`     |
-| Hooks             | `use` + PascalCase                             | `useTranslate`, `useAuthStore`          |
-| Types/Models      | PascalCase                                     | `PortfolioItem`, `StocksInfoItem`       |
-| Props type        | `Props` (trong file) hoặc `ComponentNameProps` | `type Props = {...}`                    |
-| Constants         | UPPER_SNAKE_CASE                               | `TRADE_PAGE_META`, `ACCOUNT_TYPE`       |
-| Boolean variables | `is` prefix                                    | `isLoading`, `isVisible`                |
+| Loại              | Convention                                     | Ví dụ                                  |
+| ----------------- | ---------------------------------------------- | -------------------------------------- |
+| Folders           | kebab-case                                     | `bang-gia/`, `tai-san/`                |
+| Component files   | PascalCase                                     | `TradePanel.tsx`, `IBoardTable.tsx`    |
+| Hook files        | camelCase                                      | `useDebounce.ts`, `useClickOutside.ts` |
+| Other files       | camelCase                                      | `useAssetStore.ts`, `assets.ts`        |
+| Components        | PascalCase                                     | `TradePanel`, `AssetPortfolioTable`    |
+| Hooks             | `use` + PascalCase                             | `useDebounce`, `useAuthStore`          |
+| Types/Models      | PascalCase                                     | `PortfolioItem`, `StocksInfoItem`      |
+| Props type        | `Props` (trong file) hoặc `ComponentNameProps` | `type Props = {...}`                   |
+| Constants         | UPPER_SNAKE_CASE                               | `TRADE_PAGE_META`, `ACCOUNT_TYPE`      |
+| Boolean variables | `is` prefix                                    | `isLoading`, `isVisible`               |
 
 ### type vs interface
 
-Luôn dùng `type`, không dùng `interface`:
+Code mới luôn dùng `type`, không dùng `interface`:
 
 ```typescript
 // ✅
@@ -52,6 +60,10 @@ interface User {
     name: string;
 }
 ```
+
+> Còn 8 chỗ `interface` cũ (`types/datafeed/stock-event.ts`, `proto/stock.ts`,
+> `hooks/lib/useToast.ts`, `components/common/feature/PDFViewer.tsx`) — đổi dần khi sửa tới,
+> đừng thêm mới.
 
 ### Export
 
@@ -93,12 +105,15 @@ export const Chart = ({ data }: Props) => <div />;
 Luôn dùng `@` alias — không dùng relative paths:
 
 ```typescript
-// ❌
 // ✅
-import { useTranslate } from '@/hooks/useTranslate';
+import { useDebounce } from '@/hooks/useDebounce';
 
-import { useAuth } from '../../../hooks/useTranslate';
+// ❌
+import { useDebounce } from '../../../hooks/useDebounce';
 ```
+
+Prettier (`@trivago/prettier-plugin-sort-imports`) tự sắp xếp và nhóm import — đừng sắp tay,
+cũng đừng chèn comment giữa các dòng import.
 
 ---
 
@@ -198,7 +213,7 @@ state variables → API functions → logic functions → reset
 ```typescript
 import { create } from 'zustand';
 
-import { toast } from '@/hooks/useToast';
+import { toast } from '@/hooks/lib/useToast';
 import { getOrders } from '@/services/api/trade/orders';
 import { isSuccessApi } from '@/utils/common';
 
@@ -242,6 +257,16 @@ export const useOrderStore = create<State & Actions>((set) => ({
 ## API Call Pattern
 
 Không gọi axios trực tiếp trong component — gói trong `services/api/`.
+
+Hai instance trong `@/services/interceptor`:
+
+| Instance              | Base URL                   | Dùng cho                                      |
+| --------------------- | -------------------------- | --------------------------------------------- |
+| `vnscService`         | `NEXT_PUBLIC_API_URL`      | accounts, auth, trade, payments — có Bearer   |
+| `vnscServiceDatafeed` | `NEXT_PUBLIC_DATAFEED_URL` | dữ liệu thị trường (`services/api/datafeed/`) |
+
+Interceptor tự gắn `Authorization`, `device-id`, `x-access-key`, `Accept-Language: vi`
+và tự refresh token khi 401 — service function không tự set các header này.
 
 ### Gọi API đơn giản (không cần store)
 
@@ -294,7 +319,7 @@ Dùng `@tanstack/react-form`. Xem giá trị field realtime qua `useStore(form.s
 ```typescript
 import { useForm, useStore } from '@tanstack/react-form';
 
-import { toast } from '@/hooks/useToast';
+import { toast } from '@/hooks/lib/useToast';
 
 const form = useForm({
     defaultValues: { username: '', password: '' },
@@ -363,6 +388,31 @@ const virtualizer = useVirtualizer({
     overscan: 5,
 });
 ```
+
+---
+
+## Chart — ECharts
+
+Không import `echarts` trực tiếp trong component — dùng hook trong `@/hooks/chart/`:
+
+| Hook                        | Dùng khi                                                      |
+| --------------------------- | ------------------------------------------------------------- |
+| `useEChartsInstance`        | 1 chart / component — trả `chartInstanceRef`                  |
+| `useEChartsInstances`       | Nhiều chart động trong cùng component (quản lý theo `Map`)    |
+| `useEChartsOption`          | `setOption` lại khi deps đổi (đã bọc `requestAnimationFrame`) |
+| `useEChartsTooltipAutoHide` | Tự ẩn tooltip khi con trỏ rời chart                           |
+
+```typescript
+const chartRef = useRef<HTMLDivElement>(null);
+const chartInstanceRef = useEChartsInstance(chartRef);
+
+useEChartsOption(chartInstanceRef, () => createSomeChartOptions(data), { deps: [data] });
+
+return <div ref={chartRef} className="h-44 w-full shrink-0" />;
+```
+
+Hàm dựng `EChartsOption` dùng lại nhiều nơi đặt trong `src/config/market/*.ts`
+(ví dụ `market-flow.ts`, `market-heatmap.ts`). Component chỉ truyền data vào.
 
 ---
 
@@ -458,14 +508,16 @@ dayjs(date).format('DD/MM/YYYY HH:mm');
 
 ## Icons
 
+Prettier sắp xếp lại import nên đừng đặt comment giữa các dòng `import`:
+
 ```typescript
 import { FaArrowDown, FaXmark } from 'react-icons/fa6';
-// Feather Icons
+// Font Awesome 6 — ưu tiên
 import { FcOk } from 'react-icons/fc';
-// Font Awesome 6 (ưu tiên)
+// Flat Color Icons
 import { FiSearch } from 'react-icons/fi';
 
-// Flat Color Icons
+// Feather Icons
 ```
 
 ---
@@ -477,7 +529,7 @@ Project dùng **internal toast** — không dùng `react-toastify`.
 **Import:**
 
 ```typescript
-import { toast } from '@/hooks/useToast';
+import { toast } from '@/hooks/lib/useToast';
 ```
 
 **Sử dụng:**
@@ -494,6 +546,7 @@ toast.error('Có lỗi xảy ra'); // fallback khi catch
 ```typescript
 toast.success('Lưu thành công', { duration: 2000 });
 toast.error('Lỗi nghiêm trọng', { duration: -1 }); // không tự đóng
+toast.error('Đặt lệnh thất bại', { description: 'Số dư không đủ' });
 ```
 
 **Render `ToastContainer` trong `_app.tsx`** (đã có sẵn, không cần thêm):
@@ -509,15 +562,14 @@ import { ToastContainer } from '@/components/common/ui/Toast';
 
 ---
 
-## Native JS — Không dùng Lodash trong code mới
+## Native JS — không thêm utility library
+
+Dự án **không có lodash**. Đừng cài thêm; dùng API sẵn có của JS:
 
 ```typescript
-// ❌
-import { cloneDeep, isEmpty } from 'lodash';
-
-// ✅
 const copy = structuredClone(obj);
 const isEmpty = arr.length === 0;
-items.map((item) => item.name);
-items.filter((item) => item.active);
+const names = items.map((item) => item.name);
+const active = items.filter((item) => item.active);
+const bySymbol = Object.groupBy(items, (item) => item.symbol);
 ```

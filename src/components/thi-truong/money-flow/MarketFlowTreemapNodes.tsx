@@ -7,7 +7,6 @@ import type * as echarts from 'echarts';
 import { createMarketFlowTreemapOptions } from '@/config/market/market-flow';
 import { useEChartsInstance } from '@/hooks/chart/useEChartsInstance';
 import { useEChartsTooltipAutoHide } from '@/hooks/chart/useEChartsTooltipAutoHide';
-import { useTranslate } from '@/hooks/useTranslate';
 import type {
     TradingFlowTopNetSide,
     TradingFlowTreemapCell,
@@ -22,7 +21,6 @@ type Props = {
 };
 
 export const MarketFlowTreemapNodes = ({ side, items, colorMode, onCellClick }: Props) => {
-    const trans = useTranslate();
     const chartRef = useRef<HTMLDivElement>(null);
     const onCellClickRef = useRef(onCellClick);
     const optionRef = useRef<echarts.EChartsOption | null>(null);
@@ -68,14 +66,14 @@ export const MarketFlowTreemapNodes = ({ side, items, colorMode, onCellClick }: 
     useEffect(() => {
         if (items.length === 0) return;
 
-        optionRef.current = createMarketFlowTreemapOptions(items, side, trans, {
+        optionRef.current = createMarketFlowTreemapOptions(items, side, {
             clickable: !!onCellClickRef.current,
             colorMode,
         });
 
         hideTooltip();
         renderTreemap(true);
-    }, [items, side, colorMode, trans, hideTooltip, renderTreemap]);
+    }, [items, side, colorMode, hideTooltip, renderTreemap]);
 
     useEffect(() => {
         const container = chartRef.current;

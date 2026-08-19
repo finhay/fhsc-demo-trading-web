@@ -7,7 +7,6 @@ import Image from 'next/image';
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa6';
 
 import { Dialog } from '@/components/common/ui/Dialog';
-import { useTranslate } from '@/hooks/useTranslate';
 
 const TOTAL_SLIDES = 3;
 
@@ -16,11 +15,10 @@ type Props = {
 };
 
 export const DepositGuideModal = ({ onClose }: Props) => {
-    const trans = useTranslate();
     const [activeSlide, setActiveSlide] = useState(0);
 
     return (
-        <Dialog title={trans.deposit_guide_modal.title} maxWidth="max-w-2xl" onClose={onClose}>
+        <Dialog title={'Hướng dẫn chuyển khoản'} maxWidth="max-w-2xl" onClose={onClose}>
             <div className="flex flex-col gap-6">
                 <div className="overflow-hidden">
                     <div
@@ -30,14 +28,14 @@ export const DepositGuideModal = ({ onClose }: Props) => {
                         <div className="w-full shrink-0">
                             <div className="flex flex-col gap-4">
                                 <h3 className="font-body-2-highlight text-primary">
-                                    {trans.deposit_guide_modal.step1_title}
+                                    {'Bước 1: Mở app ngân hàng mà bạn đang sử dụng'}
                                 </h3>
                                 <div className="flex justify-center bg-secondary rounded-xl p-6">
                                     <Image
                                         src="https://cdn1.finhay.com.vn/wp-content/uploads/2023/01/12105653/sli1.png"
                                         width={340}
                                         height={229}
-                                        alt={trans.deposit_guide_modal.step1_alt}
+                                        alt={'Mở app ngân hàng'}
                                         className="rounded-xl"
                                     />
                                 </div>
@@ -46,14 +44,14 @@ export const DepositGuideModal = ({ onClose }: Props) => {
                         <div className="w-full shrink-0">
                             <div className="flex flex-col gap-4">
                                 <h3 className="font-body-2-highlight text-primary">
-                                    {trans.deposit_guide_modal.step2_title}
+                                    {'Bước 2: Tạo lệnh chuyển tiền theo thông tin được cung cấp'}
                                 </h3>
                                 <div className="flex justify-center bg-secondary rounded-xl p-6">
                                     <Image
                                         src="https://cdn1.finhay.com.vn/wp-content/uploads/2023/01/12105655/sli2.png"
                                         width={340}
                                         height={229}
-                                        alt={trans.deposit_guide_modal.step2_alt}
+                                        alt={'Tạo lệnh chuyển tiền'}
                                         className="rounded-xl"
                                     />
                                 </div>
@@ -62,14 +60,14 @@ export const DepositGuideModal = ({ onClose }: Props) => {
                         <div className="w-full shrink-0">
                             <div className="flex flex-col gap-4">
                                 <h3 className="font-body-2-highlight text-primary">
-                                    {trans.deposit_guide_modal.step3_title}
+                                    {'Bước 3: Xác nhận chuyển tiền từ app ngân hàng của bạn'}
                                 </h3>
                                 <div className="flex justify-center bg-secondary rounded-xl p-6">
                                     <Image
                                         src="https://cdn1.finhay.com.vn/wp-content/uploads/2023/01/12105652/sli3.png"
                                         width={340}
                                         height={229}
-                                        alt={trans.deposit_guide_modal.step3_alt}
+                                        alt={'Xác nhận chuyển tiền'}
                                         className="rounded-xl"
                                     />
                                 </div>
@@ -85,7 +83,7 @@ export const DepositGuideModal = ({ onClose }: Props) => {
                             type="button"
                         >
                             <FaChevronLeft size={14} />
-                            <span>{trans.deposit_guide_modal.back}</span>
+                            <span>{'Trở lại'}</span>
                         </button>
                     )}
 
@@ -95,7 +93,7 @@ export const DepositGuideModal = ({ onClose }: Props) => {
                             className="px-6 py-2.5 bg-highlight hover:opacity-90 text-quaternary font-body-3-highlight rounded-xl transition-opacity flex items-center gap-2"
                             type="button"
                         >
-                            <span>{trans.deposit_guide_modal.next}</span>
+                            <span>{'Tiếp tục'}</span>
                             <FaChevronRight size={14} />
                         </button>
                     ) : (
@@ -104,7 +102,7 @@ export const DepositGuideModal = ({ onClose }: Props) => {
                             className="px-6 py-2.5 bg-highlight hover:opacity-90 text-quaternary font-body-3-highlight rounded-xl transition-opacity"
                             type="button"
                         >
-                            {trans.deposit_guide_modal.understood}
+                            {'Tôi đã hiểu'}
                         </button>
                     )}
                 </div>

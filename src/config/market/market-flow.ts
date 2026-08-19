@@ -1,7 +1,6 @@
 import type * as echarts from 'echarts';
 
 import { BAR_CHART_AXIS_TOOLTIP } from '@/constants/market';
-import type { useTranslate } from '@/hooks/useTranslate';
 import type { TradingStatsPeriod } from '@/types/datafeed/trading-data';
 import type {
     TradingFlowBarPoint,
@@ -122,10 +121,7 @@ const mapTradingFlowSessionsToSeriesData = (
         };
     });
 
-export const createChartTradingFlow = (
-    sessions: TradingFlowSession[],
-    trans: ReturnType<typeof useTranslate>,
-): echarts.EChartsOption => {
+export const createChartTradingFlow = (sessions: TradingFlowSession[]): echarts.EChartsOption => {
     const categories = sessions.map((s) => formatDate(s.date, 'DD/MM'));
 
     return {
@@ -171,7 +167,7 @@ export const createChartTradingFlow = (
                 return `
                     <div class="flex flex-col gap-1 rounded-xl bg-tertiary p-2">
                         <span class="font-caption text-secondary">${label}</span>
-                        <p class="font-caption text-secondary">${trans.market.flow.chart_net}</p>
+                        <p class="font-caption text-secondary">${'Mua bán ròng'}</p>
                         <p class="font-caption-highlight ${valueClass}">${absVal} tỷ</p>
                     </div>
                 `;
@@ -181,7 +177,7 @@ export const createChartTradingFlow = (
             {
                 type: 'bar',
                 id: 'trading-flow-10-sessions',
-                name: trans.market.flow.chart_net,
+                name: 'Mua bán ròng',
                 barWidth: '55%',
                 barMinHeight: 2,
                 data: mapTradingFlowSessionsToSeriesData(sessions),
@@ -200,7 +196,6 @@ export const createChartTradingFlow = (
 
 export const createChartTradingFlowHistory = (
     sessions: TradingFlowSession[],
-    trans: ReturnType<typeof useTranslate>,
     period: TradingStatsPeriod,
 ): echarts.EChartsOption => {
     const dateStyle = resolveChartAxisDateStyle(period);
@@ -219,8 +214,8 @@ export const createChartTradingFlowHistory = (
         return formatNumberVN(value, { decimals: 0 });
     };
 
-    const legendNet = trans.market.flow.modal.legend_net;
-    const legendCumulative = trans.market.flow.modal.legend_cumulative;
+    const legendNet = 'Mua/bán ròng';
+    const legendCumulative = 'GTGD ròng luỹ kế (bên phải)';
 
     return {
         animation: false,
@@ -392,7 +387,6 @@ const formatFlowTreemapCellLabel = (data: TradingFlowTreemapCell): string => {
 const formatFlowTreemapTooltip = (
     params: { data?: TradingFlowTreemapCell & { key?: string } },
     side: TradingFlowTopNetSide,
-    trans: ReturnType<typeof useTranslate>,
 ): string => {
     const data = params?.data;
     if (!data?.name) return '';
@@ -401,8 +395,7 @@ const formatFlowTreemapTooltip = (
     const companyLine = data.companyName
         ? `<span class="font-caption text-secondary">${data.companyName}</span>`
         : '';
-    const netLabel =
-        side === 'buy' ? trans.market.flow.tooltip_net_buy : trans.market.flow.tooltip_net_sell;
+    const netLabel = side === 'buy' ? 'Mua ròng' : 'Bán ròng';
 
     return `<div class="flex min-w-32 flex-col gap-1 rounded-lg bg-tertiary p-2">
         <span class="font-caption-highlight text-primary">${data.name}</span>
@@ -416,7 +409,6 @@ const formatFlowTreemapTooltip = (
 export const createMarketFlowTreemapOptions = (
     items: TradingFlowTreemapCell[],
     side: TradingFlowTopNetSide,
-    trans: ReturnType<typeof useTranslate>,
     options?: { clickable?: boolean; colorMode?: TradingFlowTreemapColorMode },
 ): echarts.EChartsOption => {
     const sideColor = FLOW_TREEMAP_SIDE_COLORS[side];
@@ -453,7 +445,6 @@ export const createMarketFlowTreemapOptions = (
                 formatFlowTreemapTooltip(
                     params as { data?: TradingFlowTreemapCell & { key?: string } },
                     side,
-                    trans,
                 ),
         },
         series: [

@@ -1,7 +1,6 @@
 export const AUTH_REGEX = {
     PHONE: /^(0[0-9]{8,11}|84[0-9]{7,10})$/,
     PHONE_NUMBER_ONLY: /^[0-9]+$/,
-    EMAIL: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
     PASSWORD_SPECIAL_CHAR: /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/,
 };
 
@@ -60,11 +59,6 @@ export const PASSWORD_REQUIREMENTS = [
     },
 ] as const;
 
-export const ACCOUNT_TYPES = [
-    { key: 'individual', translateKey: 'acct_individual' },
-    { key: 'business', translateKey: 'acct_business' },
-] as const;
-
 export const REGISTER_PASSWORD_FIELDS = [
     {
         key: 'password',
@@ -80,70 +74,45 @@ export const REGISTER_PASSWORD_FIELDS = [
     },
 ] as const;
 
-export const LOGIN_ACCOUNT_FIELDS = {
-    individual: [
-        {
-            key: 'username',
-            type: 'tel',
-            labelTranslateKey: 'phone_lbl',
-            placeholderTranslateKey: 'input_phone',
-            inputFilter: /[^0-9]/g,
-        },
-    ],
-    business: [
-        {
-            key: 'username',
-            type: 'text',
-            labelTranslateKey: 'custody_lbl',
-            placeholderTranslateKey: 'input_custody',
-            inputFilter: null,
-        },
-    ],
+export const LOGIN_ACCOUNT_FIELD = {
+    key: 'username',
+    type: 'tel',
+    label: 'Số điện thoại',
+    placeholder: 'Nhập số điện thoại của bạn',
+    inputFilter: /[^0-9]/g,
 } as const;
 
-export const RESET_PASSWORD_ACCOUNT_FIELDS = {
-    individual: {
-        type: 'tel' as const,
-        labelTranslateKey: 'phone_lbl',
-        placeholderTranslateKey: 'input_phone',
-        inputFilter: /[^0-9]/g,
-    },
-    business: {
-        type: 'email' as const,
-        labelTranslateKey: 'email',
-        placeholderTranslateKey: 'input_email',
-        inputFilter: null,
-    },
+export const RESET_PASSWORD_ACCOUNT_FIELD = {
+    type: 'tel' as const,
+    label: 'Số điện thoại',
+    placeholder: 'Nhập số điện thoại của bạn',
+    inputFilter: /[^0-9]/g,
 };
-
-export const SSO_PENDING_KEY = 'sso_pending';
-
-export const SSO_PENDING_TTL_MS = 10 * 60 * 1000;
-
-export const SSO_ERROR_CODE = {
-    ACCESS_DENIED: 'access_denied',
-    SESSION_EXPIRED: 'session_expired',
-} as const;
-
-export const SSO_ALLOWED_REDIRECT_URIS = (process.env.NEXT_PUBLIC_SSO_ALLOWED_REDIRECT_URIS ?? '')
-    .split(',')
-    .map((uri) => uri.trim())
-    .filter(Boolean);
-
-export const SSO_CONSENT_IMAGE_URL =
-    'https://cdn1.finhay.com.vn/vnsc-prod/1777863552264.2024-Gemini_Generated_Image.png';
-
-export const SSO_CONSENT_SHARED_ITEMS = [
-    { translateKey: 'consent_shared_account' },
-    { translateKey: 'consent_shared_personal' },
-    { translateKey: 'consent_shared_bank' },
-] as const;
 
 export const AUTH_MODE = {
     LOGIN: 'login',
     REGISTER: 'register',
     RESET_PASSWORD: 'resetPassword',
-    CHANGE_PASSWORD: 'changePassword',
-    SSO_CONSENT: 'ssoConsent',
-    SSO_ACCOUNT_CHOOSER: 'ssoAccountChooser',
+};
+
+export const AUTH_VALIDATE = {
+    phone_required: 'Vui lòng nhập số điện thoại',
+    phone_digits_only: 'Số điện thoại chỉ được nhập số',
+    phone_invalid: 'Số điện thoại không hợp lệ',
+    password_required: 'Vui lòng nhập mật khẩu',
+    password_min_8: 'Mật khẩu phải có tối thiểu 8 ký tự',
+    password_need_upper: 'Mật khẩu phải có ký tự viết hoa',
+    password_need_lower: 'Mật khẩu phải có ký tự viết thường',
+    password_need_special: 'Mật khẩu phải có ký tự đặc biệt',
+    confirm_password_required: 'Vui lòng nhập lại mật khẩu',
+    confirm_password_mismatch: 'Mật khẩu không khớp',
+    reset_account_required: 'Vui lòng nhập thông tin tài khoản',
+};
+
+export const PASSWORD_REQUIREMENT_LABELS: Record<string, string> = {
+    req_min_len: 'Có tối thiểu 08 ký tự',
+    req_upper: 'Có ký tự viết hoa',
+    req_lower: 'Có ký tự viết thường',
+    req_special: 'Có ký tự đặc biệt (@#$%...)',
+    req_match: 'Trùng với mật khẩu đã tạo',
 };

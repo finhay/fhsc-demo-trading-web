@@ -2,7 +2,6 @@
 
 import { TradeOrderBookRowActions } from '@/components/giao-dich/order-book/rows/TradeOrderBookRowActions';
 import { ORDER_TYPE } from '@/constants/trading';
-import { useTranslate } from '@/hooks/useTranslate';
 import type { TradeOrderBookRow } from '@/types/pages/trading';
 import { getOrderStatusColor, getTwapLoOrderStatus } from '@/utils/trading/order-book';
 
@@ -13,8 +12,7 @@ type Props = {
 };
 
 export const TradeOrderBookRowTwapLo = ({ order, onOpenDetail, onCancel }: Props) => {
-    const trans = useTranslate();
-    const status = getTwapLoOrderStatus(trans, order.status);
+    const status = getTwapLoOrderStatus(order.status);
     const canCancel = Boolean(order.allowCancel);
 
     return (

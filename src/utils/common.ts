@@ -119,26 +119,23 @@ export const sortSearchResults = <T extends { symbol: string }>(
     });
 };
 
-export const getSessionText = (
-    sessionInExchange: string,
-    trans: { session: Record<string, string> },
-): string => {
+export const getSessionText = (sessionInExchange: string): string => {
     if (!sessionInExchange) return '';
     switch (sessionInExchange) {
         case 'LO':
-            return trans.session.lo;
+            return 'Liên tục';
         case 'Break':
-            return trans.session.break;
+            return 'Tạm nghỉ';
         case 'ATC':
-            return trans.session.atc;
+            return 'Phiên ATC';
         case 'ATO':
-            return trans.session.ato;
+            return 'Phiên ATO';
         case 'PutThrough':
-            return trans.session.putthrough;
+            return 'GDTT';
         case 'PLO':
-            return trans.session.plo;
+            return 'PLO';
         default:
-            return trans.session.close;
+            return 'Đóng cửa';
     }
 };
 
@@ -317,10 +314,8 @@ export const getFlashBgBySign = (value: number | null | undefined): string => {
     return 'bg-orange';
 };
 
-export const buildChartUrl = (symbol: string, locale?: string): string => {
-    const baseUrl = `https://chart.vnsc.vn/chart-fhsc?symbol=${symbol}`;
-    return locale === 'en' ? `${baseUrl}&locale=en` : baseUrl;
-};
+export const buildChartUrl = (symbol: string): string =>
+    `https://chart.vnsc.vn/chart-fhsc?symbol=${symbol}`;
 
 export const generateDeviceId = async (): Promise<string> => {
     if (cachedDeviceId) {

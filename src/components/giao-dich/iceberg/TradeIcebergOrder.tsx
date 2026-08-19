@@ -7,7 +7,6 @@ import { RiInformationFill } from 'react-icons/ri';
 import { ACCOUNT_TYPE, ERROR_CODES } from '@/constants/common';
 import { ORDER_MODE_KEY, ORDER_SIDE, TWO_FA_PLACEMENT } from '@/constants/trading';
 import { toast } from '@/hooks/lib/useToast';
-import { useTranslate } from '@/hooks/useTranslate';
 import { createIcebergOrder } from '@/services/api/trade/iceberg-orders';
 import { useAuthStore } from '@/stores/auth/useAuthStore';
 import { useLoadingStore } from '@/stores/common/useLoadingStore';
@@ -32,7 +31,6 @@ type Props = {
 };
 
 export const TradeIcebergOrder = ({ symbol, order, onClose, onSuccess }: Props) => {
-    const trans = useTranslate();
     const { activeSubAccount, profile } = useAuthStore();
     const { startLoading, stopLoading, isLoading } = useLoadingStore();
     const { request2FA, handle2FATokenExpired, addPlacedOrdersToBook } = useTradingStore();
@@ -45,7 +43,7 @@ export const TradeIcebergOrder = ({ symbol, order, onClose, onSuccess }: Props) 
     const validationType = profile?.user_type === ACCOUNT_TYPE.ENTERPRISE ? 'OTP' : 'SMART_OTP';
 
     const title = (
-        isBuy ? trans.trading.iceberg_order.title_buy : trans.trading.iceberg_order.title_sell
+        isBuy ? 'Xác nhận mua Iceberg {symbol}' : 'Xác nhận bán Iceberg {symbol}'
     ).replace('{symbol}', symbol);
 
     const totalMoney = price > 0 ? price * totalQuantity : 0;
@@ -87,12 +85,12 @@ export const TradeIcebergOrder = ({ symbol, order, onClose, onSuccess }: Props) 
                 if (data) {
                     addPlacedOrdersToBook([mapIcebergOrderToOrder(data)], ORDER_MODE_KEY.ICEBERG);
                 }
-                toast.success(trans.trading.toast.place_success);
+                toast.success('Đặt lệnh thành công');
                 onSuccess();
             } else if (error_code === ERROR_CODES.FAILED_2FA_TOKEN_EXPIRED) {
                 is2FAExpired = true;
             } else {
-                toast.error(message || trans.common.try_again_error);
+                toast.error(message || 'Có lỗi xảy ra, vui lòng thử lại');
             }
         } catch (err: unknown) {
             const errCode =
@@ -102,7 +100,7 @@ export const TradeIcebergOrder = ({ symbol, order, onClose, onSuccess }: Props) 
             if (errCode === ERROR_CODES.FAILED_2FA_TOKEN_EXPIRED) {
                 is2FAExpired = true;
             } else {
-                toast.error(getApiErrorMessage(err, trans.common.try_again_error));
+                toast.error(getApiErrorMessage(err, 'Có lỗi xảy ra, vui lòng thử lại'));
             }
         } finally {
             stopLoading();
@@ -119,24 +117,19 @@ export const TradeIcebergOrder = ({ symbol, order, onClose, onSuccess }: Props) 
             <div className="flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto">
                 <h3 className="font-body-2-highlight w-full shrink-0 text-primary">{title}</h3>
                 <div className="flex shrink-0 flex-col gap-2">
-                    <span className="font-body-3-highlight text-primary">
-                        {trans.trading.order_book.tab_iceberg}
-                    </span>
+                    <span className="font-body-3-highlight text-primary">{'Lệnh Iceberg'}</span>
                     <dl className="shrink-0 flex flex-col gap-2 rounded-xl">
                         <div className="flex items-center gap-4">
                             <dt className="min-w-0 flex-1 font-body-3 text-secondary">
-                                {isBuy
-                                    ? trans.trading.iceberg_order.qty_buy
-                                    : trans.trading.iceberg_order.qty_sell}
+                                {isBuy ? 'Tổng KL' : 'Tổng KL'}
                             </dt>
                             <dd className="shrink-0 whitespace-nowrap font-body-3-highlight text-primary">
-                                {formatNumberVN(totalQuantity, { decimals: 0 })}{' '}
-                                {trans.trading.iceberg_order.unit}
+                                {formatNumberVN(totalQuantity, { decimals: 0 })} {'cp'}
                             </dd>
                         </div>
                         <div className="flex items-center gap-4">
                             <dt className="min-w-0 flex-1 font-body-3 text-secondary">
-                                {trans.trading.panel.qty_placeholder_child}
+                                {'KL 1 lệnh con'}
                             </dt>
                             <dd className="shrink-0 whitespace-nowrap font-body-3-highlight text-primary">
                                 {displaySize}
@@ -144,7 +137,7 @@ export const TradeIcebergOrder = ({ symbol, order, onClose, onSuccess }: Props) 
                         </div>
                         <div className="flex items-center gap-4">
                             <dt className="min-w-0 flex-1 font-body-3 text-secondary">
-                                {trans.trading.iceberg_order.price}
+                                {'Giá đặt'}
                             </dt>
                             <dd className="shrink-0 whitespace-nowrap font-body-3-highlight text-primary">
                                 {formatBoardPrice(price)}
@@ -152,13 +145,11 @@ export const TradeIcebergOrder = ({ symbol, order, onClose, onSuccess }: Props) 
                         </div>
                         <div className="flex items-center gap-4">
                             <dt className="min-w-0 flex-1 font-body-3 text-secondary">
-                                {isBuy
-                                    ? trans.trading.iceberg_order.money_buy
-                                    : trans.trading.iceberg_order.money_sell}
+                                {isBuy ? 'Tổng tiền mua' : 'Tổng tiền bán'}
                             </dt>
                             <dd className="shrink-0 whitespace-nowrap font-body-3-highlight text-primary">
                                 {formatNumberVN(totalMoney, { trimTrailingZeros: true })}
-                                {trans.trading.currency.suffix}
+                                {'đ'}
                             </dd>
                         </div>
                     </dl>
@@ -166,13 +157,13 @@ export const TradeIcebergOrder = ({ symbol, order, onClose, onSuccess }: Props) 
                         <div className="flex items-start gap-3 text-blue">
                             <RiInformationFill size={20} className="shrink-0" aria-hidden />
                             <p className="font-body-3">
-                                {trans.trading.iceberg_order.remainder_notice
+                                {'Lệnh thứ {index} sẽ có KL là {quantity} {unit} do chênh lệch giữa tổng KL và KL 1 lệnh con.'
                                     .replace('{index}', String(sliceCount))
                                     .replace(
                                         '{quantity}',
                                         formatNumberVN(lastSliceQuantity, { decimals: 0 }),
                                     )
-                                    .replace('{unit}', trans.trading.iceberg_order.unit)}
+                                    .replace('{unit}', 'cp')}
                             </p>
                         </div>
                     )}
@@ -191,9 +182,7 @@ export const TradeIcebergOrder = ({ symbol, order, onClose, onSuccess }: Props) 
                               : 'bg-red text-primary hover:opacity-90 active:opacity-80'
                     }`}
                 >
-                    {isBuy
-                        ? trans.trading.panel.btn_confirm_buy
-                        : trans.trading.panel.btn_confirm_sell}
+                    {isBuy ? 'Xác nhận mua' : 'Xác nhận bán'}
                 </button>
                 <button
                     type="button"
@@ -201,7 +190,7 @@ export const TradeIcebergOrder = ({ symbol, order, onClose, onSuccess }: Props) 
                     disabled={isLoading}
                     className="font-body-3-highlight flex w-full items-center justify-center rounded-full bg-error px-4 py-2 text-red transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
                 >
-                    {trans.trading.place_modal.btn_cancel}
+                    {'Huỷ'}
                 </button>
             </div>
         </section>

@@ -7,7 +7,6 @@ import { MarketDot } from '@/components/thi-truong/shared/MarketDot';
 import { MarketOutOfSession } from '@/components/thi-truong/shared/MarketOutOfSession';
 import { createChartMarketBreadth } from '@/config/market/market-index';
 import { useEChartsInstance } from '@/hooks/chart/useEChartsInstance';
-import { useTranslate } from '@/hooks/useTranslate';
 import { useMarketIndexStore } from '@/stores/common/useMarketIndexStore';
 import type { MarketBreadthChartData } from '@/types/pages/market';
 import { hasMarketBreadthData } from '@/utils/market/market-index';
@@ -17,7 +16,6 @@ type Props = {
 };
 
 export const MarketIndexBreadth = ({ selectedIndex }: Props) => {
-    const trans = useTranslate();
     const { data, isPreSession } = useMarketIndexStore();
 
     const containerRef = useRef<HTMLDivElement>(null);
@@ -45,7 +43,7 @@ export const MarketIndexBreadth = ({ selectedIndex }: Props) => {
         const container = containerRef.current;
         if (!container || !shouldShowChart || !breadthData) return;
 
-        const options = createChartMarketBreadth(breadthData, trans);
+        const options = createChartMarketBreadth(breadthData);
         if (!options) return;
 
         chartInstanceRef.current?.setOption(options, { lazyUpdate: true });
@@ -53,7 +51,7 @@ export const MarketIndexBreadth = ({ selectedIndex }: Props) => {
         requestAnimationFrame(() => {
             chartInstanceRef.current?.resize();
         });
-    }, [breadthData, shouldShowChart, chartInstanceRef, trans]);
+    }, [breadthData, shouldShowChart, chartInstanceRef]);
 
     useEffect(() => {
         const container = containerRef.current;
@@ -85,7 +83,7 @@ export const MarketIndexBreadth = ({ selectedIndex }: Props) => {
         <div className="flex shrink-0 flex-col gap-4">
             <h2 className="font-body-2-highlight text-primary flex items-center gap-2">
                 <MarketDot />
-                {trans.market.index.breadth_heading}
+                {'Độ rộng thị trường'}
             </h2>
             <div className="flex h-80 w-full min-h-0 items-center justify-center">
                 {renderContent()}

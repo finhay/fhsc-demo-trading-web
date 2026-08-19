@@ -3,25 +3,25 @@
 import { useEffect, useState } from 'react';
 
 import Image from 'next/image';
-import { useRouter } from 'next/router';
 
-import { FaChevronDown, FaChevronRight } from 'react-icons/fa6';
+import { FaChevronDown } from 'react-icons/fa6';
 
-import { ACCOUNT_DASHBOARD_MENU_ITEMS } from '@/constants/account';
 import { AUTH_ROUTES, DEFAULT_AVATAR_URL, NextAction } from '@/constants/common';
-import { useTranslate } from '@/hooks/useTranslate';
-import { useAccountStore } from '@/stores/account/useAccountStore';
 import { useAuthFlowStore } from '@/stores/auth/useAuthFlowStore';
 import { useAuthStore } from '@/stores/auth/useAuthStore';
 
+const NAV_AUTH = {
+    login: 'Đăng nhập',
+    register: 'Đăng ký',
+    acct_unverified: 'Tài khoản chưa được định danh',
+    profile: 'Hồ sơ',
+    logout: 'Đăng xuất',
+};
+
 export const NavAuth = () => {
-    const trans = useTranslate();
-    const menuLabelMap = trans.account_menu.menu;
     const [isShowDropBox, setIsShowDropBox] = useState<boolean>(false);
     const { profile, logout, avatarUrl } = useAuthStore();
-    const { setActiveTab } = useAccountStore();
     const { openAuthDialog } = useAuthFlowStore();
-    const router = useRouter();
 
     useEffect(() => {
         if (!profile) setIsShowDropBox(false);
@@ -33,7 +33,7 @@ export const NavAuth = () => {
                 <nav className="flex items-center gap-2" aria-label="User authentication">
                     {profile?.next_action === NextAction.EKYC && (
                         <span className="text-primary font-caption-highlight">
-                            {trans.nav_auth.acct_unverified}
+                            {'Tài khoản chưa được định danh'}
                         </span>
                     )}
                     <div
@@ -79,7 +79,7 @@ export const NavAuth = () => {
                                     <div className="relative h-10 w-10 shrink-0 overflow-hidden rounded-full bg-tertiary">
                                         <Image
                                             src={avatarUrl || DEFAULT_AVATAR_URL}
-                                            alt={trans.account_menu.avatar_alt}
+                                            alt={'Ảnh đại diện người dùng'}
                                             fill
                                             sizes="40px"
                                             className="object-cover object-center"
@@ -94,45 +94,12 @@ export const NavAuth = () => {
                                         </span>
                                     </div>
                                 </div>
-                                <nav
-                                    className="flex flex-col gap-6"
-                                    aria-label={trans.account_menu.nav_aria}
-                                >
-                                    {ACCOUNT_DASHBOARD_MENU_ITEMS.map((item) => {
-                                        const Icon = item.icon;
-
-                                        return (
-                                            <button
-                                                key={item.tab}
-                                                type="button"
-                                                className="flex cursor-pointer items-center justify-between"
-                                                onClick={() => {
-                                                    setActiveTab(item.tab);
-                                                    router.push('/tai-khoan');
-                                                    setIsShowDropBox(false);
-                                                }}
-                                                role="menuitem"
-                                            >
-                                                <span className="flex items-center gap-4">
-                                                    <Icon size={18} className="text-secondary" />
-                                                    <span className="font-body-2 text-primary">
-                                                        {menuLabelMap[item.tab]}
-                                                    </span>
-                                                </span>
-                                                <FaChevronRight
-                                                    size={14}
-                                                    className="text-secondary"
-                                                />
-                                            </button>
-                                        );
-                                    })}
-                                </nav>
                                 <button
                                     className="cursor-pointer font-body-3 text-red bg-primary px-6 py-1.5 rounded-full w-fit"
                                     onClick={logout}
                                     role="menuitem"
                                 >
-                                    {trans.nav_auth.logout}
+                                    {'Đăng xuất'}
                                 </button>
                             </menu>
                         </div>
@@ -151,7 +118,7 @@ export const NavAuth = () => {
                             }`}
                             onClick={() => openAuthDialog(route.mode)}
                         >
-                            {trans.nav_auth[route.translationKey]}
+                            {NAV_AUTH[route.translationKey]}
                         </button>
                     ))}
                 </nav>

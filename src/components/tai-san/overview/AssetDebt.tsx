@@ -5,7 +5,6 @@ import { useEffect, useMemo, useState } from 'react';
 import { EmptyState } from '@/components/common/feature/EmptyState';
 import { Skeleton } from '@/components/common/ui/Skeleton';
 import { SUB_ACCOUNT_TYPE } from '@/constants/common';
-import { useTranslate } from '@/hooks/useTranslate';
 import { getSubAccountAssetSummary } from '@/services/api/trade/assets';
 import { useAssetStore } from '@/stores/assets/useAssetStore';
 import { useAuthStore } from '@/stores/auth/useAuthStore';
@@ -32,7 +31,6 @@ const toDebtRows = (rows: DebtAmountRow[]): DebtRow[] =>
         }));
 
 export const AssetDebt = () => {
-    const trans = useTranslate();
     const { subAccounts } = useAuthStore();
     const { assetsSummary, isSummaryLoading } = useAssetStore();
     const [normalAsset, setNormalAsset] = useState<SubAccountAsset | null>(null);
@@ -50,19 +48,19 @@ export const AssetDebt = () => {
         const debt = assetsSummary?.debt;
         return toDebtRows([
             {
-                label: trans.assets.debt.total,
+                label: 'Tổng nợ',
                 amount: (debt?.total || 0) - (debt?.secure_amount || 0),
             },
             {
-                label: trans.assets.debt.custody,
+                label: 'Nợ phí lưu ký',
                 amount: (debt?.cidepo_fee_acr || 0) + (debt?.cidepo_fee || 0),
             },
             {
-                label: trans.assets.debt.advance,
+                label: 'Nợ ứng trước tiền bán',
                 amount: debt?.advance_amt || 0,
             },
             {
-                label: trans.assets.debt.margin,
+                label: 'Nợ ký quỹ margin',
                 amount: debt?.owe_deposit || 0,
             },
         ]);
@@ -71,18 +69,18 @@ export const AssetDebt = () => {
     const buildDebtRows = (asset: SubAccountAsset | null, includeMargin = false): DebtRow[] => {
         const rows = [
             {
-                label: trans.assets.debt.custody,
+                label: 'Nợ phí lưu ký',
                 amount: (asset?.cidepo_fee_acr || 0) + (asset?.cidepo_fee || 0),
             },
             {
-                label: trans.assets.debt.advance,
+                label: 'Nợ ứng trước tiền bán',
                 amount: asset?.advanced_amount || 0,
             },
         ];
 
         if (includeMargin) {
             rows.push({
-                label: trans.assets.debt.margin,
+                label: 'Nợ ký quỹ margin',
                 amount: (asset?.t0_debt_amount || 0) + (asset?.margin_amount || 0),
             });
         }
@@ -94,24 +92,24 @@ export const AssetDebt = () => {
         () => [
             {
                 key: 'summary',
-                title: trans.assets.debt.heading,
+                title: 'Nợ',
                 rows: buildSummaryRows(),
                 isLoading: isSummaryLoading,
             },
             {
                 key: 'normal',
-                title: trans.assets.debt.normal_account,
+                title: 'Tiểu khoản thường',
                 rows: buildDebtRows(normalAsset),
                 isLoading,
             },
             {
                 key: 'margin',
-                title: trans.assets.debt.margin_account,
+                title: 'Tiểu khoản margin',
                 rows: buildDebtRows(marginAsset, true),
                 isLoading,
             },
         ],
-        [assetsSummary, isSummaryLoading, normalAsset, marginAsset, isLoading, trans],
+        [assetsSummary, isSummaryLoading, normalAsset, marginAsset, isLoading],
     );
 
     useEffect(() => {
@@ -156,10 +154,8 @@ export const AssetDebt = () => {
         <section className="flex flex-col bg-secondary rounded-xl p-3 gap-8 w-full shrink-0">
             {isAllEmpty ? (
                 <div className="h-96 w-full">
-                    <h2 className="font-body-2-highlight text-primary">
-                        {trans.assets.debt.heading}
-                    </h2>
-                    <EmptyState description={trans.assets.debt.empty} />
+                    <h2 className="font-body-2-highlight text-primary">{'Nợ'}</h2>
+                    <EmptyState description={'Bạn đang không có khoản nợ nào!'} />
                 </div>
             ) : (
                 sections.map((section) => {

@@ -7,10 +7,9 @@ import {
     createChartMacroLine,
     createChartMacroMulti,
 } from '@/config/market/market-macro';
-import { MACRO_SERIES_COLORS } from '@/constants/market';
+import { MACRO_SERIES_COLORS, MARKET_MACRO } from '@/constants/market';
 import { useEChartsInstance } from '@/hooks/chart/useEChartsInstance';
 import { useEChartsOption } from '@/hooks/chart/useEChartsOption';
-import { useTranslate } from '@/hooks/useTranslate';
 import type { MacroUsRawState } from '@/types/pages/market';
 import { formatNumberVN } from '@/utils/format';
 import { formatMacroPercent, getLastMacroValue } from '@/utils/market/market-macro';
@@ -20,26 +19,26 @@ type Props = {
 };
 
 export const MarketMacroUs = ({ data }: Props) => {
-    const detail = useTranslate().market.macro.detail;
+    const detail = MARKET_MACRO;
 
     const { dates, series } = useMemo(
         () =>
             buildDualMacroChartSeries(data.pce, data.corePce, {
-                primary: detail.pce,
-                secondary: detail.core_pce,
+                primary: 'PCE',
+                secondary: 'PCE lõi',
             }),
         [data.pce, data.corePce, detail],
     );
     const consumptionLegends = [
         {
             key: 'pce',
-            label: detail.pce,
+            label: 'PCE',
             colorClass: 'bg-blue',
             value: getLastMacroValue(data.pce),
         },
         {
             key: 'core_pce',
-            label: detail.core_pce,
+            label: 'PCE lõi',
             colorClass: 'bg-orange',
             value: getLastMacroValue(data.corePce),
         },
@@ -63,7 +62,7 @@ export const MarketMacroUs = ({ data }: Props) => {
     });
 
     const formatNfp = (value: number) =>
-        `${formatNumberVN(value, { trimTrailingZeros: true })} ${detail.nfp_suffix}`;
+        `${formatNumberVN(value, { trimTrailingZeros: true })} ${'nghìn'}`;
     const formatNfpAxis = (value: number) =>
         `${formatNumberVN(value, { trimTrailingZeros: true })}k`;
 
@@ -76,7 +75,7 @@ export const MarketMacroUs = ({ data }: Props) => {
     useEChartsOption(
         nfpInstanceRef,
         () =>
-            createChartMacroLine(data.nfp, detail.nfp, {
+            createChartMacroLine(data.nfp, 'Việc làm (NFP)', {
                 color: MACRO_SERIES_COLORS.orange,
                 yFormatter: formatNfpAxis,
                 valueFormatter: formatNfp,
@@ -87,7 +86,7 @@ export const MarketMacroUs = ({ data }: Props) => {
     useEChartsOption(
         unemploymentInstanceRef,
         () =>
-            createChartMacroLine(data.unemployment, detail.unemployment, {
+            createChartMacroLine(data.unemployment, 'Tỷ lệ thất nghiệp', {
                 color: MACRO_SERIES_COLORS.blue,
                 valueSuffix: '%',
             }),
@@ -96,11 +95,11 @@ export const MarketMacroUs = ({ data }: Props) => {
 
     return (
         <section className="bg-secondary flex flex-col gap-4 rounded-2xl p-4">
-            <h3 className="font-body-2-highlight text-primary">{detail.section_us_inflation}</h3>
+            <h3 className="font-body-2-highlight text-primary">{'Tiêu dùng & việc làm'}</h3>
             <div className="flex flex-col gap-4 lg:flex-row">
                 <div className="border-tertiary bg-secondary flex min-w-0 flex-1 flex-col gap-5 rounded-2xl border p-4">
                     <div className="flex flex-col gap-4">
-                        <p className="font-body-3 text-secondary">{detail.consumption}</p>
+                        <p className="font-body-3 text-secondary">{'Lạm phát (YoY)'}</p>
                         <div className="flex flex-wrap items-center gap-4">
                             {consumptionLegends.map((legend) => (
                                 <div
@@ -137,7 +136,7 @@ export const MarketMacroUs = ({ data }: Props) => {
                 <div className="border-tertiary bg-secondary flex min-w-0 flex-1 flex-col rounded-2xl border">
                     <div className="flex w-full flex-col gap-5 p-4">
                         <div className="flex flex-col gap-1">
-                            <p className="font-body-3 text-secondary">{detail.nfp}</p>
+                            <p className="font-body-3 text-secondary">{'Việc làm (NFP)'}</p>
                             <p className="font-body-2-highlight text-primary">
                                 {nfpLast == null ? '--' : formatNfp(nfpLast)}
                             </p>
@@ -156,7 +155,7 @@ export const MarketMacroUs = ({ data }: Props) => {
                     <div className="bg-tertiary h-px w-full" />
                     <div className="flex w-full flex-col gap-5 p-4">
                         <div className="flex flex-col gap-1">
-                            <p className="font-body-3 text-secondary">{detail.unemployment}</p>
+                            <p className="font-body-3 text-secondary">{'Tỷ lệ thất nghiệp'}</p>
                             <p className="font-body-2-highlight text-primary">
                                 {formatMacroPercent(getLastMacroValue(data.unemployment))}
                             </p>

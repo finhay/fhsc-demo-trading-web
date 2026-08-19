@@ -6,7 +6,6 @@ import { EmptyState } from '@/components/common/feature/EmptyState';
 import { PortfolioLeadPanel } from '@/components/common/portfolio-chart/PortfolioLeadPanel';
 import { Skeleton } from '@/components/common/ui/Skeleton';
 import { useMQTT } from '@/hooks/useMQTT';
-import { useTranslate } from '@/hooks/useTranslate';
 import { StockPriceMessage } from '@/proto/stock';
 import { fetchStocksMetadataBySymbolsV4 } from '@/services/api/datafeed/stock-info';
 import { fetchSubAccountStockPortfolio } from '@/services/api/trade/portfolio';
@@ -23,7 +22,6 @@ import {
 import { MarketWatchlistStockList } from './MarketWatchlistStockList';
 
 export const MarketWatchlistPortfolio = () => {
-    const trans = useTranslate();
     const { profile, activeSubAccount } = useAuthStore();
     const [quantities, setQuantities] = useState<Record<string, number>>({});
     const [stocks, setStocks] = useState<StocksInfoItem[]>([]);
@@ -161,7 +159,7 @@ export const MarketWatchlistPortfolio = () => {
 
     return (
         <div
-            aria-label={trans.market.portfolio.heading}
+            aria-label={'Danh mục sở hữu của bạn:'}
             className="flex min-h-0 flex-1 flex-col gap-4 overflow-hidden"
         >
             <div className="shrink-0">
@@ -174,8 +172,8 @@ export const MarketWatchlistPortfolio = () => {
                     weightPercent={activeRow.weightPercent}
                     heading={
                         activeRow.symbol === rows[0]?.symbol
-                            ? trans.market.portfolio.lead_heading
-                            : trans.market.portfolio.impact_heading
+                            ? 'Dẫn dắt danh mục'
+                            : 'Tác động danh mục'
                     }
                 />
             </div>

@@ -6,7 +6,6 @@ import { FaChevronDown, FaChevronUp, FaPen, FaPlus, FaTrash } from 'react-icons/
 
 import { FormWatchlistModal } from '@/components/common/modal/FormWatchlistModal';
 import { toast } from '@/hooks/lib/useToast';
-import { useTranslate } from '@/hooks/useTranslate';
 import { useAuthStore } from '@/stores/auth/useAuthStore';
 import { useLoadingStore } from '@/stores/common/useLoadingStore';
 import { isOwnedWatchlist, useWatchlistStore } from '@/stores/common/useWatchlistStore';
@@ -30,7 +29,6 @@ export const DropdownWatchlist = ({
     isOwnedActive = false,
     onSelectOwned,
 }: Props = {}) => {
-    const trans = useTranslate();
     const { profile, isInitialized } = useAuthStore();
     const { startLoading, stopLoading } = useLoadingStore();
     const {
@@ -44,9 +42,7 @@ export const DropdownWatchlist = ({
 
     const hasOptions = watchlists.length > 0 || showOwnedOption;
     const selectedWatchlist = isOwnedWatchlist(currentWatchList) ? null : currentWatchList;
-    const currentWatchListName = isOwnedActive
-        ? trans.dropdown_watchlist.owned
-        : selectedWatchlist?.name;
+    const currentWatchListName = isOwnedActive ? 'Đang sở hữu' : selectedWatchlist?.name;
     const isAnyOptionSelected = Boolean(selectedWatchlist) || isOwnedActive;
 
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -58,7 +54,7 @@ export const DropdownWatchlist = ({
         try {
             const { success, message } = await deleteWatchlist(watchlistId);
             if (success) {
-                toast.success(trans.dropdown_watchlist.delete_success);
+                toast.success('Xoá danh mục thành công');
 
                 const updatedWatchlists = watchlists.filter((w) => w.id !== watchlistId);
                 setWatchlists(updatedWatchlists);
@@ -67,7 +63,7 @@ export const DropdownWatchlist = ({
                     setCurrentWatchList(updatedWatchlists[0] || null);
                 }
             } else {
-                toast.error(message || trans.dropdown_watchlist.delete_error);
+                toast.error(message || 'Lỗi xoá danh mục');
             }
             setIsDropdownOpen(false);
         } finally {
@@ -85,7 +81,7 @@ export const DropdownWatchlist = ({
             {showCreateButton && (
                 <button
                     type="button"
-                    aria-label={trans.dropdown_watchlist.create_aria}
+                    aria-label={'Tạo danh mục'}
                     onClick={() => {
                         setModalMode('create');
                         setIsModalOpen(true);
@@ -106,11 +102,8 @@ export const DropdownWatchlist = ({
                     type="button"
                     aria-haspopup="listbox"
                     aria-expanded={isDropdownOpen && hasOptions}
-                    aria-label={`${trans.dropdown_watchlist.selected_prefix}${
-                        currentWatchListName ||
-                        (hasOptions
-                            ? trans.dropdown_watchlist.select_placeholder
-                            : trans.dropdown_watchlist.empty)
+                    aria-label={`${'Danh mục đang chọn: '}${
+                        currentWatchListName || (hasOptions ? 'Chọn danh mục' : 'Chưa có danh mục')
                     }`}
                     className={`${buttonClass} flex ${buttonWidthClass} min-w-0 shrink-0 items-center gap-2 rounded-full px-4 py-1.5`}
                 >
@@ -120,9 +113,7 @@ export const DropdownWatchlist = ({
                         }`}
                     >
                         {currentWatchListName ||
-                            (hasOptions
-                                ? trans.dropdown_watchlist.select_placeholder
-                                : trans.dropdown_watchlist.empty)}
+                            (hasOptions ? 'Chọn danh mục' : 'Chưa có danh mục')}
                     </span>
                     {hasOptions && (
                         <>
@@ -151,7 +142,7 @@ export const DropdownWatchlist = ({
                     >
                         <ul
                             role="listbox"
-                            aria-label={trans.dropdown_watchlist.list_aria}
+                            aria-label={'Chọn danh mục theo dõi'}
                             className="w-full list-none overflow-hidden rounded-xl bg-tertiary p-0 m-0 shadow-lg"
                         >
                             {showOwnedOption && (
@@ -168,7 +159,7 @@ export const DropdownWatchlist = ({
                                             : 'text-secondary hover:text-primary'
                                     }`}
                                 >
-                                    <span>{trans.dropdown_watchlist.owned}</span>
+                                    <span>{'Đang sở hữu'}</span>
                                 </li>
                             )}
                             {watchlists.map((watchlist) => (
@@ -198,7 +189,7 @@ export const DropdownWatchlist = ({
                                                 setIsModalOpen(true);
                                             }}
                                             className="text-secondary hover:text-highlight transition-colors"
-                                            aria-label={`${trans.dropdown_watchlist.edit_prefix}${watchlist.name}`}
+                                            aria-label={`${'Chỉnh sửa danh mục '}${watchlist.name}`}
                                         >
                                             <FaPen size={14} />
                                         </button>
@@ -209,7 +200,7 @@ export const DropdownWatchlist = ({
                                                 handleDeleteWatchlist(watchlist.id);
                                             }}
                                             className="text-red hover:text-red/80 transition-colors"
-                                            aria-label={`${trans.dropdown_watchlist.delete_prefix}${watchlist.name}`}
+                                            aria-label={`${'Xóa danh mục '}${watchlist.name}`}
                                         >
                                             <FaTrash size={14} />
                                         </button>

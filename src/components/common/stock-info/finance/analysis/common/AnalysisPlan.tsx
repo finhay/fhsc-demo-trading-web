@@ -1,6 +1,6 @@
 'use client';
 
-import { useTranslate } from '@/hooks/useTranslate';
+import { FINANCE_ANALYSIS_LABELS } from '@/constants/stock-info';
 import type { PlanItem } from '@/types/pages/stock-info';
 import { formatNumberVN } from '@/utils/format';
 
@@ -10,9 +10,8 @@ type Props = {
 };
 
 export const AnalysisPlan = ({ items, title }: Props) => {
-    const trans = useTranslate();
-    const fa = trans.stockInfo.finance_analysis as Record<string, string>;
-    const resolvedTitle = title ?? fa.plan_completion_pct;
+    const fa = FINANCE_ANALYSIS_LABELS as Record<string, string>;
+    const resolvedTitle = title ?? '% hoàn thành kế hoạch';
 
     return (
         <div className="flex flex-col gap-1">

@@ -11,7 +11,6 @@ import { ACCOUNT_TYPE, ERROR_CODES } from '@/constants/common';
 import { ORDER_SIDE, TWO_FA_PLACEMENT } from '@/constants/trading';
 import { useHotkeys } from '@/hooks/lib/useHotkeys';
 import { toast } from '@/hooks/lib/useToast';
-import { useTranslate } from '@/hooks/useTranslate';
 import { cancelTwapLoOrder } from '@/services/api/trade/twap-lo';
 import { useAuthStore } from '@/stores/auth/useAuthStore';
 import { useLoadingStore } from '@/stores/common/useLoadingStore';
@@ -36,8 +35,6 @@ export const TradeTwapLoDetail = ({
     onSuccess,
     onExpired2FA,
 }: Props) => {
-    const trans = useTranslate();
-    const detailTrans = trans.trading.twap_lo_detail;
     const { activeSubAccount, profile } = useAuthStore();
     const { startLoading, stopLoading, isLoading } = useLoadingStore();
     const { request2FA, handle2FATokenExpired, patchOrdersInBook } = useTradingStore();
@@ -57,12 +54,11 @@ export const TradeTwapLoDetail = ({
     const canCancel = canCancelTwapLoOrder(order.status ?? '');
     const slices = order.slices ?? [];
 
-    const detailTitle = (isBuy ? detailTrans.title_buy : detailTrans.title_sell).replace(
-        '{symbol}',
-        order.symbol,
-    );
+    const detailTitle = (
+        isBuy ? 'Chi tiết Lệnh CD LO mua {symbol}' : 'Chi tiết Lệnh CD LO bán {symbol}'
+    ).replace('{symbol}', order.symbol);
     const cancelTitle = (
-        isBuy ? detailTrans.cancel_title_buy : detailTrans.cancel_title_sell
+        isBuy ? 'Xác nhận hủy lệnh CD LO mua {symbol}' : 'Xác nhận hủy lệnh CD LO bán {symbol}'
     ).replace('{symbol}', order.symbol);
     const title = view === 'detail' ? detailTitle : cancelTitle;
 
@@ -92,7 +88,7 @@ export const TradeTwapLoDetail = ({
                         allowAmend: false,
                     },
                 ]);
-                toast.success(trans.trading.toast.cancel_success);
+                toast.success('Huỷ lệnh thành công');
                 onSuccess();
             } else if (error_code === ERROR_CODES.FAILED_2FA_TOKEN_EXPIRED) {
                 is2FAExpired = true;
@@ -107,7 +103,7 @@ export const TradeTwapLoDetail = ({
             if (errCode === ERROR_CODES.FAILED_2FA_TOKEN_EXPIRED) {
                 is2FAExpired = true;
             } else {
-                toast.error(getApiErrorMessage(err, trans.common.try_again_error));
+                toast.error(getApiErrorMessage(err, 'Có lỗi xảy ra, vui lòng thử lại'));
             }
         } finally {
             stopLoading();
@@ -146,7 +142,7 @@ export const TradeTwapLoDetail = ({
         <div className="fixed inset-0 z-50" role="presentation">
             <button
                 type="button"
-                aria-label={trans.dialog.close}
+                aria-label={'Đóng'}
                 className="absolute inset-0"
                 onClick={() => setIsOpen(false)}
             />
@@ -164,7 +160,7 @@ export const TradeTwapLoDetail = ({
                         type="button"
                         onClick={() => setIsOpen(false)}
                         className="shrink-0 text-primary transition-colors hover:text-highlight"
-                        aria-label={trans.dialog.close}
+                        aria-label={'Đóng'}
                     >
                         <FaXmark size={16} />
                     </button>
@@ -182,17 +178,17 @@ export const TradeTwapLoDetail = ({
                             <dl className="flex shrink-0 flex-col gap-4 rounded-xl bg-quaternary p-3">
                                 <div className="flex items-center gap-6">
                                     <dt className="min-w-0 flex-1 font-body-3 text-secondary">
-                                        {detailTrans.qty_matched_total}
+                                        {'KL khớp / Tổng KL đặt'}
                                     </dt>
                                     <dd className="shrink-0 whitespace-nowrap font-body-3 text-primary">
                                         {formatNumberVN(order.matchedQty ?? 0, { decimals: 0 })} /{' '}
                                         {formatNumberVN(order.orderQty ?? 0, { decimals: 0 })}{' '}
-                                        {detailTrans.unit}
+                                        {'cp'}
                                     </dd>
                                 </div>
                                 <div className="flex items-center gap-6">
                                     <dt className="min-w-0 flex-1 font-body-3 text-secondary">
-                                        {detailTrans.price_matched_placed}
+                                        {'Giá khớp / Giá đặt'}
                                     </dt>
                                     <dd className="shrink-0 whitespace-nowrap font-body-3 text-primary">
                                         {matchedAvgPrice > 0
@@ -203,11 +199,11 @@ export const TradeTwapLoDetail = ({
                                 </div>
                                 <div className="flex items-center gap-6">
                                     <dt className="min-w-0 flex-1 font-body-3 text-secondary">
-                                        {isBuy ? detailTrans.money_buy : detailTrans.money_sell}
+                                        {isBuy ? 'Tổng tiền mua' : 'Tổng tiền bán'}
                                     </dt>
                                     <dd className="shrink-0 whitespace-nowrap font-body-3 text-primary">
                                         {formatNumberVN(totalMoney, { trimTrailingZeros: true })}
-                                        {trans.trading.currency.suffix}
+                                        {'đ'}
                                     </dd>
                                 </div>
                             </dl>
@@ -215,7 +211,7 @@ export const TradeTwapLoDetail = ({
                             <dl className="flex shrink-0 flex-col gap-4 rounded-xl bg-quaternary p-3">
                                 <div className="flex items-center gap-6">
                                     <dt className="min-w-0 flex-1 font-body-3 text-secondary">
-                                        {detailTrans.transaction_id}
+                                        {'Mã giao dịch'}
                                     </dt>
                                     <dd className="shrink-0 whitespace-nowrap font-body-3 text-primary">
                                         {orderId || '--'}
@@ -223,7 +219,7 @@ export const TradeTwapLoDetail = ({
                                 </div>
                                 <div className="flex items-center gap-6">
                                     <dt className="min-w-0 flex-1 font-body-3 text-secondary">
-                                        {detailTrans.placed_at}
+                                        {'Thời gian đặt'}
                                     </dt>
                                     <dd className="shrink-0 whitespace-nowrap font-body-3 text-primary">
                                         {order.createdAt ? formatDateTime(order.createdAt) : '--'}
@@ -233,7 +229,7 @@ export const TradeTwapLoDetail = ({
 
                             <section className="flex min-h-0 flex-1 flex-col">
                                 <h3 className="shrink-0 font-body-2-highlight text-primary">
-                                    {detailTrans.child_heading.replace(
+                                    {'Danh sách lệnh con ({count} lệnh)'.replace(
                                         '{count}',
                                         String(slices.length || order.n || 0),
                                     )}
@@ -254,7 +250,7 @@ export const TradeTwapLoDetail = ({
                                     onClick={() => setView('cancel_confirm')}
                                     className="flex h-10 w-full items-center justify-center rounded-full bg-red px-4 py-2 font-body-3-highlight text-quaternary transition-opacity hover:opacity-90"
                                 >
-                                    {detailTrans.btn_cancel}
+                                    {'Hủy lệnh'}
                                 </button>
                             </div>
                         )}
@@ -264,26 +260,28 @@ export const TradeTwapLoDetail = ({
                         <div className="flex min-h-0 flex-1 flex-col overflow-y-auto">
                             <div className="flex items-start gap-3 px-6 py-3 text-orange">
                                 <RiErrorWarningFill size={20} className="shrink-0" aria-hidden />
-                                <p className="font-body-3">{detailTrans.cancel_warn}</p>
+                                <p className="font-body-3">
+                                    {
+                                        'Việc hủy lệnh CD LO sẽ hủy các lệnh chưa khớp, khớp một phần đã được lên sàn và toàn bộ các lệnh chờ trong danh sách.'
+                                    }
+                                </p>
                             </div>
                             <div className="px-6 py-3">
                                 <dl className="flex flex-col gap-4 rounded-xl bg-quaternary p-3">
                                     <div className="flex items-start justify-between gap-4">
-                                        <dt className="font-body-3 text-secondary">
-                                            {detailTrans.cancel_qty}
-                                        </dt>
+                                        <dt className="font-body-3 text-secondary">{'KL hủy'}</dt>
                                         <dd className="shrink-0 whitespace-nowrap font-body-3 text-primary">
                                             {formatNumberVN(cancelQty, { decimals: 0 })}
-                                            {detailTrans.unit}
+                                            {'cp'}
                                         </dd>
                                     </div>
                                     <div className="flex items-start justify-between gap-4">
                                         <dt className="font-body-3 text-secondary">
-                                            {detailTrans.cancel_qty_total}
+                                            {'Tổng KL đặt'}
                                         </dt>
                                         <dd className="shrink-0 whitespace-nowrap font-body-3 text-primary">
                                             {formatNumberVN(order.orderQty ?? 0, { decimals: 0 })}
-                                            {detailTrans.unit}
+                                            {'cp'}
                                         </dd>
                                     </div>
                                 </dl>
@@ -301,7 +299,7 @@ export const TradeTwapLoDetail = ({
                                         : 'bg-red text-quaternary hover:opacity-90'
                                 }`}
                             >
-                                {detailTrans.btn_confirm}
+                                {'Xác nhận hủy lệnh'}
                             </button>
                             <button
                                 type="button"
@@ -309,7 +307,7 @@ export const TradeTwapLoDetail = ({
                                 disabled={isLoading}
                                 className="flex h-10 w-full items-center justify-center rounded-full bg-primary px-4 py-2 font-body-3-highlight text-highlight transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
                             >
-                                {detailTrans.btn_back}
+                                {'Quay lại'}
                             </button>
                         </div>
                     </>

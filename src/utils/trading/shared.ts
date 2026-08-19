@@ -112,34 +112,34 @@ export const buildDepthRawRows = (d: StockPrice): DepthRawRow[] => {
     ];
 };
 
-export const mapOrderErrorCodeToStatus = (code: string, trans: any, text: string): string => {
+export const mapOrderErrorCodeToStatus = (code: string, text: string): string => {
     switch (code) {
         case '-400099':
-            return trans.trading.order_status_message.symbolInvalidWithSubAccount;
+            return 'Mã chứng khoán không hợp lệ với tiểu khoản';
         case '-400116':
-            return trans.trading.order_status_message.outOfMoney;
+            return 'Vượt quá sức mua';
         case '-900017':
-            return trans.trading.order_status_message.outOfQuantity;
+            return 'Vượt quá số lượng';
         case '-100522':
-            return trans.trading.order_status_message.orderInvalid;
+            return 'Lệnh không hợp lệ';
         case '-700114':
-            return trans.trading.order_status_message.orderTypeInvalid;
+            return 'Loại lệnh không hợp lệ';
         case '-700069':
-            return trans.trading.order_status_message.symbolInvalid;
+            return 'Mã chứng khoán không hợp lệ';
         case '-10011':
-            return trans.trading.order_status_message.stepPriceInvalid;
+            return 'Bước giá không hợp lệ';
         case '-100113':
-            return trans.trading.order_status_message.sessionInvalid;
+            return 'Lệnh sai phiên';
         case '-700106':
-            return trans.trading.order_status_message.editOrderDifferent;
+            return 'Lệnh sửa không khác lệnh gốc';
         case '-700104':
-            return trans.trading.order_status_message.evenLotDifferent;
+            return 'Không thể sửa từ lô chẵn sang lô lẻ';
         case '-700105':
-            return trans.trading.order_status_message.oddLotDifferent;
+            return 'Không thể sửa từ lô lẻ sang lô chẵn';
         case '-701111':
-            return trans.trading.order_status_message.quantitySmallerMatched;
+            return 'Khối lượng sửa nhỏ hơn khối lượng đã khớp';
         case '-300025':
-            return trans.trading.order_status_message.endOfSession;
+            return 'Đã hết phiên giao dịch';
         default:
             return text;
     }

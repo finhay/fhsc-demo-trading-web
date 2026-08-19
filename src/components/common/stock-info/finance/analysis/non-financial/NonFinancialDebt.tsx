@@ -1,13 +1,15 @@
 'use client';
 
 import { AnalysisSection } from '@/components/common/stock-info/finance/analysis/common/AnalysisSection';
-import { ANALYSIS_CONTENT_CARD, NON_FINANCIAL_DEBT } from '@/constants/stock-info';
-import { useTranslate } from '@/hooks/useTranslate';
+import {
+    ANALYSIS_CONTENT_CARD,
+    FINANCE_ANALYSIS_LABELS,
+    NON_FINANCIAL_DEBT,
+} from '@/constants/stock-info';
 import { formatNumberVN, formatNumberVNWithUnit } from '@/utils/format';
 
 export const NonFinancialDebt = ({ dataAnnual }: { dataAnnual: any }) => {
-    const trans = useTranslate();
-    const fa = trans.stockInfo.finance_analysis as Record<string, string>;
+    const fa = FINANCE_ANALYSIS_LABELS as Record<string, string>;
     const latest = dataAnnual?.[0] ?? {};
 
     const ratioBars = NON_FINANCIAL_DEBT.ratioBars.map((bar) => {
@@ -33,7 +35,7 @@ export const NonFinancialDebt = ({ dataAnnual }: { dataAnnual: any }) => {
     }));
 
     return (
-        <AnalysisSection title={fa.nonfin_debt_question}>
+        <AnalysisSection title={'Nợ có an toàn không?'}>
             <div className={ANALYSIS_CONTENT_CARD}>
                 {latest?.vonchusohuu_tong && latest?.nonganhan && latest?.nodaihan && (
                     <div className="flex w-full overflow-hidden rounded">

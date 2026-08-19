@@ -3,7 +3,6 @@
 import Image from 'next/image';
 
 import { AUTH_MODE } from '@/constants/auth';
-import { useTranslate } from '@/hooks/useTranslate';
 import { useAuthFlowStore } from '@/stores/auth/useAuthFlowStore';
 
 type Props = {
@@ -13,7 +12,6 @@ type Props = {
 };
 
 export const EmptyState = ({ button, title, description }: Props) => {
-    const trans = useTranslate();
     const { openAuthDialog } = useAuthFlowStore();
     return (
         <figure className="flex flex-col items-center justify-center h-full gap-4">
@@ -28,14 +26,14 @@ export const EmptyState = ({ button, title, description }: Props) => {
             />
             <figcaption className="font-body-2 text-secondary text-center">
                 {description ||
-                    (button ? trans.empty_state.no_information : trans.empty_state.no_data)}
+                    (button ? 'Đăng nhập để xem thông tin chi tiết' : 'Không có dữ liệu')}
             </figcaption>
             {button && (
                 <button
                     className="text-quaternary bg-highlight rounded-full w-28 py-1.5 font-body-3-highlight cursor-pointer"
                     onClick={() => openAuthDialog(AUTH_MODE.LOGIN)}
                 >
-                    {title || trans.empty_state.login}
+                    {title || 'Đăng nhập'}
                 </button>
             )}
         </figure>

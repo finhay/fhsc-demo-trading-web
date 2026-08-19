@@ -18,19 +18,44 @@ import { FaArrowDown, FaArrowUp } from 'react-icons/fa6';
 import { EmptyState } from '@/components/common/feature/EmptyState';
 import { Spinner } from '@/components/common/ui/Spinner';
 import { Tooltip } from '@/components/common/ui/Tooltip';
-import { useTranslate } from '@/hooks/useTranslate';
 import type {
     StockMajorShareholder,
     StockOwnershipShareholderType,
 } from '@/types/datafeed/stock-info';
 import { formatDateOrDash, formatNumberVN, formatPercentVN } from '@/utils/format';
 
+const STOCK_INFO_PROFILE = {
+    section_aria: 'Hồ sơ doanh nghiệp',
+    info_aria: 'Thông tin doanh nghiệp',
+    shareholders_aria: 'Cổ đông lớn',
+    shareholders_title: 'Cổ đông lớn',
+    empty: 'Chưa có dữ liệu',
+    sic_code: 'Mã SIC',
+    exchange: 'Sàn',
+    sector: 'Ngành',
+    listing_date: 'Ngày niêm yết',
+    listing_ref_price: 'Giá TC chào sàn',
+    listed_shares: 'CP niêm yết',
+    outstanding_shares: 'CP lưu hành',
+    treasury_shares: 'CP quỹ',
+    free_float: 'CP trôi nổi',
+    free_float_pct: 'Tỷ lệ trôi nổi',
+    col_name: 'Tên',
+    col_shares: 'Số CP',
+    col_pct: 'Tỷ lệ',
+    col_updated: 'Cập nhật',
+    shareholder_type: {
+        foreign: 'Nước ngoài',
+        insider: 'Nội bộ',
+        individual: 'Cá nhân',
+        local_institution: 'Tổ chức',
+    },
+};
+
 type Props = {
     isLoading: boolean;
     shareholders: StockMajorShareholder[];
 };
-
-type Trans = ReturnType<typeof useTranslate>;
 
 const renderSortIcon = (sorted: false | 'asc' | 'desc') => {
     if (sorted === 'asc') return <FaArrowUp size={10} />;
@@ -57,8 +82,8 @@ const SortableHeader = ({
     </button>
 );
 
-const getColumns = (trans: Trans): ColumnDef<StockMajorShareholder>[] => {
-    const t = trans.stockInfo.profile;
+const getColumns = (): ColumnDef<StockMajorShareholder>[] => {
+    const t = STOCK_INFO_PROFILE;
 
     const getShareholderTypeLabel = (type: StockOwnershipShareholderType) =>
         t.shareholder_type[type] ?? type;
@@ -67,7 +92,7 @@ const getColumns = (trans: Trans): ColumnDef<StockMajorShareholder>[] => {
         {
             id: 'name',
             accessorKey: 'name',
-            header: ({ column }) => <SortableHeader label={t.col_name} column={column} />,
+            header: ({ column }) => <SortableHeader label={'Tên'} column={column} />,
             cell: ({ row }) => {
                 const name = row.original.name || '—';
                 return (
@@ -90,7 +115,7 @@ const getColumns = (trans: Trans): ColumnDef<StockMajorShareholder>[] => {
         {
             id: 'volume',
             accessorKey: 'volume',
-            header: ({ column }) => <SortableHeader label={t.col_shares} column={column} />,
+            header: ({ column }) => <SortableHeader label={'Số CP'} column={column} />,
             cell: ({ row }) => (
                 <span className="font-body-3-highlight text-primary">
                     {formatNumberVN(row.original.volume, { decimals: 0 })}
@@ -100,7 +125,7 @@ const getColumns = (trans: Trans): ColumnDef<StockMajorShareholder>[] => {
         {
             id: 'pct',
             accessorKey: 'pct',
-            header: ({ column }) => <SortableHeader label={t.col_pct} column={column} />,
+            header: ({ column }) => <SortableHeader label={'Tỷ lệ'} column={column} />,
             cell: ({ row }) => (
                 <span className="font-body-3-highlight text-primary">
                     {formatPercentVN(row.original.pct)}
@@ -110,7 +135,7 @@ const getColumns = (trans: Trans): ColumnDef<StockMajorShareholder>[] => {
         {
             id: 'updated_at',
             accessorKey: 'updated_at',
-            header: ({ column }) => <SortableHeader label={t.col_updated} column={column} />,
+            header: ({ column }) => <SortableHeader label={'Cập nhật'} column={column} />,
             cell: ({ row }) => (
                 <span className="font-body-3-highlight text-primary">
                     {formatDateOrDash(row.original.updated_at)}
@@ -123,11 +148,10 @@ const getColumns = (trans: Trans): ColumnDef<StockMajorShareholder>[] => {
 };
 
 export const StockProfileShareholders = ({ isLoading, shareholders }: Props) => {
-    const trans = useTranslate();
-    const t = trans.stockInfo.profile;
+    const t = STOCK_INFO_PROFILE;
     const [sorting, setSorting] = useState<SortingState>([]);
 
-    const columns = useMemo(() => getColumns(trans), [trans]);
+    const columns = useMemo(() => getColumns(), []);
 
     const table = useReactTable({
         data: shareholders,
@@ -144,7 +168,7 @@ export const StockProfileShareholders = ({ isLoading, shareholders }: Props) => 
     return (
         <aside
             className="flex h-full min-h-0 min-w-0 basis-3/5 flex-col overflow-hidden rounded-2xl border border-quaternary"
-            aria-label={t.shareholders_aria}
+            aria-label={'Cổ đông lớn'}
         >
             {isLoading ? (
                 <div className="flex h-full min-h-0 items-center justify-center" role="status">
@@ -152,9 +176,7 @@ export const StockProfileShareholders = ({ isLoading, shareholders }: Props) => 
                 </div>
             ) : (
                 <div className="flex min-h-0 flex-1 flex-col gap-3 overflow-hidden p-4">
-                    <h3 className="shrink-0 font-body-2-highlight text-primary">
-                        {t.shareholders_title}
-                    </h3>
+                    <h3 className="shrink-0 font-body-2-highlight text-primary">{'Cổ đông lớn'}</h3>
                     {shareholders.length === 0 ? (
                         <EmptyState />
                     ) : (

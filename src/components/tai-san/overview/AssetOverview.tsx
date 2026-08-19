@@ -13,7 +13,6 @@ import { ASSET_ACTION_KEYS, ASSET_ACTION_STYLES, GROWTH_TIME_PERIODS } from '@/c
 import { SUB_ACCOUNT_PERMISSION } from '@/constants/common';
 import { useEChartsInstance } from '@/hooks/chart/useEChartsInstance';
 import { toast } from '@/hooks/lib/useToast';
-import { useTranslate } from '@/hooks/useTranslate';
 import { getAssetSnapshot, getSubAccountDeposit } from '@/services/api/accounts/assets';
 import {
     getSubAccountCiBalance,
@@ -31,7 +30,6 @@ import { formatDateToTimestamp, formatNumberVN } from '@/utils/format';
 type Props = AssetSummaryProps;
 
 export const AssetOverview = ({ data, isLoading }: Props) => {
-    const trans = useTranslate();
     const { activeSubAccount } = useAuthStore();
     const { startLoading, stopLoading } = useLoadingStore();
     const { fetchAssetsSummary, setSummaryLoading } = useAssetStore();
@@ -66,7 +64,7 @@ export const AssetOverview = ({ data, isLoading }: Props) => {
     const displayValue = data?.net_asset_value;
     const formattedNetAssetValue = displayValue
         ? `${formatNumberVN(displayValue, { trimTrailingZeros: true })}đ`
-        : trans.assets.overview.zero_amount;
+        : '0đ';
 
     const refreshAssetsSummary = () => {
         setSummaryLoading(true);
@@ -135,19 +133,19 @@ export const AssetOverview = ({ data, isLoading }: Props) => {
     const assetActions = [
         {
             key: ASSET_ACTION_KEYS.DEPOSIT,
-            label: trans.assets.overview.deposit,
+            label: 'Nạp',
             permission: SUB_ACCOUNT_PERMISSION.DEPOSIT_CASH,
             onClick: handleOpenDeposit,
         },
         {
             key: ASSET_ACTION_KEYS.TRANSFER,
-            label: trans.assets.overview.transfer,
+            label: 'Chuyển',
             permission: SUB_ACCOUNT_PERMISSION.TRANSFER_CASH,
             onClick: handleOpenTransfer,
         },
         {
             key: ASSET_ACTION_KEYS.WITHDRAW,
-            label: trans.assets.overview.withdraw,
+            label: 'Rút',
             permission: SUB_ACCOUNT_PERMISSION.WITHDRAW_CASH,
             onClick: handleOpenWithdraw,
         },
@@ -185,12 +183,10 @@ export const AssetOverview = ({ data, isLoading }: Props) => {
 
     return (
         <section className="flex flex-col gap-4 bg-secondary rounded-xl p-3 w-full shrink-0">
-            <h2 className="font-body-2-highlight text-primary">{trans.assets.overview.heading}</h2>
+            <h2 className="font-body-2-highlight text-primary">{'Tổng quan tài sản'}</h2>
             <div className="flex items-end justify-between gap-4 w-full">
                 <div className="flex flex-col gap-2 shrink-0">
-                    <span className="font-body-3 text-secondary">
-                        {trans.assets.overview.nav_label}
-                    </span>
+                    <span className="font-body-3 text-secondary">{'Tài sản ròng (NAV)'}</span>
                     <div className="flex items-center gap-2">
                         {isLoading ? (
                             <div className="h-8 w-40">
@@ -198,20 +194,14 @@ export const AssetOverview = ({ data, isLoading }: Props) => {
                             </div>
                         ) : (
                             <p className="font-heading-3 text-primary whitespace-nowrap">
-                                {isAmountHidden
-                                    ? trans.assets.overview.hidden_placeholder
-                                    : formattedNetAssetValue}
+                                {isAmountHidden ? '******' : formattedNetAssetValue}
                             </p>
                         )}
                         <button
                             type="button"
                             onClick={() => setIsAmountHidden(!isAmountHidden)}
                             className="text-secondary hover:text-primary transition-colors shrink-0"
-                            aria-label={
-                                isAmountHidden
-                                    ? trans.assets.overview.show_amount
-                                    : trans.assets.overview.hide_amount
-                            }
+                            aria-label={isAmountHidden ? 'Hiển thị số tiền' : 'Ẩn số tiền'}
                         >
                             {isAmountHidden ? (
                                 <FaEyeSlash size={24} className="text-primary" />
@@ -227,10 +217,7 @@ export const AssetOverview = ({ data, isLoading }: Props) => {
                     </div>
                 )}
             </div>
-            <nav
-                className="flex items-center gap-3 w-full"
-                aria-label={trans.assets.overview.actions_aria}
-            >
+            <nav className="flex items-center gap-3 w-full" aria-label={'Hành động tài sản'}>
                 {assetActions.map((action) => (
                     <button
                         key={action.key}

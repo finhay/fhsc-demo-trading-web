@@ -9,11 +9,11 @@ import {
     ANALYSIS_CONTENT_CARD,
     BILLION,
     CHART_LINE_COLORS,
+    FINANCE_ANALYSIS_LABELS,
     NET_REVENUE_FIELD,
     NON_FINANCIAL_MARGIN_ITEMS,
 } from '@/constants/stock-info';
 import { useEChartsInstance } from '@/hooks/chart/useEChartsInstance';
-import { useTranslate } from '@/hooks/useTranslate';
 import type { FinancialStatementRow } from '@/types/datafeed/finance';
 import { formatNumberVN, formatPeriodMMYYYY } from '@/utils/format';
 import { sortByYearAsc } from '@/utils/stock-info';
@@ -25,8 +25,7 @@ export const NonFinancialMargin = ({
     dataQuarterly: any;
     incomeData: FinancialStatementRow[];
 }) => {
-    const trans = useTranslate();
-    const fa = trans.stockInfo.finance_analysis as Record<string, string>;
+    const fa = FINANCE_ANALYSIS_LABELS as Record<string, string>;
     const latest = dataQuarterly?.[0] ?? {};
     const sortedIncome = sortByYearAsc(incomeData);
     const latestIncome = sortedIncome[sortedIncome.length - 1] ?? {};
@@ -114,21 +113,21 @@ export const NonFinancialMargin = ({
 
     return (
         <AnalysisSection
-            title={fa.nonfin_margin_question}
+            title={'Biên lợi nhuận thế nào?'}
             right={
                 <span className="shrink-0 rounded-full border border-tertiary px-2 py-1 font-body-3 text-primary">
-                    {fa.qoq}
+                    {'QoQ'}
                 </span>
             }
         >
             <div className={ANALYSIS_CONTENT_CARD}>
                 <div className="flex shrink-0 items-center gap-3">
-                    <p className="font-body-3 text-secondary">{fa.net_revenue}</p>
+                    <p className="font-body-3 text-secondary">{'Doanh thu thuần'}</p>
                     <p className="font-body-2-highlight text-primary">
                         {formatNumberVN(netRevenue, {
                             trimTrailingZeros: true,
                         })}{' '}
-                        {fa.unit_bn}
+                        {'tỷ'}
                     </p>
                 </div>
                 <div className={ANALYSIS_CHART_FILL}>

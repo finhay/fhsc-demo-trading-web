@@ -7,7 +7,6 @@ import { FaChevronRight } from 'react-icons/fa';
 import { EmptyState } from '@/components/common/feature/EmptyState';
 import { MarketMacroModal } from '@/components/thi-truong/macro/MarketMacroModal';
 import { EMPTY_MACRO_VN_RAW, MACRO_INDICATOR_ROW_CONFIGS } from '@/constants/market';
-import { useTranslate } from '@/hooks/useTranslate';
 import { fetchMacroExport, fetchMacroIndicator } from '@/services/api/datafeed/finance';
 import { useLoadingStore } from '@/stores/common/useLoadingStore';
 import type { MacroExportPoint, MacroPoint } from '@/types/datafeed/finance';
@@ -16,8 +15,42 @@ import { formatNumberVN, formatQuarterlyMonthHeader } from '@/utils/format';
 import { buildMacroCellColorMap } from '@/utils/market/market-macro';
 import { unwrap } from '@/utils/market/market-shared';
 
+const MACRO_ROWS = {
+    IIP: {
+        label: 'Chỉ số IIP',
+        subLabel: 'YoY',
+    },
+    PMI: {
+        label: 'Chỉ số PMI',
+        subLabel: '',
+    },
+    SERVICE_RETAIL: {
+        label: 'Bán lẻ dịch vụ',
+        subLabel: 'YoY',
+    },
+    GOODS_RETAIL: {
+        label: 'Bán lẻ hàng hoá',
+        subLabel: 'YoY',
+    },
+    CPI: {
+        label: 'CPI',
+        subLabel: 'YoY',
+    },
+    EXPORT_TOTAL: {
+        label: 'XK cả nước',
+        subLabel: '%YoY',
+    },
+    EXPORT_DOMESTIC: {
+        label: 'XK nội địa',
+        subLabel: '%YoY',
+    },
+    EXPORT_FDI: {
+        label: 'XK FDI',
+        subLabel: '%YoY',
+    },
+};
+
 export const MarketMacro = () => {
-    const trans = useTranslate();
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [raw, setRaw] = useState<MacroVnRawState>(EMPTY_MACRO_VN_RAW);
     const [data, setData] = useState<MacroIndicatorState>({ months: [], rows: [] });
@@ -120,13 +153,13 @@ export const MarketMacro = () => {
         <section className="bg-secondary flex h-fit w-full min-h-0 flex-col gap-3 rounded-xl p-4">
             <div className="flex items-center justify-between gap-2">
                 <h2 className="font-body-2-highlight text-primary flex items-center gap-2">
-                    {trans.market.macro.heading}
+                    {'Vĩ mô'}
                 </h2>
                 <button
                     type="button"
                     onClick={() => handleOpenModal()}
                     className="text-primary shrink-0"
-                    aria-label={trans.market.macro.heading}
+                    aria-label={'Vĩ mô'}
                 >
                     <FaChevronRight size={14} />
                 </button>
@@ -170,10 +203,10 @@ export const MarketMacro = () => {
                                             className="bg-secondary sticky left-0 z-20 w-32 min-w-32 max-w-32 py-3 px-2 text-left font-normal after:absolute after:inset-y-0 after:right-0 after:w-0.5 after:bg-secondary"
                                         >
                                             <p className="font-caption-highlight text-primary">
-                                                {trans.market.macro.rows[row.key].label}
+                                                {MACRO_ROWS[row.key].label}
                                             </p>
                                             <p className="font-caption text-tertiary">
-                                                {trans.market.macro.rows[row.key].subLabel}
+                                                {MACRO_ROWS[row.key].subLabel}
                                             </p>
                                         </th>
                                         {data.months.map((month) => {

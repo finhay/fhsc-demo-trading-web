@@ -10,7 +10,6 @@ import { createMarketHeatmapEChartsOptions } from '@/config/market/market-heatma
 import { useEChartsInstance } from '@/hooks/chart/useEChartsInstance';
 import { useEChartsTooltipAutoHide } from '@/hooks/chart/useEChartsTooltipAutoHide';
 import { useMQTT } from '@/hooks/useMQTT';
-import { useTranslate } from '@/hooks/useTranslate';
 import { StockPriceMessage } from '@/proto/stock';
 import { fetchIndustryPriceChange, fetchSectorStocks } from '@/services/api/datafeed/trading-data';
 import { useMarketIndexStore } from '@/stores/common/useMarketIndexStore';
@@ -24,7 +23,6 @@ import {
 } from '@/utils/market/market-heatmap';
 
 export const MarketHeatmap = () => {
-    const trans = useTranslate();
     const { isPreSession } = useMarketIndexStore();
     const [sectors, setSectors] = useState<HeatmapSector[]>([]);
     const [hierarchicalData, setHierarchicalData] = useState<HeatmapTreemapNode[]>([]);
@@ -53,7 +51,7 @@ export const MarketHeatmap = () => {
         [sectors],
     );
 
-    const chartOptions = useMemo(() => createMarketHeatmapEChartsOptions([], trans), [trans]);
+    const chartOptions = useMemo(() => createMarketHeatmapEChartsOptions([]), []);
 
     const handleMQTTMessage = useCallback((_topic: string, message: Buffer) => {
         const stockData = StockPriceMessage.decode(new Uint8Array(message));
@@ -173,7 +171,7 @@ export const MarketHeatmap = () => {
             <div className="flex shrink-0 items-center justify-between gap-2">
                 <h2 className="font-body-2-highlight text-primary flex items-center gap-2">
                     <MarketDot />
-                    {trans.market.heatmap.heading}
+                    {'Bản đồ nhiệt'}
                 </h2>
             </div>
             <div className="relative min-h-0 w-full flex-1 overflow-hidden">

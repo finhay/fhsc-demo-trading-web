@@ -1,6 +1,5 @@
 'use client';
 
-import { useTranslate } from '@/hooks/useTranslate';
 import type { TwapLoSliceDto } from '@/types/trade/twap-lo';
 import { formatBoardPrice, formatDateTime, formatNumberVN } from '@/utils/format';
 import { getOrderStatusBorder, getTwapLoSliceStatus } from '@/utils/trading/order-book';
@@ -12,11 +11,8 @@ type Props = {
 };
 
 export const TradeTwapLoSliceList = ({ slices, limitPrice }: Props) => {
-    const trans = useTranslate();
-    const detailTrans = trans.trading.twap_lo_detail;
-
     const getSliceStatus = (slice: TwapLoSliceDto) =>
-        getTwapLoSliceStatus(trans, slice.status, slice.matchedQty ?? 0, getTwapLoSliceQty(slice));
+        getTwapLoSliceStatus(slice.status, slice.matchedQty ?? 0, getTwapLoSliceQty(slice));
 
     const renderSliceRows = (slice: TwapLoSliceDto) => {
         const qty = getTwapLoSliceQty(slice);
@@ -30,32 +26,28 @@ export const TradeTwapLoSliceList = ({ slices, limitPrice }: Props) => {
             return (
                 <>
                     <div className="flex items-center gap-6">
-                        <dt className="min-w-0 flex-1 font-body-3 text-secondary">
-                            {detailTrans.slice_qty}
-                        </dt>
+                        <dt className="min-w-0 flex-1 font-body-3 text-secondary">{'KL'}</dt>
                         <dd className={valueClass}>
-                            {formatNumberVN(qty, { decimals: 0 })} {detailTrans.unit}
+                            {formatNumberVN(qty, { decimals: 0 })} {'cp'}
                         </dd>
                     </div>
                     <div className="flex items-center gap-6">
-                        <dt className="min-w-0 flex-1 font-body-3 text-secondary">
-                            {detailTrans.slice_price_placed}
-                        </dt>
+                        <dt className="min-w-0 flex-1 font-body-3 text-secondary">{'Giá đặt'}</dt>
                         <dd className={valueClass}>{formatBoardPrice(limitPrice)}</dd>
                     </div>
                     <div className="flex items-center gap-6">
                         <dt className="min-w-0 flex-1 font-body-3 text-secondary">
-                            {detailTrans.slice_value}
+                            {'Giá trị lệnh'}
                         </dt>
                         <dd className={valueClass}>
                             {formatNumberVN(orderValue, { trimTrailingZeros: true })}
-                            {trans.trading.currency.suffix}
+                            {'đ'}
                         </dd>
                     </div>
                     {slice.scheduledAt && (
                         <div className="flex items-center gap-6">
                             <dt className="min-w-0 flex-1 font-body-3 text-secondary">
-                                {detailTrans.slice_scheduled_at}
+                                {'Dự kiến đặt'}
                             </dt>
                             <dd className={valueClass}>{formatDateTime(slice.scheduledAt)}</dd>
                         </div>
@@ -67,19 +59,17 @@ export const TradeTwapLoSliceList = ({ slices, limitPrice }: Props) => {
         return (
             <>
                 <div className="flex items-center gap-6">
-                    <dt className="min-w-0 flex-1 font-body-3 text-secondary">
-                        {detailTrans.slice_qty_matched}
-                    </dt>
+                    <dt className="min-w-0 flex-1 font-body-3 text-secondary">{'KL Khớp/Tổng'}</dt>
                     <dd className="shrink-0 whitespace-nowrap font-body-3 text-primary">
                         <span>{formatNumberVN(matchedQty, { decimals: 0 })} / </span>
                         <span className="text-secondary">
-                            {formatNumberVN(qty, { decimals: 0 })} {detailTrans.unit}
+                            {formatNumberVN(qty, { decimals: 0 })} {'cp'}
                         </span>
                     </dd>
                 </div>
                 <div className="flex items-center gap-6">
                     <dt className="min-w-0 flex-1 font-body-3 text-secondary">
-                        {detailTrans.slice_price_matched}
+                        {'Giá khớp/Giá đặt'}
                     </dt>
                     <dd className="shrink-0 whitespace-nowrap font-body-3 text-primary">
                         <span>{matchedPrice > 0 ? formatBoardPrice(matchedPrice) : '--'} / </span>
@@ -87,18 +77,16 @@ export const TradeTwapLoSliceList = ({ slices, limitPrice }: Props) => {
                     </dd>
                 </div>
                 <div className="flex items-center gap-6">
-                    <dt className="min-w-0 flex-1 font-body-3 text-secondary">
-                        {detailTrans.slice_value}
-                    </dt>
+                    <dt className="min-w-0 flex-1 font-body-3 text-secondary">{'Giá trị lệnh'}</dt>
                     <dd className="shrink-0 whitespace-nowrap font-body-3 text-primary">
                         {formatNumberVN(orderValue, { trimTrailingZeros: true })}
-                        {trans.trading.currency.suffix}
+                        {'đ'}
                     </dd>
                 </div>
                 {slice.placedAt && (
                     <div className="flex items-center gap-6">
                         <dt className="min-w-0 flex-1 font-body-3 text-secondary">
-                            {detailTrans.slice_placed_at}
+                            {'Thời gian đặt'}
                         </dt>
                         <dd className="shrink-0 whitespace-nowrap font-body-3 text-primary">
                             {formatDateTime(slice.placedAt)}
@@ -119,7 +107,7 @@ export const TradeTwapLoSliceList = ({ slices, limitPrice }: Props) => {
                         <dl className="flex flex-col gap-3 py-4">
                             <div className="flex items-center gap-3">
                                 <dt className="min-w-0 flex-1 font-body-3-highlight text-primary">
-                                    {detailTrans.child_title.replace(
+                                    {'Lệnh {index}'.replace(
                                         '{index}',
                                         String(slice.seq ?? index + 1),
                                     )}

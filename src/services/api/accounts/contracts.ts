@@ -1,6 +1,5 @@
 import { vnscService } from '@/services/interceptor';
 import type {
-    ContractsEnterpriseResponse,
     ContractsHaybondResponse,
     PreviewTermAndConditionResponse,
     TermsAndConditionsResponse,
@@ -30,15 +29,6 @@ export const fetchContractTermsByType = (type: string): Promise<ContractsHaybond
     return new Promise((resolve, reject) => {
         vnscService
             .get(`/accounts/v1/contracts/types/${type}`)
-            .then((res) => resolve(res.data))
-            .catch((err) => reject(err.response?.data || err));
-    });
-};
-
-export const fetchUserEnterpriseContracts = (): Promise<ContractsEnterpriseResponse> => {
-    return new Promise((resolve, reject) => {
-        vnscService
-            .get('/accounts/v3/users/:user_id/profile/contracts-enterprise')
             .then((res) => resolve(res.data))
             .catch((err) => reject(err.response?.data || err));
     });

@@ -2,7 +2,6 @@
 
 import { RiBarChart2Fill, RiFireFill, RiHandCoinFill } from 'react-icons/ri';
 
-import { useTranslate } from '@/hooks/useTranslate';
 import type { FundMarketSummary } from '@/types/pages/fund';
 import {
     formatFundNetFlowBillion,
@@ -15,8 +14,6 @@ type Props = {
 };
 
 export const MarketFundSummary = ({ summary }: Props) => {
-    const trans = useTranslate();
-    const t = trans.market.assets.fund_modal;
     const month = summary.month ?? new Date().getMonth() + 1;
     const beatValue =
         summary.fundsBeatingVnIndex == null ? '--' : String(summary.fundsBeatingVnIndex);
@@ -30,17 +27,17 @@ export const MarketFundSummary = ({ summary }: Props) => {
 
     return (
         <div className="flex flex-col gap-3">
-            <p className="font-body-2-highlight text-secondary">{t.month_title_fn(month)}</p>
+            <p className="font-body-2-highlight text-secondary">{`Trong tháng ${month}...`}</p>
             <div className="flex flex-col gap-3 md:flex-row">
                 <div className="flex min-w-0 flex-1 items-center gap-2 rounded-2xl border border-quaternary p-4">
                     <div className="flex shrink-0 items-center gap-2">
                         <RiFireFill size={20} className="text-primary shrink-0" aria-hidden />
                         <span className="font-body-1-highlight text-orange whitespace-nowrap">
-                            {t.beat_vnindex_value_fn(beatValue)}
+                            {`${beatValue} quỹ`}
                         </span>
                     </div>
                     <span className="font-body-2 text-primary whitespace-nowrap">
-                        {t.beat_vnindex_label}
+                        {'vượt VNINDEX'}
                     </span>
                 </div>
                 <div className="flex min-w-0 flex-1 items-center gap-2 rounded-2xl border border-quaternary p-4">
@@ -53,7 +50,7 @@ export const MarketFundSummary = ({ summary }: Props) => {
                         </span>
                     </div>
                     <span className="font-body-2 text-primary whitespace-nowrap">
-                        {t.net_inflow_label}
+                        {'tiền vào ròng'}
                     </span>
                 </div>
                 <div className="flex min-w-0 flex-1 items-center gap-2 rounded-2xl border border-quaternary p-4">
@@ -64,7 +61,7 @@ export const MarketFundSummary = ({ summary }: Props) => {
                         </span>
                     </div>
                     <span className="font-body-2 text-primary whitespace-nowrap">
-                        {t.aum_label}
+                        {'tài sản quản lý'}
                     </span>
                 </div>
             </div>

@@ -7,7 +7,6 @@ import { Skeleton } from '@/components/common/ui/Skeleton';
 import { MarketFlowTreemapSide } from '@/components/thi-truong/money-flow/MarketFlowTreemapSide';
 import { MarketDot } from '@/components/thi-truong/shared/MarketDot';
 import { useTopNetRealtimeQuotes } from '@/hooks/market/useTopNetRealtimeQuotes';
-import { useTranslate } from '@/hooks/useTranslate';
 import {
     fetchAllStockScreener,
     fetchStocksMetadataBySymbolsV4,
@@ -38,7 +37,6 @@ const TOP_NET_REFRESH_INTERVAL_MS = 5 * 60 * 1000;
 const buildFetchKey = (isForeign: boolean, exchange: string) => `${isForeign}-${exchange}`;
 
 export const MarketFlowTopNet = ({ isForeign, activeExchange, showDot = true }: Props) => {
-    const trans = useTranslate();
     const openStockDetail = useStockInfoStore((state) => state.openStockDetail);
     const requestedKeyRef = useRef(buildFetchKey(isForeign, activeExchange));
     const [symbolBuy, setSymbolBuy] = useState<TopNetDisplayItem[]>([]);
@@ -179,7 +177,7 @@ export const MarketFlowTopNet = ({ isForeign, activeExchange, showDot = true }: 
                             showDot ? 'font-body-3-highlight' : 'font-body-2-highlight'
                         }`}
                     >
-                        {trans.market.flow.top_net}
+                        {'Bản đồ nhiệt theo mã'}
                     </h3>
                 </div>
                 {/* <div className="border-tertiary flex shrink-0 items-center gap-1 rounded-full border p-1">

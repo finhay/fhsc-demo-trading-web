@@ -1,6 +1,6 @@
 # Project structure — tạo page mới
 
-Hướng dẫn cấu trúc chuẩn khi thêm route/page, bám theo các page hiện có trong repo (kể cả Haybond).
+Hướng dẫn cấu trúc chuẩn khi thêm route/page, bám theo các page hiện có trong repo (thị trường, bảng giá, giao dịch, tài sản).
 
 Design System (màu, typography, v.v.) xem [design-system.md](design-system.md). Quy ước code chi tiết xem [coding-standards.md](coding-standards.md).
 
@@ -10,12 +10,11 @@ Design System (màu, typography, v.v.) xem [design-system.md](design-system.md).
 
 ```
 src/pages/{route}/index.tsx
-    → DefaultLayout + useTranslate
+    → DefaultLayout
     → components/{feature}/… hoặc components/common/…
     → (tuỳ chọn) stores/{feature}/use*Store.ts
     → services/api/… (axios qua vnscService)
     → types/… + utils/… + constants/…
-    → language/vi/*.ts + language/en/*.ts
 ```
 
 - **API**: không gọi axios trực tiếp trong JSX; gói trong `src/services/api/`.
@@ -25,13 +24,13 @@ src/pages/{route}/index.tsx
 
 ## 1. Routes & page file
 
-| Quy tắc       | Chi tiết                                                                                                   |
-| ------------- | ---------------------------------------------------------------------------------------------------------- |
-| Thư mục route | **kebab-case**, khớp URL: `bang-gia`, `giao-dich`, `quan-ly-api`, `ma-chung-khoan/[symbol]`                |
-| Entry         | `index.tsx`; dynamic route dùng `[param]/index.tsx`                                                        |
-| Layout        | Bọc nội dung trong `DefaultLayout` từ `@/layouts/DefaultLayout`, truyền `title` và `metaDescription`       |
-| i18n          | `const trans = useTranslate()` — chuỗi lấy từ `trans.{namespace}` (namespace trùng file trong `language/`) |
-| Client        | Thêm `'use client'` ở đầu file khi cần hook chỉ chạy client hoặc tương tác browser                         |
+| Quy tắc       | Chi tiết                                                                                                  |
+| ------------- | --------------------------------------------------------------------------------------------------------- |
+| Thư mục route | **kebab-case**, khớp URL: `bang-gia`, `giao-dich`, `tai-san`; dynamic dùng `[param]`                      |
+| Entry         | `index.tsx`; dynamic route dùng `[param]/index.tsx`                                                       |
+| Layout        | Bọc nội dung trong `DefaultLayout` từ `@/layouts/DefaultLayout`, truyền `title` và `metaDescription`      |
+| Text          | Viết thẳng chuỗi tiếng Việt trong component; map/label động đặt trong `const` cùng file hoặc `constants/` |
+| Client        | Thêm `'use client'` ở đầu file khi cần hook chỉ chạy client hoặc tương tác browser                        |
 
 Trang có thể **mỏng** (chỉ compose component + layout) hoặc **chứa fetch / useEffect** (ví dụ gọi API khởi tạo, reset store khi unmount) tùy feature.
 
@@ -41,7 +40,7 @@ Trang `/` (`src/pages/index.tsx`) có thể import component từ namespace khá
 
 ## 2. Components
 
-- Feature: `src/components/{feature}/` — cùng “tên gọi nhớ” với product (thường gần với route: `ipo`, `giao-dich`, `bang-gia`, …).
+- Feature: `src/components/{feature}/` — trùng tên route: `thi-truong`, `bang-gia`, `giao-dich`, `tai-san`.
 - Dùng chung: `src/components/common/` (`ui/`, `header/`, `modal/`, `feature/`, …).
 - File component: **PascalCase**, tên file = tên export (`TradePanel.tsx` → `TradePanel`).
 - Không dùng `index.tsx` làm barrel cho component feature (import trực tiếp file).
@@ -72,9 +71,10 @@ export const getSomething = (): Promise<SomeResponse> => {
 
 ## 4. Stores (Zustand) — khi nào cần
 
-- Đặt tại `src/stores/{feature}/use{Name}Store.ts` hoặc `src/stores/common/` nếu dùng chọn nhiều page.
-- Dùng khi: state chia sẻ giữa nhiều component trên cùng page/flow, cần `load` / `reset` theo lifecycle trang (ví dụ IPO, Haypoint, trading).
-- Page chỉ dùng `useState` + API là đủ thì **không** bắt buộc tạo store (ví dụ một số trang quản lý đơn giản).
+- Đặt tại `src/stores/{feature}/use{Name}Store.ts` hoặc `src/stores/common/` nếu dùng chung nhiều page.
+- Dùng khi: state chia sẻ giữa nhiều component trên cùng page/flow, cần `load` / `reset` theo lifecycle trang (ví dụ `useTradingStore`, `useAssetStore`).
+- Page chỉ dùng `useState` + API là đủ thì **không** bắt buộc tạo store.
+- Store cần dọn khi logout thì đăng ký vào `src/stores/reset-registry.ts`.
 
 Chi tiết pattern store (toast, `isSuccessApi`, …) tham chiếu [coding-standards.md](coding-standards.md) và store cùng feature trong repo.
 
@@ -82,32 +82,36 @@ Chi tiết pattern store (toast, `isSuccessApi`, …) tham chiếu [coding-stand
 
 ## 5. Types (`src/types/`)
 
-- File **kebab-case**, nhóm theo domain: `types/accounts/assets.ts`, `types/auth/openapi.ts`, `types/pages/…`, v.v.
+- File **kebab-case**, nhóm theo domain: `types/accounts/…`, `types/auth/…`, `types/trade/…`, `types/datafeed/…`, `types/pages/…`.
 - Response/request API nên có type riêng; page import type từ đây thay vì `any`.
 
 ---
 
 ## 6. Constants & utils
 
-- `src/constants/common.ts` — dùng chung; `src/constants/{domain}.ts` — theo nghiệp vụ (`trading.ts`, `assets.ts`, `openapi.ts`, …). Tên file có thể **không** trùng tên folder `pages` nếu domain đã ổn định (ví dụ trang `tai-san` dùng `constants/assets`).
-- `src/utils/common.ts` — helper dùng chộng; thêm `utils/{domain}.ts` khi logic chỉ phục vụ một mảng (ví dụ `utils/openapi.ts`).
+- `src/constants/common.ts` — dùng chung; `src/constants/{domain}.ts` — theo nghiệp vụ (`trading.ts`, `assets.ts`, `market.ts`, `iboard.ts`, `stock-info.ts`, `auth.ts`). Tên file có thể **không** trùng tên folder `pages` (trang `tai-san` dùng `constants/assets`, trang `bang-gia` dùng `constants/iboard`).
+- `src/utils/common.ts` — helper dùng chung; thêm `utils/{domain}.ts` khi logic chỉ phục vụ một mảng (`utils/iboard.ts`, `utils/trading/…`, `utils/market/…`).
+- `src/utils/format.ts` — format số/ngày (`formatNumberVN`, …); đừng viết lại.
 
 ---
 
-## 7. i18n (`src/language/`)
+## 7. Text hiển thị
 
-- Thêm `vi/{namespace}.ts` và `en/{namespace}.ts` export object chuỗi.
-- Đăng ký vào `src/language/vi.ts` và `src/language/en.ts` (import + spread vào object `vi` / `en`).
-- Trên page: `trans.{namespace}` (ví dụ `trans.openapi.title`).
+Repo **không dùng i18n** — app chỉ phục vụ tiếng Việt.
+
+- Chuỗi tĩnh: viết thẳng trong JSX.
+- Nhãn tra cứu động (`map[key]`): khai báo `const` SCREAMING_SNAKE_CASE ở đầu file, hoặc `src/constants/` nếu nhiều file dùng chung.
+- Chuỗi có tham số: dùng template literal tại chỗ.
 
 ---
 
 ## 8. Tuỳ chọn theo feature
 
-| Khi nào                                    | Đặt ở đâu                     |
-| ------------------------------------------ | ----------------------------- |
-| Form + validation Zod                      | `src/schema/{name}.schema.ts` |
-| Cấu hình chart (Highcharts, …) tái sử dụng | `src/config/{name}.ts`        |
+| Khi nào                            | Đặt ở đâu                                                  |
+| ---------------------------------- | ---------------------------------------------------------- |
+| Validator cho form                 | `src/utils/{domain}.ts` (xem `utils/auth.ts`)              |
+| Cấu hình chart ECharts tái sử dụng | `src/config/{name}.ts`, chart thị trường: `config/market/` |
+| Topic / decode MQTT                | `src/hooks/useMQTT.ts` + `src/proto/stock.ts`              |
 
 Chỉ thêm khi thật sự cần; không bắt buộc mọi page.
 
@@ -124,8 +128,6 @@ Chỉ thêm khi thật sự cần; không bắt buộc mọi page.
 - [ ] `src/constants/…` hoặc mở rộng `constants/common.ts`
 - [ ] `src/utils/…` nếu có helper riêng feature
 - [ ] `src/stores/{feature}/use…Store.ts` nếu cần state chia sẻ / lifecycle load-reset
-- [ ] `src/language/vi/{namespace}.ts` + `src/language/en/{namespace}.ts` + cập nhật `vi.ts` / `en.ts`
-- [ ] `src/schema/…` nếu có form cần Zod
 - [ ] `src/config/…` nếu có cấu hình chart/options dùng lại
 
 ---
@@ -139,13 +141,12 @@ src/
 ├── layouts/
 ├── hooks/
 ├── stores/          # Zustand
-├── services/        # interceptor, api/, …
-├── schema/          # Zod (tuỳ chọn)
+├── services/        # interceptor, api/, mqtt
+├── provider/        # Providers bọc app (auth, MQTT, market index)
+├── proto/           # protobuf decode message realtime
 ├── types/
 ├── utils/
 ├── constants/
-├── language/        # vi.ts, en.ts + vi/*, en/*
-├── styles/
-├── config/          # chart / static config (tuỳ chọn)
-└── …
+├── config/          # cấu hình chart ECharts dùng lại
+└── styles/
 ```

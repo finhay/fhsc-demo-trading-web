@@ -6,7 +6,6 @@ import Image from 'next/image';
 
 import { EmptyState } from '@/components/common/feature/EmptyState';
 import { Spinner } from '@/components/common/ui/Spinner';
-import { useTranslate } from '@/hooks/useTranslate';
 import type { StockListingData, StockProfileData } from '@/types/datafeed/stock-info';
 import { getAvatarUrl } from '@/utils/common';
 import { formatDateOrDash, formatNumberVN, formatPercentVN } from '@/utils/format';
@@ -32,8 +31,6 @@ const InfoRow = ({ label, value }: InfoItem) => (
 const Divider = () => <div className="h-px w-full shrink-0 bg-tertiary" />;
 
 export const StockProfileInfo = ({ isLoading, profile, listing }: Props) => {
-    const trans = useTranslate();
-    const t = trans.stockInfo.profile;
     const [hasLogoError, setHasLogoError] = useState(false);
 
     useEffect(() => {
@@ -52,15 +49,15 @@ export const StockProfileInfo = ({ isLoading, profile, listing }: Props) => {
     );
 
     const basicRows: InfoItem[] = [
-        { label: t.sic_code, value: profile?.symbol ?? '—' },
-        { label: t.exchange, value: listing?.exchange ?? '—' },
-        { label: t.sector, value: sectorLabel },
+        { label: 'Mã SIC', value: profile?.symbol ?? '—' },
+        { label: 'Sàn', value: listing?.exchange ?? '—' },
+        { label: 'Ngành', value: sectorLabel },
     ];
 
     const listingRows: InfoItem[] = [
-        { label: t.listing_date, value: formatDateOrDash(listing?.listing_date) },
+        { label: 'Ngày niêm yết', value: formatDateOrDash(listing?.listing_date) },
         {
-            label: t.listing_ref_price,
+            label: 'Giá TC chào sàn',
             value:
                 listing?.listing_reference_price != null
                     ? formatNumberVN(listing.listing_reference_price, {
@@ -70,7 +67,7 @@ export const StockProfileInfo = ({ isLoading, profile, listing }: Props) => {
                     : '—',
         },
         {
-            label: t.listed_shares,
+            label: 'CP niêm yết',
             value:
                 listing?.listed_shares != null
                     ? formatNumberVN(listing.listed_shares, { decimals: 0 })
@@ -80,28 +77,28 @@ export const StockProfileInfo = ({ isLoading, profile, listing }: Props) => {
 
     const shareRows: InfoItem[] = [
         {
-            label: t.outstanding_shares,
+            label: 'CP lưu hành',
             value:
                 listing?.outstanding_shares != null
                     ? formatNumberVN(listing.outstanding_shares, { decimals: 0 })
                     : '—',
         },
         {
-            label: t.treasury_shares,
+            label: 'CP quỹ',
             value:
                 listing?.treasury_shares != null
                     ? formatNumberVN(listing.treasury_shares, { decimals: 0 })
                     : '—',
         },
         {
-            label: t.free_float,
+            label: 'CP trôi nổi',
             value:
                 listing?.free_float != null
                     ? formatNumberVN(listing.free_float, { decimals: 0 })
                     : '—',
         },
         {
-            label: t.free_float_pct,
+            label: 'Tỷ lệ trôi nổi',
             value: listing?.free_float_pct != null ? formatPercentVN(listing.free_float_pct) : '—',
         },
     ];
@@ -109,7 +106,7 @@ export const StockProfileInfo = ({ isLoading, profile, listing }: Props) => {
     return (
         <aside
             className="flex h-full min-h-0 min-w-0 basis-2/5 flex-col overflow-hidden rounded-2xl border border-tertiary"
-            aria-label={t.info_aria}
+            aria-label={'Thông tin doanh nghiệp'}
         >
             {isLoading ? (
                 <div className="flex h-full min-h-0 items-center justify-center" role="status">
@@ -131,7 +128,7 @@ export const StockProfileInfo = ({ isLoading, profile, listing }: Props) => {
                         />
                     ) : null}
                     <p className="font-caption text-primary">
-                        {profile?.about || trans.stockInfo.finance_overview.no_company_info}
+                        {profile?.about || 'Không có thông tin về mã cổ phiếu'}
                     </p>
                     <Divider />
                     {basicRows.map((row) => (

@@ -6,10 +6,14 @@ import { useState } from 'react';
 
 import { InputField } from '@/components/common/feature/InputField';
 import { PasswordRequirements } from '@/components/common/feature/PasswordRequirements';
-import { AUTH_MODE, REGISTER_PASSWORD_FIELDS } from '@/constants/auth';
+import {
+    AUTH_MODE,
+    AUTH_VALIDATE,
+    PASSWORD_REQUIREMENT_LABELS,
+    REGISTER_PASSWORD_FIELDS,
+} from '@/constants/auth';
 import { ACCOUNT_TYPE } from '@/constants/common';
 import { toast } from '@/hooks/lib/useToast';
-import { useTranslate } from '@/hooks/useTranslate';
 import { putResetPassword } from '@/services/api/auth/password';
 import { useAuthFlowStore } from '@/stores/auth/useAuthFlowStore';
 import { useLoadingStore } from '@/stores/common/useLoadingStore';
@@ -17,12 +21,11 @@ import { getPasswordRequirements, validateConfirmPassword, validatePassword } fr
 import { getApiErrorMessage, isSuccessApi } from '@/utils/common';
 
 export const ResetPassword = () => {
-    const trans = useTranslate();
     const { startLoading, stopLoading } = useLoadingStore();
     const [focusedField, setFocusedField] = useState<string | null>(null);
 
     const { resetPassword, resetPasswordSetIsSuccess, openAuthDialog } = useAuthFlowStore();
-    const { accountType, otpToken } = resetPassword;
+    const { otpToken } = resetPassword;
 
     const form = useForm({
         defaultValues: {
@@ -48,30 +51,26 @@ export const ResetPassword = () => {
 
     const requirements = getPasswordRequirements(password, confirmPassword);
 
-    const requirementTranslations = Object.fromEntries(
-        Object.entries(trans.auth.change).map(([key, value]) => [key, value as string]),
-    );
+    const requirementTranslations = PASSWORD_REQUIREMENT_LABELS;
 
     const handleResetPassword = async (passwordParam: string) => {
         try {
-            const userType =
-                accountType === 'individual' ? ACCOUNT_TYPE.INDIVIDUAL : ACCOUNT_TYPE.ENTERPRISE;
             const { error_code, message } = await putResetPassword(
                 otpToken,
                 passwordParam,
-                userType,
+                ACCOUNT_TYPE.INDIVIDUAL,
             );
 
             if (isSuccessApi(error_code)) {
                 resetPasswordSetIsSuccess(true);
-                toast.success(trans.auth.reset.msg_pass_updated);
+                toast.success('Mật khẩu đã được cập nhật thành công');
                 openAuthDialog(AUTH_MODE.LOGIN);
                 return;
             }
 
             toast.error(message);
         } catch (err) {
-            toast.error(getApiErrorMessage(err, trans.common.try_again_error));
+            toast.error(getApiErrorMessage(err, 'Có lỗi xảy ra, vui lòng thử lại'));
         }
     };
 
@@ -97,13 +96,13 @@ export const ResetPassword = () => {
                                     fieldKey === 'confirmPassword' ? ['password'] : undefined,
                                 onChange: ({ value, fieldApi }) => {
                                     if (fieldKey === 'password') {
-                                        return validatePassword(value, trans.auth.validate);
+                                        return validatePassword(value, AUTH_VALIDATE);
                                     }
                                     const passwordValue = fieldApi.form.getFieldValue('password');
                                     return validateConfirmPassword(
                                         value,
                                         passwordValue,
-                                        trans.auth.validate,
+                                        AUTH_VALIDATE,
                                     );
                                 },
                             }}
@@ -114,13 +113,13 @@ export const ResetPassword = () => {
                                     type="password"
                                     label={
                                         key === 'password'
-                                            ? trans.auth.reset.new_pass_lbl
-                                            : trans.auth.reset.confirm_new_pass_lbl
+                                            ? 'Mật khẩu mới'
+                                            : 'Xác nhận mật khẩu mới'
                                     }
                                     placeholder={
                                         key === 'password'
-                                            ? trans.auth.reset.input_new_pass
-                                            : trans.auth.reset.input_confirm_new_pass
+                                            ? 'Nhập mật khẩu mới'
+                                            : 'Nhập lại mật khẩu mới'
                                     }
                                     error={field.state.meta.errors?.[0]}
                                     showError={showError}
@@ -138,7 +137,7 @@ export const ResetPassword = () => {
                     focusedField={focusedField}
                     requirements={requirements}
                     translations={requirementTranslations}
-                    legendText={trans.auth.reset.pass_rules_title}
+                    legendText={'Yêu cầu mật khẩu'}
                 />
             </section>
             <footer className="flex w-full flex-col items-center gap-2">
@@ -151,7 +150,7 @@ export const ResetPassword = () => {
                             : 'bg-disabled text-disabled cursor-not-allowed'
                     }`}
                 >
-                    {trans.auth.reset.btn_update}
+                    {'Cập nhật'}
                 </button>
             </footer>
         </form>

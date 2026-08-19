@@ -7,7 +7,6 @@ import OtpInput from 'react-otp-input';
 import { Spinner } from '@/components/common/ui/Spinner';
 import { OTP_CONFIG } from '@/constants/trading';
 import { toast } from '@/hooks/lib/useToast';
-import { useTranslate } from '@/hooks/useTranslate';
 import { postSendOtpV2, postVerifyOtpV2 } from '@/services/api/auth/otp';
 import { setAccessToken2FA } from '@/services/localStorage';
 import { useAuthStore } from '@/stores/auth/useAuthStore';
@@ -20,7 +19,6 @@ type Props = {
 };
 
 export const TradeVerifyOtpPanel = ({ onClose, onSuccess }: Props) => {
-    const trans = useTranslate();
     const [otp, setOtp] = useState('');
     const [isLoading, setIsLoading] = useState(true);
     const [invalidOtp, setInvalidOtp] = useState(false);
@@ -42,7 +40,7 @@ export const TradeVerifyOtpPanel = ({ onClose, onSuccess }: Props) => {
                 toast.error(message);
             }
         } catch (err) {
-            toast.error(getApiErrorMessage(err, trans.common.try_again_error));
+            toast.error(getApiErrorMessage(err, 'Có lỗi xảy ra, vui lòng thử lại'));
         } finally {
             setIsLoading(false);
         }
@@ -63,7 +61,7 @@ export const TradeVerifyOtpPanel = ({ onClose, onSuccess }: Props) => {
             if (isSuccessApi(error_code)) {
                 setAccessToken2FA(result.token);
                 setToken2fa(result.token);
-                toast.success(trans.trading.otp_modal.toast_success);
+                toast.success('Xác thực thành công');
                 onSuccess();
             } else {
                 setInvalidOtp(true);
@@ -97,19 +95,19 @@ export const TradeVerifyOtpPanel = ({ onClose, onSuccess }: Props) => {
                 <>
                     <div className="flex w-full flex-col items-center gap-4">
                         <h3 className="font-body-1-highlight shrink-0 text-primary">
-                            {trans.trading.qr_panel.title}
+                            {'Xác thực giao dịch'}
                         </h3>
                         <p className="font-body-3 w-full text-center text-secondary">
-                            {trans.trading.otp_modal.description_1}
+                            {'Mã OTP đã được gửi qua email của bạn.'}
                             <br />
-                            {trans.trading.otp_modal.description_2}
+                            {'Vui lòng kiểm tra và thực hiện xác thực.'}
                         </p>
 
                         <div className="flex w-full flex-col gap-3">
                             <div
                                 className="flex w-full justify-center gap-1"
                                 role="group"
-                                aria-label={trans.trading.otp_modal.otp_group_aria}
+                                aria-label={'Nhập mã OTP'}
                             >
                                 <OtpInput
                                     value={otp}
@@ -130,12 +128,12 @@ export const TradeVerifyOtpPanel = ({ onClose, onSuccess }: Props) => {
 
                             {invalidOtp && (
                                 <p className="font-caption text-center text-red">
-                                    {trans.trading.otp_modal.invalid_otp}
+                                    {'OTP không chính xác'}
                                 </p>
                             )}
                             <div className="flex w-full items-center justify-center gap-1">
                                 <span className="font-body-3 text-secondary">
-                                    {trans.trading.otp_modal.no_otp}
+                                    {'Không nhận được OTP?'}
                                 </span>
                                 <button
                                     type="button"
@@ -147,7 +145,7 @@ export const TradeVerifyOtpPanel = ({ onClose, onSuccess }: Props) => {
                                             : 'text-highlight'
                                     }`}
                                 >
-                                    {trans.trading.otp_modal.resend.replace(
+                                    {'Gửi lại ({countdown}s)'.replace(
                                         '{countdown}',
                                         String(countDown),
                                     )}
@@ -165,7 +163,7 @@ export const TradeVerifyOtpPanel = ({ onClose, onSuccess }: Props) => {
                                         : 'bg-disabled text-disabled cursor-not-allowed'
                                 }`}
                             >
-                                {trans.trading.otp_modal.btn_verify}
+                                {'Xác thực'}
                             </button>
                             <button
                                 type="button"
@@ -173,13 +171,13 @@ export const TradeVerifyOtpPanel = ({ onClose, onSuccess }: Props) => {
                                 disabled={isLoading}
                                 className="font-body-3-highlight flex w-full items-center justify-center rounded-full bg-error px-4 py-2 text-red transition-opacity disabled:cursor-not-allowed disabled:opacity-50"
                             >
-                                {trans.trading.place_modal.btn_cancel}
+                                {'Huỷ'}
                             </button>
                         </div>
                     </div>
                     <div className="flex w-full flex-col items-center gap-1 text-center">
                         <span className="font-body-3 text-secondary">
-                            {trans.trading.otp_modal.support}
+                            {'Tôi cần hỗ trợ. Liên hệ hotline:'}
                         </span>
                         <a
                             href="tel:024777789096"

@@ -7,9 +7,8 @@ import * as echarts from 'echarts';
 import { AnalysisPlan } from '@/components/common/stock-info/finance/analysis/common/AnalysisPlan';
 import { AnalysisSection } from '@/components/common/stock-info/finance/analysis/common/AnalysisSection';
 import { createStockInfoSparkline } from '@/config/stock-info';
-import { SECURITIES_GROWTH, STATUS_COLORS } from '@/constants/stock-info';
+import { FINANCE_ANALYSIS_LABELS, SECURITIES_GROWTH, STATUS_COLORS } from '@/constants/stock-info';
 import { useEChartsInstances } from '@/hooks/chart/useEChartsInstances';
-import { useTranslate } from '@/hooks/useTranslate';
 import type { SecuritiesGrowthRow } from '@/types/pages/stock-info';
 import { formatNumberVN, formatNumberVNWithUnit, formatPeriodMMYYYY } from '@/utils/format';
 import { pickPlanItems, sortByYearAsc, trendColor } from '@/utils/stock-info';
@@ -21,8 +20,7 @@ export const SecuritiesGrowth = ({
     dataAnnual: any;
     dataQuarterly: any;
 }) => {
-    const trans = useTranslate();
-    const fa = trans.stockInfo.finance_analysis as Record<string, string>;
+    const fa = FINANCE_ANALYSIS_LABELS as Record<string, string>;
     const [tab, setTab] = useState<string>('% YoY');
     const isYoY = tab === '% YoY';
 
@@ -106,7 +104,7 @@ export const SecuritiesGrowth = ({
 
     return (
         <AnalysisSection
-            title={fa.growth_question}
+            title={'Có tăng trưởng không?'}
             right={
                 <div className="flex shrink-0 items-center gap-1">
                     {SECURITIES_GROWTH.tabs.map((t) => (
@@ -127,9 +125,9 @@ export const SecuritiesGrowth = ({
             }
         >
             <div ref={containerRef} className="flex flex-col gap-3">
-                <p className="font-body-3 text-primary">{fa.overview}</p>
+                <p className="font-body-3 text-primary">{'Tổng quan'}</p>
                 <div className="flex items-stretch gap-3">{tongQuanRows.map(renderCard)}</div>
-                <p className="font-body-3 text-primary">{fa.business_structure}</p>
+                <p className="font-body-3 text-primary">{'Cơ cấu kinh doanh'}</p>
                 <div className="flex items-stretch gap-3">{cocauRows.map(renderCard)}</div>
             </div>
             <div className="rounded-xl border border-quaternary p-3">

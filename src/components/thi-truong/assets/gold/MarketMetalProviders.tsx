@@ -5,7 +5,6 @@ import { useMemo } from 'react';
 import Image from 'next/image';
 
 import { EmptyState } from '@/components/common/feature/EmptyState';
-import { useTranslate } from '@/hooks/useTranslate';
 import type { MetalProviderItem } from '@/types/datafeed/finance';
 import { getChangeColor } from '@/utils/common';
 import {
@@ -46,7 +45,6 @@ const PriceCell = ({
 };
 
 export const MarketMetalProviders = ({ items }: Props) => {
-    const trans = useTranslate();
     const groups = useMemo(() => groupMetalProviders(items), [items]);
 
     return items.length === 0 ? (
@@ -56,15 +54,9 @@ export const MarketMetalProviders = ({ items }: Props) => {
     ) : (
         <div className="bg-secondary flex flex-col overflow-hidden rounded-2xl">
             <div className="flex w-full shrink-0 items-center justify-between bg-secondary px-4 py-3">
-                <span className="font-body-3 text-secondary min-w-0 flex-1">
-                    {trans.market.assets.modal.col_type}
-                </span>
-                <span className="font-body-3 text-secondary w-28 shrink-0">
-                    {trans.market.assets.modal.col_buy}
-                </span>
-                <span className="font-body-3 text-secondary w-28 shrink-0">
-                    {trans.market.assets.modal.col_sell}
-                </span>
+                <span className="font-body-3 text-secondary min-w-0 flex-1">{'Loại vàng'}</span>
+                <span className="font-body-3 text-secondary w-28 shrink-0">{'Giá mua'}</span>
+                <span className="font-body-3 text-secondary w-28 shrink-0">{'Giá bán'}</span>
             </div>
 
             <div className="flex flex-col gap-4 px-4 pb-4">

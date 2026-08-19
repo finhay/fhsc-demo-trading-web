@@ -1,7 +1,6 @@
 'use client';
 
 import { ORDER_MODE_KEY, ORDER_TYPE_KEY } from '@/constants/trading';
-import { useTranslate } from '@/hooks/useTranslate';
 
 type Props = {
     orderMode: string;
@@ -20,7 +19,6 @@ export const TradePanelOrderTypes = ({
     selectedOrderType,
     onSelectOrderType,
 }: Props) => {
-    const trans = useTranslate();
     const isLoOnlyMode = isIceberg || isTwapLo;
 
     if (orderMode !== ORDER_MODE_KEY.NORMAL && !isLoOnlyMode) {
@@ -28,11 +26,7 @@ export const TradePanelOrderTypes = ({
     }
 
     return (
-        <div
-            className="flex gap-2 items-start w-full"
-            role="tablist"
-            aria-label={trans.trading.panel.order_type_aria}
-        >
+        <div className="flex gap-2 items-start w-full" role="tablist" aria-label={'Chọn loại lệnh'}>
             {(isLoOnlyMode ? [ORDER_TYPE_KEY.LO] : orderTypes).map((orderType) => (
                 <button
                     key={orderType}

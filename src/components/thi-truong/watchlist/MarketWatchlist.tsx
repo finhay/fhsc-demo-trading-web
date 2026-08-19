@@ -28,7 +28,6 @@ import { InputSearch } from '@/components/common/feature/InputSearch';
 import { Skeleton } from '@/components/common/ui/Skeleton';
 import { MarketWatchlistPortfolio } from '@/components/thi-truong/watchlist/MarketWatchlistPortfolio';
 import { useMQTT } from '@/hooks/useMQTT';
-import { useTranslate } from '@/hooks/useTranslate';
 import { StockPriceMessage } from '@/proto/stock';
 import { fetchStockRealtime } from '@/services/api/datafeed/stock-info';
 import { useAuthStore } from '@/stores/auth/useAuthStore';
@@ -52,7 +51,6 @@ import { getChangeColor } from '@/utils/common';
 import { formatNumberVN } from '@/utils/format';
 
 export const MarketWatchlist = () => {
-    const trans = useTranslate();
     const { profile, isInitialized, activeSubAccount } = useAuthStore();
     const { startLoading, stopLoading } = useLoadingStore();
     const {
@@ -286,7 +284,7 @@ export const MarketWatchlist = () => {
                             {...attributes}
                             {...listeners}
                             className="shrink-0 cursor-grab active:cursor-grabbing text-tertiary hover:text-secondary transition-colors touch-none"
-                            aria-label={trans.market.watchlist.aria_drag_fn(stock.symbol)}
+                            aria-label={`Kéo để sắp xếp ${stock.symbol}`}
                         >
                             <RxDragHandleDots2 size={16} />
                         </button>
@@ -318,21 +316,21 @@ export const MarketWatchlist = () => {
                             type="button"
                             onClick={onRemove}
                             className="shrink-0 p-1 text-tertiary hover:text-red transition-colors"
-                            aria-label={trans.market.watchlist.aria_remove_fn(stock.symbol)}
+                            aria-label={`Xóa ${stock.symbol} khỏi danh mục`}
                         >
                             <FiMinus size={16} />
                         </button>
                     </li>
                 );
             },
-        [trans],
+        [],
     );
 
     return (
         <section className="bg-secondary flex h-full min-h-0 w-full flex-1 flex-col gap-2 overflow-hidden rounded-xl p-4">
             <div className="flex shrink-0 items-center justify-between gap-1">
                 <h2 className="font-body-2-highlight text-primary flex shrink-0 items-center gap-2 whitespace-nowrap">
-                    {trans.market.watchlist.heading}
+                    {'Mã đang theo dõi'}
                 </h2>
                 <div className="flex min-w-0 items-center gap-2">
                     <DropdownWatchlist
@@ -356,7 +354,7 @@ export const MarketWatchlist = () => {
                     <InputSearch
                         onSelectStock={handleSelectStock}
                         className="w-full shrink-0"
-                        placeholder={trans.market.watchlist.placeholder}
+                        placeholder={'Nhập mã để thêm vào watchlist'}
                     />
                     {stocks.length === 0 ? (
                         <div className="flex min-h-0 flex-1 flex-col">

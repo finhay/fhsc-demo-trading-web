@@ -1,17 +1,40 @@
 import { ORDER_SIDE, ORDER_STATUS, ORDER_TYPE } from '@/constants/trading';
-import type { useTranslate } from '@/hooks/useTranslate';
 import type { TradeOrderBookRow } from '@/types/pages/trading';
 import type { OrderItem } from '@/types/trade/orders';
 import { formatBoardPrice, formatNumberVN } from '@/utils/format';
 
-type Trans = ReturnType<typeof useTranslate>;
+const TRADING_ORDER_BOOK_STATUS = {
+    pending_match: 'Chờ khớp',
+    cancelled: 'Đã hủy',
+    amending: 'Đang sửa',
+    partially_filled: 'Khớp một phần',
+    expired_validity: 'Hết hiệu lực',
+    cancelling: 'Đang hủy',
+    rejected: 'Bị từ chối',
+    queued: 'Chờ gửi',
+    amended: 'Đã sửa',
+    sending: 'Đang gửi',
+    filled: 'Khớp hết',
+    expired: 'Hết hạn',
+    waiting_activation: 'Chờ kích hoạt',
+    activated: 'Đã kích hoạt',
+    received: 'Đã nhận',
+    failed: 'Thất bại',
+    completed: 'Hoàn thành',
+    done: 'Hoàn tất',
+    waiting_execution: 'Chờ thực hiện',
+    executing: 'Đang thực hiện',
+    cancelled_system: 'Bị hủy',
+    fully_filled: 'Khớp toàn bộ',
+    on_exchange: 'Đã lên sàn',
+};
 
 type OrderStatusTone = 'success' | 'error' | 'pending' | 'neutral';
 
 type OrderStatusView = { text: string; tone: OrderStatusTone };
 
 type OrderStatusEntry = {
-    labelKey: keyof Trans['trading']['order_book_status'];
+    labelKey: keyof typeof TRADING_ORDER_BOOK_STATUS;
     tone: OrderStatusTone;
 };
 
@@ -73,69 +96,60 @@ const TWAP_LO_ORDER_STATUS_MAP: Record<string, OrderStatusEntry> = {
     CANCELLED: { labelKey: 'cancelled', tone: 'error' },
 };
 
-const resolveOrderStatus = (trans: Trans, entry: OrderStatusEntry | undefined): OrderStatusView =>
+const resolveOrderStatus = (entry: OrderStatusEntry | undefined): OrderStatusView =>
     entry
-        ? { text: trans.trading.order_book_status[entry.labelKey], tone: entry.tone }
+        ? { text: TRADING_ORDER_BOOK_STATUS[entry.labelKey], tone: entry.tone }
         : { text: '', tone: 'neutral' };
 
-export const getNormalOrderStatus = (trans: Trans, statusCode: string): OrderStatusView =>
-    resolveOrderStatus(
-        trans,
-        NORMAL_ORDER_STATUS_MAP[statusCode] ?? SHARED_ORDER_STATUS_MAP[statusCode],
-    );
+export const getNormalOrderStatus = (statusCode: string): OrderStatusView =>
+    resolveOrderStatus(NORMAL_ORDER_STATUS_MAP[statusCode] ?? SHARED_ORDER_STATUS_MAP[statusCode]);
 
-export const get247OrderStatus = (trans: Trans, status: string): OrderStatusView =>
-    resolveOrderStatus(trans, ORDER_247_STATUS_MAP[status]);
+export const get247OrderStatus = (status: string): OrderStatusView =>
+    resolveOrderStatus(ORDER_247_STATUS_MAP[status]);
 
-export const getOrderStatus = (trans: Trans, status: string): OrderStatusView =>
-    resolveOrderStatus(trans, SHARED_ORDER_STATUS_MAP[status]);
+export const getOrderStatus = (status: string): OrderStatusView =>
+    resolveOrderStatus(SHARED_ORDER_STATUS_MAP[status]);
 
 export const getIcebergSliceStatus = (
-    trans: Trans,
     status: string | undefined,
     matchedQty = 0,
     orderQty = 0,
 ): OrderStatusView => {
-    if (!status || status === 'PENDING') return getOrderStatus(trans, 'PENDING');
+    if (!status || status === 'PENDING') return getOrderStatus('PENDING');
     if (status === 'MATCHED') {
-        return getOrderStatus(
-            trans,
-            matchedQty >= orderQty && orderQty > 0 ? 'MATCHED_ALL' : 'MATCHED',
-        );
+        return getOrderStatus(matchedQty >= orderQty && orderQty > 0 ? 'MATCHED_ALL' : 'MATCHED');
     }
-    return getOrderStatus(trans, status);
+    return getOrderStatus(status);
 };
 
-export const getTwapLoOrderStatus = (trans: Trans, status: string): OrderStatusView =>
-    resolveOrderStatus(trans, TWAP_LO_ORDER_STATUS_MAP[status]);
+export const getTwapLoOrderStatus = (status: string): OrderStatusView =>
+    resolveOrderStatus(TWAP_LO_ORDER_STATUS_MAP[status]);
 
 export const getTwapLoSliceStatus = (
-    trans: Trans,
     status: string | undefined,
     matchedQty = 0,
     orderQty = 0,
 ): OrderStatusView => {
     if (!status || status === 'PENDING' || status === 'DISPATCHING' || status === 'CARRIED_OVER') {
-        return getTwapLoOrderStatus(trans, 'PENDING');
+        return getTwapLoOrderStatus('PENDING');
     }
     if (status === 'COMPLETED') {
-        return resolveOrderStatus(trans, { labelKey: 'fully_filled', tone: 'success' });
+        return resolveOrderStatus({ labelKey: 'fully_filled', tone: 'success' });
     }
     if (status === 'MATCHED') {
         return resolveOrderStatus(
-            trans,
             matchedQty >= orderQty && orderQty > 0
                 ? { labelKey: 'fully_filled', tone: 'success' }
                 : { labelKey: 'partially_filled', tone: 'success' },
         );
     }
     if (status === 'PLACED') {
-        return resolveOrderStatus(trans, { labelKey: 'on_exchange', tone: 'success' });
+        return resolveOrderStatus({ labelKey: 'on_exchange', tone: 'success' });
     }
     if (status === 'FAILED') {
-        return resolveOrderStatus(trans, { labelKey: 'failed', tone: 'error' });
+        return resolveOrderStatus({ labelKey: 'failed', tone: 'error' });
     }
-    return getTwapLoOrderStatus(trans, status);
+    return getTwapLoOrderStatus(status);
 };
 
 export const getOrderStatusColor = (tone: OrderStatusTone): string => {

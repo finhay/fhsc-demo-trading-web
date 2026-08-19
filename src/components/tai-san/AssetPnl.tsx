@@ -4,7 +4,6 @@ import { useEffect, useState } from 'react';
 
 import { EmptyState } from '@/components/common/feature/EmptyState';
 import { Skeleton } from '@/components/common/ui/Skeleton';
-import { useTranslate } from '@/hooks/useTranslate';
 import { fetchSubAccountSellOrdersPnl } from '@/services/api/trade/portfolio';
 import { useAuthStore } from '@/stores/auth/useAuthStore';
 import type { SellOrderPnlItem } from '@/types/trade/portfolio';
@@ -12,7 +11,6 @@ import { isSuccessApi } from '@/utils/common';
 import { formatDateOrDash, formatNumberVN, formatPercentVN } from '@/utils/format';
 
 export const AssetPnl = () => {
-    const trans = useTranslate();
     const { activeSubAccount } = useAuthStore();
     const [items, setItems] = useState<SellOrderPnlItem[]>([]);
     const [isLoading, setIsLoading] = useState(false);
@@ -44,9 +42,7 @@ export const AssetPnl = () => {
 
     return (
         <section className="flex h-full w-full min-h-0 shrink-0 flex-col gap-3 overflow-hidden rounded-xl bg-secondary p-3">
-            <h2 className="shrink-0 font-body-2-highlight text-primary">
-                {trans.assets.realized_pnl.list_title}
-            </h2>
+            <h2 className="shrink-0 font-body-2-highlight text-primary">{'Lãi/lỗ đã chốt'}</h2>
             <div className="min-h-0 flex-1">
                 {isLoading ? (
                     <div className="h-full w-full">
@@ -63,9 +59,7 @@ export const AssetPnl = () => {
                                 const isProfit = item.percentPNL >= 0;
                                 const sign = isProfit ? '+' : '-';
                                 const pnlColor = isProfit ? 'text-green' : 'text-red';
-                                const typeLabel = isProfit
-                                    ? trans.assets.realized_pnl.take_profit
-                                    : trans.assets.realized_pnl.cut_loss;
+                                const typeLabel = isProfit ? 'Chốt lời' : 'Cắt lỗ';
 
                                 return (
                                     <li
@@ -96,19 +90,19 @@ export const AssetPnl = () => {
                                                     {formatNumberVN(Math.abs(item.value), {
                                                         trimTrailingZeros: true,
                                                     })}{' '}
-                                                    {trans.assets.modals.common.currency}
+                                                    {'đ'}
                                                 </p>
                                             </div>
                                             <div className="flex shrink-0 flex-col items-end gap-1 font-body-3 text-secondary">
                                                 <p>
-                                                    {trans.assets.realized_pnl.sell_price}:{' '}
+                                                    {'Giá bán'}:{' '}
                                                     {formatNumberVN(item.matchedPrice / 1000, {
                                                         decimals: 2,
                                                         trimTrailingZeros: true,
                                                     })}
                                                 </p>
                                                 <p>
-                                                    {trans.assets.realized_pnl.buy_price}:{' '}
+                                                    {'Giá mua'}:{' '}
                                                     {formatNumberVN(item.costPrice / 1000, {
                                                         decimals: 2,
                                                         trimTrailingZeros: true,

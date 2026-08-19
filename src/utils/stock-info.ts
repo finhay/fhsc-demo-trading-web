@@ -8,7 +8,6 @@ import {
     STATUS_COLORS,
     UI_LABEL_OVERRIDES,
 } from '@/constants/stock-info';
-import { useTranslate } from '@/hooks/useTranslate';
 import type {
     CompanyType,
     PlanItem,
@@ -161,25 +160,22 @@ export const pickPlanItems = (
         return { ...item, value, isZero, ...color };
     });
 
-export const getTabInformationLabel = (
-    key: StockInfoTabKey,
-    trans: ReturnType<typeof useTranslate>,
-) => {
+export const getTabInformationLabel = (key: StockInfoTabKey) => {
     switch (key) {
         case 'CHART':
-            return trans.stockInfo.navigation.tab_chart;
+            return 'Biểu đồ';
         case 'OVERVIEW':
-            return trans.stockInfo.navigation.tab_overview;
+            return 'Tổng quan';
         case 'NEWS':
-            return trans.stockInfo.navigation.tab_news;
+            return 'Tin tức';
         case 'FINANCE':
-            return trans.stockInfo.navigation.tab_finance;
+            return 'Tài chính';
         case 'STATISTICS':
-            return trans.stockInfo.navigation.tab_statistics;
+            return 'Thống kê';
         case 'EVENTS':
-            return trans.stockInfo.navigation.tab_events;
+            return 'Sự kiện';
         case 'PROFILE':
-            return trans.stockInfo.navigation.tab_profile;
+            return 'Hồ sơ';
         default:
             return key;
     }

@@ -15,7 +15,6 @@ import { Skeleton } from '@/components/common/ui/Skeleton';
 import { TradeQuickPanel } from '@/components/giao-dich/panel/TradeQuickPanel';
 import { getAssetPortfolioColumns } from '@/components/tai-san/portfolio/AssetPortfolioColumns';
 import { AUTH_MODE } from '@/constants/auth';
-import { useTranslate } from '@/hooks/useTranslate';
 import { useAssetStore } from '@/stores/assets/useAssetStore';
 import { useAuthFlowStore } from '@/stores/auth/useAuthFlowStore';
 import { useAuthStore } from '@/stores/auth/useAuthStore';
@@ -25,7 +24,6 @@ import type { SortableColMeta } from '@/types/pages/common';
 import type { PortfolioItem } from '@/types/trade/portfolio';
 
 export const AssetPortfolio = () => {
-    const trans = useTranslate();
     const [sorting, setSorting] = useState<SortingState>([]);
     const [tradeAnchor, setTradeAnchor] = useState<PortfolioTradeAnchor | null>(null);
 
@@ -49,11 +47,11 @@ export const AssetPortfolio = () => {
 
     const columns = useMemo(
         () =>
-            getAssetPortfolioColumns(trans, {
+            getAssetPortfolioColumns({
                 onSymbolClick: handleSymbolClick,
                 onTradeClick: handleTradeClick,
             }),
-        [trans, profile],
+        [profile],
     );
 
     const table = useReactTable({
@@ -68,9 +66,7 @@ export const AssetPortfolio = () => {
 
     return (
         <section className="flex w-full flex-col gap-3 rounded-xl bg-secondary p-3">
-            <h2 className="shrink-0 font-body-2-highlight text-primary">
-                {trans.assets.portfolio.list_heading}
-            </h2>
+            <h2 className="shrink-0 font-body-2-highlight text-primary">{'Danh sách'}</h2>
             {isPortfolioLoading ? (
                 <div className="h-64 w-full">
                     <Skeleton />

@@ -3,7 +3,6 @@
 import { EmptyState } from '@/components/common/feature/EmptyState';
 import { Tooltip } from '@/components/common/ui/Tooltip';
 import { MarketFlowTreemapNodes } from '@/components/thi-truong/money-flow/MarketFlowTreemapNodes';
-import { useTranslate } from '@/hooks/useTranslate';
 import type {
     TradingFlowTopNetSide,
     TradingFlowTreemapCell,
@@ -26,11 +25,9 @@ export const MarketFlowTreemapSide = ({
     colorMode,
     onCellClick,
 }: Props) => {
-    const trans = useTranslate();
-
     const isBuy = side === 'buy';
-    const sideLabel = isBuy ? trans.market.flow.col_buy : trans.market.flow.col_sell;
-    const totalLabel = `${formatNumberVN(Math.abs(totalBillion), { decimals: 2 })} ${trans.market.flow.unit_value}`;
+    const sideLabel = isBuy ? 'Mua' : 'Bán';
+    const totalLabel = `${formatNumberVN(Math.abs(totalBillion), { decimals: 2 })} ${'tỷ đồng'}`;
 
     return (
         <div className="grid h-full min-h-0 w-full min-w-0 grid-cols-1 grid-rows-[auto_1fr] gap-1">

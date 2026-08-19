@@ -17,7 +17,6 @@ import { EmptyState } from '@/components/common/feature/EmptyState';
 import { Skeleton } from '@/components/common/ui/Skeleton';
 import { createWatchlistColumns } from '@/components/giao-dich/watchlist/TradeWatchlistColumns';
 import { useMQTT } from '@/hooks/useMQTT';
-import { useTranslate } from '@/hooks/useTranslate';
 import { StockPriceMessage } from '@/proto/stock';
 import { useAuthStore } from '@/stores/auth/useAuthStore';
 import {
@@ -33,7 +32,6 @@ import { createAlphanumericSortFn, createNumericSortFn } from '@/utils/iboard';
 import { mapWatchlistItemToStock } from '@/utils/trading/shared';
 
 export const TradeWatchlist = () => {
-    const trans = useTranslate();
     const router = useRouter();
     const { activeSubAccount } = useAuthStore();
     const [stocks, setStocks] = useState<StocksInfoItem[]>([]);
@@ -154,9 +152,9 @@ export const TradeWatchlist = () => {
         () =>
             createWatchlistColumns({
                 labels: {
-                    col_symbol: trans.trading.watchlist.col_symbol,
-                    col_market_price_ref: trans.trading.watchlist.col_market_price_ref,
-                    col_change: trans.trading.watchlist.col_change,
+                    col_symbol: 'Mã',
+                    col_market_price_ref: 'Giá TT / Giá TC',
+                    col_change: 'Biến động',
                 },
                 numericSortFn,
                 alphanumericSortFn,
@@ -165,9 +163,9 @@ export const TradeWatchlist = () => {
         [
             alphanumericSortFn,
             numericSortFn,
-            trans.trading.watchlist.col_symbol,
-            trans.trading.watchlist.col_market_price_ref,
-            trans.trading.watchlist.col_change,
+            'Mã',
+            'Giá TT / Giá TC',
+            'Biến động',
             handleSelectSymbol,
         ],
     );
@@ -223,7 +221,7 @@ export const TradeWatchlist = () => {
 
     return (
         <section
-            aria-label={trans.trading.watchlist.portfolio_section}
+            aria-label={'Danh mục sở hữu'}
             aria-live="polite"
             className="bg-secondary flex h-full min-h-0 w-full min-w-0 flex-1 flex-col gap-3 overflow-hidden rounded-xl p-3"
         >
@@ -285,7 +283,7 @@ export const TradeWatchlist = () => {
                             {rows.map((row, index) => (
                                 <tr
                                     key={row.id}
-                                    aria-label={`${row.original.symbol} — ${trans.trading.watchlist.portfolio_stock_price_prefix} ${row.original.price}, ${trans.trading.watchlist.portfolio_stock_change_prefix} ${row.original.price_change}/${row.original.price_change_percent}%`}
+                                    aria-label={`${row.original.symbol} — ${'Giá'} ${row.original.price}, ${'biến động'} ${row.original.price_change}/${row.original.price_change_percent}%`}
                                     className="text-left"
                                 >
                                     {row.getVisibleCells().map((cell) => {

@@ -4,8 +4,6 @@ import React from 'react';
 
 import { FaRegSquare, FaSquareCheck } from 'react-icons/fa6';
 
-import { useTranslate } from '@/hooks/useTranslate';
-
 type Props = {
     label: React.ReactNode;
     checked: boolean;
@@ -23,17 +21,12 @@ export const Checkbox = ({
     className = '',
     onChange,
 }: Props) => {
-    const trans = useTranslate();
     if (readOnly) {
         return (
             <div
                 className={`flex items-center gap-1.5 ${className}`}
                 role="img"
-                aria-label={
-                    checked
-                        ? `${trans.checkbox.met}: ${label}`
-                        : `${trans.checkbox.not_met}: ${label}`
-                }
+                aria-label={checked ? `${'Đã đáp ứng'}: ${label}` : `${'Chưa đáp ứng'}: ${label}`}
             >
                 <span className="flex-shrink-0">
                     {checked ? (

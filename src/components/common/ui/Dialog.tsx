@@ -6,7 +6,6 @@ import { createPortal } from 'react-dom';
 import { FaArrowLeft, FaXmark } from 'react-icons/fa6';
 
 import { useHotkeys } from '@/hooks/lib/useHotkeys';
-import { useTranslate } from '@/hooks/useTranslate';
 
 let openDialogCount = 0;
 
@@ -35,7 +34,6 @@ export const Dialog = ({
     onClose,
     onBack,
 }: Props) => {
-    const trans = useTranslate();
     const [isMounted, setIsMounted] = useState(false);
 
     useHotkeys('Escape', () => {
@@ -86,7 +84,7 @@ export const Dialog = ({
                                 <button
                                     onClick={onBack}
                                     className="text-primary hover:text-highlight transition-colors flex-shrink-0"
-                                    aria-label={trans.dialog.back}
+                                    aria-label={'Quay lại'}
                                     type="button"
                                 >
                                     <FaArrowLeft size={20} />
@@ -104,7 +102,7 @@ export const Dialog = ({
                         <button
                             onClick={onClose}
                             className="text-primary hover:text-highlight transition-colors flex-shrink-0"
-                            aria-label={trans.dialog.close}
+                            aria-label={'Đóng'}
                             type="button"
                         >
                             <FaXmark size={20} />

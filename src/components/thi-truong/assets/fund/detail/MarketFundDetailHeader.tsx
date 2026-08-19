@@ -1,14 +1,13 @@
 'use client';
 
 import Image from 'next/image';
-import { useRouter } from 'next/router';
 
 import {
+    FUND_MODAL_LIST_TABS,
     PROFIT_PERIOD_FIVE_YEARS,
     PROFIT_PERIOD_ONE_YEAR,
     PROFIT_PERIOD_THREE_YEARS,
 } from '@/constants/market';
-import { useTranslate } from '@/hooks/useTranslate';
 import type { FundCertificateDetail } from '@/types/pages/fund';
 import {
     formatFundPercent,
@@ -21,20 +20,14 @@ type Props = {
 };
 
 export const MarketFundDetailHeader = ({ detail }: Props) => {
-    const trans = useTranslate();
-    const { locale } = useRouter();
-    const t = trans.market.assets.fund_modal;
-    const d = t.detail;
+    const t = FUND_MODAL_LIST_TABS;
 
-    const briefDescription =
-        locale === 'en'
-            ? detail.en_brief_description || detail.brief_description
-            : detail.brief_description;
+    const briefDescription = detail.brief_description;
 
     const periods = [
-        { key: PROFIT_PERIOD_ONE_YEAR, label: d.profit_1y },
-        { key: PROFIT_PERIOD_THREE_YEARS, label: d.profit_3y },
-        { key: PROFIT_PERIOD_FIVE_YEARS, label: d.profit_5y },
+        { key: PROFIT_PERIOD_ONE_YEAR, label: '1 năm' },
+        { key: PROFIT_PERIOD_THREE_YEARS, label: '3 năm' },
+        { key: PROFIT_PERIOD_FIVE_YEARS, label: '5 năm' },
     ];
 
     return (
@@ -55,7 +48,7 @@ export const MarketFundDetailHeader = ({ detail }: Props) => {
                     <div className="flex items-center gap-3">
                         <span className="font-body-1-highlight text-primary">{detail.name}</span>
                         <span className="font-caption rounded-full border border-green px-3 py-1 text-primary">
-                            {t.list_tabs[detail.type as keyof typeof t.list_tabs] ?? detail.type}
+                            {t[detail.type as keyof typeof t] ?? detail.type}
                         </span>
                     </div>
                     {briefDescription && (
@@ -78,9 +71,7 @@ export const MarketFundDetailHeader = ({ detail }: Props) => {
                                 <span className={`font-body-2-highlight ${valueColor}`}>
                                     {formatFundPercent(value)}
                                     {hasValue && (
-                                        <span className="font-body-3 text-tertiary">
-                                            {d.profit_suffix}
-                                        </span>
+                                        <span className="font-body-3 text-tertiary">{'/năm*'}</span>
                                     )}
                                 </span>
                             </div>

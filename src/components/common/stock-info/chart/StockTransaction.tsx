@@ -6,7 +6,6 @@ import { EmptyState } from '@/components/common/feature/EmptyState';
 import { Skeleton } from '@/components/common/ui/Skeleton';
 import { TRADE_LITERAL, TRADE_TOPIC } from '@/constants/trading';
 import { useMQTT } from '@/hooks/useMQTT';
-import { useTranslate } from '@/hooks/useTranslate';
 import { fetchStockTransactionLog } from '@/services/api/datafeed/stock-info';
 import { useStockInfoStore } from '@/stores/common/useStockInfoStore';
 import { TradeTransactionDisplayItem } from '@/types/pages/trading';
@@ -14,7 +13,6 @@ import { isSuccessApi } from '@/utils/common';
 import { formatNumberVN } from '@/utils/format';
 
 export const StockTransaction = () => {
-    const trans = useTranslate();
     const [isLoading, setIsLoading] = useState(false);
     const [data, setData] = useState<TradeTransactionDisplayItem[]>([]);
     const { selectedStock } = useStockInfoStore();
@@ -102,10 +100,10 @@ export const StockTransaction = () => {
     return (
         <section
             className="flex min-h-0 flex-1 flex-col gap-3 overflow-hidden rounded-xl bg-secondary p-3"
-            aria-label={trans.trading.transaction.heading}
+            aria-label={'Giao dịch toàn thị trường'}
         >
             <h3 className="shrink-0 font-body-3-highlight text-primary">
-                {trans.trading.transaction.heading}
+                {'Giao dịch toàn thị trường'}
             </h3>
 
             {isLoading ? (
@@ -119,14 +117,10 @@ export const StockTransaction = () => {
             ) : (
                 <div className="flex min-h-0 flex-1 flex-col gap-3">
                     <div className="flex w-full shrink-0 font-caption text-secondary">
-                        <span className="w-20 shrink-0">{trans.trading.transaction.col_time}</span>
-                        <span className="min-w-0 flex-1">{trans.trading.transaction.col_side}</span>
-                        <span className="w-20 shrink-0 text-right">
-                            {trans.trading.transaction.col_qty}
-                        </span>
-                        <span className="w-16 shrink-0 text-right">
-                            {trans.trading.transaction.col_price}
-                        </span>
+                        <span className="w-20 shrink-0">{'Thời gian'}</span>
+                        <span className="min-w-0 flex-1">{'M/B'}</span>
+                        <span className="w-20 shrink-0 text-right">{'KL'}</span>
+                        <span className="w-16 shrink-0 text-right">{'Giá'}</span>
                     </div>
                     <div className="flex min-h-0 flex-1 flex-col gap-3 overflow-y-auto">
                         {data.map((transaction, index) => (

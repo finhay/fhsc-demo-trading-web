@@ -14,7 +14,6 @@ import {
     EXCHANGE_RATE_DEFAULT_PERIOD,
     MACRO_LIQUIDITY_DEFAULT_CURRENCY,
 } from '@/constants/market';
-import { useTranslate } from '@/hooks/useTranslate';
 import {
     fetchBankInterestRates,
     fetchExchangeRateChart,
@@ -35,7 +34,6 @@ import {
 import { unwrap } from '@/utils/market/market-shared';
 
 export const MarketCurrency = () => {
-    const trans = useTranslate();
     const [isLoading, setIsLoading] = useState(true);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [raw, setRaw] = useState<MacroLiquidityRawState>(EMPTY_MACRO_LIQUIDITY_RAW);
@@ -44,7 +42,7 @@ export const MarketCurrency = () => {
 
     const fetchPromiseRef = useRef<Promise<void> | null>(null);
 
-    const rows = buildMacroLiquidityRows(state, trans);
+    const rows = buildMacroLiquidityRows(state);
     const iconRows = rows.filter((row) => row.icon);
     const rateRows = rows.filter((row) => !row.icon);
 
@@ -93,13 +91,13 @@ export const MarketCurrency = () => {
         <section className="bg-secondary flex min-h-0 flex-1 flex-col gap-3 rounded-xl p-4">
             <div className="flex items-center justify-between gap-2">
                 <h2 className="font-body-2-highlight text-primary flex items-center gap-2">
-                    {trans.market.currency.heading}
+                    {'Tiền tệ'}
                 </h2>
                 <button
                     type="button"
                     onClick={() => handleOpenModal()}
                     className="text-primary"
-                    aria-label={trans.market.currency.heading}
+                    aria-label={'Tiền tệ'}
                 >
                     <FaChevronRight size={14} />
                 </button>
@@ -136,7 +134,11 @@ export const MarketCurrency = () => {
                             ))}
                         </ul>
                     )}
-                    <p className="font-caption text-tertiary">{trans.market.currency.disclaimer}</p>
+                    <p className="font-caption text-tertiary">
+                        {
+                            'Lưu ý: Thông tin lãi suất chỉ mang tính chất tham khảo, và có thể thay đổi dựa trên chính sách ngân hàng. Vui lòng liên hệ trực tiếp ngân hàng để được tư vấn về lãi suất và các gói vay.'
+                        }
+                    </p>
                 </div>
             )}
             {isModalOpen && <MarketCurrencyModal onClose={() => setIsModalOpen(false)} raw={raw} />}

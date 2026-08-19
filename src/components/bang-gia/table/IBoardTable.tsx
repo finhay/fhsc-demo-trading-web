@@ -20,10 +20,9 @@ import { Spinner } from '@/components/common/ui/Spinner';
 import { Tooltip } from '@/components/common/ui/Tooltip';
 import { TradeQuickPanel } from '@/components/giao-dich/panel/TradeQuickPanel';
 import { AUTH_MODE } from '@/constants/auth';
-import { IBOARD_BID_ASK_PRICE_KEYS } from '@/constants/iboard';
+import { IBOARD, IBOARD_BID_ASK_PRICE_KEYS } from '@/constants/iboard';
 import { TRADE_LITERAL } from '@/constants/trading';
 import { useMQTT } from '@/hooks/useMQTT';
-import { useTranslate } from '@/hooks/useTranslate';
 import { StockPriceMessage } from '@/proto/stock';
 import {
     decodeOddLotStockPriceProtobufByQueryParam,
@@ -51,7 +50,6 @@ import {
 } from '@/utils/iboard';
 
 export const IBoardTable = () => {
-    const trans = useTranslate();
     const router = useRouter();
     const { exchange } = useMarketIndexStore();
     const { selectedSearchStock, fetchStockInfo } = useStockInfoStore();
@@ -157,7 +155,7 @@ export const IBoardTable = () => {
                 if (isTradablePriceCell && value != null) {
                     return (
                         <Tooltip
-                            content={trans.iboard.price_cell_trade_tooltip}
+                            content={'Click để giao dịch'}
                             placement="right"
                             variant="light"
                             className="block w-full min-w-0"
@@ -187,11 +185,11 @@ export const IBoardTable = () => {
         const visibleLeaves = getVisibleLeafColumns(totalMetric);
 
         return visibleLeaves.map((column) => {
-            const leafKey = `leaf_${column.key}` as keyof typeof trans.iboard;
-            const label = (trans.iboard[leafKey] as string | undefined) ?? column.label;
+            const leafKey = `leaf_${column.key}` as keyof typeof IBOARD;
+            const label = (IBOARD[leafKey] as string | undefined) ?? column.label;
             return makeLeafColumn(column.key, label);
         });
-    }, [alphanumericSortFn, numericSortFn, totalMetric, trans.iboard, handlePriceCellClick]);
+    }, [alphanumericSortFn, numericSortFn, totalMetric, handlePriceCellClick]);
 
     const clearRealtimeHighlight = useCallback((symbol: string, field: string) => {
         setRealtimeCellBgMap((prev) => {
@@ -347,7 +345,7 @@ export const IBoardTable = () => {
 
     return (
         <section
-            aria-label={trans.iboard.stock_price_table}
+            aria-label={'Bảng giá cổ phiếu'}
             className="flex h-full min-h-0 w-full min-w-0 flex-col overflow-hidden bg-secondary rounded-xl"
         >
             {isLoading || isOwnedLoading ? (

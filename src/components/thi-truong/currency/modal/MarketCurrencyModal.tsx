@@ -5,7 +5,6 @@ import { MarketExchangeRate } from '@/components/thi-truong/currency/modal/Marke
 import { MarketInterbank } from '@/components/thi-truong/currency/modal/MarketInterbank';
 import { MarketInterestCards } from '@/components/thi-truong/currency/modal/MarketInterestCards';
 import { MarketOmo } from '@/components/thi-truong/currency/modal/MarketOmo';
-import { useTranslate } from '@/hooks/useTranslate';
 import type { MacroLiquidityRawState } from '@/types/pages/market';
 
 type Props = {
@@ -14,11 +13,9 @@ type Props = {
 };
 
 export const MarketCurrencyModal = ({ onClose, raw }: Props) => {
-    const trans = useTranslate();
-
     return (
         <Dialog
-            title={trans.market.currency.heading}
+            title={'Tiền tệ'}
             onClose={onClose}
             maxWidth="max-w-7xl"
             maxHeight="h-[90vh]"

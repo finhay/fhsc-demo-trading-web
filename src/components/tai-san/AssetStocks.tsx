@@ -8,7 +8,6 @@ import { EmptyState } from '@/components/common/feature/EmptyState';
 import { PortfolioLeadPanel } from '@/components/common/portfolio-chart/PortfolioLeadPanel';
 import { Skeleton } from '@/components/common/ui/Skeleton';
 import { useMQTT } from '@/hooks/useMQTT';
-import { useTranslate } from '@/hooks/useTranslate';
 import { StockPriceMessage } from '@/proto/stock';
 import { fetchStocksMetadataBySymbolsV4 } from '@/services/api/datafeed/stock-info';
 import { useAssetStore } from '@/stores/assets/useAssetStore';
@@ -23,7 +22,6 @@ import {
 } from '@/utils/market/market-portfolio';
 
 export const AssetStocks = () => {
-    const trans = useTranslate();
     const [stocks, setStocks] = useState<StocksInfoItem[]>([]);
     const [isMetadataLoading, setIsMetadataLoading] = useState(true);
     const [activeSymbol, setActiveSymbol] = useState('');
@@ -141,9 +139,7 @@ export const AssetStocks = () => {
 
     return (
         <section className="flex h-full flex-col gap-3 overflow-hidden rounded-xl bg-secondary p-3">
-            <h2 className="shrink-0 font-body-2-highlight text-primary">
-                {trans.assets.stock_summary.total_value}
-            </h2>
+            <h2 className="shrink-0 font-body-2-highlight text-primary">{'Tổng giá trị'}</h2>
             {isLoading ? (
                 <div className="h-80 w-full">
                     <Skeleton />
@@ -162,11 +158,7 @@ export const AssetStocks = () => {
                             đ
                         </p>
                         <div className="flex items-start gap-3 whitespace-nowrap font-body-3">
-                            <span className="text-secondary">
-                                {isPnlUp
-                                    ? trans.assets.stock_summary.profit
-                                    : trans.assets.stock_summary.loss}
-                            </span>
+                            <span className="text-secondary">{isPnlUp ? 'Lãi' : 'Lỗ'}</span>
                             <span className={isPnlUp ? 'text-green' : 'text-red'}>
                                 {isPnlUp ? '+' : '-'}{' '}
                                 {formatNumberVN(Math.abs(totalPnl), {
@@ -178,14 +170,12 @@ export const AssetStocks = () => {
                         </div>
                     </div>
                     <div className="h-px w-full shrink-0 bg-tertiary" />
-                    <h3 className="shrink-0 font-body-3 text-primary">
-                        {trans.assets.stock_summary.did_you_know}
-                    </h3>
+                    <h3 className="shrink-0 font-body-3 text-primary">{'Bạn có biết?'}</h3>
                     <div className="flex shrink-0 flex-wrap items-start gap-3">
                         <span className="font-body-3 text-secondary">
                             {isPortfolioUp
-                                ? trans.assets.stock_summary.session_up
-                                : trans.assets.stock_summary.session_down}
+                                ? 'Trong phiên, danh mục sở hữu của bạn đã tăng'
+                                : 'Trong phiên, danh mục sở hữu của bạn đã giảm'}
                         </span>
                         <span
                             className={`inline-flex items-center gap-0.5 font-body-3-highlight ${
@@ -209,8 +199,8 @@ export const AssetStocks = () => {
                         weightPercent={activeRow!.weightPercent}
                         heading={
                             activeRow!.symbol === rows[0]?.symbol
-                                ? trans.assets.stock_summary.lead_heading
-                                : trans.market.portfolio.impact_heading
+                                ? 'Dẫn dắt danh mục'
+                                : 'Tác động danh mục'
                         }
                     />
                 </>

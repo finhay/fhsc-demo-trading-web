@@ -4,11 +4,15 @@ import {
     NETWORK_STATUS_COLOR_CLASS,
     WifiIcon,
 } from '@/components/common/header/network-status/WifiIcon';
-import { useTranslate } from '@/hooks/useTranslate';
 import { useNetworkHealthStore } from '@/stores/common/useNetworkHealthStore';
 
+const NETWORK = {
+    stable: 'Ổn định',
+    unstable: 'Không ổn định',
+    offline: 'Mất kết nối',
+};
+
 export const StatusBadge = () => {
-    const trans = useTranslate();
     const { status, avgLatencyMs } = useNetworkHealthStore();
 
     if (!status) return null;
@@ -19,10 +23,10 @@ export const StatusBadge = () => {
         <div
             className={`flex items-center gap-1 ${colorClass}`}
             title={`~${avgLatencyMs}ms`}
-            aria-label={trans.network[status]}
+            aria-label={NETWORK[status]}
         >
             <WifiIcon />
-            <span className="font-body-3">{trans.network[status]}</span>
+            <span className="font-body-3">{NETWORK[status]}</span>
         </div>
     );
 };

@@ -11,7 +11,6 @@ import { MarketIndexHeader } from '@/components/thi-truong/index/modal/MarketInd
 import { MarketIndexInvestment } from '@/components/thi-truong/index/modal/MarketIndexInvestment';
 import { MARKET_INDEX_LIST } from '@/constants/market';
 import { useMQTT } from '@/hooks/useMQTT';
-import { useTranslate } from '@/hooks/useTranslate';
 import { IndexData } from '@/proto/stock';
 import { useMarketIndexStore } from '@/stores/common/useMarketIndexStore';
 import { useStockInfoStore } from '@/stores/common/useStockInfoStore';
@@ -21,7 +20,6 @@ type Props = {
 };
 
 export const MarketDetailModal = ({ onClose }: Props) => {
-    const trans = useTranslate();
     const { updateFromMQTT } = useMarketIndexStore();
     const { detailIndex, openIndexDetail, openStockDetail } = useStockInfoStore();
     const selectedIndex = detailIndex ?? '';
@@ -33,8 +31,8 @@ export const MarketDetailModal = ({ onClose }: Props) => {
     );
 
     const tabs: { key: string; label: string }[] = [
-        { key: 'chart', label: trans.market.index.detail.tabs.chart },
-        { key: 'overview', label: trans.market.index.detail.tabs.overview },
+        { key: 'chart', label: 'Biểu đồ' },
+        { key: 'overview', label: 'Tổng quan' },
     ];
 
     const handleIndexMqttMessage = useCallback(

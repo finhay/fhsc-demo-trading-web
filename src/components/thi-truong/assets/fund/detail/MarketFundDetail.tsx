@@ -10,14 +10,17 @@ import { MarketFundDetailInfoTab } from '@/components/thi-truong/assets/fund/det
 import { MarketFundDetailMonthlyStats } from '@/components/thi-truong/assets/fund/detail/MarketFundDetailMonthlyStats';
 import { MarketFundDetailTradingInfo } from '@/components/thi-truong/assets/fund/detail/MarketFundDetailTradingInfo';
 import { FUND_DETAIL_TABS } from '@/constants/market';
-import { useTranslate } from '@/hooks/useTranslate';
 import { useMarketFundStore } from '@/stores/fund/useMarketFundStore';
 import type { FundDetailTab } from '@/types/pages/fund';
 import { getLatestNav } from '@/utils/market/market-fund';
 
+const FUND_MODAL_TABS = {
+    info: 'Thông tin cần biết',
+    fee: 'Thuế-phí',
+};
+
 export const MarketFundDetail = () => {
-    const trans = useTranslate();
-    const d = trans.market.assets.fund_modal.detail;
+    const d = FUND_MODAL_TABS;
 
     const { selectedFundName, detail, listing, navHistories } = useMarketFundStore();
 
@@ -52,7 +55,7 @@ export const MarketFundDetail = () => {
                                         : 'font-body-3 text-secondary'
                                 }`}
                             >
-                                {d.tabs[key]}
+                                {d[key]}
                             </button>
                         );
                     })}

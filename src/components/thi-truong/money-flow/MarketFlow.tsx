@@ -10,7 +10,6 @@ import { MarketFlowTopNet } from '@/components/thi-truong/money-flow/MarketFlowT
 import { MarketFlowModal } from '@/components/thi-truong/money-flow/modal/MarketFlowModal';
 import { TRADING_FLOW_BLOCK_TABS, TRADING_FLOW_EXCHANGES } from '@/constants/market';
 import { useMQTT } from '@/hooks/useMQTT';
-import { useTranslate } from '@/hooks/useTranslate';
 import {
     fetchForeignTradingStats,
     fetchProprietaryTradingStats,
@@ -26,7 +25,6 @@ import {
 } from '@/utils/market/market-flow';
 
 export const MarketFlow = () => {
-    const trans = useTranslate();
     const [activeTab, setActiveTab] = useState<TradingFlowTab>(TRADING_FLOW_BLOCK_TABS[0]);
     const [activeExchange, setActiveExchange] = useState<string>(TRADING_FLOW_EXCHANGES[0].value);
     const [isLoading, setIsLoading] = useState(true);
@@ -93,9 +91,7 @@ export const MarketFlow = () => {
                                     activeTab === tab ? 'text-primary' : 'text-secondary'
                                 }`}
                             >
-                                {tab === 'foreign'
-                                    ? trans.market.flow.tab_foreign
-                                    : trans.market.flow.tab_proprietary}
+                                {tab === 'foreign' ? 'Khối ngoại' : 'Tự doanh'}
                             </button>
                         ))}
                     </div>
@@ -104,7 +100,7 @@ export const MarketFlow = () => {
                         onClick={handleOpenModal}
                         className="text-highlight flex shrink-0 items-center gap-2 transition-colors hover:text-highlight/80"
                     >
-                        <span className="font-caption-highlight">{trans.market.flow.see_more}</span>
+                        <span className="font-caption-highlight">{'Xem thêm'}</span>
                         <FaArrowRight size={16} aria-hidden />
                     </button>
                 </div>
@@ -131,7 +127,7 @@ export const MarketFlow = () => {
                     {!isForeign && (
                         <div className="border-tertiary flex shrink-0 items-center justify-center rounded-full border px-3 py-1">
                             <p className="font-caption text-secondary whitespace-nowrap">
-                                {trans.market.flow.data_day}{' '}
+                                {'Dữ liệu ngày'}{' '}
                                 <span className="text-primary">
                                     {stats?.trading_date ? formatDate(stats.trading_date) : '--'}
                                 </span>

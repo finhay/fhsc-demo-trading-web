@@ -4,9 +4,9 @@ import { AnalysisSection } from '@/components/common/stock-info/finance/analysis
 import {
     ANALYSIS_CONTENT_CARD,
     CHART_GRADIENTS,
+    FINANCE_ANALYSIS_LABELS,
     NON_FINANCIAL_CASHFLOW,
 } from '@/constants/stock-info';
-import { useTranslate } from '@/hooks/useTranslate';
 import type { FinancialStatementRow } from '@/types/datafeed/finance';
 import { formatNumberVNWithUnit } from '@/utils/format';
 import { getToneByValue, getValueClass, sortByYearAsc } from '@/utils/stock-info';
@@ -18,8 +18,7 @@ export const NonFinancialCashflow = ({
     dataQuarterly: any;
     cashFlowData: FinancialStatementRow[];
 }) => {
-    const trans = useTranslate();
-    const fa = trans.stockInfo.finance_analysis as Record<string, string>;
+    const fa = FINANCE_ANALYSIS_LABELS as Record<string, string>;
     const latest = dataQuarterly?.[0] ?? {};
     const { fields, labelKeys } = NON_FINANCIAL_CASHFLOW;
     const sortedCashFlow = sortByYearAsc(cashFlowData);
@@ -42,7 +41,7 @@ export const NonFinancialCashflow = ({
     }));
 
     return (
-        <AnalysisSection title={fa.nonfin_cashflow_question}>
+        <AnalysisSection title={'Dòng tiền có khoẻ không?'}>
             <div className={ANALYSIS_CONTENT_CARD}>
                 <div className="flex gap-3">
                     {cashflowItems.map((item) => (

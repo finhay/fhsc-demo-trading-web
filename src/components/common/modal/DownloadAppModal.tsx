@@ -4,15 +4,12 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 import { Dialog } from '@/components/common/ui/Dialog';
-import { useTranslate } from '@/hooks/useTranslate';
 
 type Props = {
     onClose: () => void;
 };
 
 export const DownloadAppModal = ({ onClose }: Props) => {
-    const trans = useTranslate();
-
     return (
         <Dialog onClose={onClose} maxWidth="max-w-md">
             <section
@@ -22,7 +19,7 @@ export const DownloadAppModal = ({ onClose }: Props) => {
                 <figure className="m-0 flex flex-col items-center">
                     <Image
                         src="https://cdn1.finhay.com.vn/vnsc-prod/1741929570552-QR-Radar-Home.png?w=128"
-                        alt={trans.download_app_modal.qr_image_alt}
+                        alt={'Mã QR tải ứng dụng Finhay'}
                         width={200}
                         height={200}
                         className="w-48 h-48 object-contain"
@@ -32,11 +29,11 @@ export const DownloadAppModal = ({ onClose }: Props) => {
                     id="download-app-modal-title"
                     className="m-0 text-center text-primary font-heading-4"
                 >
-                    {trans.download_app_modal.title}
+                    {'Tải ứng dụng Finhay tại đây'}
                 </h2>
                 <nav
                     className="flex flex-wrap items-center justify-center gap-4"
-                    aria-label={trans.download_app_modal.nav_aria}
+                    aria-label={'Tải ứng dụng trên kho ứng dụng'}
                 >
                     <ul className="m-0 flex list-none flex-wrap items-center justify-center gap-4 p-0">
                         <li>
@@ -47,7 +44,7 @@ export const DownloadAppModal = ({ onClose }: Props) => {
                             >
                                 <Image
                                     src="https://cdn1.finhay.com.vn/vnsc-prod/1730190940000-down-appstore.webp?w=384"
-                                    alt={trans.download_app_modal.app_store_alt}
+                                    alt={'Tải trên App Store'}
                                     width={200}
                                     height={60}
                                     className="h-15 w-48 object-contain"
@@ -62,7 +59,7 @@ export const DownloadAppModal = ({ onClose }: Props) => {
                             >
                                 <Image
                                     src="https://cdn1.finhay.com.vn/vnsc-prod/1730190927136-down-ggplay.webp?w=384"
-                                    alt={trans.download_app_modal.google_play_alt}
+                                    alt={'Tải trên Google Play'}
                                     width={200}
                                     height={60}
                                     className="h-15 w-48 object-contain"

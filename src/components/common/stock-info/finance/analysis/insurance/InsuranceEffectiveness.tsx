@@ -6,15 +6,18 @@ import * as echarts from 'echarts';
 
 import { AnalysisSection } from '@/components/common/stock-info/finance/analysis/common/AnalysisSection';
 import { createStockInfoSparkline } from '@/config/stock-info';
-import { CHART_GRADIENTS, INSURANCE_EFFECTIVENESS, STATUS_COLORS } from '@/constants/stock-info';
+import {
+    CHART_GRADIENTS,
+    FINANCE_ANALYSIS_LABELS,
+    INSURANCE_EFFECTIVENESS,
+    STATUS_COLORS,
+} from '@/constants/stock-info';
 import { useEChartsInstances } from '@/hooks/chart/useEChartsInstances';
-import { useTranslate } from '@/hooks/useTranslate';
 import { formatNumberVN, formatPeriodMMYYYY } from '@/utils/format';
 import { sortByYearAsc, trendColor } from '@/utils/stock-info';
 
 export const InsuranceEffectiveness = ({ dataQuarterly }: { dataQuarterly: any }) => {
-    const trans = useTranslate();
-    const fa = trans.stockInfo.finance_analysis as Record<string, string>;
+    const fa = FINANCE_ANALYSIS_LABELS as Record<string, string>;
     const latestQuarterly = dataQuarterly?.[0] ?? {};
 
     const containerRef = useRef<HTMLDivElement>(null);
@@ -67,14 +70,14 @@ export const InsuranceEffectiveness = ({ dataQuarterly }: { dataQuarterly: any }
 
     return (
         <AnalysisSection
-            title={fa.insurance_effectiveness_question}
+            title={'Bảo hiểm có hiệu quả không?'}
             right={
                 <div className="flex shrink-0 items-center gap-1">
                     <span className="rounded-full px-3 py-1 font-body-3 text-secondary">
-                        {fa.overview}
+                        {'Tổng quan'}
                     </span>
                     <span className="rounded-full bg-tertiary px-3 py-1 font-body-3-highlight text-primary">
-                        {fa.yoy}
+                        {'YoY'}
                     </span>
                 </div>
             }
@@ -101,13 +104,13 @@ export const InsuranceEffectiveness = ({ dataQuarterly }: { dataQuarterly: any }
                 </div>
 
                 <div className="flex flex-col gap-3">
-                    <p className="font-body-3 text-primary">{fa.compensation_pct_by_business}</p>
+                    <p className="font-body-3 text-primary">{'% bồi thường theo nghiệp vụ'}</p>
                     <div className="flex gap-3">
                         <div
                             className="flex min-w-0 flex-1 flex-col gap-1 rounded-xl px-3 py-2"
                             style={{ background: CHART_GRADIENTS.neutral }}
                         >
-                            <p className="font-body-3 text-secondary">{fa.life_insurance}</p>
+                            <p className="font-body-3 text-secondary">{'Nhân thọ'}</p>
                             <p className="font-body-3-highlight text-primary">
                                 {formatNumberVN(nhanTho)}%
                             </p>
@@ -116,7 +119,7 @@ export const InsuranceEffectiveness = ({ dataQuarterly }: { dataQuarterly: any }
                             className="flex min-w-0 flex-1 flex-col gap-1 rounded-xl px-3 py-2"
                             style={{ background: CHART_GRADIENTS.positive }}
                         >
-                            <p className="font-body-3 text-secondary">{fa.non_life_insurance}</p>
+                            <p className="font-body-3 text-secondary">{'Phi nhân thọ'}</p>
                             <p className="font-body-3-highlight text-green">
                                 {formatNumberVN(phiNhanTho)}%
                             </p>
@@ -125,7 +128,7 @@ export const InsuranceEffectiveness = ({ dataQuarterly }: { dataQuarterly: any }
                     <div className="flex gap-3">
                         <div className="flex min-w-0 flex-1 items-center justify-between gap-2 rounded-xl border border-tertiary p-3">
                             <span className="truncate font-caption text-secondary">
-                                {fa.motor_insurance}
+                                {'Xe cơ giới'}
                             </span>
                             <span className="shrink-0 font-body-3-highlight text-primary">
                                 {formatNumberVN(xeCoGioi)}%
@@ -133,7 +136,7 @@ export const InsuranceEffectiveness = ({ dataQuarterly }: { dataQuarterly: any }
                         </div>
                         <div className="flex min-w-0 flex-1 items-center justify-between gap-2 rounded-xl border border-tertiary p-3">
                             <span className="truncate font-caption text-secondary">
-                                {fa.health_insurance}
+                                {'Sức khoẻ'}
                             </span>
                             <span className="shrink-0 font-body-3-highlight text-primary">
                                 {formatNumberVN(sucKhoe)}%

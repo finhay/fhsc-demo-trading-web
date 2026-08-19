@@ -7,7 +7,6 @@ import { FaArrowDown, FaArrowUp } from 'react-icons/fa6';
 import { createChartMarketIndexMini } from '@/config/market/market-index';
 import { useEChartsInstance } from '@/hooks/chart/useEChartsInstance';
 import { useMQTT } from '@/hooks/useMQTT';
-import { useTranslate } from '@/hooks/useTranslate';
 import { IndexData } from '@/proto/stock';
 import { useMarketIndexStore } from '@/stores/common/useMarketIndexStore';
 import { getFlashBgBySign, getSessionText } from '@/utils/common';
@@ -19,7 +18,6 @@ type Props = {
 };
 
 export const MarketIndexChart = ({ selectedIndex, onClick }: Props) => {
-    const trans = useTranslate();
     const { data, updateFromMQTT } = useMarketIndexStore();
 
     const [indexValueBgClass, setIndexValueBgClass] = useState('');
@@ -134,7 +132,7 @@ export const MarketIndexChart = ({ selectedIndex, onClick }: Props) => {
                     </div>
                 </div>
                 <span className="font-caption text-primary bg-disabled flex items-center justify-center rounded-full px-3 py-1">
-                    {getSessionText(indexData?.sessionInExchange || '', trans)}
+                    {getSessionText(indexData?.sessionInExchange || '')}
                 </span>
             </div>
             <div className="flex h-48 w-full items-center justify-center">
@@ -142,14 +140,13 @@ export const MarketIndexChart = ({ selectedIndex, onClick }: Props) => {
             </div>
             <div className="font-caption flex items-center justify-between text-secondary">
                 <div>
-                    <span>{trans.market.index.vol_label} </span>
+                    <span>{'KLGD:'} </span>
                     <span className="text-primary">
-                        {formatNumberVN(indexData?.allQuantity || 0, { decimals: 0 })}{' '}
-                        {trans.market.index.shares_unit}
+                        {formatNumberVN(indexData?.allQuantity || 0, { decimals: 0 })} {'CP'}
                     </span>
                 </div>
                 <div>
-                    <span>{trans.market.index.val_label} </span>
+                    <span>{'GTGD:'} </span>
                     <span className="text-primary">
                         {formatNumberVNWithUnit(indexData?.allValue || 0)}
                     </span>

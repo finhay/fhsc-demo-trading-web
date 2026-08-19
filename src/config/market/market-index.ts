@@ -3,7 +3,6 @@ import type { MutableRefObject } from 'react';
 import * as echarts from 'echarts';
 
 import { BAR_CHART_AXIS_TOOLTIP, MARKET_BREADTH_SERIES } from '@/constants/market';
-import type { useTranslate } from '@/hooks/useTranslate';
 import type { MarketLeaderboardItem } from '@/types/datafeed/trading-data';
 import type {
     InfluenceBubbleDirection,
@@ -15,6 +14,14 @@ import type {
 } from '@/types/pages/market';
 import { formatNumberVN, formatStockTimeRange } from '@/utils/format';
 import { getBarChartAxisTooltipPoint } from '@/utils/market/market-shared';
+
+const INDEX_BREADTH_SERIES = {
+    floors: 'Sàn',
+    declines: 'Thấp',
+    nochanges: 'Không đổi',
+    advances: 'Cao',
+    ceilings: 'Trần',
+};
 
 const INVESTMENT_PERFORMANCE_HIGHLIGHTED_CHANNEL = 'VNINDEX';
 const INVESTMENT_PERFORMANCE_CHANNEL_LABEL_MAX_LENGTH = 20;
@@ -458,7 +465,6 @@ export const createChartMarketIndexCompareSparkline = (
 
 export const createChartMarketBreadth = (
     data: MarketBreadthChartData | null | undefined,
-    trans: ReturnType<typeof useTranslate>,
 ): echarts.EChartsOption | null => {
     if (!data?.times?.length) return null;
 
@@ -531,7 +537,7 @@ export const createChartMarketBreadth = (
                     .map((p: any) => {
                         const seriesConfig = MARKET_BREADTH_SERIES[p.seriesIndex];
                         if (!seriesConfig) return '';
-                        const label = trans.market.index.breadth_series[seriesConfig.key];
+                        const label = INDEX_BREADTH_SERIES[seriesConfig.key];
                         const val = Number(p?.value?.[1] ?? 0);
                         return `<span class="font-caption" style="color:${seriesConfig.color}">${label}: ${formatNumberVN(val, { decimals: 1 })}%</span>`;
                     })
@@ -541,7 +547,7 @@ export const createChartMarketBreadth = (
             },
         },
         series: MARKET_BREADTH_SERIES.map((series) => ({
-            name: trans.market.index.breadth_series[series.key],
+            name: INDEX_BREADTH_SERIES[series.key],
             type: 'line' as const,
             stack: 'breadth',
             smooth: true,

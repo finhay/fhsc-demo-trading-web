@@ -7,9 +7,13 @@ import * as echarts from 'echarts';
 import { AnalysisPlan } from '@/components/common/stock-info/finance/analysis/common/AnalysisPlan';
 import { AnalysisSection } from '@/components/common/stock-info/finance/analysis/common/AnalysisSection';
 import { createStockInfoSparkline } from '@/config/stock-info';
-import { ANALYSIS_CONTENT_CARD, BANK_GROWTH_ROWS, STATUS_COLORS } from '@/constants/stock-info';
+import {
+    ANALYSIS_CONTENT_CARD,
+    BANK_GROWTH_ROWS,
+    FINANCE_ANALYSIS_LABELS,
+    STATUS_COLORS,
+} from '@/constants/stock-info';
 import { useEChartsInstances } from '@/hooks/chart/useEChartsInstances';
-import { useTranslate } from '@/hooks/useTranslate';
 import { formatNumberVN, formatPeriodMMYYYY } from '@/utils/format';
 import { pickPlanItems, sortByYearAsc, trendColor } from '@/utils/stock-info';
 
@@ -20,8 +24,7 @@ export const BankGrowth = ({
     dataAnnual: any;
     dataQuarterly: any;
 }) => {
-    const trans = useTranslate();
-    const fa = trans.stockInfo.finance_analysis as Record<string, string>;
+    const fa = FINANCE_ANALYSIS_LABELS as Record<string, string>;
     const latest = dataAnnual?.[0] ?? {};
     const latestQuarterly = dataQuarterly?.[0] ?? {};
 
@@ -89,10 +92,10 @@ export const BankGrowth = ({
 
     return (
         <AnalysisSection
-            title={fa.growth_question}
+            title={'Có tăng trưởng không?'}
             right={
                 <span className="shrink-0 rounded-full border border-tertiary px-2 py-1 font-body-3 text-primary">
-                    {fa.yoy}
+                    {'YoY'}
                 </span>
             }
         >

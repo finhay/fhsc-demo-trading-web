@@ -5,21 +5,19 @@ import { useState } from 'react';
 import { IBoardChartIndex } from '@/components/bang-gia/navigation/IBoardChartIndex';
 import { IBoardNavigation } from '@/components/bang-gia/navigation/IBoardNavigation';
 import { IBoardTable } from '@/components/bang-gia/table/IBoardTable';
-import { useTranslate } from '@/hooks/useTranslate';
 import { DefaultLayout } from '@/layouts/DefaultLayout';
 import { useMarketIndexStore } from '@/stores/common/useMarketIndexStore';
 import { buildMarketPageTitle } from '@/utils/common';
 
 export default function BangGia() {
-    const trans = useTranslate();
     const { exchange, data } = useMarketIndexStore();
     const [isIndexSliderVisible, setIsIndexSliderVisible] = useState(true);
 
     const pageTitle = buildMarketPageTitle({
         exchange,
         marketIndexes: data ?? [],
-        pageSuffix: trans.iboard.page_title,
-        fallbackTitle: trans.iboard.page_title,
+        pageSuffix: 'Bảng giá',
+        fallbackTitle: 'Bảng giá',
     });
 
     return (

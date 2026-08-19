@@ -12,7 +12,6 @@ import {
     FUND_UNIVERSE_TAB,
     FUND_UNIVERSE_TABS,
 } from '@/constants/market';
-import { useTranslate } from '@/hooks/useTranslate';
 import type {
     FundCertificateItem,
     FundTopFundFlowItem,
@@ -26,6 +25,14 @@ import {
     formatFundPercent,
     getFundValueColor,
 } from '@/utils/market/market-fund';
+
+const FUND_MODAL_UNIVERSE_TABS = {
+    short_term: 'Hệ sao lãi ngắn hạn',
+    long_term: 'Hệ sao lãi dài hạn',
+    investor: 'Hệ sao nhiều nhà du hành',
+    fund_flow: 'Hệ sao dòng tiền khoẻ mạnh',
+    aum: 'Hệ sao tăng trưởng AUM',
+};
 
 type Props = {
     certificates: FundCertificateItem[];
@@ -42,8 +49,7 @@ export const MarketFundUniverse = ({
     topFundFlow,
     onSelectFund,
 }: Props) => {
-    const trans = useTranslate();
-    const t = trans.market.assets.fund_modal;
+    const t = FUND_MODAL_UNIVERSE_TABS;
     const [tab, setTab] = useState<FundUniverseTab>(FUND_UNIVERSE_TAB.SHORT_TERM);
     const imageMap = useMemo(() => buildFundImageMap(certificates), [certificates]);
     const planets = useMemo(
@@ -55,7 +61,7 @@ export const MarketFundUniverse = ({
     return (
         <section className="relative flex w-full flex-col gap-3 overflow-visible">
             <div className="flex flex-col gap-4">
-                <h3 className="font-heading-4 text-primary">{t.universe_heading}</h3>
+                <h3 className="font-heading-4 text-primary">{'Vũ trụ quỹ mở'}</h3>
                 <div className="scrollbar flex gap-3 overflow-x-auto pb-1">
                     {FUND_UNIVERSE_TABS.map((key) => {
                         const isActive = tab === key;
@@ -70,7 +76,7 @@ export const MarketFundUniverse = ({
                                         : 'border-quaternary bg-secondary font-body-3 text-secondary'
                                 }`}
                             >
-                                {t.universe_tabs[key]}
+                                {t[key]}
                             </button>
                         );
                     })}
@@ -149,7 +155,7 @@ export const MarketFundUniverse = ({
                     );
                 })}
             </div>
-            <p className="font-caption text-tertiary">{t.source_fiinpro}</p>
+            <p className="font-caption text-tertiary">{'Nguồn từ FiinPro'}</p>
         </section>
     );
 };

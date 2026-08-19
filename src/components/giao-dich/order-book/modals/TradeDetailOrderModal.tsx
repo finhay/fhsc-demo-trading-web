@@ -3,7 +3,6 @@
 import { Fragment } from 'react';
 
 import { Dialog } from '@/components/common/ui/Dialog';
-import { useTranslate } from '@/hooks/useTranslate';
 import type { OrderBookHistoryReportItem } from '@/types/trade/orders';
 import { formatDateTime, formatNumberVN } from '@/utils/format';
 import { getNormalOrderStatus, getOrderStatusColor } from '@/utils/trading/order-book';
@@ -16,62 +15,59 @@ type Props = {
 const CELL_CLASS = 'py-0 font-caption text-secondary whitespace-nowrap';
 
 export const TradeDetailOrderModal = ({ items, onClose }: Props) => {
-    const trans = useTranslate();
-    const modalTrans = trans.trading.detail_order_modal;
-
     const columns = [
         {
             key: 'time',
-            label: modalTrans.col_time,
+            label: 'Thời gian',
             align: 'left' as const,
             width: 'w-2/12',
         },
         {
             key: 'orderType',
-            label: modalTrans.col_order_type,
+            label: 'Loại lệnh',
             align: 'left' as const,
             width: 'w-1/12',
         },
         {
             key: 'placedQty',
-            label: modalTrans.col_placed_qty,
+            label: 'KL đặt',
             align: 'left' as const,
             width: 'w-1/12',
         },
         {
             key: 'price',
-            label: modalTrans.col_price,
+            label: 'Giá đặt',
             align: 'left' as const,
             width: 'w-1/12',
         },
         {
             key: 'matchedQty',
-            label: modalTrans.col_matched_qty,
+            label: 'KL khớp',
             align: 'left' as const,
             width: 'w-2/12',
         },
         {
             key: 'avgMatchedPrice',
-            label: modalTrans.col_avg_matched_price,
+            label: 'Giá khớp TB',
             align: 'left' as const,
             width: 'w-2/12',
         },
         {
             key: 'remainingQty',
-            label: modalTrans.col_remaining_qty,
+            label: 'KL còn lại',
             align: 'left' as const,
             width: 'w-1/12',
         },
         {
             key: 'status',
-            label: modalTrans.col_status,
+            label: 'Trạng thái',
             align: 'right' as const,
             width: 'w-2/12',
         },
     ];
 
     const renderRow = (item: OrderBookHistoryReportItem) => {
-        const status = getNormalOrderStatus(trans, item.order_status);
+        const status = getNormalOrderStatus(item.order_status);
         const timeText = item.created_date ? formatDateTime(item.created_date) : '--';
 
         return (
@@ -100,7 +96,7 @@ export const TradeDetailOrderModal = ({ items, onClose }: Props) => {
 
     return (
         <Dialog
-            title={modalTrans.title}
+            title={'Lịch sử lệnh'}
             maxWidth="max-w-4xl"
             maxHeight="max-h-screen"
             onClose={onClose}

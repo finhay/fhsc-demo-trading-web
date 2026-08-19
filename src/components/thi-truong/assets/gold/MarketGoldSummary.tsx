@@ -1,7 +1,6 @@
 'use client';
 
 import { EmptyState } from '@/components/common/feature/EmptyState';
-import { useTranslate } from '@/hooks/useTranslate';
 import type { GoldItem } from '@/types/datafeed/finance';
 import { getChangeColor } from '@/utils/common';
 import { formatMetalChangePercent, formatMetalPrice } from '@/utils/market/market-assets';
@@ -11,8 +10,6 @@ type Props = {
 };
 
 export const MarketGoldSummary = ({ items }: Props) => {
-    const trans = useTranslate();
-
     return items.length === 0 ? (
         <div className="flex min-h-32 items-center justify-center rounded-2xl bg-secondary p-4">
             <EmptyState />
@@ -31,9 +28,7 @@ export const MarketGoldSummary = ({ items }: Props) => {
                         <h4 className="font-body-2-highlight text-primary truncate">{item.name}</h4>
                         <div className="flex gap-2">
                             <div className="flex min-w-0 flex-1 flex-col gap-1">
-                                <span className="font-body-3 text-secondary">
-                                    {trans.market.assets.modal.buy}
-                                </span>
+                                <span className="font-body-3 text-secondary">{'Mua'}</span>
                                 <div className="flex flex-wrap items-center gap-1">
                                     <span className="font-body-3-highlight text-primary">
                                         {formatMetalPrice(item.buy_value)}
@@ -50,9 +45,7 @@ export const MarketGoldSummary = ({ items }: Props) => {
                                 </div>
                             </div>
                             <div className="flex min-w-0 flex-1 flex-col gap-1">
-                                <span className="font-body-3 text-secondary">
-                                    {trans.market.assets.modal.sell}
-                                </span>
+                                <span className="font-body-3 text-secondary">{'Bán'}</span>
                                 <div className="flex flex-wrap items-center gap-1">
                                     <span className="font-body-3-highlight text-primary">
                                         {formatMetalPrice(item.sell_value)}

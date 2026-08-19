@@ -6,15 +6,17 @@ import * as echarts from 'echarts';
 
 import { AnalysisSection } from '@/components/common/stock-info/finance/analysis/common/AnalysisSection';
 import { createStockInfoAxisLine } from '@/config/stock-info';
-import { ANALYSIS_CONTENT_CARD, BANK_EFFICIENCY_PANELS } from '@/constants/stock-info';
+import {
+    ANALYSIS_CONTENT_CARD,
+    BANK_EFFICIENCY_PANELS,
+    FINANCE_ANALYSIS_LABELS,
+} from '@/constants/stock-info';
 import { useEChartsInstances } from '@/hooks/chart/useEChartsInstances';
-import { useTranslate } from '@/hooks/useTranslate';
 import { formatNumberVN, formatPeriodMMYYYY } from '@/utils/format';
 import { sortByYearAsc, toneClass, trendColor } from '@/utils/stock-info';
 
 export const BankEfficiency = ({ dataAnnual }: { dataAnnual: any }) => {
-    const trans = useTranslate();
-    const fa = trans.stockInfo.finance_analysis as Record<string, string>;
+    const fa = FINANCE_ANALYSIS_LABELS as Record<string, string>;
     const latest = dataAnnual?.[0] ?? {};
 
     const containerRef = useRef<HTMLDivElement>(null);
@@ -64,16 +66,16 @@ export const BankEfficiency = ({ dataAnnual }: { dataAnnual: any }) => {
     }, [panels, categories, chartsMapRef, disposeAll]);
 
     return (
-        <AnalysisSection title={fa.bank_efficiency_question}>
+        <AnalysisSection title={'Hiệu quả hoạt động thế nào?'}>
             <div className="flex shrink-0 flex-row gap-3 rounded-xl border border-quaternary p-3">
                 <div className="flex min-w-0 flex-1 items-center gap-3">
-                    <span className="font-body-3 text-secondary">{fa.cof}</span>
+                    <span className="font-body-3 text-secondary">{'COF'}</span>
                     <span className="font-body-2-highlight text-primary">
                         {formatNumberVN(latest?.cof * 100)}%
                     </span>
                 </div>
                 <div className="flex min-w-0 flex-1 items-center gap-3">
-                    <span className="font-body-3 text-secondary">{fa.yea}</span>
+                    <span className="font-body-3 text-secondary">{'YEA'}</span>
                     <span className="font-body-2-highlight text-primary">
                         {formatNumberVN(latest?.yea * 100)}%
                     </span>

@@ -9,7 +9,6 @@ import { MarketFundDetail } from '@/components/thi-truong/assets/fund/detail/Mar
 import { MarketFundTable } from '@/components/thi-truong/assets/fund/table/MarketFundTable';
 import { AUTH_MODE } from '@/constants/auth';
 import { FUND_UNIVERSE_BG_URL } from '@/constants/market';
-import { useTranslate } from '@/hooks/useTranslate';
 import { useAuthFlowStore } from '@/stores/auth/useAuthFlowStore';
 import { useAuthStore } from '@/stores/auth/useAuthStore';
 import { useMarketFundStore } from '@/stores/fund/useMarketFundStore';
@@ -20,7 +19,6 @@ type Props = {
 };
 
 export const MarketFundModal = ({ certificates }: Props) => {
-    const trans = useTranslate();
     const { profile } = useAuthStore();
     const { openAuthDialog } = useAuthFlowStore();
     const {
@@ -46,11 +44,7 @@ export const MarketFundModal = ({ certificates }: Props) => {
         <Dialog
             onClose={closeModal}
             onBack={selectedFundName ? () => backToSummary() : undefined}
-            title={
-                selectedFundName
-                    ? trans.market.assets.fund_modal.detail.title
-                    : trans.market.assets.fund_modal.title
-            }
+            title={selectedFundName ? 'Thông tin quỹ' : 'Chứng chỉ quỹ mở'}
             maxWidth="max-w-7xl"
             maxHeight="h-[90vh]"
             panelClassName="bg-primary"

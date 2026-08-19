@@ -2,7 +2,6 @@
 
 import { useMemo } from 'react';
 
-import { useTranslate } from '@/hooks/useTranslate';
 import type { BankInterestRatesData, LoanRateItem } from '@/types/datafeed/finance';
 import { deriveDepositRate, deriveLoanRate } from '@/utils/market/market-currency';
 
@@ -12,8 +11,6 @@ type Props = {
 };
 
 export const MarketInterestCards = ({ depositData, loanItems }: Props) => {
-    const trans = useTranslate();
-    const currency = trans.market.currency;
     const deposit = useMemo(() => deriveDepositRate(depositData), [depositData]);
     const loan = useMemo(() => deriveLoanRate(loanItems), [loanItems]);
 
@@ -25,10 +22,10 @@ export const MarketInterestCards = ({ depositData, loanItems }: Props) => {
                         <span className="bg-blue h-1.5 w-1.5 shrink-0 rounded-full" aria-hidden />
                         <div className="flex flex-col gap-1">
                             <p className="font-body-2-highlight text-primary">
-                                {currency.row_deposit}
+                                {'Lãi suất huy động 12T'}
                             </p>
                             <p className="font-caption text-secondary">
-                                {currency.row_deposit_sub}
+                                {'Bình quân của VPB, MB, TCB, ACB'}
                             </p>
                         </div>
                     </div>
@@ -43,11 +40,11 @@ export const MarketInterestCards = ({ depositData, loanItems }: Props) => {
                         <div className="flex flex-col gap-1">
                             <p className="font-body-2-highlight text-primary">
                                 {loan
-                                    ? currency.row_loan_fn(loan.durationMonths)
-                                    : currency.row_loan_fn('--')}
+                                    ? `Lãi suất cho vay ${loan.durationMonths} tháng đầu`
+                                    : 'Lãi suất cho vay -- tháng đầu'}
                             </p>
                             <p className="font-caption text-secondary">
-                                {loan ? currency.row_loan_sub_fn(loan.bankName) : '--'}
+                                {loan ? `${loan.bankName} (Cố định trong thời gian trên)` : '--'}
                             </p>
                         </div>
                     </div>
@@ -56,7 +53,11 @@ export const MarketInterestCards = ({ depositData, loanItems }: Props) => {
                     </p>
                 </article>
             </div>
-            <p className="font-caption text-tertiary">{currency.disclaimer}</p>
+            <p className="font-caption text-tertiary">
+                {
+                    'Lưu ý: Thông tin lãi suất chỉ mang tính chất tham khảo, và có thể thay đổi dựa trên chính sách ngân hàng. Vui lòng liên hệ trực tiếp ngân hàng để được tư vấn về lãi suất và các gói vay.'
+                }
+            </p>
         </div>
     );
 };

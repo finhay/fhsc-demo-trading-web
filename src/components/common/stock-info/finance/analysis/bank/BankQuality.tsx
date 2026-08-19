@@ -6,15 +6,17 @@ import * as echarts from 'echarts';
 
 import { AnalysisSection } from '@/components/common/stock-info/finance/analysis/common/AnalysisSection';
 import { createStockInfoSparkline } from '@/config/stock-info';
-import { ANALYSIS_CONTENT_CARD, BANK_QUALITY_SPARK_ROWS } from '@/constants/stock-info';
+import {
+    ANALYSIS_CONTENT_CARD,
+    BANK_QUALITY_SPARK_ROWS,
+    FINANCE_ANALYSIS_LABELS,
+} from '@/constants/stock-info';
 import { useEChartsInstances } from '@/hooks/chart/useEChartsInstances';
-import { useTranslate } from '@/hooks/useTranslate';
 import { formatNumberVN, formatNumberVNWithUnit, formatPeriodMMYYYY } from '@/utils/format';
 import { sortByYearAsc, toneClass, trendColor } from '@/utils/stock-info';
 
 export const BankQuality = ({ dataQuarterly }: { dataQuarterly: any }) => {
-    const trans = useTranslate();
-    const fa = trans.stockInfo.finance_analysis as Record<string, string>;
+    const fa = FINANCE_ANALYSIS_LABELS as Record<string, string>;
     const latest = dataQuarterly?.[0] ?? {};
 
     const containerRef = useRef<HTMLDivElement>(null);
@@ -59,7 +61,7 @@ export const BankQuality = ({ dataQuarterly }: { dataQuarterly: any }) => {
     }, [rows, sortedData, chartsMapRef, disposeAll]);
 
     return (
-        <AnalysisSection title={fa.bank_quality_question}>
+        <AnalysisSection title={'Chất lượng tài sản thế nào?'}>
             <div className={ANALYSIS_CONTENT_CARD}>
                 <div
                     ref={containerRef}
@@ -80,15 +82,13 @@ export const BankQuality = ({ dataQuarterly }: { dataQuarterly: any }) => {
                 <div className="h-px w-full shrink-0 bg-tertiary" />
                 <div className="flex shrink-0 gap-4">
                     <div className="flex min-w-0 flex-1 flex-col">
-                        <span className="font-body-3 text-secondary">{fa.npl_value}</span>
+                        <span className="font-body-3 text-secondary">{'Nợ xấu (giá trị)'}</span>
                         <span className="font-body-2-highlight text-primary">
                             {formatNumberVNWithUnit(latest?.noxau)}
                         </span>
                     </div>
                     <div className="flex min-w-0 flex-1 flex-col">
-                        <span className="font-body-3 text-secondary">
-                            {fa.provision_over_loans}
-                        </span>
+                        <span className="font-body-3 text-secondary">{'Dự phòng/Cho vay KH'}</span>
                         <span className="font-body-2-highlight text-primary">
                             {formatNumberVN(latest?.duphongchovaykh_chovaykh * 100)}%
                         </span>

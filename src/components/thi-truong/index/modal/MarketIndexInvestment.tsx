@@ -5,9 +5,8 @@ import { useEffect, useRef, useState } from 'react';
 import { EmptyState } from '@/components/common/feature/EmptyState';
 import { Skeleton } from '@/components/common/ui/Skeleton';
 import { createChartInvestmentPerformanceModal } from '@/config/market/market-index';
-import { INVESTMENT_CHANNEL_PERIODS } from '@/constants/market';
+import { INVESTMENT_CHANNEL_PERIODS, INVESTMENT_PERFORMANCE_PERIOD } from '@/constants/market';
 import { useEChartsInstance } from '@/hooks/chart/useEChartsInstance';
-import { useTranslate } from '@/hooks/useTranslate';
 import {
     fetchIndexComparison,
     fetchInvestmentChannelPerformance,
@@ -17,8 +16,6 @@ import type { InvestmentPerformanceBarItem } from '@/types/pages/market';
 import { isSuccessApi } from '@/utils/common';
 
 export const MarketIndexInvestment = () => {
-    const trans = useTranslate();
-
     const [period, setPeriod] = useState<InvestmentChannelPeriod>('YTD');
     const [items, setItems] = useState<InvestmentPerformanceBarItem[]>([]);
     const [isLoading, setIsLoading] = useState(true);
@@ -105,9 +102,7 @@ export const MarketIndexInvestment = () => {
     return (
         <div className="flex shrink-0 flex-col gap-4">
             <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
-                <h2 className="font-body-2-highlight text-primary">
-                    {trans.market.investment_performance.modal_heading}
-                </h2>
+                <h2 className="font-body-2-highlight text-primary">{'So sánh hiệu suất đầu tư'}</h2>
                 <div className="flex flex-wrap gap-1">
                     {INVESTMENT_CHANNEL_PERIODS.map((value) => (
                         <button
@@ -120,7 +115,7 @@ export const MarketIndexInvestment = () => {
                                     : 'font-caption text-secondary'
                             }`}
                         >
-                            {trans.market.investment_performance.period[value]}
+                            {INVESTMENT_PERFORMANCE_PERIOD[value]}
                         </button>
                     ))}
                 </div>

@@ -8,7 +8,6 @@ import { FaBalanceScale, FaTrophy } from 'react-icons/fa';
 import { FaArrowTrendUp } from 'react-icons/fa6';
 
 import { PROFIT_PERIOD_ONE_YEAR } from '@/constants/market';
-import { useTranslate } from '@/hooks/useTranslate';
 import { fetchFundCertificateDetail, fetchFundSuggestions } from '@/services/api/fund';
 import type {
     FundCertificateDetail,
@@ -29,8 +28,6 @@ type Props = {
 };
 
 export const MarketFundDetailCompare = ({ original }: Props) => {
-    const trans = useTranslate();
-    const d = trans.market.assets.fund_modal.detail;
     const [suggestions, setSuggestions] = useState<FundCertificateDetail[]>([]);
 
     const fetchData = async () => {
@@ -71,17 +68,17 @@ export const MarketFundDetailCompare = ({ original }: Props) => {
         return [
             {
                 key: 'profit_1y',
-                label: d.compare_profit_1y,
+                label: 'Lợi nhuận 1 năm',
                 leftValue: formatFundPercent(originalProfit),
                 rightValue: formatFundPercent(suggestedProfit),
                 leftColorClass: getFundValueColor(originalProfit),
                 rightColorClass: getFundValueColor(suggestedProfit),
                 winner: getFundCompareWinner(originalProfit, suggestedProfit),
-                valueSuffix: d.compare_profit_suffix,
+                valueSuffix: '/năm',
             },
             {
                 key: 'aum_change',
-                label: d.compare_aum_change,
+                label: 'AUM so với tháng trước',
                 leftValue: formatFundPercent(original.monthly_stats?.aum_change_percent),
                 rightValue: formatFundPercent(suggested.monthly_stats?.aum_change_percent),
                 leftColorClass: getFundValueColor(original.monthly_stats?.aum_change_percent),
@@ -94,7 +91,7 @@ export const MarketFundDetailCompare = ({ original }: Props) => {
             },
             {
                 key: 'investor_change',
-                label: d.compare_investor_change,
+                label: 'Số nhà đầu tư so với tháng trước',
                 leftValue: formatFundPercent(original.monthly_stats?.investor_change_percent),
                 rightValue: formatFundPercent(suggested.monthly_stats?.investor_change_percent),
                 leftColorClass: getFundValueColor(original.monthly_stats?.investor_change_percent),
@@ -109,7 +106,7 @@ export const MarketFundDetailCompare = ({ original }: Props) => {
             },
             {
                 key: 'cashflow',
-                label: month && year ? d.compare_cashflow_month_fn(month, year) : '',
+                label: month && year ? `Dòng tiền tháng ${month}/${year}` : '',
                 leftValue: formatFundNetFlowBillion(original.monthly_stats?.net_inflow),
                 rightValue: formatFundNetFlowBillion(suggested.monthly_stats?.net_inflow),
                 leftColorClass: getFundValueColor(original.monthly_stats?.net_inflow),
@@ -168,7 +165,7 @@ export const MarketFundDetailCompare = ({ original }: Props) => {
 
     return (
         <section className="flex flex-col gap-4">
-            <h3 className="font-body-2-highlight text-primary">{d.compare_heading}</h3>
+            <h3 className="font-body-2-highlight text-primary">{'Thường được so sánh với'}</h3>
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                 {suggestions.map((suggested) => {
                     const rows = buildRows(suggested);

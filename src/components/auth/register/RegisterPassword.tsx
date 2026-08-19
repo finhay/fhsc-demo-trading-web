@@ -6,9 +6,13 @@ import { useState } from 'react';
 
 import { InputField } from '@/components/common/feature/InputField';
 import { PasswordRequirements } from '@/components/common/feature/PasswordRequirements';
-import { REGISTER_PASSWORD_FIELDS, STEPS_REGISTER } from '@/constants/auth';
+import {
+    AUTH_VALIDATE,
+    PASSWORD_REQUIREMENT_LABELS,
+    REGISTER_PASSWORD_FIELDS,
+    STEPS_REGISTER,
+} from '@/constants/auth';
 import { toast } from '@/hooks/lib/useToast';
-import { useTranslate } from '@/hooks/useTranslate';
 import { registerAccountV3 } from '@/services/api/accounts/register';
 import {
     setAccessKey,
@@ -23,8 +27,38 @@ import { useLoadingStore } from '@/stores/common/useLoadingStore';
 import { getPasswordRequirements, validateConfirmPassword, validatePassword } from '@/utils/auth';
 import { getApiErrorMessage, isSuccessApi } from '@/utils/common';
 
+const AUTH_REGISTER = {
+    title: 'Tạo tài khoản',
+    meta_description:
+        'Nhập số điện thoại của bạn làm tài khoản đăng nhập. Mã OTP sẽ được gửi để xác thực',
+    hdr_create_acct: 'Tạo tài khoản',
+    phone_lbl: 'Số điện thoại',
+    input_phone: 'Nhập số điện thoại của bạn',
+    err_phone_in_use: 'Số điện thoại đã được sử dụng',
+    btn_continue: 'Tiếp tục',
+    or_sep: 'Hoặc',
+    has_acct_prompt: 'Bạn đã có tài khoản?',
+    terms_agree_prefix: 'Bằng việc “Tiếp tục”, bạn đồng ý với',
+    terms_link: 'Điều khoản và điều kiện sử dụng sản phẩm FHSC',
+    terms_dialog_title: 'Điều khoản và điều kiện sử dụng sản phẩm FHSC',
+    back: 'Quay lại',
+    resend: 'Gửi lại',
+    create_pass_title: 'Tạo mật khẩu',
+    pass_lbl: 'Mật khẩu',
+    input_pass_secure: 'Nhập mật khẩu theo yêu cầu bảo mật',
+    confirm_pass_lbl: 'Nhập lại mật khẩu',
+    input_confirm_pass: 'Nhập lại mật khẩu của bạn',
+    pass_rules_title: 'Yêu cầu mật khẩu',
+    btn_done: 'Xong',
+    open_acct_ok: 'Mở tài khoản thành công',
+    download_app_prompt:
+        'Tải ứng dụng, xác thực tài khoản để sử dụng đầy đủ\nsản phẩm đầu tư hấp dẫn trên Finhay',
+    btn_download_app: 'Tải ứng dụng',
+    btn_later: 'Lúc khác',
+    qr_download_prompt: 'Quét mã QR để tải xuống ứng dụng\nFinhay trên điện thoại',
+};
+
 export const RegisterPassword = () => {
-    const trans = useTranslate();
     const { startLoading, stopLoading } = useLoadingStore();
     const [focusedField, setFocusedField] = useState<string | null>(null);
 
@@ -56,9 +90,7 @@ export const RegisterPassword = () => {
 
     const requirements = getPasswordRequirements(password, confirmPassword);
 
-    const requirementTranslations = Object.fromEntries(
-        Object.entries(trans.auth.change).map(([key, value]) => [key, value as string]),
-    );
+    const requirementTranslations = PASSWORD_REQUIREMENT_LABELS;
 
     const handleRegister = async (passwordParam: string) => {
         try {
@@ -89,7 +121,7 @@ export const RegisterPassword = () => {
 
             toast.error(message);
         } catch (err) {
-            toast.error(getApiErrorMessage(err, trans.common.try_again_error));
+            toast.error(getApiErrorMessage(err, 'Có lỗi xảy ra, vui lòng thử lại'));
         }
     };
 
@@ -116,14 +148,14 @@ export const RegisterPassword = () => {
                                         fieldKey === 'confirmPassword' ? ['password'] : undefined,
                                     onChange: ({ value, fieldApi }) => {
                                         if (fieldKey === 'password') {
-                                            return validatePassword(value, trans.auth.validate);
+                                            return validatePassword(value, AUTH_VALIDATE);
                                         }
                                         const passwordValue =
                                             fieldApi.form.getFieldValue('password');
                                         return validateConfirmPassword(
                                             value,
                                             passwordValue,
-                                            trans.auth.validate,
+                                            AUTH_VALIDATE,
                                         );
                                     },
                                 }}
@@ -133,13 +165,13 @@ export const RegisterPassword = () => {
                                         id={`auth-dialog-register-pwd-${key}`}
                                         type="password"
                                         label={
-                                            trans.auth.register[
-                                                labelTranslateKey as keyof typeof trans.auth.register
+                                            AUTH_REGISTER[
+                                                labelTranslateKey as keyof typeof AUTH_REGISTER
                                             ]
                                         }
                                         placeholder={
-                                            trans.auth.register[
-                                                placeholderTranslateKey as keyof typeof trans.auth.register
+                                            AUTH_REGISTER[
+                                                placeholderTranslateKey as keyof typeof AUTH_REGISTER
                                             ]
                                         }
                                         error={field.state.meta.errors?.[0]}
@@ -159,7 +191,7 @@ export const RegisterPassword = () => {
                     focusedField={focusedField}
                     requirements={requirements}
                     translations={requirementTranslations}
-                    legendText={trans.auth.register.pass_rules_title}
+                    legendText={'Yêu cầu mật khẩu'}
                 />
             </section>
             <footer className="flex w-full flex-col items-center gap-2">
@@ -172,7 +204,7 @@ export const RegisterPassword = () => {
                             : 'bg-disabled text-disabled cursor-not-allowed'
                     }`}
                 >
-                    {trans.auth.register.btn_done}
+                    {'Xong'}
                 </button>
             </footer>
         </form>

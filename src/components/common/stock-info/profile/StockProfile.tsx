@@ -4,7 +4,6 @@ import { useEffect, useState } from 'react';
 
 import { StockProfileInfo } from '@/components/common/stock-info/profile/StockProfileInfo';
 import { StockProfileShareholders } from '@/components/common/stock-info/profile/StockProfileShareholders';
-import { useTranslate } from '@/hooks/useTranslate';
 import {
     fetchStockListing,
     fetchStockOwnership,
@@ -19,7 +18,6 @@ import type {
 import { isSuccessApi } from '@/utils/common';
 
 export const StockProfile = () => {
-    const trans = useTranslate();
     const { selectedStock } = useStockInfoStore();
     const [isLoading, setIsLoading] = useState(false);
     const [profile, setProfile] = useState<StockProfileData | null>(null);
@@ -73,7 +71,7 @@ export const StockProfile = () => {
     return (
         <section
             className="flex h-full min-h-0 gap-3 overflow-hidden"
-            aria-label={trans.stockInfo.profile.section_aria}
+            aria-label={'Hồ sơ doanh nghiệp'}
         >
             <StockProfileInfo isLoading={isLoading} profile={profile} listing={listing} />
             <StockProfileShareholders isLoading={isLoading} shareholders={shareholders} />

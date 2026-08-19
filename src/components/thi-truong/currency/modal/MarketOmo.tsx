@@ -5,7 +5,6 @@ import { useRef, useState } from 'react';
 import { createChartOmo } from '@/config/market/market-currency';
 import { useEChartsInstance } from '@/hooks/chart/useEChartsInstance';
 import { useEChartsOption } from '@/hooks/chart/useEChartsOption';
-import { useTranslate } from '@/hooks/useTranslate';
 import type { OmoHistoryItem } from '@/types/datafeed/finance';
 import type { OmoChartTab } from '@/types/pages/market';
 import { formatNumberVN } from '@/utils/format';
@@ -15,28 +14,26 @@ type Props = {
 };
 
 export const MarketOmo = ({ items }: Props) => {
-    const trans = useTranslate();
-    const detail = trans.market.currency.detail;
     const [tab, setTab] = useState<OmoChartTab>('outstanding');
     const chartRef = useRef<HTMLDivElement>(null);
     const hasData = items.length > 0;
     const chartInstanceRef = useEChartsInstance(chartRef, { shouldInitialize: hasData });
     const last = items.at(-1);
     const tabs: { key: OmoChartTab; label: string }[] = [
-        { key: 'outstanding', label: detail.omo_tab_outstanding },
-        { key: 'net', label: detail.omo_tab_net },
+        { key: 'outstanding', label: 'Tổng lưu hành' },
+        { key: 'net', label: 'Bơm hút ròng' },
     ];
 
-    useEChartsOption(chartInstanceRef, () => createChartOmo(items, tab, trans), {
+    useEChartsOption(chartInstanceRef, () => createChartOmo(items, tab), {
         enabled: hasData,
-        deps: [items, tab, trans],
+        deps: [items, tab],
     });
 
     return (
         <section className="bg-secondary flex flex-col gap-3 rounded-xl p-4">
             <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:gap-5">
                 <div className="flex flex-1 flex-col gap-3">
-                    <p className="font-body-3 text-secondary">{detail.omo_title}</p>
+                    <p className="font-body-3 text-secondary">{'Hoạt động thị trường mở'}</p>
                     <div className="flex items-center gap-5">
                         {tabs.map(({ key, label }) => {
                             const isActive = tab === key;
@@ -59,16 +56,16 @@ export const MarketOmo = ({ items }: Props) => {
                 </div>
                 <div className="border-tertiary flex items-center gap-5 rounded-2xl border px-4 py-3">
                     <div className="flex w-40 shrink-0 flex-col gap-2">
-                        <p className="font-body-3 text-secondary">{detail.omo_outstanding}</p>
+                        <p className="font-body-3 text-secondary">{'OMO lưu hành'}</p>
                         <p className="font-body-2-highlight text-primary">
                             {last
-                                ? `${formatNumberVN(last.outstanding_volume, { trimTrailingZeros: true })} ${detail.omo_suffix}`
+                                ? `${formatNumberVN(last.outstanding_volume, { trimTrailingZeros: true })} ${'tỷ'}`
                                 : '--'}
                         </p>
                     </div>
                     <div className="bg-tertiary self-stretch w-px" />
                     <div className="flex w-40 shrink-0 flex-col gap-2">
-                        <p className="font-body-3 text-secondary">{detail.omo_rate}</p>
+                        <p className="font-body-3 text-secondary">{'Lãi suất OMO'}</p>
                         <p className="font-body-2-highlight text-primary">
                             {last
                                 ? `${formatNumberVN(last.rate, { trimTrailingZeros: true })}%`
@@ -87,7 +84,7 @@ export const MarketOmo = ({ items }: Props) => {
                     --
                 </div>
             )}
-            <p className="font-caption text-tertiary text-right">{detail.omo_unit}</p>
+            <p className="font-caption text-tertiary text-right">{'Đơn vị: nghìn tỷ đồng'}</p>
         </section>
     );
 };

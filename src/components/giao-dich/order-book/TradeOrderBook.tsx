@@ -17,7 +17,6 @@ import { TradeTwapLoDetail } from '@/components/giao-dich/twap-lo/TradeTwapLoDet
 import { ORDER_MODE_KEY } from '@/constants/trading';
 import { toast } from '@/hooks/lib/useToast';
 import { useMQTT } from '@/hooks/useMQTT';
-import { useTranslate } from '@/hooks/useTranslate';
 import { getNotificationsMqttPrefix } from '@/services/api/notifications';
 import { fetchOrderBookOrderDetail } from '@/services/api/trade/orders';
 import { useAuthStore } from '@/stores/auth/useAuthStore';
@@ -29,7 +28,6 @@ import type { TwapLoDetailView, TwapLoOrderDto } from '@/types/trade/twap-lo';
 import { getApiErrorMessage, isSuccessApi } from '@/utils/common';
 
 export const TradeOrderBook = () => {
-    const trans = useTranslate();
     const [updateOrder, setUpdateOrder] = useState<TradeOrderBookRow | null>(null);
     const [cancelOrder, setCancelOrder] = useState<TradeOrderBookRow | null>(null);
     const [icebergDetail, setIcebergDetail] = useState<{
@@ -92,7 +90,7 @@ export const TradeOrderBook = () => {
                 toast.error(message);
             }
         } catch (err) {
-            toast.error(getApiErrorMessage(err, trans.common.try_again_error));
+            toast.error(getApiErrorMessage(err, 'Có lỗi xảy ra, vui lòng thử lại'));
         } finally {
             stopLoading();
         }
@@ -180,7 +178,7 @@ export const TradeOrderBook = () => {
                         id="orderbook-heading"
                         className="font-body-3-highlight text-primary whitespace-nowrap"
                     >
-                        {trans.trading.order_book.heading}
+                        {'Sổ lệnh'}
                     </h2>
 
                     <TradeOrderBookTabs
@@ -200,9 +198,7 @@ export const TradeOrderBook = () => {
                         <Skeleton />
                     ) : !isLoadingOrders && orders.length === 0 ? (
                         <div className="flex items-center justify-center h-full">
-                            <p className="text-secondary font-caption">
-                                {trans.trading.order_book.empty}
-                            </p>
+                            <p className="text-secondary font-caption">{'Chưa có lệnh nào'}</p>
                         </div>
                     ) : (
                         <>
@@ -216,26 +212,26 @@ export const TradeOrderBook = () => {
                                     <thead className="sticky top-0 bg-secondary z-5">
                                         <tr>
                                             <th className="w-1/6 pb-2 font-caption text-secondary whitespace-nowrap px-1 text-left">
-                                                {trans.trading.order_book.col_symbol}
+                                                {'Mã CP'}
                                             </th>
                                             <th className="w-1/6 pb-2 font-caption text-secondary whitespace-nowrap px-1 text-right">
                                                 {isNormalTab || isIcebergTab || isTwapLoTab
-                                                    ? trans.trading.order_book.col_qty_normal
-                                                    : trans.trading.order_book.col_qty_247}
+                                                    ? 'KL khớp/KL đặt'
+                                                    : 'KL đặt'}
                                             </th>
                                             <th className="w-1/6 pb-2 font-caption text-secondary whitespace-nowrap px-1 text-right">
                                                 {isNormalTab || isIcebergTab || isTwapLoTab
-                                                    ? trans.trading.order_book.col_price_normal
-                                                    : trans.trading.order_book.col_price_247}
+                                                    ? 'Giá khớp/Giá đặt'
+                                                    : 'Giá đặt'}
                                             </th>
                                             <th className="w-1/6 pb-2 font-caption text-secondary whitespace-nowrap px-1 text-right">
-                                                {trans.trading.order_book.col_side}
+                                                {'Loại lệnh'}
                                             </th>
                                             <th className="w-1/6 pb-2 font-caption text-secondary whitespace-nowrap px-1 text-right">
-                                                {trans.trading.order_book.col_status}
+                                                {'Trạng thái'}
                                             </th>
                                             <th className="w-1/6 pb-2 font-caption text-secondary whitespace-nowrap px-1 text-right">
-                                                {trans.trading.order_book.col_actions}
+                                                {'Sửa / Huỷ lệnh'}
                                             </th>
                                         </tr>
                                     </thead>

@@ -7,9 +7,8 @@ import { Dialog } from '@/components/common/ui/Dialog';
 import { Skeleton } from '@/components/common/ui/Skeleton';
 import { AssetRegisterModal } from '@/components/tai-san/rights/AssetRegisterModal';
 import { AssetRightsDetail } from '@/components/tai-san/rights/AssetRightsDetail';
-import { RIGHT_STATUS_COLORS } from '@/constants/assets';
+import { RIGHTS_EVENT_TYPES, RIGHT_STATUS_COLORS } from '@/constants/assets';
 import { toast } from '@/hooks/lib/useToast';
-import { useTranslate } from '@/hooks/useTranslate';
 import { fetchAccountUserRights, registerAccountUserRight } from '@/services/api/trade/user-rights';
 import { useAuthStore } from '@/stores/auth/useAuthStore';
 import { useLoadingStore } from '@/stores/common/useLoadingStore';
@@ -18,8 +17,14 @@ import { getRightLabel } from '@/utils/assets';
 import { isSuccessApi } from '@/utils/common';
 import { formatDateOrDash } from '@/utils/format';
 
+const RIGHTS_STATUSES = {
+    unregister: 'Chưa đăng ký',
+    registered: 'Đã đăng ký',
+    expired: 'Hết hạn',
+    received: 'Đã nhận',
+};
+
 export const AssetRights = () => {
-    const trans = useTranslate();
     const { startLoading, stopLoading } = useLoadingStore();
     const { activeSubAccount } = useAuthStore();
     const [rights, setRights] = useState<UserRightItem[]>([]);
@@ -108,7 +113,7 @@ export const AssetRights = () => {
             />
             {isDetailOpen && (
                 <Dialog
-                    title={`${trans.assets.rights.detail_title} ${selectedRight?.symbol ?? ''}`.trim()}
+                    title={`${'Chi tiết mã'} ${selectedRight?.symbol ?? ''}`.trim()}
                     maxWidth="max-w-2xl"
                     onClose={handleCloseDetail}
                 >
@@ -124,9 +129,7 @@ export const AssetRights = () => {
                 </Dialog>
             )}
             <section className="flex h-full w-full min-h-0 shrink-0 flex-col gap-3 overflow-hidden rounded-xl bg-secondary p-3">
-                <h2 className="shrink-0 font-body-2-highlight text-primary">
-                    {trans.assets.rights.list_title}
-                </h2>
+                <h2 className="shrink-0 font-body-2-highlight text-primary">{'Quyền'}</h2>
                 <div className="min-h-0 flex-1">
                     {isListLoading ? (
                         <div className="h-full w-full">
@@ -141,13 +144,10 @@ export const AssetRights = () => {
                             <ul className="m-0 flex list-none flex-col gap-3 p-0">
                                 {rights.map((right) => {
                                     const statusLabel = getRightLabel(
-                                        trans.assets.rights.statuses,
+                                        RIGHTS_STATUSES,
                                         right.userRightRegisterStatus,
                                     );
-                                    const typeLabel = getRightLabel(
-                                        trans.assets.rights.event_types,
-                                        right.type,
-                                    );
+                                    const typeLabel = getRightLabel(RIGHTS_EVENT_TYPES, right.type);
                                     return (
                                         <li key={right.caMastId}>
                                             <button
@@ -170,7 +170,7 @@ export const AssetRights = () => {
                                                         {typeLabel}
                                                     </span>
                                                     <span className="shrink-0 font-body-3 text-secondary whitespace-nowrap">
-                                                        {trans.assets.rights.last_register_date}:{' '}
+                                                        {'Ngày đăng ký cuối cùng'}:{' '}
                                                         {formatDateOrDash(right.reportDate)}
                                                     </span>
                                                 </div>

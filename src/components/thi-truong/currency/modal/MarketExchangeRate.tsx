@@ -13,7 +13,6 @@ import {
 } from '@/constants/market';
 import { useEChartsInstance } from '@/hooks/chart/useEChartsInstance';
 import { useEChartsOption } from '@/hooks/chart/useEChartsOption';
-import { useTranslate } from '@/hooks/useTranslate';
 import { fetchExchangeRateChart } from '@/services/api/datafeed/finance';
 import type {
     ExchangeRateChartData,
@@ -36,8 +35,6 @@ const buildChartKey = (
 ) => `${currency}-${valueType}-${period}`;
 
 export const MarketExchangeRate = ({ initialChart }: Props) => {
-    const trans = useTranslate();
-    const detail = trans.market.currency.detail;
     const [currency, setCurrency] = useState<ExchangeRateCurrency>(
         MACRO_LIQUIDITY_DEFAULT_CURRENCY,
     );
@@ -63,36 +60,36 @@ export const MarketExchangeRate = ({ initialChart }: Props) => {
     const lastItem = items[items.length - 1];
     const valueTypeTabs = EXCHANGE_RATE_VALUE_TYPES.map((type) => ({
         type,
-        label: type === 'NUMBER' ? detail.value_absolute : detail.value_percent,
+        label: type === 'NUMBER' ? 'Số' : '%',
     }));
     const periodLabels: Record<ExchangeRatePeriod, string> = {
-        YTD: detail.period_ytd,
-        '1M': detail.period_1m,
-        '1Y': detail.period_1y,
+        YTD: 'Từ đầu năm',
+        '1M': '1 tháng',
+        '1Y': '1 năm',
     };
     const legends = useMemo(
         () =>
             [
                 {
                     key: 'VCB',
-                    label: detail.legend_commercial,
+                    label: 'NH thương mại',
                     colorClass: 'bg-blue',
                     value: lastItem?.VCB,
                 },
                 {
                     key: 'SBV',
-                    label: detail.legend_sbv,
+                    label: 'NHNN',
                     colorClass: 'bg-orange',
                     value: lastItem?.SBV,
                 },
                 {
                     key: 'BLACK_MARKET',
-                    label: detail.legend_free,
+                    label: 'Tự do',
                     colorClass: 'bg-gray',
                     value: lastItem?.BLACK_MARKET,
                 },
             ].filter((legend) => legend.value != null && Number.isFinite(legend.value)),
-        [detail, lastItem],
+        [lastItem],
     );
 
     const loadChart = async (
@@ -143,13 +140,13 @@ export const MarketExchangeRate = ({ initialChart }: Props) => {
             createChartExchangeRate(
                 items,
                 {
-                    vcb: detail.legend_commercial,
-                    sbv: detail.legend_sbv,
-                    free: detail.legend_free,
+                    vcb: 'NH thương mại',
+                    sbv: 'NHNN',
+                    free: 'Tự do',
                 },
                 resolveChartAxisDateStyle(chartPeriod),
             ),
-        { deps: [items, detail, chartPeriod] },
+        { deps: [items, chartPeriod] },
     );
 
     return (
@@ -170,7 +167,7 @@ export const MarketExchangeRate = ({ initialChart }: Props) => {
                                             : 'font-body-3 text-secondary'
                                     }
                                 >
-                                    {detail.exchange_pair_fn(item)}
+                                    {`${item}/VND`}
                                 </button>
                             );
                         })}

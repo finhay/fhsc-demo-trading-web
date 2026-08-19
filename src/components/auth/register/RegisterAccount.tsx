@@ -9,9 +9,8 @@ import { FaFileLines } from 'react-icons/fa6';
 import { InputField } from '@/components/common/feature/InputField';
 import { PDFViewer } from '@/components/common/feature/PDFViewer';
 import { Dialog } from '@/components/common/ui/Dialog';
-import { AUTH_MODE, STEPS_REGISTER } from '@/constants/auth';
+import { AUTH_MODE, AUTH_VALIDATE, STEPS_REGISTER } from '@/constants/auth';
 import { toast } from '@/hooks/lib/useToast';
-import { useTranslate } from '@/hooks/useTranslate';
 import {
     fetchPublicTermsAndConditionTemplates,
     fetchTermsAndConditionPreviewById,
@@ -28,7 +27,6 @@ type TermTemplate = {
 };
 
 export const RegisterAccount = () => {
-    const trans = useTranslate();
     const { startLoading, stopLoading, isLoading } = useLoadingStore();
     const { registerSetStep, registerSetPhone, openAuthDialog } = useAuthFlowStore();
 
@@ -66,7 +64,7 @@ export const RegisterAccount = () => {
                 toast.error(message);
             }
         } catch (err) {
-            toast.error(getApiErrorMessage(err, trans.common.try_again_error));
+            toast.error(getApiErrorMessage(err, 'Có lỗi xảy ra, vui lòng thử lại'));
         } finally {
             stopLoading();
         }
@@ -90,7 +88,7 @@ export const RegisterAccount = () => {
                 toast.error(message);
             }
         } catch (err) {
-            toast.error(getApiErrorMessage(err, trans.common.try_again_error));
+            toast.error(getApiErrorMessage(err, 'Có lỗi xảy ra, vui lòng thử lại'));
         } finally {
             stopLoading();
         }
@@ -112,13 +110,13 @@ export const RegisterAccount = () => {
                     registerSetPhone(phoneParam);
                     registerSetStep(STEPS_REGISTER.VERIFY_OTP);
                 } else {
-                    toast.error(trans.auth.register.err_phone_in_use);
+                    toast.error('Số điện thoại đã được sử dụng');
                 }
             } else {
                 toast.error(message);
             }
         } catch (err) {
-            toast.error(getApiErrorMessage(err, trans.common.try_again_error));
+            toast.error(getApiErrorMessage(err, 'Có lỗi xảy ra, vui lòng thử lại'));
         }
     };
 
@@ -134,15 +132,15 @@ export const RegisterAccount = () => {
             <form.Field
                 name="phone"
                 validators={{
-                    onChange: ({ value }) => validatePhone(value, trans.auth.validate),
+                    onChange: ({ value }) => validatePhone(value, AUTH_VALIDATE),
                 }}
             >
                 {(field) => (
                     <InputField
                         id="auth-dialog-register-phone"
                         type="tel"
-                        label={trans.auth.register.phone_lbl}
-                        placeholder={trans.auth.register.input_phone}
+                        label={'Số điện thoại'}
+                        placeholder={'Nhập số điện thoại của bạn'}
                         error={field.state.meta.errors?.[0]}
                         value={field.state.value || ''}
                         onInput={(e) => {
@@ -155,13 +153,13 @@ export const RegisterAccount = () => {
                 )}
             </form.Field>
             <p className="font-body-3 text-secondary">
-                {trans.auth.register.terms_agree_prefix}{' '}
+                {'Bằng việc “Tiếp tục”, bạn đồng ý với'}{' '}
                 <button
                     type="button"
                     onClick={handleOpenTerms}
                     className="cursor-pointer text-primary hover:underline bg-transparent border-0 p-0 font-body-3"
                 >
-                    {trans.auth.register.terms_link}
+                    {'Điều khoản và điều kiện sử dụng sản phẩm FHSC'}
                 </button>
             </p>
             <footer className="flex flex-col items-center gap-2">
@@ -174,20 +172,20 @@ export const RegisterAccount = () => {
                             : 'bg-disabled text-disabled cursor-not-allowed'
                     }`}
                 >
-                    {trans.auth.register.btn_continue}
+                    {'Tiếp tục'}
                 </button>
-                <p className="font-body-3 text-primary">{trans.auth.register.or_sep}</p>
+                <p className="font-body-3 text-primary">{'Hoặc'}</p>
                 <button
                     type="button"
                     onClick={() => openAuthDialog(AUTH_MODE.LOGIN)}
                     className="w-2/3 px-4 py-2 rounded-full font-body-3-highlight text-highlight bg-success cursor-pointer"
                 >
-                    {trans.auth.register.has_acct_prompt}
+                    {'Bạn đã có tài khoản?'}
                 </button>
             </footer>
             {isTermsOpen && (
                 <Dialog
-                    title={trans.auth.register.terms_dialog_title}
+                    title={'Điều khoản và điều kiện sử dụng sản phẩm FHSC'}
                     onClose={() => setIsTermsOpen(false)}
                 >
                     <div className="flex flex-col gap-2">

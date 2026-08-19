@@ -15,17 +15,6 @@ export type PreviewTermAndConditionResponse = {
     data: string;
 };
 
-export type ContractsEnterpriseResponse = {
-    error_code: string;
-    message: string;
-    data: {
-        contract_type: string;
-        pathFile: string;
-        owner: string;
-        title: string;
-    }[];
-};
-
 export type ContractsHaybondResponse = {
     error_code: string;
     message: string;

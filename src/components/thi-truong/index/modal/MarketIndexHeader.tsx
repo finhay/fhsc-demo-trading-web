@@ -3,7 +3,6 @@
 import { FaXmark } from 'react-icons/fa6';
 
 import { InputSearch } from '@/components/common/feature/InputSearch';
-import { useTranslate } from '@/hooks/useTranslate';
 import { useMarketIndexStore } from '@/stores/common/useMarketIndexStore';
 import { formatNumberVN } from '@/utils/format';
 
@@ -20,7 +19,6 @@ export const MarketIndexHeader = ({
     onSelectStock,
     onClose,
 }: Props) => {
-    const trans = useTranslate();
     const { data } = useMarketIndexStore();
 
     const indexData = data.find((item) => item?.index === selectedIndex);
@@ -57,14 +55,14 @@ export const MarketIndexHeader = ({
                         </div>
                     </div>
                     <p className="font-caption text-secondary">
-                        {trans.market.index.detail.title_prefix} {selectedIndex}
+                        {'Chỉ số'} {selectedIndex}
                     </p>
                 </div>
             </div>
             <button
                 onClick={onClose}
                 className="text-primary hover:text-highlight transition-colors flex-shrink-0"
-                aria-label={trans.dialog.close}
+                aria-label={'Đóng'}
                 type="button"
             >
                 <FaXmark size={20} />

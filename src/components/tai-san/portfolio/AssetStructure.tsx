@@ -9,7 +9,6 @@ import { PORTFOLIO_TREEMAP_COLORS } from '@/constants/assets';
 import { useEChartsInstance } from '@/hooks/chart/useEChartsInstance';
 import { useEChartsTooltipAutoHide } from '@/hooks/chart/useEChartsTooltipAutoHide';
 import { useMQTT } from '@/hooks/useMQTT';
-import { useTranslate } from '@/hooks/useTranslate';
 import { StockPriceMessage } from '@/proto/stock';
 import { useAssetStore } from '@/stores/assets/useAssetStore';
 import { useStockInfoStore } from '@/stores/common/useStockInfoStore';
@@ -18,7 +17,6 @@ import { calcPortfolioHoldingQuantity } from '@/utils/assets';
 import { buildStockPriceTopics } from '@/utils/common';
 
 export const AssetStructure = () => {
-    const trans = useTranslate();
     const { portfolio, isPortfolioLoading } = useAssetStore();
     const openStockDetail = useStockInfoStore((state) => state.openStockDetail);
     const chartRef = useRef<HTMLDivElement>(null);
@@ -141,9 +139,7 @@ export const AssetStructure = () => {
 
     return (
         <section className="flex h-full flex-col gap-3 overflow-hidden rounded-xl bg-secondary p-3">
-            <h2 className="shrink-0 font-body-2-highlight text-primary">
-                {trans.assets.stock_summary.structure_heading}
-            </h2>
+            <h2 className="shrink-0 font-body-2-highlight text-primary">{'Cấu trúc danh mục'}</h2>
             <div className={`relative w-full ${hasData ? 'min-h-0 flex-1' : 'h-80'}`}>
                 <div ref={chartRef} className={`h-full w-full ${hasData ? '' : 'invisible'}`} />
                 {isPortfolioLoading ? (

@@ -4,10 +4,9 @@ import { useEffect, useMemo, useState } from 'react';
 
 import { EmptyState } from '@/components/common/feature/EmptyState';
 import { AssetRightsRow } from '@/components/tai-san/rights/AssetRightsRow';
-import { RIGHT_EVENT_TYPES } from '@/constants/assets';
+import { RIGHTS_EVENT_TYPES, RIGHT_EVENT_TYPES } from '@/constants/assets';
 import { SUB_ACCOUNT_TYPE } from '@/constants/common';
 import { ORDER_SIDE } from '@/constants/trading';
-import { useTranslate } from '@/hooks/useTranslate';
 import { getSubAccountWithdrawalAvailableBalance } from '@/services/api/payments';
 import { fetchSubAccountAvailableTrade } from '@/services/api/trade/orders';
 import { useAuthStore } from '@/stores/auth/useAuthStore';
@@ -36,7 +35,6 @@ export const AssetRightsDetail = ({
     onQuantityChange,
     onOpenRegisterModal,
 }: Props) => {
-    const trans = useTranslate();
     const [error, setError] = useState('');
 
     const { activeSubAccount } = useAuthStore();
@@ -85,17 +83,17 @@ export const AssetRightsDetail = ({
         val !== null && val !== undefined && val !== '' && val !== 0 && val !== '0';
 
     const eventTypeLabel = selectedRight
-        ? getRightLabel(trans.assets.rights.event_types, selectedRight.type)
+        ? getRightLabel(RIGHTS_EVENT_TYPES, selectedRight.type)
         : '';
 
     const handleQuantityChange = (value: string) => {
         const rawValue = sanitizeQuantityInput(value);
         if (!isValidDate) {
-            setError(trans.assets.rights.err_not_in_register_period);
+            setError('Chưa đến thời gian đăng ký');
             return;
         }
         if (Number(rawValue) > maxCanBuy) {
-            setError(trans.assets.rights.err_quantity_exceeds);
+            setError('Số lượng vượt quá khối lượng có thể mua');
             onQuantityChange(rawValue);
             return;
         }
@@ -146,28 +144,25 @@ export const AssetRightsDetail = ({
             {selectedRight ? (
                 <div className="flex flex-1 flex-col gap-4 overflow-y-auto">
                     <div className="flex flex-col gap-2">
+                        <AssetRightsRow label={'Loại sự kiện'} value={eventTypeLabel} />
                         <AssetRightsRow
-                            label={trans.assets.rights.event_type}
-                            value={eventTypeLabel}
-                        />
-                        <AssetRightsRow
-                            label={trans.assets.rights.last_register_date}
+                            label={'Ngày đăng ký cuối cùng'}
                             value={formatDateOrDash(selectedRight.reportDate)}
                         />
                         {isStockRight ? (
                             <>
                                 <AssetRightsRow
-                                    label={trans.assets.rights.start_register_date}
+                                    label={'Ngày bắt đầu đăng ký mua'}
                                     value={formatDateOrDash(selectedRight.startDate)}
                                 />
                                 <AssetRightsRow
-                                    label={trans.assets.rights.end_register_date}
+                                    label={'Ngày kết thúc đăng ký mua'}
                                     value={formatDateOrDash(selectedRight.finishDate)}
                                 />
                             </>
                         ) : null}
                         <AssetRightsRow
-                            label={trans.assets.rights.expected_action_date}
+                            label={'Ngày dự kiến thực hiện'}
                             value={formatDateOrDash(selectedRight.actionDate)}
                         />
                     </div>
@@ -175,34 +170,31 @@ export const AssetRightsDetail = ({
                         <>
                             <div className="flex flex-col gap-2 border-b border-tertiary">
                                 {isValuePresent(selectedRight.ratio) && (
-                                    <AssetRightsRow
-                                        label={trans.assets.rights.ratio}
-                                        value={selectedRight.ratio}
-                                    />
+                                    <AssetRightsRow label={'Tỷ lệ'} value={selectedRight.ratio} />
                                 )}
                                 {isValuePresent(selectedRight.buyPrice) && (
                                     <AssetRightsRow
-                                        label={trans.assets.rights.price}
-                                        value={`${formatNumberVN(selectedRight.buyPrice, { trimTrailingZeros: true })} ${trans.assets.modals.common.currency}`}
+                                        label={'Giá'}
+                                        value={`${formatNumberVN(selectedRight.buyPrice, { trimTrailingZeros: true })} ${'đ'}`}
                                     />
                                 )}
                                 {isValuePresent(selectedRight.totalStocksCanBuy) && (
                                     <AssetRightsRow
-                                        label={trans.assets.rights.max_register_quantity}
-                                        value={`${formatNumberVN(selectedRight.totalStocksCanBuy, { decimals: 0 })} ${trans.assets.modals.common.unit_shares}`}
+                                        label={'Khối lượng đăng ký tối đa'}
+                                        value={`${formatNumberVN(selectedRight.totalStocksCanBuy, { decimals: 0 })} ${'CP'}`}
                                     />
                                 )}
                                 {isValuePresent(selectedRight.numberOfWaitingStock) && (
                                     <AssetRightsRow
-                                        label={trans.assets.rights.registered_quantity}
-                                        value={`${formatNumberVN(selectedRight.numberOfWaitingStock, { decimals: 0 })} ${trans.assets.modals.common.unit_shares}`}
+                                        label={'Đã đăng ký'}
+                                        value={`${formatNumberVN(selectedRight.numberOfWaitingStock, { decimals: 0 })} ${'CP'}`}
                                     />
                                 )}
                             </div>
                             <div className="flex max-w-sm flex-col gap-2">
                                 <div className="flex flex-col gap-2">
                                     <label className="font-body-3 text-secondary">
-                                        {trans.assets.rights.register_quantity}
+                                        {'Số lượng đăng ký'}
                                     </label>
                                     <input
                                         type="text"
@@ -212,7 +204,7 @@ export const AssetRightsDetail = ({
                                                 : ''
                                         }
                                         onChange={(e) => handleQuantityChange(e.target.value)}
-                                        placeholder={trans.assets.rights.quantity_placeholder}
+                                        placeholder={'Nhập số lượng'}
                                         disabled={!isValidDate}
                                         className="w-full rounded-xl border border-quaternary bg-tertiary px-3 py-2 font-body-3 text-primary focus:border-highlight focus:outline-none disabled:cursor-not-allowed disabled:opacity-50"
                                     />
@@ -221,24 +213,24 @@ export const AssetRightsDetail = ({
                                 <dl className="flex flex-col gap-2 rounded-xl bg-tertiary p-3">
                                     <div className="flex items-center justify-between gap-2">
                                         <dt className="font-body-3 text-secondary">
-                                            {trans.assets.rights.available_balance}
+                                            {'Tiền mặt khả dụng'}
                                         </dt>
                                         <dd className="font-body-3-highlight text-primary">
                                             {formatNumberVN(availableBalance, {
                                                 trimTrailingZeros: true,
                                             })}{' '}
-                                            {trans.assets.modals.common.currency}
+                                            {'đ'}
                                         </dd>
                                     </div>
                                     <div className="flex items-center justify-between gap-2">
                                         <dt className="font-body-3 text-secondary">
-                                            {trans.assets.rights.payment_amount}
+                                            {'Số tiền thanh toán'}
                                         </dt>
                                         <dd className="font-body-3-highlight text-green">
                                             {formatNumberVN(paymentAmount, {
                                                 trimTrailingZeros: true,
                                             })}{' '}
-                                            {trans.assets.modals.common.currency}
+                                            {'đ'}
                                         </dd>
                                     </div>
                                 </dl>
@@ -252,36 +244,33 @@ export const AssetRightsDetail = ({
                                             : 'bg-highlight text-quaternary hover:opacity-90'
                                     }`}
                                 >
-                                    {trans.assets.rights.register_buy}
+                                    {'Đăng ký mua'}
                                 </button>
                             </div>
                         </>
                     ) : (
                         <div className="flex flex-col gap-2">
                             {isValuePresent(selectedRight.ratio) && (
-                                <AssetRightsRow
-                                    label={trans.assets.rights.ratio}
-                                    value={selectedRight.ratio}
-                                />
+                                <AssetRightsRow label={'Tỷ lệ'} value={selectedRight.ratio} />
                             )}
                             {isValuePresent(selectedRight.ownNumberOfShare) && (
                                 <AssetRightsRow
-                                    label={trans.assets.rights.own_shares}
-                                    value={`${formatNumberVN(selectedRight.ownNumberOfShare, { decimals: 0 })} ${trans.assets.modals.common.unit_shares}`}
+                                    label={'Số lượng cổ phiếu sở hữu'}
+                                    value={`${formatNumberVN(selectedRight.ownNumberOfShare, { decimals: 0 })} ${'CP'}`}
                                 />
                             )}
                             {isValuePresent(selectedRight.numberOfWaitingStock) &&
                                 selectedRight.type === RIGHT_EVENT_TYPES.STOCK_DIVIDEND && (
                                     <AssetRightsRow
-                                        label={trans.assets.rights.dividend_stock}
-                                        value={`${formatNumberVN(selectedRight.numberOfWaitingStock, { decimals: 0 })} ${trans.assets.modals.common.unit_shares}`}
+                                        label={'Cổ tức bằng cổ phiếu'}
+                                        value={`${formatNumberVN(selectedRight.numberOfWaitingStock, { decimals: 0 })} ${'CP'}`}
                                     />
                                 )}
                             {isValuePresent(selectedRight.amount) &&
                                 selectedRight.type === RIGHT_EVENT_TYPES.CASH_DIVIDEND && (
                                     <AssetRightsRow
-                                        label={trans.assets.rights.dividend_cash}
-                                        value={`${formatNumberVN(selectedRight.amount, { trimTrailingZeros: true })} ${trans.assets.modals.common.currency}`}
+                                        label={'Cổ tức bằng tiền'}
+                                        value={`${formatNumberVN(selectedRight.amount, { trimTrailingZeros: true })} ${'đ'}`}
                                     />
                                 )}
                         </div>

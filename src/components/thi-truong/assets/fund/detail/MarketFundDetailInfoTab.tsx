@@ -4,27 +4,43 @@ import { useMemo, useState } from 'react';
 
 import { FaChevronDown, FaChevronRight, FaFile } from 'react-icons/fa6';
 
-import { useTranslate } from '@/hooks/useTranslate';
 import type { FundListing } from '@/types/pages/fund';
 import { formatDate } from '@/utils/format';
+
+const FUND_MODAL_INFO_TAB = {
+    target: 'Mục tiêu đầu tư',
+    strategy: 'Chiến lược đầu tư',
+    method: 'Phương pháp lựa chọn đầu tư',
+    allocate: 'Phân bổ tài sản đầu tư',
+    risk: 'Các rủi ro liên quan',
+    division_plan: 'Kế hoạch phân chia lợi nhuận và chính sách thuế',
+    other_documents: 'Xem thêm tài liệu khác',
+};
 
 type Props = {
     listing: FundListing | null;
 };
 
 export const MarketFundDetailInfoTab = ({ listing }: Props) => {
-    const trans = useTranslate();
-    const d = trans.market.assets.fund_modal.detail.info_tab;
+    const d = FUND_MODAL_INFO_TAB;
 
     const sections = useMemo(
         () =>
             [
-                { key: 'target', title: d.target, content: listing?.target },
-                { key: 'strategy', title: d.strategy, content: listing?.strategy },
-                { key: 'method', title: d.method, content: listing?.method_invest },
-                { key: 'allocate', title: d.allocate, content: listing?.allocate },
-                { key: 'risk', title: d.risk, content: listing?.risk },
-                { key: 'division_plan', title: d.division_plan, content: listing?.division_plan },
+                { key: 'target', title: 'Mục tiêu đầu tư', content: listing?.target },
+                { key: 'strategy', title: 'Chiến lược đầu tư', content: listing?.strategy },
+                {
+                    key: 'method',
+                    title: 'Phương pháp lựa chọn đầu tư',
+                    content: listing?.method_invest,
+                },
+                { key: 'allocate', title: 'Phân bổ tài sản đầu tư', content: listing?.allocate },
+                { key: 'risk', title: 'Các rủi ro liên quan', content: listing?.risk },
+                {
+                    key: 'division_plan',
+                    title: 'Kế hoạch phân chia lợi nhuận và chính sách thuế',
+                    content: listing?.division_plan,
+                },
             ].filter((section) => !!section.content),
         [d, listing],
     );
@@ -101,7 +117,7 @@ export const MarketFundDetailInfoTab = ({ listing }: Props) => {
                         >
                             <span className="flex items-center gap-2 font-body-2-highlight text-primary">
                                 <FaFile size={20} className="shrink-0 text-secondary" />
-                                {d.other_documents}
+                                {'Xem thêm tài liệu khác'}
                             </span>
                             <FaChevronRight size={14} className="shrink-0 text-primary" />
                         </a>

@@ -10,7 +10,6 @@ import { MarketDot } from '@/components/thi-truong/shared/MarketDot';
 import { MarketOutOfSession } from '@/components/thi-truong/shared/MarketOutOfSession';
 import { renderInfluenceBubbleChart } from '@/config/market/market-index';
 import { INDEX_TO_EXCHANGE } from '@/constants/market';
-import { useTranslate } from '@/hooks/useTranslate';
 import { fetchMarketLeaderboardV2 } from '@/services/api/datafeed/trading-data';
 import { useMarketIndexStore } from '@/stores/common/useMarketIndexStore';
 import { useStockInfoStore } from '@/stores/common/useStockInfoStore';
@@ -23,7 +22,6 @@ type Props = {
 };
 
 export const MarketIndexBubble = ({ selectedIndex }: Props) => {
-    const trans = useTranslate();
     const { isPreSession } = useMarketIndexStore();
 
     const [increaseStocks, setIncreaseStocks] = useState<MarketLeaderboardItem[]>([]);
@@ -185,7 +183,7 @@ export const MarketIndexBubble = ({ selectedIndex }: Props) => {
         <div className="flex shrink-0 flex-col gap-4">
             <h2 className="font-body-2-highlight text-primary flex items-center gap-2">
                 <MarketDot />
-                {trans.market.index.top_impact} {selectedIndex}
+                {'Top mã tác động'} {selectedIndex}
             </h2>
             <div className="flex h-60 w-full items-center justify-center">{renderContent()}</div>
         </div>

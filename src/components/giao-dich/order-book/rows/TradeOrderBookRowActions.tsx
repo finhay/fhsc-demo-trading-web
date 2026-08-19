@@ -2,7 +2,6 @@
 
 import { RiDeleteBin5Fill, RiEdit2Fill } from 'react-icons/ri';
 
-import { useTranslate } from '@/hooks/useTranslate';
 import type { TradeOrderBookRow } from '@/types/pages/trading';
 
 type Props = {
@@ -20,8 +19,6 @@ export const TradeOrderBookRowActions = ({
     onEdit,
     onCancel,
 }: Props) => {
-    const trans = useTranslate();
-
     return (
         <div className="flex gap-2 items-center justify-end">
             {canEdit && (
@@ -31,7 +28,7 @@ export const TradeOrderBookRowActions = ({
                         onEdit?.(order);
                     }}
                     className="text-primary hover:text-highlight transition-colors"
-                    aria-label={trans.trading.order_book.edit_aria}
+                    aria-label={'Sửa lệnh'}
                 >
                     <RiEdit2Fill size={18} />
                 </button>
@@ -43,7 +40,7 @@ export const TradeOrderBookRowActions = ({
                         onCancel(order);
                     }}
                     className="text-primary hover:text-red transition-colors"
-                    aria-label={trans.trading.order_book.cancel_aria}
+                    aria-label={'Huỷ lệnh'}
                 >
                     <RiDeleteBin5Fill size={18} />
                 </button>

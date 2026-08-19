@@ -7,7 +7,7 @@ import { useCallback } from 'react';
 import { FaArrowDown, FaArrowUp } from 'react-icons/fa6';
 import { IoMdArrowDropleft, IoMdArrowDropright } from 'react-icons/io';
 
-import { useTranslate } from '@/hooks/useTranslate';
+import { IBOARD } from '@/constants/iboard';
 import type { ColumnKey, IboardDisplayRow } from '@/types/pages/iboard';
 import { getVisibleLeafColumns } from '@/utils/iboard';
 
@@ -18,8 +18,6 @@ type Props = {
 };
 
 export const IBoardTableHeader = ({ table, totalMetric, onToggleTotalMetric }: Props) => {
-    const trans = useTranslate();
-
     const getSortState = useCallback(
         (key: ColumnKey): string => {
             const column = table.getColumn(key);
@@ -71,7 +69,7 @@ export const IBoardTableHeader = ({ table, totalMetric, onToggleTotalMetric }: P
                                 onClick={() => onToggleSort('symbol')}
                                 className="inline-flex w-full items-center justify-start gap-1 font-tiny-highlight text-primary"
                             >
-                                <span>{trans.iboard.leaf_symbol}</span>
+                                <span>{'Mã'}</span>
                                 <span className="inline-flex items-center">
                                     {renderSortIcon(sorted)}
                                 </span>
@@ -83,19 +81,19 @@ export const IBoardTableHeader = ({ table, totalMetric, onToggleTotalMetric }: P
                     rowSpan={2}
                     className="pr-1 whitespace-nowrap border-r border-b border-t border-l border-quaternary bg-secondary text-right"
                 >
-                    {renderSortableLeafHeader('reference', trans.iboard.leaf_reference)}
+                    {renderSortableLeafHeader('reference', 'TC')}
                 </th>
                 <th
                     rowSpan={2}
                     className="pr-1 whitespace-nowrap border-r border-b border-t border-l border-quaternary bg-secondary text-right"
                 >
-                    {renderSortableLeafHeader('ceiling', trans.iboard.leaf_ceiling)}
+                    {renderSortableLeafHeader('ceiling', 'Trần')}
                 </th>
                 <th
                     rowSpan={2}
                     className="pr-1 whitespace-nowrap border-r border-b border-t border-l border-quaternary bg-secondary text-right"
                 >
-                    {renderSortableLeafHeader('floor', trans.iboard.leaf_floor)}
+                    {renderSortableLeafHeader('floor', 'Sàn')}
                 </th>
                 <th
                     rowSpan={2}
@@ -104,10 +102,7 @@ export const IBoardTableHeader = ({ table, totalMetric, onToggleTotalMetric }: P
                     {(() => {
                         const activeKey: ColumnKey =
                             totalMetric === 'vol' ? 'totalVol' : 'totalVal';
-                        const label =
-                            totalMetric === 'vol'
-                                ? trans.iboard.leaf_totalVol
-                                : trans.iboard.leaf_totalVal;
+                        const label = totalMetric === 'vol' ? 'Tổng KL' : 'Tổng GT';
                         const sorted = getSortState(activeKey);
                         return (
                             <div className="inline-flex w-full items-center justify-end gap-0.5">
@@ -145,49 +140,39 @@ export const IBoardTableHeader = ({ table, totalMetric, onToggleTotalMetric }: P
                     colSpan={6}
                     className="pr-1 whitespace-nowrap border-r border-b border-t border-l border-quaternary bg-secondary text-center"
                 >
-                    <span className="font-tiny-highlight text-primary">
-                        {trans.iboard.group_bid}
-                    </span>
+                    <span className="font-tiny-highlight text-primary">{'Bên mua'}</span>
                 </th>
                 <th
                     colSpan={4}
                     className="pr-1 whitespace-nowrap border-r border-b border-t border-l border-quaternary bg-secondary text-center"
                 >
-                    <span className="font-tiny-highlight text-primary">
-                        {trans.iboard.group_match}
-                    </span>
+                    <span className="font-tiny-highlight text-primary">{'Khớp lệnh'}</span>
                 </th>
                 <th
                     colSpan={6}
                     className="pr-1 whitespace-nowrap border-r border-b border-t border-l border-quaternary bg-secondary text-center"
                 >
-                    <span className="font-tiny-highlight text-primary">
-                        {trans.iboard.group_ask}
-                    </span>
+                    <span className="font-tiny-highlight text-primary">{'Bên bán'}</span>
                 </th>
                 <th
                     colSpan={3}
                     className="pr-1 whitespace-nowrap border-r border-b border-t border-l border-quaternary bg-secondary text-center"
                 >
-                    <span className="font-tiny-highlight text-primary">
-                        {trans.iboard.group_price}
-                    </span>
+                    <span className="font-tiny-highlight text-primary">{'Giá'}</span>
                 </th>
                 <th
                     colSpan={3}
                     className="pr-1 whitespace-nowrap border-r border-b border-t border-l border-quaternary bg-secondary text-center"
                 >
-                    <span className="font-tiny-highlight text-primary">
-                        {trans.iboard.group_foreign}
-                    </span>
+                    <span className="font-tiny-highlight text-primary">{'ĐTNN'}</span>
                 </th>
             </tr>
             <tr>
                 {getVisibleLeafColumns(totalMetric)
                     .slice(5)
                     .map((column) => {
-                        const leafKey = `leaf_${column.key}` as keyof typeof trans.iboard;
-                        const label = (trans.iboard[leafKey] as string | undefined) ?? column.label;
+                        const leafKey = `leaf_${column.key}` as keyof typeof IBOARD;
+                        const label = (IBOARD[leafKey] as string | undefined) ?? column.label;
                         return (
                             <th
                                 key={`sub-${column.key}`}

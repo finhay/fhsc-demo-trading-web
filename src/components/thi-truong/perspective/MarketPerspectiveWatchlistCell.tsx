@@ -4,7 +4,6 @@ import { useMemo } from 'react';
 
 import { IoHeart, IoHeartOutline } from 'react-icons/io5';
 
-import { useTranslate } from '@/hooks/useTranslate';
 import {
     getOrderedWatchlistSymbols,
     isOwnedWatchlist,
@@ -14,7 +13,6 @@ import type { TopStockPriceChangeItem } from '@/types/datafeed/trading-data';
 import { makeWatchlistItem } from '@/utils/common';
 
 export const MarketPerspectiveWatchlistCell = ({ stock }: { stock: TopStockPriceChangeItem }) => {
-    const trans = useTranslate();
     const { currentWatchList, addStockToWatchlist, removeStockFromWatchlist } = useWatchlistStore();
 
     const isWatchlisted = useMemo(
@@ -48,11 +46,7 @@ export const MarketPerspectiveWatchlistCell = ({ stock }: { stock: TopStockPrice
     return (
         <button
             type="button"
-            aria-label={
-                isWatchlisted
-                    ? trans.market.perspective.aria_remove
-                    : trans.market.perspective.aria_add
-            }
+            aria-label={isWatchlisted ? 'Xóa khỏi danh mục' : 'Thêm vào danh mục'}
             onClick={(e) => {
                 e.stopPropagation();
                 handleToggleWatchlist();

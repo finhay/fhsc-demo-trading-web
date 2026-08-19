@@ -347,3 +347,39 @@ export const PORTFOLIO_THEME_STYLES = {
         ],
     },
 } as const;
+
+export const FUND_MODAL_LIST_TABS: Record<string, string> = {
+    STOCK_FUND: 'Quỹ cổ phiếu',
+    BOND_FUND: 'Quỹ trái phiếu',
+    BALANCE_FUND: 'Quỹ cân bằng',
+};
+
+export const INVESTMENT_PERFORMANCE_PERIOD: Record<string, string> = {
+    YTD: 'Từ đầu năm',
+    '1Y': '1 năm',
+    '5Y': '5 năm',
+    '10Y': '10 năm',
+};
+
+export const MARKET_MACRO: Record<string, string> = {
+    tab_vn: 'Việt Nam',
+    tab_us: 'Mỹ',
+    section_production: 'Sản xuất & xuất khẩu',
+    section_retail: 'Bán lẻ & tiêu dùng',
+    section_us_inflation: 'Tiêu dùng & việc làm',
+    iip: 'IIP (YoY)',
+    pmi: 'PMI',
+    export_title: 'Xuất khẩu (YoY)',
+    export_domestic: 'Nội địa',
+    export_fdi: 'FDI',
+    export_total: 'Cả nước',
+    service_retail: 'Dịch vụ (YoY)',
+    goods_retail: 'Hàng hoá (YoY)',
+    cpi: 'Lạm phát (YoY)',
+    consumption: 'Lạm phát (YoY)',
+    pce: 'PCE',
+    core_pce: 'PCE lõi',
+    nfp: 'Việc làm (NFP)',
+    nfp_suffix: 'nghìn',
+    unemployment: 'Tỷ lệ thất nghiệp',
+};

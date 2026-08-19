@@ -5,7 +5,6 @@ import {
     LOAN_RATE_FLOAT_TYPE,
     LOAN_RATE_PREFERRED_BANK,
 } from '@/constants/market';
-import type { useTranslate } from '@/hooks/useTranslate';
 import type {
     BankInterestRatesData,
     ExchangeRateChartData,
@@ -135,18 +134,14 @@ export const deriveLoanRate = (items: LoanRateItem[]): MacroLiquidityLoanRateVie
     return null;
 };
 
-export const buildMacroLiquidityRows = (
-    state: MacroLiquidityState,
-    trans: ReturnType<typeof useTranslate>,
-): MacroLiquidityStatRow[] => {
-    const c = trans.market.currency;
+export const buildMacroLiquidityRows = (state: MacroLiquidityState): MacroLiquidityStatRow[] => {
     const rows: MacroLiquidityStatRow[] = [];
     if (state.exchangeRate) {
         rows.push({
             key: 'exchange',
             icon: 'coins',
             iconClassName: 'text-green',
-            title: c.row_exchange,
+            title: 'Tỷ giá',
             subtitle: 'USD/VND',
             value: state.exchangeRate.value,
             change: {
@@ -160,8 +155,8 @@ export const buildMacroLiquidityRows = (
             key: 'interbank',
             icon: 'building',
             iconClassName: 'text-blue',
-            title: c.row_interbank,
-            subtitle: c.row_interbank_sub,
+            title: 'Lãi suất qua đêm',
+            subtitle: 'Liên ngân hàng',
             value: `${state.interbank.value}%`,
             change: {
                 text: `${Math.abs(state.interbank.bps)} bps`,
@@ -174,25 +169,25 @@ export const buildMacroLiquidityRows = (
             key: 'omo',
             icon: 'omo',
             iconClassName: 'text-purple',
-            title: c.row_omo,
-            subtitle: c.row_omo_sub,
+            title: 'Thị trường mở',
+            subtitle: 'OMO lưu hành',
             value: state.omo.value,
-            valueSuffix: c.row_omo_suffix,
+            valueSuffix: 'nghìn tỷ đồng',
         });
     }
     if (state.deposit) {
         rows.push({
             key: 'deposit',
-            title: c.row_deposit,
-            subtitle: c.row_deposit_sub,
+            title: 'Lãi suất huy động 12T',
+            subtitle: 'Bình quân của VPB, MB, TCB, ACB',
             value: `${state.deposit.value}%`,
         });
     }
     if (state.loan) {
         rows.push({
             key: 'loan',
-            title: c.row_loan_fn(state.loan.durationMonths),
-            subtitle: c.row_loan_sub_fn(state.loan.bankName),
+            title: `Lãi suất cho vay ${state.loan.durationMonths} tháng đầu`,
+            subtitle: `${state.loan.bankName} (Cố định trong thời gian trên)`,
             value: `${state.loan.value}%`,
         });
     }

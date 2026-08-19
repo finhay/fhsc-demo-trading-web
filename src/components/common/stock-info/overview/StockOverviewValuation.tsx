@@ -3,9 +3,27 @@
 import { useMemo } from 'react';
 
 import { COMPANY_TYPE } from '@/constants/stock-info';
-import { useTranslate } from '@/hooks/useTranslate';
 import type { FinanceOverviewData } from '@/types/datafeed/finance';
 import { formatNumberVN } from '@/utils/format';
+
+const STOCK_INFO_FINANCE_OVERVIEW = {
+    section_aria: 'Tổng quan định giá và chỉ số',
+    quick_valuation: 'Định giá nhanh',
+    valuation_title: 'Định giá',
+    industry_avg: 'TB ngành',
+    metric_pe: 'P/E',
+    metric_pb: 'P/B',
+    metric_ev_ebitda: 'EV/EBITDA',
+    gross_margin: 'Biên lãi gộp',
+    dividend_pct: '% Cổ tức',
+    metric_eps: 'EPS',
+    business_trend_title: 'Xu hướng kinh doanh',
+    net_revenue: 'Doanh thu thuần',
+    profit_after_tax: 'Lợi nhuận sau thuế',
+    unit_thousand_bn: 'Đơn vị: nghìn tỷ đồng',
+    company_intro_aria: 'Giới thiệu doanh nghiệp',
+    no_company_info: 'Không có thông tin về mã cổ phiếu',
+};
 
 type StockOverviewValuationProps = {
     overview: FinanceOverviewData | null;
@@ -21,8 +39,7 @@ type ValuationMetric = {
 };
 
 export const StockOverviewValuation = ({ overview, companyType }: StockOverviewValuationProps) => {
-    const trans = useTranslate();
-    const t = trans.stockInfo.finance_overview;
+    const t = STOCK_INFO_FINANCE_OVERVIEW;
 
     const metrics = useMemo<ValuationMetric[]>(() => {
         if (!overview) return [];
@@ -55,7 +72,7 @@ export const StockOverviewValuation = ({ overview, companyType }: StockOverviewV
         <article className="flex flex-col gap-3">
             <h2 className="font-body-3-highlight text-primary">{t.valuation_title}</h2>
             {!overview ? (
-                <p className="font-caption text-tertiary">{trans.stockInfo.finance_report.empty}</p>
+                <p className="font-caption text-tertiary">{'Chưa có dữ liệu'}</p>
             ) : (
                 <div className="flex w-full gap-3">
                     {metrics.map((metric) => (

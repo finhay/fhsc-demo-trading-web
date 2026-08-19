@@ -12,7 +12,6 @@ import {
 } from '@/constants/trading';
 import { toast } from '@/hooks/lib/useToast';
 import { useMQTT } from '@/hooks/useMQTT';
-import { useTranslate } from '@/hooks/useTranslate';
 import { StockPriceMessage } from '@/proto/stock';
 import { fetchOddStockRealtime, fetchStockRealtime } from '@/services/api/datafeed/stock-info';
 import { useStockInfoStore } from '@/stores/common/useStockInfoStore';
@@ -24,7 +23,6 @@ import { buildActiveOrderPriceMarkers } from '@/utils/trading/order-book';
 import { buildDepthRawRows, calculatePriceRows } from '@/utils/trading/shared';
 
 export const StockPriceStep = () => {
-    const trans = useTranslate();
     const { selectedStock } = useStockInfoStore();
     const {
         activeTradeSide,
@@ -166,10 +164,10 @@ export const StockPriceStep = () => {
                     toast.error(message);
                 }
             } catch (err) {
-                toast.error(getApiErrorMessage(err, trans.common.try_again_error));
+                toast.error(getApiErrorMessage(err, 'Có lỗi xảy ra, vui lòng thử lại'));
             }
         },
-        [selectedStock?.symbol, trans.common.try_again_error],
+        [selectedStock?.symbol, 'Có lỗi xảy ra, vui lòng thử lại'],
     );
 
     const handleChangeTab = useCallback(
@@ -208,12 +206,12 @@ export const StockPriceStep = () => {
         <section className="flex w-full shrink-0 flex-col gap-3 rounded-xl bg-secondary p-3">
             <header className="flex h-7 w-full items-center gap-6">
                 <h3 className="shrink-0 font-body-3-highlight text-primary whitespace-nowrap">
-                    {trans.trading.price_step.heading}
+                    {'Bước giá'}
                 </h3>
                 <nav
                     className="flex h-full min-w-0 flex-1 items-center gap-3"
                     role="tablist"
-                    aria-label={trans.trading.price_step.lot_aria}
+                    aria-label={'Chọn loại lô'}
                 >
                     {LOT_TABS.map(({ key: tabKey }) => (
                         <button
@@ -228,9 +226,7 @@ export const StockPriceStep = () => {
                                     : 'font-caption text-secondary'
                             }`}
                         >
-                            {tabKey === LOT_TYPE.EVEN
-                                ? trans.trading.price_step.tab_even
-                                : trans.trading.price_step.tab_odd}
+                            {tabKey === LOT_TYPE.EVEN ? 'Lô chẵn' : 'Lô lẻ'}
                         </button>
                     ))}
                 </nav>
@@ -241,16 +237,16 @@ export const StockPriceStep = () => {
                 role="tabpanel"
                 aria-labelledby={activeTab}
                 className="flex w-full flex-col gap-1.5"
-                aria-label={trans.trading.price_step.article_aria}
+                aria-label={'Bảng giá mua bán'}
             >
                 <div className="flex w-full items-start gap-0.5 whitespace-nowrap font-caption text-secondary">
                     <div className="flex flex-1 items-start justify-between pr-1">
-                        <span>{trans.trading.price_step.col_buy_qty}</span>
-                        <span>{trans.trading.price_step.col_buy_price}</span>
+                        <span>{'KL mua'}</span>
+                        <span>{'Giá mua'}</span>
                     </div>
                     <div className="flex flex-1 items-start justify-between pl-1">
-                        <span>{trans.trading.price_step.col_sell_price}</span>
-                        <span>{trans.trading.price_step.col_sell_qty}</span>
+                        <span>{'Giá bán'}</span>
+                        <span>{'KL bán'}</span>
                     </div>
                 </div>
 
@@ -260,7 +256,7 @@ export const StockPriceStep = () => {
                             <button
                                 type="button"
                                 onClick={() => handleFillQuantity(rawRows[i].buyVol)}
-                                aria-label={`${trans.trading.price_step.fill_buy_qty_aria} ${rawRows[i].buyVol}`}
+                                aria-label={`${'Điền khối lượng mua'} ${rawRows[i].buyVol}`}
                                 className="cursor-pointer whitespace-nowrap font-caption text-primary"
                             >
                                 {row.bidQty}
@@ -275,7 +271,7 @@ export const StockPriceStep = () => {
                                 <button
                                     type="button"
                                     onClick={() => handleFillPrice(rawRows[i].buyPrice)}
-                                    aria-label={`${trans.trading.price_step.fill_buy_price_aria} ${rawRows[i].buyPrice}`}
+                                    aria-label={`${'Điền giá mua'} ${rawRows[i].buyPrice}`}
                                     className={`cursor-pointer whitespace-nowrap font-caption ${PRICE_COLOR_MAP[row.bidPriceVariant] ?? 'text-primary'}`}
                                 >
                                     {row.bidPrice}
@@ -290,7 +286,7 @@ export const StockPriceStep = () => {
                                 <button
                                     type="button"
                                     onClick={() => handleFillPrice(rawRows[i].sellPrice)}
-                                    aria-label={`${trans.trading.price_step.fill_sell_price_aria} ${rawRows[i].sellPrice}`}
+                                    aria-label={`${'Điền giá bán'} ${rawRows[i].sellPrice}`}
                                     className={`cursor-pointer whitespace-nowrap font-caption ${PRICE_COLOR_MAP[row.askPriceVariant] ?? 'text-primary'}`}
                                 >
                                     {row.askPrice}
@@ -302,7 +298,7 @@ export const StockPriceStep = () => {
                             <button
                                 type="button"
                                 onClick={() => handleFillQuantity(rawRows[i].sellVol)}
-                                aria-label={`${trans.trading.price_step.fill_sell_qty_aria} ${rawRows[i].sellVol}`}
+                                aria-label={`${'Điền khối lượng bán'} ${rawRows[i].sellVol}`}
                                 className="cursor-pointer whitespace-nowrap text-right font-caption text-primary"
                             >
                                 {row.askQty}
@@ -334,21 +330,18 @@ export const StockPriceStep = () => {
             <div className="flex w-full flex-col gap-1 whitespace-nowrap font-caption text-primary">
                 <div className="flex items-start justify-between">
                     <span>
-                        {trans.trading.price_step.total_volume}:{' '}
-                        {formatNumberVNWithUnit(stockPriceData.totalVolume ?? 0)}
+                        {'Tổng KL'}: {formatNumberVNWithUnit(stockPriceData.totalVolume ?? 0)}
                     </span>
                     <span>
-                        {trans.trading.price_step.total_value}:{' '}
-                        {formatNumberVNWithUnit(stockPriceData.totalValue ?? 0)}
+                        {'Tổng GT'}: {formatNumberVNWithUnit(stockPriceData.totalValue ?? 0)}
                     </span>
                 </div>
                 <div className="flex items-start justify-between">
                     <span>
-                        {trans.trading.price_step.room}:{' '}
-                        {formatNumberVNWithUnit(selectedStock?.foreignRemain ?? 0)}
+                        {'Room'}: {formatNumberVNWithUnit(selectedStock?.foreignRemain ?? 0)}
                     </span>
                     <span>
-                        {trans.trading.price_step.listed_share}:{' '}
+                        {'KL cp lưu hành'}:{' '}
                         {formatNumberVNWithUnit(selectedStock?.listedShare ?? 0)}
                     </span>
                 </div>

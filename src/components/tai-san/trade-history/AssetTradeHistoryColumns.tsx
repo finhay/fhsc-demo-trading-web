@@ -1,22 +1,33 @@
 import { type ColumnDef } from '@tanstack/react-table';
 
 import { SortableHeader } from '@/components/common/table/SortableHeader';
-import { ORDER_STATUS_MAP } from '@/constants/assets';
-import type { useTranslate } from '@/hooks/useTranslate';
+import { ASSETS_TRADE_HISTORY, ORDER_STATUS_MAP } from '@/constants/assets';
 import type { SortableColMeta } from '@/types/pages/common';
 import type { CashAdvance, OrderHistory } from '@/types/trade/history';
 import type { Loans } from '@/types/trade/loans';
 import { formatOrderSide } from '@/utils/assets';
 import { formatDateOrDash, formatNumberVN, formatPercentVN } from '@/utils/format';
 
-type Trans = ReturnType<typeof useTranslate>;
+const ASSETS_ORDER_STATUS = {
+    sent: 'Đã gửi',
+    matched_all: 'Thành công',
+    completed: 'Thành công',
+    matched: 'Đang khớp',
+    waiting_to_send: 'Chờ gửi',
+    sending: 'Đang gửi',
+    fixed: 'Đã sửa',
+    fixing: 'Đang sửa',
+    cancelled: 'Đã hủy',
+    expired: 'Hết hiệu lực',
+    rejecting: 'Từ chối',
+};
 
-const renderOrderStatus = (trans: Trans, status: string) => {
+const renderOrderStatus = (status: string) => {
     const statusInfo = ORDER_STATUS_MAP[status];
     const labelKey = statusInfo?.labelKey;
     const label =
         labelKey != null
-            ? trans.assets.order_status[labelKey as keyof typeof trans.assets.order_status]
+            ? ASSETS_ORDER_STATUS[labelKey as keyof typeof ASSETS_ORDER_STATUS]
             : status;
     const type = statusInfo?.type ?? 'warning';
     const colorClass =
@@ -30,16 +41,14 @@ const renderOrderStatus = (trans: Trans, status: string) => {
     );
 };
 
-export const getOrderHistoryColumns = (trans: Trans): ColumnDef<OrderHistory, unknown>[] => {
-    const t = trans.assets.trade_history;
+export const getOrderHistoryColumns = (): ColumnDef<OrderHistory, unknown>[] => {
+    const t = ASSETS_TRADE_HISTORY;
 
     return [
         {
             id: 'symbol',
             accessorKey: 'symbol',
-            header: ({ column }) => (
-                <SortableHeader label={t.col_symbol} column={column} align="left" />
-            ),
+            header: ({ column }) => <SortableHeader label={'Mã'} column={column} align="left" />,
             meta: { align: 'left' } satisfies SortableColMeta,
             cell: ({ getValue }) => (
                 <span className="font-body-3-highlight text-primary">{getValue<string>()}</span>
@@ -49,16 +58,14 @@ export const getOrderHistoryColumns = (trans: Trans): ColumnDef<OrderHistory, un
             id: 'order_id',
             accessorKey: 'order_id',
             header: ({ column }) => (
-                <SortableHeader label={t.col_order_id} column={column} align="right" />
+                <SortableHeader label={'Số hiệu lệnh'} column={column} align="right" />
             ),
             meta: { align: 'right' } satisfies SortableColMeta,
         },
         {
             id: 'tx_date',
             accessorKey: 'tx_date',
-            header: ({ column }) => (
-                <SortableHeader label={t.col_date} column={column} align="right" />
-            ),
+            header: ({ column }) => <SortableHeader label={'Ngày'} column={column} align="right" />,
             meta: { align: 'right' } satisfies SortableColMeta,
             cell: ({ getValue }) => formatDateOrDash(getValue<string>()),
         },
@@ -66,7 +73,7 @@ export const getOrderHistoryColumns = (trans: Trans): ColumnDef<OrderHistory, un
             id: 'side',
             accessorKey: 'side',
             header: ({ column }) => (
-                <SortableHeader label={t.col_trade_type} column={column} align="right" />
+                <SortableHeader label={'Loại giao dịch'} column={column} align="right" />
             ),
             meta: { align: 'right' } satisfies SortableColMeta,
             cell: ({ getValue }) => formatOrderSide(getValue<string>()),
@@ -75,7 +82,7 @@ export const getOrderHistoryColumns = (trans: Trans): ColumnDef<OrderHistory, un
             id: 'orderType',
             accessorKey: 'orderType',
             header: ({ column }) => (
-                <SortableHeader label={t.col_order_type} column={column} align="right" />
+                <SortableHeader label={'Loại lệnh'} column={column} align="right" />
             ),
             meta: { align: 'right' } satisfies SortableColMeta,
         },
@@ -83,7 +90,7 @@ export const getOrderHistoryColumns = (trans: Trans): ColumnDef<OrderHistory, un
             id: 'exec_price',
             accessorKey: 'exec_price',
             header: ({ column }) => (
-                <SortableHeader label={t.col_match_price} column={column} align="right" />
+                <SortableHeader label={'Giá khớp'} column={column} align="right" />
             ),
             meta: { align: 'right' } satisfies SortableColMeta,
             cell: ({ getValue }) => formatNumberVN(getValue<number>()),
@@ -92,7 +99,7 @@ export const getOrderHistoryColumns = (trans: Trans): ColumnDef<OrderHistory, un
             id: 'exec_qtty',
             accessorKey: 'exec_qtty',
             header: ({ column }) => (
-                <SortableHeader label={t.col_match_vol} column={column} align="right" />
+                <SortableHeader label={'KL khớp/đặt'} column={column} align="right" />
             ),
             meta: { align: 'right' } satisfies SortableColMeta,
             cell: ({ row }) =>
@@ -101,18 +108,14 @@ export const getOrderHistoryColumns = (trans: Trans): ColumnDef<OrderHistory, un
         {
             id: 'tax_amt',
             accessorKey: 'tax_amt',
-            header: ({ column }) => (
-                <SortableHeader label={t.col_tax} column={column} align="right" />
-            ),
+            header: ({ column }) => <SortableHeader label={'Thuế'} column={column} align="right" />,
             meta: { align: 'right' } satisfies SortableColMeta,
             cell: ({ getValue }) => formatNumberVN(getValue<number>(), { trimTrailingZeros: true }),
         },
         {
             id: 'fee_amt',
             accessorKey: 'fee_amt',
-            header: ({ column }) => (
-                <SortableHeader label={t.col_fee} column={column} align="right" />
-            ),
+            header: ({ column }) => <SortableHeader label={'Phí'} column={column} align="right" />,
             meta: { align: 'right' } satisfies SortableColMeta,
             cell: ({ getValue }) => formatNumberVN(getValue<number>(), { trimTrailingZeros: true }),
         },
@@ -120,23 +123,23 @@ export const getOrderHistoryColumns = (trans: Trans): ColumnDef<OrderHistory, un
             id: 'status',
             accessorKey: 'status',
             header: ({ column }) => (
-                <SortableHeader label={t.col_status} column={column} align="right" />
+                <SortableHeader label={'Trạng thái'} column={column} align="right" />
             ),
             meta: { align: 'right' } satisfies SortableColMeta,
-            cell: ({ getValue }) => renderOrderStatus(trans, getValue<string>()),
+            cell: ({ getValue }) => renderOrderStatus(getValue<string>()),
         },
     ];
 };
 
-export const getCashAdvanceColumns = (trans: Trans): ColumnDef<CashAdvance, unknown>[] => {
-    const t = trans.assets.trade_history;
+export const getCashAdvanceColumns = (): ColumnDef<CashAdvance, unknown>[] => {
+    const t = ASSETS_TRADE_HISTORY;
 
     return [
         {
             id: 'order_date',
             accessorKey: 'order_date',
             header: ({ column }) => (
-                <SortableHeader label={t.col_sell_date} column={column} align="left" />
+                <SortableHeader label={'Ngày bán'} column={column} align="left" />
             ),
             meta: { align: 'left' } satisfies SortableColMeta,
             cell: ({ getValue }) => formatDateOrDash(getValue<string>()),
@@ -145,7 +148,7 @@ export const getCashAdvanceColumns = (trans: Trans): ColumnDef<CashAdvance, unkn
             id: 'tx_date',
             accessorKey: 'tx_date',
             header: ({ column }) => (
-                <SortableHeader label={t.col_advance_date} column={column} align="right" />
+                <SortableHeader label={'Ngày ứng'} column={column} align="right" />
             ),
             meta: { align: 'right' } satisfies SortableColMeta,
             cell: ({ getValue }) => formatDateOrDash(getValue<string>()),
@@ -154,7 +157,7 @@ export const getCashAdvanceColumns = (trans: Trans): ColumnDef<CashAdvance, unkn
             id: 'clear_date',
             accessorKey: 'clear_date',
             header: ({ column }) => (
-                <SortableHeader label={t.col_payment_date} column={column} align="right" />
+                <SortableHeader label={'Ngày thanh toán'} column={column} align="right" />
             ),
             meta: { align: 'right' } satisfies SortableColMeta,
             cell: ({ getValue }) => formatDateOrDash(getValue<string>()),
@@ -163,7 +166,7 @@ export const getCashAdvanceColumns = (trans: Trans): ColumnDef<CashAdvance, unkn
             id: 'advanced_days',
             accessorKey: 'advanced_days',
             header: ({ column }) => (
-                <SortableHeader label={t.col_advance_days} column={column} align="right" />
+                <SortableHeader label={'Số ngày ứng'} column={column} align="right" />
             ),
             meta: { align: 'right' } satisfies SortableColMeta,
         },
@@ -171,7 +174,7 @@ export const getCashAdvanceColumns = (trans: Trans): ColumnDef<CashAdvance, unkn
             id: 'amt',
             accessorKey: 'amt',
             header: ({ column }) => (
-                <SortableHeader label={t.col_sell_amount} column={column} align="right" />
+                <SortableHeader label={'Tiền bán'} column={column} align="right" />
             ),
             meta: { align: 'right' } satisfies SortableColMeta,
             cell: ({ getValue }) => formatNumberVN(getValue<number>(), { trimTrailingZeros: true }),
@@ -180,7 +183,7 @@ export const getCashAdvanceColumns = (trans: Trans): ColumnDef<CashAdvance, unkn
             id: 'advanced_amt',
             accessorKey: 'advanced_amt',
             header: ({ column }) => (
-                <SortableHeader label={t.col_advance_amount} column={column} align="right" />
+                <SortableHeader label={'Tiền ứng'} column={column} align="right" />
             ),
             meta: { align: 'right' } satisfies SortableColMeta,
             cell: ({ getValue }) => formatNumberVN(getValue<number>(), { trimTrailingZeros: true }),
@@ -189,7 +192,7 @@ export const getCashAdvanceColumns = (trans: Trans): ColumnDef<CashAdvance, unkn
             id: 'fee_amt',
             accessorKey: 'fee_amt',
             header: ({ column }) => (
-                <SortableHeader label={t.col_advance_fee} column={column} align="right" />
+                <SortableHeader label={'Phí ứng'} column={column} align="right" />
             ),
             meta: { align: 'right' } satisfies SortableColMeta,
             cell: ({ getValue }) => formatNumberVN(getValue<number>(), { trimTrailingZeros: true }),
@@ -198,7 +201,7 @@ export const getCashAdvanceColumns = (trans: Trans): ColumnDef<CashAdvance, unkn
             id: 'receive_amt',
             accessorKey: 'receive_amt',
             header: ({ column }) => (
-                <SortableHeader label={t.col_advance_received} column={column} align="right" />
+                <SortableHeader label={'Tiền ứng thực nhận'} column={column} align="right" />
             ),
             meta: { align: 'right' } satisfies SortableColMeta,
             cell: ({ getValue }) => formatNumberVN(getValue<number>(), { trimTrailingZeros: true }),
@@ -206,15 +209,15 @@ export const getCashAdvanceColumns = (trans: Trans): ColumnDef<CashAdvance, unkn
     ];
 };
 
-export const getLoansColumns = (trans: Trans): ColumnDef<Loans, unknown>[] => {
-    const t = trans.assets.trade_history;
+export const getLoansColumns = (): ColumnDef<Loans, unknown>[] => {
+    const t = ASSETS_TRADE_HISTORY;
 
     return [
         {
             id: 'release_date',
             accessorKey: 'release_date',
             header: ({ column }) => (
-                <SortableHeader label={t.col_disbursement_date} column={column} align="left" />
+                <SortableHeader label={'Ngày giải ngân'} column={column} align="left" />
             ),
             meta: { align: 'left' } satisfies SortableColMeta,
             cell: ({ getValue }) => formatDateOrDash(getValue<string>()),
@@ -223,7 +226,7 @@ export const getLoansColumns = (trans: Trans): ColumnDef<Loans, unknown>[] => {
             id: 'overdue_date',
             accessorKey: 'overdue_date',
             header: ({ column }) => (
-                <SortableHeader label={t.col_due_date} column={column} align="right" />
+                <SortableHeader label={'Ngày đáo hạn'} column={column} align="right" />
             ),
             meta: { align: 'right' } satisfies SortableColMeta,
             cell: ({ getValue }) => formatDateOrDash(getValue<string>()),
@@ -232,7 +235,7 @@ export const getLoansColumns = (trans: Trans): ColumnDef<Loans, unknown>[] => {
             id: 'principal_loan',
             accessorKey: 'principal_loan',
             header: ({ column }) => (
-                <SortableHeader label={t.col_principal} column={column} align="right" />
+                <SortableHeader label={'Nợ gốc'} column={column} align="right" />
             ),
             meta: { align: 'right' } satisfies SortableColMeta,
             cell: ({ getValue }) => formatNumberVN(getValue<number>(), { trimTrailingZeros: true }),
@@ -241,7 +244,7 @@ export const getLoansColumns = (trans: Trans): ColumnDef<Loans, unknown>[] => {
             id: 'principal_paid',
             accessorKey: 'principal_paid',
             header: ({ column }) => (
-                <SortableHeader label={t.col_paid} column={column} align="right" />
+                <SortableHeader label={'Đã trả'} column={column} align="right" />
             ),
             meta: { align: 'right' } satisfies SortableColMeta,
             cell: ({ getValue }) => formatNumberVN(getValue<number>(), { trimTrailingZeros: true }),
@@ -250,7 +253,7 @@ export const getLoansColumns = (trans: Trans): ColumnDef<Loans, unknown>[] => {
             id: 'principal_remaining',
             accessorKey: 'principal_remaining',
             header: ({ column }) => (
-                <SortableHeader label={t.col_remaining} column={column} align="right" />
+                <SortableHeader label={'Nợ gốc còn lại'} column={column} align="right" />
             ),
             meta: { align: 'right' } satisfies SortableColMeta,
             cell: ({ getValue }) => formatNumberVN(getValue<number>(), { trimTrailingZeros: true }),
@@ -259,7 +262,7 @@ export const getLoansColumns = (trans: Trans): ColumnDef<Loans, unknown>[] => {
             id: 'interest_rate',
             accessorKey: 'interest_rate',
             header: ({ column }) => (
-                <SortableHeader label={t.col_interest_rate} column={column} align="right" />
+                <SortableHeader label={'Lãi suất'} column={column} align="right" />
             ),
             meta: { align: 'right' } satisfies SortableColMeta,
             cell: ({ getValue }) => formatPercentVN(getValue<number>()),
@@ -268,7 +271,7 @@ export const getLoansColumns = (trans: Trans): ColumnDef<Loans, unknown>[] => {
             id: 'interest_loan',
             accessorKey: 'interest_loan',
             header: ({ column }) => (
-                <SortableHeader label={t.col_interest_debt} column={column} align="right" />
+                <SortableHeader label={'Nợ lãi'} column={column} align="right" />
             ),
             meta: { align: 'right' } satisfies SortableColMeta,
             cell: ({ getValue }) => formatNumberVN(getValue<number>(), { trimTrailingZeros: true }),
@@ -277,7 +280,7 @@ export const getLoansColumns = (trans: Trans): ColumnDef<Loans, unknown>[] => {
             id: 'interest_paid',
             accessorKey: 'interest_paid',
             header: ({ column }) => (
-                <SortableHeader label={t.col_interest_paid} column={column} align="right" />
+                <SortableHeader label={'Lãi đã trả'} column={column} align="right" />
             ),
             meta: { align: 'right' } satisfies SortableColMeta,
             cell: ({ getValue }) => formatNumberVN(getValue<number>(), { trimTrailingZeros: true }),

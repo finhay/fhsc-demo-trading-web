@@ -9,7 +9,6 @@ import { MarketMetalProviders } from '@/components/thi-truong/assets/gold/Market
 import { MarketSilverChart } from '@/components/thi-truong/assets/gold/MarketSilverChart';
 import { MarketSilverSummary } from '@/components/thi-truong/assets/gold/MarketSilverSummary';
 import { GLOBAL_GOLD_INDEX, GLOBAL_SILVER_INDEX } from '@/constants/market';
-import { useTranslate } from '@/hooks/useTranslate';
 import type {
     GoldChartItem,
     GoldItem,
@@ -35,8 +34,6 @@ export const MarketGoldModal = ({
     goldChartItems,
     silverChartItems,
 }: Props) => {
-    const trans = useTranslate();
-
     const { goldCards, goldGlobal, silverGlobal, silverCards, goldProviders } = useMemo(() => {
         const goldGlobalItem = goldItems.find((item) => item.index === GLOBAL_GOLD_INDEX) ?? null;
         const goldCardItems = goldItems.filter((item) => item.index !== GLOBAL_GOLD_INDEX);
@@ -57,7 +54,7 @@ export const MarketGoldModal = ({
     return (
         <Dialog
             onClose={onClose}
-            title={trans.market.assets.modal.title}
+            title={'Giá vàng bạc'}
             maxWidth="max-w-7xl"
             maxHeight="max-h-[90vh]"
             panelClassName="bg-primary gap-3 p-4"

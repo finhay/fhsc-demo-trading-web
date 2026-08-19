@@ -15,14 +15,12 @@ import { AssetStructure } from '@/components/tai-san/portfolio/AssetStructure';
 import { AssetRights } from '@/components/tai-san/rights/AssetRights';
 import { AssetTradeHistory } from '@/components/tai-san/trade-history/AssetTradeHistory';
 import { MarketDetailModal } from '@/components/thi-truong/index/modal/MarketDetailModal';
-import { useTranslate } from '@/hooks/useTranslate';
 import { DefaultLayout } from '@/layouts/DefaultLayout';
 import { useAssetStore } from '@/stores/assets/useAssetStore';
 import { useAuthStore } from '@/stores/auth/useAuthStore';
 import { useStockInfoStore } from '@/stores/common/useStockInfoStore';
 
 export default function TaiSan() {
-    const trans = useTranslate();
     const { activeSubAccount } = useAuthStore();
     const { assetsSummary, isSummaryLoading, fetchAssetsSummary, fetchPortfolio } = useAssetStore();
     const { isOpenDetailModal, detailModalType, detailIndex, closeStockDetail } =
@@ -37,7 +35,7 @@ export default function TaiSan() {
     }, [activeSubAccount?.sub_account_id]);
 
     return (
-        <DefaultLayout title={trans.assets.page_title} metaDescription={trans.assets.page_title}>
+        <DefaultLayout title={'Tài sản'} metaDescription={'Tài sản'}>
             <article className="flex gap-2 w-full h-full overflow-hidden">
                 <section className="flex h-full min-h-0 w-1/3 min-w-96 shrink-0 flex-col gap-2 overflow-y-auto">
                     <AssetOverview data={assetsSummary} isLoading={isSummaryLoading} />
@@ -48,7 +46,7 @@ export default function TaiSan() {
                 <section className="flex flex-1 min-w-0 flex-col gap-2 h-full min-h-0 overflow-y-auto">
                     <header className="flex shrink-0 items-center gap-4">
                         <h1 className="font-heading-4 text-primary whitespace-nowrap">
-                            {trans.assets.portfolio.heading}
+                            {'Danh mục Chứng Khoán'}
                         </h1>
                         <div className="w-64">
                             <SubAccounts variant="embedded" borderClass="border-highlight" />

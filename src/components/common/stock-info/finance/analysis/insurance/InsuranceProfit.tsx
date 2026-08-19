@@ -6,15 +6,17 @@ import * as echarts from 'echarts';
 
 import { AnalysisSection } from '@/components/common/stock-info/finance/analysis/common/AnalysisSection';
 import { createStockInfoSparkline } from '@/config/stock-info';
-import { INSURANCE_PROFIT_ROWS, STATUS_COLORS } from '@/constants/stock-info';
+import {
+    FINANCE_ANALYSIS_LABELS,
+    INSURANCE_PROFIT_ROWS,
+    STATUS_COLORS,
+} from '@/constants/stock-info';
 import { useEChartsInstances } from '@/hooks/chart/useEChartsInstances';
-import { useTranslate } from '@/hooks/useTranslate';
 import { formatNumberVN, formatPeriodMMYYYY } from '@/utils/format';
 import { sortByYearAsc, trendColor } from '@/utils/stock-info';
 
 export const InsuranceProfit = ({ dataQuarterly }: { dataQuarterly: any }) => {
-    const trans = useTranslate();
-    const fa = trans.stockInfo.finance_analysis as Record<string, string>;
+    const fa = FINANCE_ANALYSIS_LABELS as Record<string, string>;
     const latestQuarterly = dataQuarterly?.[0] ?? {};
 
     const containerRef = useRef<HTMLDivElement>(null);
@@ -61,7 +63,7 @@ export const InsuranceProfit = ({ dataQuarterly }: { dataQuarterly: any }) => {
     }, [rows, sortedData, chartsMapRef, disposeAll]);
 
     return (
-        <AnalysisSection title={fa.insurance_profit_question}>
+        <AnalysisSection title={'Lợi nhuận đến từ đâu?'}>
             <div ref={containerRef} className="grid grid-cols-3 gap-3">
                 {rows.map(({ id, labelKey, kind, value, textClass }) => (
                     <div
@@ -75,7 +77,7 @@ export const InsuranceProfit = ({ dataQuarterly }: { dataQuarterly: any }) => {
                                 </p>
                                 {kind === 'yoy' && (
                                     <span className="shrink-0 rounded-full border border-tertiary px-2 py-1 font-tiny-highlight text-primary">
-                                        {fa.yoy}
+                                        {'YoY'}
                                     </span>
                                 )}
                             </div>

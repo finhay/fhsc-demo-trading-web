@@ -2,7 +2,6 @@
 
 import { TradeOrderBookRowActions } from '@/components/giao-dich/order-book/rows/TradeOrderBookRowActions';
 import { ORDER_TYPE } from '@/constants/trading';
-import { useTranslate } from '@/hooks/useTranslate';
 import type { TradeOrderBookRow } from '@/types/pages/trading';
 import {
     formatPlacedPriceCell,
@@ -18,8 +17,7 @@ type Props = {
 };
 
 export const TradeOrderBookRowNormal = ({ order, onOpenDetail, onEdit, onCancel }: Props) => {
-    const trans = useTranslate();
-    const status = getNormalOrderStatus(trans, order.status);
+    const status = getNormalOrderStatus(order.status);
     const canEdit = Boolean(order.allowAmend);
     const canCancel = Boolean(order.allowCancel);
 
@@ -30,10 +28,7 @@ export const TradeOrderBookRowNormal = ({ order, onOpenDetail, onEdit, onCancel 
                     type="button"
                     onClick={() => onOpenDetail(order.orderId)}
                     className="text-primary transition-colors hover:text-highlight"
-                    aria-label={trans.trading.order_book.view_detail_aria.replace(
-                        '{symbol}',
-                        order.symbol,
-                    )}
+                    aria-label={'Xem lịch sử lệnh {symbol}'.replace('{symbol}', order.symbol)}
                 >
                     {order.symbol}
                 </button>

@@ -6,7 +6,6 @@ import { EmptyState } from '@/components/common/feature/EmptyState';
 import { StockOverviewTrend } from '@/components/common/stock-info/overview/StockOverviewTrend';
 import { StockOverviewValuation } from '@/components/common/stock-info/overview/StockOverviewValuation';
 import { Spinner } from '@/components/common/ui/Spinner';
-import { useTranslate } from '@/hooks/useTranslate';
 import {
     fetchCompanyFinancialOverview,
     fetchFinancialNewsBySymbol,
@@ -16,7 +15,6 @@ import type { FinanceOverviewData } from '@/types/datafeed/finance';
 import { isSuccessApi } from '@/utils/common';
 
 export const StockOverview = () => {
-    const trans = useTranslate();
     const { selectedStock } = useStockInfoStore();
     const [isLoading, setIsLoading] = useState(false);
     const [overview, setOverview] = useState<FinanceOverviewData | null>(null);
@@ -65,7 +63,7 @@ export const StockOverview = () => {
     return (
         <section
             className="flex h-full min-h-0 flex-col gap-3 overflow-y-auto"
-            aria-label={trans.stockInfo.finance_overview.section_aria}
+            aria-label={'Tổng quan định giá và chỉ số'}
         >
             {isLoading ? (
                 <div className="flex h-full min-h-0 items-center justify-center" role="status">

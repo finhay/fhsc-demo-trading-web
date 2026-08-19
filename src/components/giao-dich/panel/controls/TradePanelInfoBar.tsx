@@ -1,7 +1,5 @@
 'use client';
 
-import { useTranslate } from '@/hooks/useTranslate';
-
 type InfoItem = {
     label: string;
     value: string;
@@ -12,10 +10,8 @@ type Props = {
 };
 
 export const TradePanelInfoBar = ({ infoItems }: Props) => {
-    const trans = useTranslate();
-
     return (
-        <dl className="flex w-full flex-col" aria-label={trans.trading.panel.margin_aria}>
+        <dl className="flex w-full flex-col" aria-label={'Thông tin sức mua bán'}>
             {infoItems.map((item) => (
                 <div key={item.label} className="flex items-center justify-between gap-2">
                     <dt className="font-caption text-tertiary">{item.label}</dt>

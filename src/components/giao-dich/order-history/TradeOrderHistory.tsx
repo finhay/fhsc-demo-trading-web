@@ -7,7 +7,6 @@ import { RiDownloadLine } from 'react-icons/ri';
 import { Skeleton } from '@/components/common/ui/Skeleton';
 import { ORDER_SIDE } from '@/constants/trading';
 import { toast } from '@/hooks/lib/useToast';
-import { useTranslate } from '@/hooks/useTranslate';
 import { fetchSubAccountMatchedOrdersReport } from '@/services/api/trade/history';
 import { exportTradingReport, fetchTradingReportResult } from '@/services/api/trade/reports';
 import { useAuthStore } from '@/stores/auth/useAuthStore';
@@ -19,7 +18,6 @@ import { getApiErrorMessage, isSuccessApi } from '@/utils/common';
 import { formatApiDate, formatNumberVN } from '@/utils/format';
 
 export const TradeOrderHistory = () => {
-    const trans = useTranslate();
     const { activeSubAccount } = useAuthStore();
     const { startLoading, stopLoading } = useLoadingStore();
     const { realtimeMatches, clearRealtimeMatches } = useTradingStore();
@@ -28,8 +26,8 @@ export const TradeOrderHistory = () => {
     const [isLoading, setIsLoading] = useState(false);
 
     const sides = [
-        { key: ORDER_SIDE.BUY, label: trans.trading.matched_history.tab_buy },
-        { key: ORDER_SIDE.SELL, label: trans.trading.matched_history.tab_sell },
+        { key: ORDER_SIDE.BUY, label: 'Mua' },
+        { key: ORDER_SIDE.SELL, label: 'Bán' },
     ];
 
     const mergedData = useMemo<MatchedOrderSymbol[]>(() => {
@@ -159,7 +157,7 @@ export const TradeOrderHistory = () => {
                 stopLoading();
             }
         } catch (err) {
-            toast.error(getApiErrorMessage(err, trans.common.try_again_error));
+            toast.error(getApiErrorMessage(err, 'Có lỗi xảy ra, vui lòng thử lại'));
             stopLoading();
         }
     };
@@ -180,13 +178,9 @@ export const TradeOrderHistory = () => {
                         id="matched-history-heading"
                         className="font-body-3-highlight text-primary whitespace-nowrap"
                     >
-                        {trans.trading.matched_history.heading}
+                        {'Lịch sử lệnh đã khớp'}
                     </h2>
-                    <nav
-                        role="tablist"
-                        aria-label={trans.trading.matched_history.tab_aria}
-                        className="flex gap-2"
-                    >
+                    <nav role="tablist" aria-label={'Chọn chiều lệnh'} className="flex gap-2">
                         {sides.map(({ key, label }) => (
                             <button
                                 key={key}
@@ -222,9 +216,7 @@ export const TradeOrderHistory = () => {
                     <Skeleton />
                 ) : flatRows.length === 0 ? (
                     <div className="flex items-center justify-center h-full">
-                        <p className="text-secondary font-caption">
-                            {trans.trading.matched_history.empty}
-                        </p>
+                        <p className="text-secondary font-caption">{'Chưa có lệnh đã khớp'}</p>
                     </div>
                 ) : (
                     <table className="w-full table-auto border-separate border-spacing-x-2 border-spacing-y-0">
@@ -234,25 +226,25 @@ export const TradeOrderHistory = () => {
                                     scope="col"
                                     className="sticky top-0 z-10 bg-secondary pb-2 font-caption text-secondary whitespace-nowrap text-left"
                                 >
-                                    {trans.trading.matched_history.col_symbol}
+                                    {'Mã'}
                                 </th>
                                 <th
                                     scope="col"
                                     className="sticky top-0 z-10 bg-secondary pb-2 font-caption text-secondary whitespace-nowrap text-right"
                                 >
-                                    {trans.trading.matched_history.col_quantity}
+                                    {'Khối lượng'}
                                 </th>
                                 <th
                                     scope="col"
                                     className="sticky top-0 z-10 bg-secondary pb-2 font-caption text-secondary whitespace-nowrap text-right"
                                 >
-                                    {trans.trading.matched_history.col_price}
+                                    {'Giá'}
                                 </th>
                                 <th
                                     scope="col"
                                     className="sticky top-0 z-10 bg-secondary pb-2 font-caption text-secondary whitespace-nowrap text-right"
                                 >
-                                    {trans.trading.matched_history.col_value}
+                                    {'Giá trị (vnđ)'}
                                 </th>
                             </tr>
                         </thead>
@@ -277,7 +269,7 @@ export const TradeOrderHistory = () => {
                                             <td className="whitespace-nowrap text-left">
                                                 {row.isTotal ? (
                                                     <span className="font-caption-highlight text-primary">
-                                                        {trans.trading.matched_history.total}
+                                                        {'Tổng'}
                                                     </span>
                                                 ) : (
                                                     <span

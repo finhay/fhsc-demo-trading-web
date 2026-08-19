@@ -9,15 +9,14 @@ import {
     ANALYSIS_CONTENT_CARD,
     BANK_LIQUIDITY_METRICS,
     CHART_LINE_COLORS,
+    FINANCE_ANALYSIS_LABELS,
 } from '@/constants/stock-info';
 import { useEChartsInstance } from '@/hooks/chart/useEChartsInstance';
-import { useTranslate } from '@/hooks/useTranslate';
 import { formatNumberVN, formatPeriodMMYYYY } from '@/utils/format';
 import { getValueClass, sortByYearAsc } from '@/utils/stock-info';
 
 export const BankLiquidity = ({ dataAnnual }: { dataAnnual: any }) => {
-    const trans = useTranslate();
-    const fa = trans.stockInfo.finance_analysis as Record<string, string>;
+    const fa = FINANCE_ANALYSIS_LABELS as Record<string, string>;
     const latest = dataAnnual?.[0] ?? {};
 
     const chartRef = useRef<HTMLDivElement>(null);
@@ -94,17 +93,17 @@ export const BankLiquidity = ({ dataAnnual }: { dataAnnual: any }) => {
 
     return (
         <AnalysisSection
-            title={fa.bank_liquidity_question}
+            title={'Thanh khoản & vốn có an toàn?'}
             right={
                 <span className="shrink-0 rounded-full border border-tertiary px-2 py-1 font-body-3 text-primary">
-                    {fa.qoq}
+                    {'QoQ'}
                 </span>
             }
         >
             <div className={ANALYSIS_CONTENT_CARD}>
                 <div className="flex min-h-0 flex-1 flex-col gap-1">
                     <div className="flex shrink-0 flex-col">
-                        <p className="font-body-3 text-secondary">{fa.casa}</p>
+                        <p className="font-body-3 text-secondary">{'CASA'}</p>
                         <p className={`font-body-2-highlight ${getValueClass(casaValue, true)}`}>
                             {formatNumberVN(casaValue)}%
                         </p>

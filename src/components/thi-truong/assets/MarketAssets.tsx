@@ -21,7 +21,6 @@ import {
     PROFIT_PERIOD_ONE_YEAR,
 } from '@/constants/market';
 import { useMQTT } from '@/hooks/useMQTT';
-import { useTranslate } from '@/hooks/useTranslate';
 import {
     fetchCryptoTopTrending,
     fetchGold,
@@ -51,7 +50,6 @@ import { getProfitByPeriod } from '@/utils/market/market-fund';
 import { getTrendBg, trendFromDelta } from '@/utils/market/market-shared';
 
 export const MarketAssets = () => {
-    const trans = useTranslate();
     const [isGoldLoading, setIsGoldLoading] = useState(true);
     const [isOilLoading, setIsOilLoading] = useState(true);
     const [isCryptoLoading, setIsCryptoLoading] = useState(true);
@@ -227,9 +225,7 @@ export const MarketAssets = () => {
         if (!goldSjc && !goldGlobal) {
             return (
                 <div className="flex h-full w-full items-center justify-center">
-                    <span className="font-caption text-tertiary">
-                        {trans.market.assets.no_data}
-                    </span>
+                    <span className="font-caption text-tertiary">{'Không có dữ liệu'}</span>
                 </div>
             );
         }
@@ -243,11 +239,9 @@ export const MarketAssets = () => {
                             </div>
                             <div className="flex flex-col gap-0.5">
                                 <span className="font-body-3-highlight text-primary">
-                                    {trans.market.assets.gold_sjc}
+                                    {'Vàng miếng SJC'}
                                 </span>
-                                <span className="font-caption text-tertiary">
-                                    {trans.market.assets.unit_mil_tael}
-                                </span>
+                                <span className="font-caption text-tertiary">{'Triệu/chỉ'}</span>
                             </div>
                         </div>
                         <div className="flex flex-col items-end gap-0.5">
@@ -281,11 +275,9 @@ export const MarketAssets = () => {
                             </div>
                             <div className="flex flex-col gap-0.5">
                                 <span className="font-body-3-highlight text-primary">
-                                    {trans.market.assets.gold_global}
+                                    {'Vàng thế giới'}
                                 </span>
-                                <span className="font-caption text-tertiary">
-                                    {trans.market.assets.unit_usd_oz}
-                                </span>
+                                <span className="font-caption text-tertiary">{'USD/oz'}</span>
                             </div>
                         </div>
                         <div className="flex flex-col items-end gap-0.5">
@@ -319,9 +311,7 @@ export const MarketAssets = () => {
         if (oilItems.length === 0) {
             return (
                 <div className="flex h-full w-full items-center justify-center">
-                    <span className="font-caption text-tertiary">
-                        {trans.market.assets.no_data}
-                    </span>
+                    <span className="font-caption text-tertiary">{'Không có dữ liệu'}</span>
                 </div>
             );
         }
@@ -347,9 +337,7 @@ export const MarketAssets = () => {
                                     <span className="font-body-3-highlight text-primary">
                                         {item.name}
                                     </span>
-                                    <span className="font-caption text-tertiary">
-                                        {trans.market.assets.unit_usd_bbl}
-                                    </span>
+                                    <span className="font-caption text-tertiary">{'USD/Bbl'}</span>
                                 </div>
                             </div>
                             <div className="flex flex-col items-end gap-0.5">
@@ -543,7 +531,7 @@ export const MarketAssets = () => {
                 <div className="flex shrink-0 items-center justify-between gap-2">
                     <h2 className="font-body-2-highlight text-primary flex items-center gap-2 px-1">
                         <MarketDot alwaysActive />
-                        {trans.market.assets.heading}
+                        {'Hàng hoá & tài sản khác'}
                     </h2>
                 </div>
                 <div className="flex min-h-0 flex-1 flex-col gap-3 overflow-hidden 2xl:flex-none 2xl:overflow-visible">
@@ -551,7 +539,7 @@ export const MarketAssets = () => {
                         <section className="bg-secondary flex min-h-0 min-w-0 flex-1 flex-col gap-4 rounded-xl border border-tertiary p-3">
                             <div className="flex shrink-0 items-center justify-between gap-2">
                                 <h3 className="font-body-3-highlight text-primary flex items-center gap-2">
-                                    {trans.market.assets.gold_heading}
+                                    {'Giá vàng'}
                                 </h3>
                                 <FaChevronRight
                                     size={14}
@@ -564,7 +552,7 @@ export const MarketAssets = () => {
                         <section className="bg-secondary flex min-h-0 min-w-0 flex-1 flex-col gap-4 rounded-xl border border-tertiary p-3">
                             <div className="flex shrink-0 items-center justify-between gap-2">
                                 <h3 className="font-body-3-highlight text-primary flex items-center gap-2">
-                                    {trans.market.assets.oil_heading}
+                                    {'Giá dầu'}
                                 </h3>
                             </div>
                             <div className="h-32 w-full">{renderOilBody()}</div>
@@ -574,7 +562,7 @@ export const MarketAssets = () => {
                         <section className="bg-secondary flex min-h-0 min-w-0 flex-1 flex-col gap-4 overflow-hidden rounded-xl border border-tertiary p-3 2xl:overflow-visible">
                             <div className="flex shrink-0 items-center justify-between gap-2">
                                 <h3 className="font-body-3-highlight text-primary flex items-center gap-2">
-                                    {trans.market.assets.crypto_heading}
+                                    {'Tài sản mã hoá'}
                                 </h3>
                             </div>
                             <div className="min-h-96 w-full flex-1 overflow-hidden lg:min-h-0 2xl:h-96 2xl:flex-none 2xl:shrink-0">
@@ -584,7 +572,7 @@ export const MarketAssets = () => {
                         <section className="bg-secondary flex min-h-0 min-w-0 flex-1 flex-col gap-4 overflow-hidden rounded-xl border border-tertiary p-3 2xl:overflow-visible">
                             <div className="flex shrink-0 items-center justify-between gap-2">
                                 <h3 className="font-body-3-highlight text-primary flex items-center gap-2">
-                                    {trans.market.assets.fund_heading}
+                                    {'Chứng chỉ quỹ mở'}
                                 </h3>
                                 <FaChevronRight
                                     size={14}

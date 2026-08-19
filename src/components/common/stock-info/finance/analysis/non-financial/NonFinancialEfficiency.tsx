@@ -3,8 +3,11 @@
 import { Fragment } from 'react';
 
 import { AnalysisSection } from '@/components/common/stock-info/finance/analysis/common/AnalysisSection';
-import { ANALYSIS_CONTENT_CARD, NON_FINANCIAL_EFFICIENCY } from '@/constants/stock-info';
-import { useTranslate } from '@/hooks/useTranslate';
+import {
+    ANALYSIS_CONTENT_CARD,
+    FINANCE_ANALYSIS_LABELS,
+    NON_FINANCIAL_EFFICIENCY,
+} from '@/constants/stock-info';
 import { formatNumberVN } from '@/utils/format';
 
 export const NonFinancialEfficiency = ({
@@ -14,8 +17,7 @@ export const NonFinancialEfficiency = ({
     dataAnnual: any;
     dataQuarterly: any;
 }) => {
-    const trans = useTranslate();
-    const fa = trans.stockInfo.finance_analysis as Record<string, string>;
+    const fa = FINANCE_ANALYSIS_LABELS as Record<string, string>;
 
     const latest = dataAnnual?.[0] ?? {};
     const quarterlyLatest = dataQuarterly?.[0] ?? {};
@@ -31,7 +33,7 @@ export const NonFinancialEfficiency = ({
     }));
 
     return (
-        <AnalysisSection title={fa.nonfin_efficiency_question}>
+        <AnalysisSection title={'Hoạt động có hiệu quả không?'}>
             <div className={ANALYSIS_CONTENT_CARD}>
                 <div className="flex gap-3">
                     {liquidityItems.map((item) => (
@@ -50,7 +52,7 @@ export const NonFinancialEfficiency = ({
                 </div>
                 <div className="h-px w-full bg-tertiary" />
                 <div className="flex flex-col gap-2">
-                    <p className="font-body-3-highlight text-secondary">{fa.efficiency_turnover}</p>
+                    <p className="font-body-3-highlight text-secondary">{'Vòng quay'}</p>
                     <div className="flex w-full items-stretch">
                         {turnoverItems.map((item, idx) => (
                             <Fragment key={item.labelKey}>

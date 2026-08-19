@@ -9,7 +9,6 @@ import { DropdownWatchlist } from '@/components/common/feature/DropdownWatchlist
 import { InputSearch } from '@/components/common/feature/InputSearch';
 import { DEFAULT_EXCHANGE } from '@/constants/common';
 import { PRICE_BOARD_TABS } from '@/constants/iboard';
-import { useTranslate } from '@/hooks/useTranslate';
 import { useAuthStore } from '@/stores/auth/useAuthStore';
 import { useLoadingStore } from '@/stores/common/useLoadingStore';
 import { useMarketIndexStore } from '@/stores/common/useMarketIndexStore';
@@ -26,7 +25,6 @@ export const IBoardNavigation = ({
     isIndexSliderVisible,
     toggleIndexSlider,
 }: IBoardNavigationProps) => {
-    const trans = useTranslate();
     const { activeSubAccount } = useAuthStore();
     const { exchange, setExchange } = useMarketIndexStore();
     const { selectedSearchStock, setSelectedSearchStock, fetchStockInfo } = useStockInfoStore();
@@ -105,7 +103,7 @@ export const IBoardNavigation = ({
     return (
         <>
             <section
-                aria-label={trans.iboard.nav_label}
+                aria-label={'Điều hướng bảng giá'}
                 className="flex min-h-0 min-w-0 w-full flex-1 items-center"
             >
                 <div className="flex min-h-0 w-full min-w-0 items-center justify-between gap-3">

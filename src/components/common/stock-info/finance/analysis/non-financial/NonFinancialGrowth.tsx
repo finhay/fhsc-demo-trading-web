@@ -8,10 +8,10 @@ import {
     ANALYSIS_CHART_BOX,
     ANALYSIS_CHART_CANVAS,
     ANALYSIS_CONTENT_CARD,
+    FINANCE_ANALYSIS_LABELS,
     NON_FINANCIAL_GROWTH,
 } from '@/constants/stock-info';
 import { useEChartsInstance } from '@/hooks/chart/useEChartsInstance';
-import { useTranslate } from '@/hooks/useTranslate';
 import { getChangeColor } from '@/utils/common';
 import { formatNumberVN, formatPeriodMMYYYY } from '@/utils/format';
 import { appendPercentTooltip, pickPlanItems, sortByYearAsc } from '@/utils/stock-info';
@@ -23,8 +23,7 @@ export const NonFinancialGrowth = ({
     dataAnnual: any;
     dataQuarterly: any;
 }) => {
-    const trans = useTranslate();
-    const fa = trans.stockInfo.finance_analysis as Record<string, string>;
+    const fa = FINANCE_ANALYSIS_LABELS as Record<string, string>;
     const [tab, setTab] = useState<string>('QoQ');
     const source = tab === 'QoQ' ? dataQuarterly : dataAnnual;
     const latest = source?.[0] ?? {};

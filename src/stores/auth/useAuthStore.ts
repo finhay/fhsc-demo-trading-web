@@ -1,7 +1,6 @@
 import { create } from 'zustand';
 
 import { toast } from '@/hooks/lib/useToast';
-import { getTranslate } from '@/hooks/useTranslate';
 import { logoutAccount } from '@/services/api/accounts/login';
 import { getUserPreferences, getUserProfile } from '@/services/api/accounts/profile';
 import {
@@ -30,7 +29,6 @@ type AuthCredentials = {
     userId: string;
     custId: string;
     accessToken2FA?: string;
-    requiredChangePassword?: boolean;
 };
 
 type UserProfile = {
@@ -47,7 +45,6 @@ type ProfileState = {
     userId: string | null;
     custId: string | null;
     accessToken2FA: string | null;
-    requiredChangePassword: boolean;
     isInitialized: boolean;
     profile: UserProfile | null;
     avatarUrl: string;
@@ -77,7 +74,6 @@ const initialState: ProfileState = {
     userId: null,
     custId: null,
     accessToken2FA: null,
-    requiredChangePassword: false,
     isInitialized: false,
     profile: null,
     avatarUrl: '',
@@ -108,7 +104,6 @@ export const useAuthStore = create<ProfileState & ProfileActions>((set, get) => 
             userId: credentials.userId,
             custId: credentials.custId,
             accessToken2FA: credentials.accessToken2FA ?? null,
-            requiredChangePassword: credentials.requiredChangePassword ?? false,
         });
     },
 
@@ -159,7 +154,7 @@ export const useAuthStore = create<ProfileState & ProfileActions>((set, get) => 
         try {
             await logoutAccount();
         } catch (err) {
-            toast.error(getApiErrorMessage(err, getTranslate().common.try_again_error));
+            toast.error(getApiErrorMessage(err, 'Có lỗi xảy ra, vui lòng thử lại'));
         } finally {
             clearLocalStorage();
         }

@@ -10,13 +10,11 @@ import { MarketDot } from '@/components/thi-truong/shared/MarketDot';
 import { createChartMarketLiquidityV2 } from '@/config/market/market-liquidity';
 import { EXCHANGES } from '@/constants/common';
 import { useEChartsInstance } from '@/hooks/chart/useEChartsInstance';
-import { useTranslate } from '@/hooks/useTranslate';
 import { fetchMarketLiquidityStats } from '@/services/api/datafeed/trading-data';
 import type { MarketLiquidityItem } from '@/types/datafeed/trading-data';
 import { isSuccessApi } from '@/utils/common';
 
 export const MarketLiquidity = () => {
-    const trans = useTranslate();
     const [activeExchange, setActiveExchange] = useState<string>(EXCHANGES[0]);
     const [isLoading, setIsLoading] = useState(true);
     const [todayData, setTodayData] = useState<MarketLiquidityItem[]>([]);
@@ -44,17 +42,15 @@ export const MarketLiquidity = () => {
 
     useEffect(() => {
         if (isLoading) return;
-        chartInstanceRef.current?.setOption(
-            createChartMarketLiquidityV2(todayData, avgData, trans),
-        );
-    }, [isLoading, todayData, avgData, trans]);
+        chartInstanceRef.current?.setOption(createChartMarketLiquidityV2(todayData, avgData));
+    }, [isLoading, todayData, avgData]);
 
     return (
         <section className="bg-secondary flex min-h-0 flex-col gap-3 rounded-xl p-4">
             <div className="flex items-center justify-between gap-2">
                 <h2 className="font-body-2-highlight text-primary flex items-center gap-2">
                     <MarketDot />
-                    {trans.market.liquidity.heading}
+                    {'Thanh khoản thị trường'}
                 </h2>
                 <Dropdown
                     options={exchangeOptions}
@@ -65,15 +61,11 @@ export const MarketLiquidity = () => {
             <div className="flex items-center gap-4">
                 <div className="flex items-center gap-2">
                     <FaCircle className="text-blue shrink-0" size={8} />
-                    <span className="font-caption text-secondary">
-                        {trans.market.liquidity.value_open}
-                    </span>
+                    <span className="font-caption text-secondary">{'GTGD từ đầu phiên'}</span>
                 </div>
                 <div className="flex items-center gap-2">
                     <FaCircle className="text-orange shrink-0" size={8} />
-                    <span className="font-caption text-secondary">
-                        {trans.market.liquidity.value_avg5}
-                    </span>
+                    <span className="font-caption text-secondary">{'GTGD TB 5 phiên'}</span>
                 </div>
             </div>
             {isLoading ? (

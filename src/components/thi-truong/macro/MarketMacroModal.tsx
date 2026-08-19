@@ -8,7 +8,6 @@ import { Dialog } from '@/components/common/ui/Dialog';
 import { MarketMacroUs } from '@/components/thi-truong/macro/us/MarketMacroUs';
 import { MarketMacroVn } from '@/components/thi-truong/macro/vn/MarketMacroVn';
 import { EMPTY_MACRO_US_RAW, MACRO_COUNTRY_TABS } from '@/constants/market';
-import { useTranslate } from '@/hooks/useTranslate';
 import { fetchMacroIndicator } from '@/services/api/datafeed/finance';
 import { useLoadingStore } from '@/stores/common/useLoadingStore';
 import type { MacroCountryTab, MacroUsRawState, MacroVnRawState } from '@/types/pages/market';
@@ -20,16 +19,14 @@ type Props = {
 };
 
 export const MarketMacroModal = ({ onClose, raw }: Props) => {
-    const trans = useTranslate();
-    const detail = trans.market.macro.detail;
     const [tab, setTab] = useState<MacroCountryTab>(MACRO_COUNTRY_TABS[0].value);
     const [indicator, setIndicator] = useState<{ left: number; width: number } | null>(null);
     const [usData, setUsData] = useState<MacroUsRawState>(EMPTY_MACRO_US_RAW);
     const [hasFetchedUs, setHasFetchedUs] = useState(false);
     const { startLoading, stopLoading } = useLoadingStore();
     const tabLabels: Record<MacroCountryTab, string> = {
-        vn: detail.tab_vn,
-        us: detail.tab_us,
+        vn: 'Việt Nam',
+        us: 'Mỹ',
     };
 
     const handleTabChange = async (next: MacroCountryTab) => {
@@ -76,7 +73,7 @@ export const MarketMacroModal = ({ onClose, raw }: Props) => {
 
     return (
         <Dialog
-            title={trans.market.macro.heading}
+            title={'Vĩ mô'}
             onClose={onClose}
             maxWidth="max-w-7xl"
             maxHeight="h-[90vh]"

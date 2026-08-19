@@ -7,7 +7,6 @@ import { FC, useEffect } from 'react';
 import { InputField } from '@/components/common/feature/InputField';
 import { Dialog } from '@/components/common/ui/Dialog';
 import { toast } from '@/hooks/lib/useToast';
-import { useTranslate } from '@/hooks/useTranslate';
 import { useLoadingStore } from '@/stores/common/useLoadingStore';
 import { getOrderedWatchlistSymbols, useWatchlistStore } from '@/stores/common/useWatchlistStore';
 import type { WatchlistItem } from '@/types/accounts/watchlist';
@@ -20,22 +19,19 @@ type Props = {
 };
 
 export const FormWatchlistModal: FC<Props> = ({ open, onClose, mode, watchlist }) => {
-    const trans = useTranslate();
     const { startLoading, stopLoading } = useLoadingStore();
     const { updateWatchlist, createWatchlist } = useWatchlistStore();
 
     const isEdit = mode === 'edit';
-    const title = isEdit ? trans.watchlist_form.edit_title : trans.watchlist_form.create_title;
-    const submitLabel = isEdit
-        ? trans.watchlist_form.edit_submit
-        : trans.watchlist_form.create_submit;
+    const title = isEdit ? 'Sửa danh mục' : 'Tạo danh mục';
+    const submitLabel = isEdit ? 'Lưu danh mục' : 'Tạo danh mục';
 
     const handleCreateWatchlist = async (name: string) => {
         const { success, message } = await createWatchlist(name);
         if (success) {
-            toast.success(trans.watchlist_form.create_success);
+            toast.success('Tạo danh mục thành công');
         } else {
-            toast.error(message || trans.watchlist_form.create_error);
+            toast.error(message || 'Lỗi tạo danh mục');
         }
     };
 
@@ -97,8 +93,8 @@ export const FormWatchlistModal: FC<Props> = ({ open, onClose, mode, watchlist }
                         <InputField
                             id="watchlist-name"
                             type="text"
-                            label={trans.watchlist_form.name_label}
-                            placeholder={trans.watchlist_form.name_placeholder}
+                            label={'Tên danh mục'}
+                            placeholder={'Đặt tên danh mục'}
                             value={field.state.value}
                             onChange={(e) => field.handleChange(e.target.value)}
                             onBlur={field.handleBlur}

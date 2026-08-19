@@ -2,7 +2,6 @@
 
 import { useCallback, useMemo } from 'react';
 
-import { LanguageSwitcher } from '@/components/common/header/LanguageSwitcher';
 import { INDEX_LIST } from '@/constants/common';
 import { useMQTT } from '@/hooks/useMQTT';
 import { IndexData } from '@/proto/stock';
@@ -82,7 +81,6 @@ export const MarketIndexTicker = () => {
                     </ul>
                 ))}
             </nav>
-            <LanguageSwitcher />
         </section>
     );
 };

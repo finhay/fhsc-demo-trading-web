@@ -5,7 +5,6 @@ import { type RefObject } from 'react';
 import { RiArrowDownSLine } from 'react-icons/ri';
 
 import { EXCHANGE_SESSION, ORDER_MODE_KEY } from '@/constants/trading';
-import { useTranslate } from '@/hooks/useTranslate';
 import type { OrderModeOption } from '@/types/pages/trading';
 
 type Props = {
@@ -29,8 +28,6 @@ export const TradePanelOrderMode = ({
     onToggleDropdown,
     onSelectMode,
 }: Props) => {
-    const trans = useTranslate();
-
     return (
         <div ref={dropdownRef} className="relative w-full">
             {exchangeSession === EXCHANGE_SESSION.CLOSED ? (
@@ -46,7 +43,7 @@ export const TradePanelOrderMode = ({
                         className="flex w-full items-center justify-between gap-2 rounded-xl border border-quaternary bg-transparent px-3 py-2"
                         aria-haspopup="listbox"
                         aria-expanded={isDropdownOpen}
-                        aria-label={trans.trading.panel.mode_aria}
+                        aria-label={'Chọn chế độ đặt lệnh'}
                         onClick={onToggleDropdown}
                     >
                         <span className="font-caption-highlight text-primary">
@@ -59,19 +56,19 @@ export const TradePanelOrderMode = ({
                     {isDropdownOpen && (
                         <ul
                             role="listbox"
-                            aria-label={trans.trading.panel.mode_aria}
+                            aria-label={'Chọn chế độ đặt lệnh'}
                             className="absolute z-20 mt-1 w-full overflow-hidden rounded-xl border border-tertiary bg-secondary"
                         >
                             {availableOrderModes.map(({ key }) => {
                                 const isSelected = orderMode === key;
                                 const optionLabel =
                                     key === ORDER_MODE_KEY.TAB_247
-                                        ? trans.trading.order_book.tab_247
+                                        ? 'Lệnh 24/7'
                                         : key === ORDER_MODE_KEY.ICEBERG
-                                          ? trans.trading.order_book.tab_iceberg
+                                          ? 'Lệnh Iceberg'
                                           : key === ORDER_MODE_KEY.TWAP_LO
-                                            ? trans.trading.order_book.tab_twap_lo
-                                            : trans.trading.order_book.tab_normal;
+                                            ? 'Lệnh CD LO'
+                                            : 'Lệnh thường';
                                 return (
                                     <li key={key}>
                                         <button

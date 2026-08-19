@@ -11,7 +11,6 @@ import { createChartGlobalIndexSparkline } from '@/config/market/market-global-i
 import { ASIA_INDICES, GLOBAL_INDEX_TAB, US_INDICES } from '@/constants/market';
 import { useEChartsInstances } from '@/hooks/chart/useEChartsInstances';
 import { useMQTT } from '@/hooks/useMQTT';
-import { useTranslate } from '@/hooks/useTranslate';
 import { fetchGlobalIndex } from '@/services/api/datafeed/finance';
 import { MQTT_CONFIG } from '@/services/mqtt';
 import type { GlobalIndexPoint, GlobalIndexTab } from '@/types/pages/market';
@@ -21,7 +20,6 @@ import { mapGlobalIndexPoints } from '@/utils/market/market-global-index';
 import { getTrendBg, trendFromDelta } from '@/utils/market/market-shared';
 
 export const MarketGlobalIndex = () => {
-    const trans = useTranslate();
     const [selectedTab, setSelectedTab] = useState<GlobalIndexTab>(GLOBAL_INDEX_TAB.ASIA);
     const [data, setData] = useState<GlobalIndexPoint[]>([]);
     const [isLoading, setIsLoading] = useState(true);
@@ -31,8 +29,8 @@ export const MarketGlobalIndex = () => {
     const { chartsMapRef, disposeAll } = useEChartsInstances();
 
     const tabs: { key: GlobalIndexTab; label: string }[] = [
-        { key: GLOBAL_INDEX_TAB.ASIA, label: trans.market.global_index.tab_asia },
-        { key: GLOBAL_INDEX_TAB.US, label: trans.market.global_index.tab_us },
+        { key: GLOBAL_INDEX_TAB.ASIA, label: 'Chỉ số Châu Á' },
+        { key: GLOBAL_INDEX_TAB.US, label: 'Chỉ số Mỹ' },
     ];
 
     const mqttTopics = useMemo(

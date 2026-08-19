@@ -1,10 +1,10 @@
+import type { StockPriceMessage } from '@/proto/stock';
 import type {
     StockScreenerItem,
     StockScreenerParams,
     StocksInfoItem,
 } from '@/types/datafeed/stock-info';
 import type { ForeignTradingStatsData, TradingStatsPeriod } from '@/types/datafeed/trading-data';
-import type { StockPriceMessage } from '@/proto/stock';
 import type {
     ForeignTradeRealtimeMessage,
     TopNetDisplayItem,

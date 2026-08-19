@@ -19,12 +19,12 @@ import {
     getOrderHistoryColumns,
 } from '@/components/tai-san/trade-history/AssetTradeHistoryColumns';
 import {
+    ASSETS_TRADE_HISTORY,
     TRADE_HISTORY_RANGE_DAYS,
     TRADE_HISTORY_TABS,
     TRADE_HISTORY_TAB_KEYS,
 } from '@/constants/assets';
 import { toast } from '@/hooks/lib/useToast';
-import { useTranslate } from '@/hooks/useTranslate';
 import {
     fetchSubAccountCashAdvanceHistory,
     fetchSubAccountOrderHistoryPage,
@@ -43,7 +43,6 @@ import { getDateRange } from '@/utils/format';
 type TradeHistoryRow = OrderHistory | CashAdvance | Loans;
 
 export const AssetTradeHistory = () => {
-    const trans = useTranslate();
     const [activeTab, setActiveTab] = useState<string>(TRADE_HISTORY_TAB_KEYS.ORDER);
     const [orderHistory, setOrderHistory] = useState<OrderHistory[]>([]);
     const [cashAdvance, setCashAdvance] = useState<CashAdvance[]>([]);
@@ -54,7 +53,7 @@ export const AssetTradeHistory = () => {
     const { activeSubAccount } = useAuthStore();
 
     const { fromDate, toDate } = useMemo(() => getDateRange(TRADE_HISTORY_RANGE_DAYS), []);
-    const t = trans.assets.trade_history;
+    const t = ASSETS_TRADE_HISTORY;
 
     const data = useMemo<TradeHistoryRow[]>(() => {
         if (activeTab === TRADE_HISTORY_TAB_KEYS.ORDER) return orderHistory;
@@ -64,13 +63,13 @@ export const AssetTradeHistory = () => {
 
     const columns = useMemo(() => {
         if (activeTab === TRADE_HISTORY_TAB_KEYS.ORDER) {
-            return getOrderHistoryColumns(trans) as ColumnDef<TradeHistoryRow, unknown>[];
+            return getOrderHistoryColumns() as ColumnDef<TradeHistoryRow, unknown>[];
         }
         if (activeTab === TRADE_HISTORY_TAB_KEYS.CASH_ADVANCE) {
-            return getCashAdvanceColumns(trans) as ColumnDef<TradeHistoryRow, unknown>[];
+            return getCashAdvanceColumns() as ColumnDef<TradeHistoryRow, unknown>[];
         }
-        return getLoansColumns(trans) as ColumnDef<TradeHistoryRow, unknown>[];
-    }, [activeTab, trans]);
+        return getLoansColumns() as ColumnDef<TradeHistoryRow, unknown>[];
+    }, [activeTab]);
 
     const table = useReactTable({
         data,
@@ -150,11 +149,11 @@ export const AssetTradeHistory = () => {
 
     return (
         <section className="flex h-96 w-full shrink-0 flex-col gap-3 overflow-hidden rounded-xl bg-secondary p-3">
-            <h2 className="shrink-0 font-body-2-highlight text-primary">{t.heading}</h2>
+            <h2 className="shrink-0 font-body-2-highlight text-primary">{'Lịch sử giao dịch'}</h2>
             <nav
                 className="flex shrink-0 gap-3 overflow-x-auto"
                 role="tablist"
-                aria-label={t.nav_aria}
+                aria-label={'Lịch sử giao dịch'}
             >
                 {TRADE_HISTORY_TABS.map((tab) => {
                     const isActive = tab.key === activeTab;

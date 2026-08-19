@@ -7,7 +7,6 @@ import { FiSearch } from 'react-icons/fi';
 import { MARKET_INDEX_LIST } from '@/constants/market';
 import { useClickOutside } from '@/hooks/lib/useClickOutside';
 import { useHotkeys } from '@/hooks/lib/useHotkeys';
-import { useTranslate } from '@/hooks/useTranslate';
 import { useStockInfoStore } from '@/stores/common/useStockInfoStore';
 import type { StocksInfoV2Item } from '@/types/datafeed/stock-info';
 import { sortSearchResults } from '@/utils/common';
@@ -41,8 +40,7 @@ export const InputSearch = ({
     variant = 'default',
     inputId = 'stock-search',
 }: Props) => {
-    const trans = useTranslate();
-    const resolvedPlaceholder = placeholder ?? trans.input_search.placeholder;
+    const resolvedPlaceholder = placeholder ?? 'Tìm kiếm';
     const { allStocks, fetchAllStocks } = useStockInfoStore();
     const [searchKeyword, setSearchKeyword] = useState('');
     const [isSearchDropdownVisible, setIsSearchDropdownVisible] = useState(false);
@@ -230,7 +228,7 @@ export const InputSearch = ({
                         ref={dropdownRef}
                         id={`${inputId}-listbox`}
                         role="listbox"
-                        aria-label={trans.input_search.results_aria}
+                        aria-label={'Kết quả tìm kiếm'}
                         className="scrollbar absolute top-full left-0 right-0 bg-secondary border border-tertiary rounded-xl overflow-hidden z-50 shadow-lg max-h-60 overflow-y-auto"
                     >
                         {searchResults.map((item, index) => (
@@ -252,9 +250,7 @@ export const InputSearch = ({
                                         {renderHighlightedText(item.symbol)}
                                     </span>
                                     <span className="font-caption text-secondary">
-                                        {item.kind === 'index'
-                                            ? trans.input_search.index_label
-                                            : item.stock.exchange}
+                                        {item.kind === 'index' ? 'Chỉ số' : item.stock.exchange}
                                     </span>
                                 </button>
                             </li>

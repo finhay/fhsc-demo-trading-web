@@ -15,7 +15,6 @@ import { MarketMacro } from '@/components/thi-truong/macro/MarketMacro';
 import { MarketFlow } from '@/components/thi-truong/money-flow/MarketFlow';
 import { MarketPerspective } from '@/components/thi-truong/perspective/MarketPerspective';
 import { MarketWatchlist } from '@/components/thi-truong/watchlist/MarketWatchlist';
-import { useTranslate } from '@/hooks/useTranslate';
 import { DefaultLayout } from '@/layouts/DefaultLayout';
 import { useMarketIndexStore } from '@/stores/common/useMarketIndexStore';
 import { useStockInfoStore } from '@/stores/common/useStockInfoStore';
@@ -23,7 +22,6 @@ import type { StocksInfoV2Item } from '@/types/datafeed/stock-info';
 import { buildMarketPageTitle } from '@/utils/common';
 
 export default function Home() {
-    const trans = useTranslate();
     const { exchange, data } = useMarketIndexStore();
     const {
         isOpenDetailModal,
@@ -38,10 +36,10 @@ export default function Home() {
             buildMarketPageTitle({
                 exchange,
                 marketIndexes: data ?? [],
-                pageSuffix: trans.market.page_title,
-                fallbackTitle: trans.market.page_title,
+                pageSuffix: 'Thị trường',
+                fallbackTitle: 'Thị trường',
             }),
-        [exchange, data, trans],
+        [exchange, data],
     );
 
     const handleSelectStock = (stock: StocksInfoV2Item) => {
@@ -69,7 +67,7 @@ export default function Home() {
                                 <InputSearch
                                     variant="pill"
                                     className="w-full"
-                                    placeholder={trans.market.home.search_placeholder}
+                                    placeholder={'Tìm kiếm mã'}
                                     includeIndices
                                     onSelectIndex={openIndexDetail}
                                     onSelectStock={handleSelectStock}
@@ -94,7 +92,7 @@ export default function Home() {
                     <div className="flex items-center gap-4">
                         <div className="h-px w-6 shrink-0 bg-tertiary" aria-hidden="true" />
                         <h2 className="shrink-0 font-body-2-highlight text-primary">
-                            {trans.market.home.overview_heading}
+                            {'Toàn cảnh thị trường'}
                         </h2>
                         <div className="h-px min-w-0 flex-1 bg-tertiary" aria-hidden="true" />
                     </div>
@@ -118,10 +116,18 @@ export default function Home() {
                     </div>
                 </div>
                 <div className="flex flex-col gap-1">
-                    <p className="font-body-3 text-tertiary">{trans.market.home.disclaimer_perf}</p>
-                    <p className="font-body-3 text-tertiary">{trans.market.home.disclaimer_info}</p>
                     <p className="font-body-3 text-tertiary">
-                        {trans.market.home.disclaimer_source}
+                        {
+                            '* Hiệu suất được tính dựa trên dữ liệu quá khứ, không phản ánh hiệu suất tương lai'
+                        }
+                    </p>
+                    <p className="font-body-3 text-tertiary">
+                        {
+                            '* Các nội dung trên chỉ cung cấp thông tin, không nhằm mục đích kinh doanh hoặc tư vấn tài chính, đầu tư, thuế, pháp lý, kế toán hay tư vấn khác.'
+                        }
+                    </p>
+                    <p className="font-body-3 text-tertiary">
+                        {'* Nguồn dữ liệu từ FiinPro và các đơn vị cung cấp thông tin khác.'}
                     </p>
                 </div>
             </article>

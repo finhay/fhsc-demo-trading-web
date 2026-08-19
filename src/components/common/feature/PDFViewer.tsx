@@ -8,7 +8,6 @@ import 'react-pdf/dist/esm/Page/TextLayer.css';
 
 import { Dialog } from '@/components/common/ui/Dialog';
 import { Spinner } from '@/components/common/ui/Spinner';
-import { useTranslate } from '@/hooks/useTranslate';
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
@@ -21,7 +20,6 @@ interface PDFViewerProps {
 }
 
 export const PDFViewer = ({ isOpen, pdfUrl, title, error, onClose }: PDFViewerProps) => {
-    const trans = useTranslate();
     const [numPages, setNumPages] = useState<number>(0);
     const [loadError, setLoadError] = useState<string | null>(null);
 
@@ -50,7 +48,7 @@ export const PDFViewer = ({ isOpen, pdfUrl, title, error, onClose }: PDFViewerPr
                 {displayError ? (
                     <div className="flex flex-col justify-center items-center h-full gap-4">
                         <p className="text-red font-body-2">
-                            {trans.pdf_viewer.load_error_prefix}
+                            {'Không thể tải PDF: '}
                             {displayError}
                         </p>
                         <button
@@ -58,7 +56,7 @@ export const PDFViewer = ({ isOpen, pdfUrl, title, error, onClose }: PDFViewerPr
                             className="bg-highlight px-6 py-2 rounded-full"
                             type="button"
                         >
-                            {trans.pdf_viewer.back}
+                            {'Quay lại'}
                         </button>
                     </div>
                 ) : (

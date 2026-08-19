@@ -5,7 +5,6 @@ import { useEffect, useState } from 'react';
 import { FaChevronDown } from 'react-icons/fa6';
 
 import { useClickOutside } from '@/hooks/lib/useClickOutside';
-import { useTranslate } from '@/hooks/useTranslate';
 import { useAuthStore } from '@/stores/auth/useAuthStore';
 import { SubAccount } from '@/types/accounts/profile';
 import { formatSubAccountLabel } from '@/utils/assets';
@@ -22,7 +21,6 @@ export const SubAccounts = ({
     variant = 'standalone',
     borderClass = 'border-quaternary',
 }: Props) => {
-    const trans = useTranslate();
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
     const { subAccounts, activeSubAccount, setActiveSubAccount } = useAuthStore();
@@ -51,11 +49,7 @@ export const SubAccounts = ({
     }, [permission, visibleSubAccounts, activeSubAccount, setActiveSubAccount]);
 
     return (
-        <section
-            ref={dropdownRef}
-            className="relative w-full"
-            aria-label={trans.sub_account.aria_label}
-        >
+        <section ref={dropdownRef} className="relative w-full" aria-label={'Chọn tài khoản phụ'}>
             <button
                 type="button"
                 className={`flex justify-between items-center gap-2 w-full rounded-xl px-3 cursor-pointer select-none ${
@@ -68,9 +62,7 @@ export const SubAccounts = ({
                 aria-haspopup="listbox"
             >
                 <span className="font-body-3-highlight text-primary">
-                    {activeSubAccount
-                        ? formatSubAccountLabel(activeSubAccount)
-                        : trans.sub_account.placeholder}
+                    {activeSubAccount ? formatSubAccountLabel(activeSubAccount) : 'Chọn tài khoản'}
                 </span>
                 <FaChevronDown
                     className={`text-secondary text-base shrink-0 transition-transform duration-200 ${isDropdownOpen ? 'rotate-180' : 'rotate-0'}`}
@@ -81,7 +73,7 @@ export const SubAccounts = ({
                 <ul
                     className="absolute z-20 mt-1 w-full overflow-hidden rounded-xl border border-tertiary bg-secondary"
                     role="listbox"
-                    aria-label={trans.sub_account.placeholder}
+                    aria-label={'Chọn tài khoản'}
                 >
                     {visibleSubAccounts.map((account) => {
                         const isSelected =

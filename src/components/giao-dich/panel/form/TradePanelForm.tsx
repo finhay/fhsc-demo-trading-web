@@ -7,7 +7,6 @@ import { TradeQuickSlider } from '@/components/giao-dich/panel/form/TradeQuickSl
 import { TradeStepperInput } from '@/components/giao-dich/panel/form/TradeStepperInput';
 import { TradeTotalField } from '@/components/giao-dich/panel/form/TradeTotalField';
 import { ORDER_MODE_KEY, ORDER_TYPE_KEY, TRADE_LITERAL } from '@/constants/trading';
-import { useTranslate } from '@/hooks/useTranslate';
 import { type TradePanelActiveConfig, type TradePanelFormInstance } from '@/types/pages/trading';
 import type { TwapLoUrgency } from '@/types/trade/twap-lo';
 import { formatBoardPrice, formatNumberVN, formatNumberVNInput } from '@/utils/format';
@@ -57,8 +56,6 @@ export const TradePanelForm = ({
     setBuyPercentage,
     setSellPercentage,
 }: Props) => {
-    const trans = useTranslate();
-
     return (
         <form
             className="flex w-full items-start"
@@ -78,7 +75,7 @@ export const TradePanelForm = ({
                     {(field) => (
                         <TradeStepperInput
                             value={is247 || isLO ? field.state.value : selectedOrderType}
-                            label={trans.trading.panel.price_label}
+                            label={'Giá'}
                             hasValue={parsePrice(field.state.value) > 0}
                             side={activeConfig.stepperSide}
                             disabled={!is247 && !isLO}
@@ -122,7 +119,7 @@ export const TradePanelForm = ({
                         <TradeStepperInput
                             unit="cp"
                             value={field.state.value}
-                            label={trans.trading.panel.qty_label}
+                            label={'Khối lượng'}
                             hasValue={parseQuantity(field.state.value) > 0}
                             side={activeConfig.stepperSide}
                             onChange={(v) => {
@@ -179,10 +176,10 @@ export const TradePanelForm = ({
                                 const total = parseQuantity(
                                     form.getFieldValue(activeConfig.qtyField),
                                 );
-                                if (child <= 0) return trans.trading.panel.err_child_qty_required;
-                                if (child % 100 !== 0) return trans.trading.panel.err_qty_divisible;
+                                if (child <= 0) return 'Nhập KL 1 lệnh con';
+                                if (child % 100 !== 0) return 'KL phải chia hết cho 100';
                                 if (total > 0 && child > total) {
-                                    return trans.trading.panel.err_child_qty;
+                                    return 'KL 1 lệnh con không được lớn hơn tổng KL';
                                 }
                                 return undefined;
                             },
@@ -192,7 +189,7 @@ export const TradePanelForm = ({
                             <TradeStepperInput
                                 unit="cp"
                                 value={field.state.value}
-                                label={trans.trading.panel.qty_label_child}
+                                label={'KL 1 lệnh con'}
                                 hasValue={parseQuantity(field.state.value) > 0}
                                 side={activeConfig.stepperSide}
                                 onChange={(v) => {
@@ -269,8 +266,8 @@ export const TradePanelForm = ({
                                     label={activeConfig.totalLabel}
                                     value={
                                         hasVal
-                                            ? `${formatNumberVN(price * qty, { trimTrailingZeros: true })}${trans.trading.currency.suffix}`
-                                            : trans.trading.currency.zero
+                                            ? `${formatNumberVN(price * qty, { trimTrailingZeros: true })}${'đ'}`
+                                            : '0đ'
                                     }
                                     hasValue={hasVal}
                                     side={activeConfig.stepperSide}
@@ -309,8 +306,6 @@ export const TradePanelSubmit = ({
     canTrade,
     onOpenConfirm,
 }: SubmitProps) => {
-    const trans = useTranslate();
-
     return (
         <div className="w-full shrink-0">
             <form.Subscribe
@@ -370,7 +365,7 @@ export const TradePanelSubmit = ({
                     if (!canTrade) {
                         return (
                             <Tooltip
-                                content={trans.trading.panel.cannot_trade}
+                                content={'TK không thể giao dịch'}
                                 placement="top"
                                 className="block w-full"
                             >

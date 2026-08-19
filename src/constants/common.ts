@@ -24,21 +24,6 @@ export const UI_CONSTANTS = {
 export const DEFAULT_AVATAR_URL =
     'https://cdn1.finhay.com.vn/vnsc-prod/1779967089857.8774-icon-avatar.png';
 
-export const LANGUAGES = [
-    {
-        code: 'vi',
-        label: 'Tiếng Việt',
-        flagSrc: 'https://cdn1.finhay.com.vn/vnsc-prod/1722397135817-flag_vi.svg',
-        flagAlt: { vi: 'Cờ Việt Nam', en: 'Vietnamese flag' },
-    },
-    {
-        code: 'en',
-        label: 'English',
-        flagSrc: 'https://cdn1.finhay.com.vn/vnsc-prod/1722397161815-flag_en.svg',
-        flagAlt: { vi: 'Cờ Anh', en: 'English flag' },
-    },
-] as const;
-
 export const AUTH_ROUTES = [
     {
         mode: AUTH_MODE.LOGIN,
@@ -73,104 +58,6 @@ export const HEADER_ROUTES = [
         translationKey: 'assets',
         activeRoutes: ['/tai-san'],
         requireAuth: true,
-    },
-];
-
-export type OtherProductNavItem = {
-    path: string;
-    translationKey: string;
-    descriptionKey: string;
-    icon: string;
-    activeRoutes: string[];
-    partialMatch?: boolean;
-    requireAuth?: boolean;
-    requireEnterprise?: boolean;
-    requireIndividual?: boolean;
-};
-
-export type OtherProductNavSection = {
-    sectionKey: string;
-    children: OtherProductNavItem[];
-};
-
-export const OTHER_PRODUCTS_NAV: {
-    translationKey: string;
-    sections: OtherProductNavSection[];
-} = {
-    translationKey: 'other_products',
-    sections: [
-        {
-            sectionKey: 'investment',
-            children: [
-                {
-                    path: '/haybond',
-                    translationKey: 'haybond',
-                    descriptionKey: 'haybond_desc',
-                    icon: 'https://cdn1.finhay.com.vn/vnsc-prod/1784775543319.8784-haybond.png',
-                    activeRoutes: ['haybond'],
-                    partialMatch: true,
-                    requireAuth: true,
-                    requireEnterprise: true,
-                },
-                {
-                    path: '/haypoint',
-                    translationKey: 'haypoint',
-                    descriptionKey: 'haypoint_desc',
-                    icon: 'https://cdn1.finhay.com.vn/vnsc-prod/1784775543321.0354-haypoint.png',
-                    activeRoutes: ['haypoint'],
-                    partialMatch: true,
-                    requireAuth: true,
-                    requireIndividual: true,
-                },
-                {
-                    path: '/ipo',
-                    translationKey: 'ipo',
-                    descriptionKey: 'ipo_desc',
-                    icon: 'https://cdn1.finhay.com.vn/vnsc-prod/1784775543322.0774-ipo.png',
-                    activeRoutes: ['ipo'],
-                    partialMatch: true,
-                    requireAuth: true,
-                    requireIndividual: true,
-                },
-            ],
-        },
-        {
-            sectionKey: 'support_tools',
-            children: [
-                {
-                    path: '/quan-ly-quy',
-                    translationKey: 'quan_ly_quy',
-                    descriptionKey: 'quan_ly_quy_desc',
-                    icon: 'https://cdn1.finhay.com.vn/vnsc-prod/1784778192795.1655-fund.png',
-                    activeRoutes: ['/quan-ly-quy'],
-                    partialMatch: true,
-                    requireAuth: true,
-                    requireEnterprise: true,
-                },
-            ],
-        },
-    ],
-};
-
-export const PROFILE_TABS = [
-    {
-        id: 1,
-        label: 'Thông tin cơ bản',
-        panelId: 'tab-panel-1',
-        translationKey: 'basic_info',
-    },
-    {
-        id: 2,
-        label: 'Ngân hàng',
-        panelId: 'tab-panel-2',
-        translationKey: 'bank',
-    },
-    {
-        id: 3,
-        label: 'Hồ sơ',
-        panelId: 'tab-panel-3',
-        translationKey: 'docs',
-        requireHayBond: true,
     },
 ];
 

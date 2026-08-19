@@ -12,8 +12,7 @@ import { useMemo, useState } from 'react';
 
 import { EmptyState } from '@/components/common/feature/EmptyState';
 import { getMarketFundTableColumns } from '@/components/thi-truong/assets/fund/table/MarketFundTableColumns';
-import { FUND_LIST_TABS, FUND_TYPE_STOCK_FUND } from '@/constants/market';
-import { useTranslate } from '@/hooks/useTranslate';
+import { FUND_LIST_TABS, FUND_MODAL_LIST_TABS, FUND_TYPE_STOCK_FUND } from '@/constants/market';
 import type { FundCertificateItem, FundListTab, FundTableColMeta } from '@/types/pages/fund';
 import { filterFundCertificatesByType } from '@/utils/market/market-fund';
 
@@ -23,11 +22,10 @@ type Props = {
 };
 
 export const MarketFundTable = ({ certificates, onSelectFund }: Props) => {
-    const trans = useTranslate();
-    const t = trans.market.assets.fund_modal;
+    const t = FUND_MODAL_LIST_TABS;
     const [tab, setTab] = useState<FundListTab>(FUND_TYPE_STOCK_FUND);
     const [sorting, setSorting] = useState<SortingState>([{ id: 'profit_ytd', desc: true }]);
-    const columns = useMemo(() => getMarketFundTableColumns(trans), [trans]);
+    const columns = useMemo(() => getMarketFundTableColumns(), []);
     const data = useMemo(
         () => filterFundCertificatesByType(certificates, tab),
         [certificates, tab],
@@ -47,7 +45,7 @@ export const MarketFundTable = ({ certificates, onSelectFund }: Props) => {
     return (
         <section className="bg-secondary relative z-10 flex flex-col gap-4 rounded-2xl p-3">
             <div className="flex shrink-0 flex-col gap-3 md:flex-row md:items-center md:justify-between">
-                <h3 className="font-body-2-highlight text-primary">{t.list_heading}</h3>
+                <h3 className="font-body-2-highlight text-primary">{'Tất cả Chứng chỉ quỹ'}</h3>
                 <div className="flex flex-wrap items-center gap-3">
                     {FUND_LIST_TABS.map((key) => {
                         const isActive = tab === key;
@@ -65,7 +63,7 @@ export const MarketFundTable = ({ certificates, onSelectFund }: Props) => {
                                         : 'font-body-3 text-secondary'
                                 }`}
                             >
-                                {t.list_tabs[key]}
+                                {t[key]}
                             </button>
                         );
                     })}

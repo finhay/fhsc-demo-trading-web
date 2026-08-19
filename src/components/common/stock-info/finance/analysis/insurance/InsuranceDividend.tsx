@@ -5,13 +5,10 @@ import { useEffect, useMemo, useRef } from 'react';
 import { AnalysisSection } from '@/components/common/stock-info/finance/analysis/common/AnalysisSection';
 import { ANALYSIS_CONTENT_CARD, CHART_LINE_COLORS } from '@/constants/stock-info';
 import { useEChartsInstance } from '@/hooks/chart/useEChartsInstance';
-import { useTranslate } from '@/hooks/useTranslate';
 import { formatNumberVN, formatPeriodMMYYYY } from '@/utils/format';
 import { sortByYearAsc } from '@/utils/stock-info';
 
 export const InsuranceDividend = ({ dataAnnual }: { dataAnnual: any }) => {
-    const trans = useTranslate();
-    const fa = trans.stockInfo.finance_analysis as Record<string, string>;
     const data = dataAnnual?.[0] ?? {};
 
     const chartRef = useRef<HTMLDivElement>(null);
@@ -85,14 +82,14 @@ export const InsuranceDividend = ({ dataAnnual }: { dataAnnual: any }) => {
     }, [chartOptions, chartInstanceRef]);
 
     return (
-        <AnalysisSection title={fa.dividend_question}>
+        <AnalysisSection title={'Cổ tức trả thế nào?'}>
             <div className={ANALYSIS_CONTENT_CARD}>
                 <div className="flex w-full shrink-0 items-center justify-between gap-2 whitespace-nowrap">
                     <span className="font-body-2-highlight text-green">
                         {data.tysuatcotuc ? `${formatNumberVN(data.tysuatcotuc * 100)}%` : '--'}
                     </span>
                     <p className="font-body-3 text-tertiary">
-                        {fa.three_year_avg}{' '}
+                        {'TB 3 năm:'}{' '}
                         <span className="font-body-3-highlight text-primary">
                             {data.bq_tysuatcotuc ? `${formatNumberVN(data.bq_tysuatcotuc)}%` : '--'}
                         </span>

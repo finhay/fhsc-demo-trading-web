@@ -1,7 +1,6 @@
 'use client';
 
 import { FUND_FEE_TYPES } from '@/constants/market';
-import { useTranslate } from '@/hooks/useTranslate';
 import type { FundCertificateDetail, FundFeeItem } from '@/types/pages/fund';
 import { formatFundFeePercent, formatFundFeeRange } from '@/utils/market/market-fund';
 
@@ -10,16 +9,13 @@ type Props = {
 };
 
 export const MarketFundDetailFeeTab = ({ detail }: Props) => {
-    const trans = useTranslate();
-    const d = trans.market.assets.fund_modal.detail.fee_tab;
-
     const rangeLabels = {
-        under: d.range_under_fn,
-        over: d.range_over_fn,
-        between: d.range_between_fn,
-        unitDay: d.unit_day,
-        unitMonth: d.unit_month,
-        unitYear: d.unit_year,
+        under: (value: string) => `Dưới ${value}`,
+        over: (value: string) => `Trên ${value}`,
+        between: (start: string, end: string) => `Từ ${start} - ${end}`,
+        unitDay: 'ngày',
+        unitMonth: 'tháng',
+        unitYear: 'năm',
     };
 
     const buyFees = detail.fees?.filter((fee) => fee.type === FUND_FEE_TYPES.buy) ?? [];
@@ -46,36 +42,40 @@ export const MarketFundDetailFeeTab = ({ detail }: Props) => {
                         buyFees.map((fee, index) => ({
                             key: fee.id ?? index,
                             label: formatFundFeeRange(fee, rangeLabels),
-                            value: formatFundFeePercent(fee.percent, d.free),
+                            value: formatFundFeePercent(fee.percent, 'Miễn phí'),
                         })),
                     )
                 ) : (
                     <div className="flex flex-col gap-1">
-                        <span className="font-body-3 text-secondary">{d.buy_fee}</span>
-                        <span className="font-body-2-highlight text-primary">{d.free}</span>
+                        <span className="font-body-3 text-secondary">{'Phí mua'}</span>
+                        <span className="font-body-2-highlight text-primary">{'Miễn phí'}</span>
                     </div>
                 )}
             </div>
 
             <div className="flex flex-col gap-3 py-4">
-                <span className="font-body-3 text-secondary">{d.sell_fee}</span>
+                <span className="font-body-3 text-secondary">
+                    {'Phí bán theo thời gian nắm giữ'}
+                </span>
                 {sellFees.length > 0 ? (
                     renderFeeRow(
                         sellFees.map((fee, index) => ({
                             key: fee.id ?? index,
                             label: formatFundFeeRange(fee, rangeLabels),
-                            value: formatFundFeePercent(fee.percent, d.free),
+                            value: formatFundFeePercent(fee.percent, 'Miễn phí'),
                         })),
                     )
                 ) : (
-                    <span className="font-body-2-highlight text-primary">{d.no_limit_free}</span>
+                    <span className="font-body-2-highlight text-primary">
+                        {'Không giới hạn / Miễn phí'}
+                    </span>
                 )}
             </div>
 
             {transferFeeData.length > 0 && (
                 <div className="flex flex-col gap-3 py-4">
                     <span className="font-body-3 text-secondary">
-                        {detail.transfer_fee_detail?.title || d.transfer_fee_default_title}
+                        {detail.transfer_fee_detail?.title || 'Phí chuyển khoản theo số tiền bán'}
                     </span>
                     {renderFeeRow(
                         transferFeeData.map((row, index) => ({
@@ -89,7 +89,7 @@ export const MarketFundDetailFeeTab = ({ detail }: Props) => {
 
             {detail.tax != null && (
                 <div className="flex flex-col gap-1 pt-4">
-                    <span className="font-body-3 text-secondary">{d.tax}</span>
+                    <span className="font-body-3 text-secondary">{'Thuế thu nhập cá nhân'}</span>
                     <span className="font-body-2-highlight text-primary">{detail.tax}%</span>
                 </div>
             )}

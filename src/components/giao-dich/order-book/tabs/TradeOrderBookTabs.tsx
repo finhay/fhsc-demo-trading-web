@@ -1,7 +1,6 @@
 'use client';
 
 import { ORDER_MODES, ORDER_MODE_KEY } from '@/constants/trading';
-import { useTranslate } from '@/hooks/useTranslate';
 
 type Props = {
     activeOrderTab: string;
@@ -9,20 +8,18 @@ type Props = {
 };
 
 export const TradeOrderBookTabs = ({ activeOrderTab, onTabChange }: Props) => {
-    const trans = useTranslate();
-
     const getTabLabel = (key: string) => {
-        if (key === ORDER_MODE_KEY.NORMAL) return trans.trading.order_book.tab_normal;
-        if (key === ORDER_MODE_KEY.TAB_247) return trans.trading.order_book.tab_247;
-        if (key === ORDER_MODE_KEY.TWAP_LO) return trans.trading.order_book.tab_twap_lo;
-        return trans.trading.order_book.tab_iceberg;
+        if (key === ORDER_MODE_KEY.NORMAL) return 'Lệnh thường';
+        if (key === ORDER_MODE_KEY.TAB_247) return 'Lệnh 24/7';
+        if (key === ORDER_MODE_KEY.TWAP_LO) return 'Lệnh CD LO';
+        return 'Lệnh Iceberg';
     };
 
     return (
         <nav
             className="flex flex-1 gap-2 items-center"
             role="tablist"
-            aria-label={trans.trading.order_book.tab_aria}
+            aria-label={'Chọn loại lệnh'}
         >
             {ORDER_MODES.map(({ key }) => (
                 <button

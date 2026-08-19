@@ -10,7 +10,6 @@ import { Trade247DateRange } from '@/components/giao-dich/shared/Trade247DateRan
 import { ACCOUNT_TYPE, ERROR_CODES } from '@/constants/common';
 import { ORDER_TYPE, TRADE_UI_CONFIG, TWO_FA_PLACEMENT } from '@/constants/trading';
 import { toast } from '@/hooks/lib/useToast';
-import { useTranslate } from '@/hooks/useTranslate';
 import { fetchStockRealtime } from '@/services/api/datafeed/stock-info';
 import { updateSubAccountOrder247, updateSubAccountStockOrder } from '@/services/api/trade/orders';
 import { useAuthStore } from '@/stores/auth/useAuthStore';
@@ -55,7 +54,6 @@ export const TradeUpdateOrderModal = ({
     onSuccess,
     onExpired2FA,
 }: Props) => {
-    const trans = useTranslate();
     const { startLoading, stopLoading, isLoading } = useLoadingStore();
     const [stockInfo, setStockInfo] = useState<TradeOrderAmendStockInfo | null>(null);
 
@@ -105,7 +103,7 @@ export const TradeUpdateOrderModal = ({
     );
 
     const isBuy = side === ORDER_TYPE.BUY;
-    const title = `${isBuy ? trans.trading.update_modal.title_buy : trans.trading.update_modal.title_sell} ${symbol}`;
+    const title = `${isBuy ? 'Sửa lệnh mua' : 'Sửa lệnh bán'} ${symbol}`;
 
     const getPriceChanged = () => {
         return parsePrice(currentPrice) !== parsePrice(initialDisplayPrice);
@@ -132,7 +130,8 @@ export const TradeUpdateOrderModal = ({
 
     const validateKrxSingleField = (priceStr: string, qtyStr: string): string | undefined => {
         if (is247) return undefined;
-        if (isPriceDirty(priceStr) && isQtyDirty(qtyStr)) return trans.trading.update_modal.warning;
+        if (isPriceDirty(priceStr) && isQtyDirty(qtyStr))
+            return 'Yêu cầu sửa lệnh có thể không được thực thi nếu lệnh đã khớp';
         return undefined;
     };
 
@@ -147,15 +146,15 @@ export const TradeUpdateOrderModal = ({
         if (krx) return krx;
         if (!value.trim()) return undefined;
         const num = parseQuantity(value);
-        if (num <= 0) return trans.trading.update_modal.err_qty_zero;
-        if (num >= 100 && num % 100 !== 0) return trans.trading.update_modal.err_qty_lot;
+        if (num <= 0) return 'Khối lượng phải lớn hơn 0';
+        if (num >= 100 && num % 100 !== 0) return 'Lô chẵn (≥100 CP) phải là bội số của 100';
 
         const isOrigOdd = rawQty < 100;
         const isNewOdd = num < 100;
         if (isOrigOdd !== isNewOdd) {
             return isOrigOdd
-                ? trans.trading.update_modal.err_qty_odd_to_even
-                : trans.trading.update_modal.err_qty_even_to_odd;
+                ? 'Không thể chuyển từ lô lẻ sang lô chẵn'
+                : 'Không thể chuyển từ lô chẵn sang lô lẻ';
         }
 
         return undefined;
@@ -178,13 +177,13 @@ export const TradeUpdateOrderModal = ({
 
         if (!value.trim()) return undefined;
         const price = parsePrice(value);
-        if (price <= 0) return trans.trading.update_modal.err_price_invalid;
+        if (price <= 0) return 'Giá không hợp lệ';
 
         if (!isPriceDirty(value)) return undefined;
 
         if (stockInfo && stockInfo.floor > 0 && stockInfo.ceiling > 0) {
             if (price < stockInfo.floor || price > stockInfo.ceiling) {
-                return trans.trading.update_modal.err_price_range
+                return 'Giá phải trong khoảng sàn (${floor}) – trần (${ceiling})'
                     .replace('${floor}', formatBoardPrice(stockInfo.floor))
                     .replace('${ceiling}', formatBoardPrice(stockInfo.ceiling));
             }
@@ -193,7 +192,7 @@ export const TradeUpdateOrderModal = ({
         if (stockInfo && stockInfo.exchange) {
             const stepSize = getStepSize(price, stockInfo.exchange, stockInfo.stockType, symbol);
             if (stepSize > 1 && price % stepSize !== 0) {
-                return trans.trading.update_modal.err_price_step.replace(
+                return 'Bước giá không hợp lệ (bước giá hiện tại: ${step})'.replace(
                     '${step}',
                     formatBoardPrice(stepSize),
                 );
@@ -243,7 +242,7 @@ export const TradeUpdateOrderModal = ({
         const qty = parseQuantity(qtyStr);
         const apiPrice = parsePrice(priceStr);
         if (!is247 && isPriceDirty(priceStr) && isQtyDirty(qtyStr)) {
-            toast.warning(trans.trading.update_modal.warning);
+            toast.warning('Yêu cầu sửa lệnh có thể không được thực thi nếu lệnh đã khớp');
             return;
         }
 
@@ -277,14 +276,10 @@ export const TradeUpdateOrderModal = ({
                                     : {}),
                             },
                         ]);
-                        toast.success(trans.trading.order_status_message.success);
+                        toast.success('Thành công');
                     } else {
                         toast.error(
-                            mapOrderErrorCodeToStatus(
-                                data[0].code,
-                                trans,
-                                data[0].rejected_reason ?? '',
-                            ),
+                            mapOrderErrorCodeToStatus(data[0].code, data[0].rejected_reason ?? ''),
                         );
                     }
                 }
@@ -299,7 +294,7 @@ export const TradeUpdateOrderModal = ({
             if (errCode === ERROR_CODES.FAILED_2FA_TOKEN_EXPIRED) {
                 is2FAExpired = true;
             } else {
-                toast.error(getApiErrorMessage(err, trans.common.try_again_error));
+                toast.error(getApiErrorMessage(err, 'Có lỗi xảy ra, vui lòng thử lại'));
             }
         } finally {
             stopLoading();
@@ -327,7 +322,7 @@ export const TradeUpdateOrderModal = ({
                 toast.error(message);
             }
         } catch (err) {
-            toast.error(getApiErrorMessage(err, trans.common.try_again_error));
+            toast.error(getApiErrorMessage(err, 'Có lỗi xảy ra, vui lòng thử lại'));
         } finally {
             stopLoading();
         }
@@ -358,7 +353,7 @@ export const TradeUpdateOrderModal = ({
                         {(field) => (
                             <div className="flex flex-col gap-2">
                                 <label htmlFor="order-qty" className="font-body-3 text-secondary">
-                                    {trans.trading.update_modal.qty_label}
+                                    {'Khối lượng'}
                                 </label>
                                 <div
                                     className={`bg-tertiary rounded-xl border flex items-center px-4 py-3 gap-3 transition-colors ${
@@ -438,7 +433,7 @@ export const TradeUpdateOrderModal = ({
                         {(field) => (
                             <div className="flex flex-col gap-2">
                                 <label htmlFor="order-price" className="font-body-3 text-secondary">
-                                    {trans.trading.update_modal.price_label}
+                                    {'Giá (nghìn đồng)'}
                                 </label>
                                 <div
                                     className={`bg-tertiary rounded-xl border flex items-center px-4 py-3 gap-3 transition-colors ${
@@ -519,12 +514,10 @@ export const TradeUpdateOrderModal = ({
                                     stockInfo.ceiling > 0 && (
                                         <div className="flex items-center justify-between">
                                             <span className="font-caption text-secondary">
-                                                {trans.trading.update_modal.floor_prefix}{' '}
-                                                {formatBoardPrice(stockInfo.floor)}
+                                                {'Sàn:'} {formatBoardPrice(stockInfo.floor)}
                                             </span>
                                             <span className="font-caption text-secondary">
-                                                {trans.trading.update_modal.ceiling_prefix}{' '}
-                                                {formatBoardPrice(stockInfo.ceiling)}
+                                                {'Trần:'} {formatBoardPrice(stockInfo.ceiling)}
                                             </span>
                                         </div>
                                     )
@@ -538,7 +531,7 @@ export const TradeUpdateOrderModal = ({
                     <div className="bg-tertiary rounded-xl px-4 py-3 flex items-start gap-2">
                         <span className="text-yellow font-caption shrink-0 mt-0.5">⚠</span>
                         <p className="font-caption text-secondary">
-                            {trans.trading.update_modal.warning}
+                            {'Yêu cầu sửa lệnh có thể không được thực thi nếu lệnh đã khớp'}
                         </p>
                     </div>
                     <button
@@ -550,7 +543,7 @@ export const TradeUpdateOrderModal = ({
                                 : 'bg-highlight text-quaternary hover:opacity-90'
                         }`}
                     >
-                        {trans.trading.update_modal.btn_confirm}
+                        {'Xác nhận'}
                     </button>
                 </div>
             </form>

@@ -5,7 +5,6 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { EmptyState } from '@/components/common/feature/EmptyState';
 import { Skeleton } from '@/components/common/ui/Skeleton';
 import { MarketFlowTreemapSide } from '@/components/thi-truong/money-flow/MarketFlowTreemapSide';
-import { useTranslate } from '@/hooks/useTranslate';
 import { fetchAllStockScreener } from '@/services/api/datafeed/stock-info';
 import { useStockInfoStore } from '@/stores/common/useStockInfoStore';
 import type { TradingStatsPeriod } from '@/types/datafeed/trading-data';
@@ -28,7 +27,6 @@ const buildFetchKey = (isForeign: boolean, exchange: string, period: TradingStat
     `${isForeign}-${exchange}-${period}`;
 
 export const MarketFlowModalTopNet = ({ isForeign, activeExchange, period }: Props) => {
-    const trans = useTranslate();
     const openStockDetail = useStockInfoStore((state) => state.openStockDetail);
     const requestedKeyRef = useRef(buildFetchKey(isForeign, activeExchange, period));
     const [symbolBuy, setSymbolBuy] = useState<TopNetDisplayItem[]>([]);
@@ -99,7 +97,7 @@ export const MarketFlowModalTopNet = ({ isForeign, activeExchange, period }: Pro
                         isForeign ? 'font-body-3-highlight' : 'font-body-2-highlight'
                     }`}
                 >
-                    {trans.market.flow.top_net}
+                    {'Bản đồ nhiệt theo mã'}
                 </h3>
             </div>
             {isLoading ? (

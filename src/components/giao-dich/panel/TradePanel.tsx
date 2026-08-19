@@ -27,7 +27,6 @@ import {
     TWO_FA_PLACEMENT,
 } from '@/constants/trading';
 import { useClickOutside } from '@/hooks/lib/useClickOutside';
-import { useTranslate } from '@/hooks/useTranslate';
 import { fetchSubAccountAvailableTrade } from '@/services/api/trade/orders';
 import { useAuthStore } from '@/stores/auth/useAuthStore';
 import { useStockInfoStore } from '@/stores/common/useStockInfoStore';
@@ -62,8 +61,6 @@ type TradePanelProps = {
 };
 
 export const TradePanel = ({ initialSide, initialPrice }: TradePanelProps = {}) => {
-    const trans = useTranslate();
-
     const priceDebounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
     const lastAvailTradeArgsRef = useRef<string>('');
     const skipNextDefaultQtyRef = useRef({ buy: false, sell: false });
@@ -140,12 +137,12 @@ export const TradePanel = ({ initialSide, initialPrice }: TradePanelProps = {}) 
 
     const selectedOrderModeLabel =
         orderMode === ORDER_MODE_KEY.TAB_247
-            ? trans.trading.order_book.tab_247
+            ? 'Lệnh 24/7'
             : orderMode === ORDER_MODE_KEY.ICEBERG
-              ? trans.trading.order_book.tab_iceberg
+              ? 'Lệnh Iceberg'
               : orderMode === ORDER_MODE_KEY.TWAP_LO
-                ? trans.trading.order_book.tab_twap_lo
-                : trans.trading.order_book.tab_normal;
+                ? 'Lệnh CD LO'
+                : 'Lệnh thường';
 
     const isOrderTypeAllowedInSession =
         orderMode === ORDER_MODE_KEY.TAB_247 ||
@@ -234,7 +231,7 @@ export const TradePanel = ({ initialSide, initialPrice }: TradePanelProps = {}) 
         : makeTradePanelQtyValidator(
               makeBuyQtyValidator(maxQtty),
               isLO && !isIceberg && !isTwapLo,
-              trans.trading.panel.err_qty_divisible,
+              'KL phải chia hết cho 100',
           );
 
     const validateSellQty = is247
@@ -242,14 +239,14 @@ export const TradePanel = ({ initialSide, initialPrice }: TradePanelProps = {}) 
         : makeTradePanelQtyValidator(
               makeSellQtyValidator(maxSell),
               isLO && !isIceberg && !isTwapLo,
-              trans.trading.panel.err_qty_divisible,
+              'KL phải chia hết cho 100',
           );
 
     const infoItems = useMemo(() => {
         const marginItem = isMarginAccount
             ? [
                   {
-                      label: trans.trading.panel.loan_ratio,
+                      label: 'Tỷ lệ cho vay',
                       value: mrratioloan > 0 ? `${formatNumberVN(mrratioloan)}%` : '--',
                   },
               ]
@@ -259,14 +256,14 @@ export const TradePanel = ({ initialSide, initialPrice }: TradePanelProps = {}) 
             return [
                 ...marginItem,
                 {
-                    label: trans.trading.panel.max_buy_power,
+                    label: 'Sức mua tối đa',
                     value:
                         ppse > 0
-                            ? `${formatNumberVN(ppse, { trimTrailingZeros: true })}${trans.trading.currency.suffix}`
+                            ? `${formatNumberVN(ppse, { trimTrailingZeros: true })}${'đ'}`
                             : '--',
                 },
                 {
-                    label: trans.trading.panel.max_buy_qty,
+                    label: 'KL mua tối đa',
                     value: maxQtty > 0 ? `${formatNumberVN(maxQtty, { decimals: 0 })}cp` : '--',
                 },
             ];
@@ -274,11 +271,11 @@ export const TradePanel = ({ initialSide, initialPrice }: TradePanelProps = {}) 
 
         return [
             {
-                label: trans.trading.panel.max_sell_qty,
+                label: 'KL bán tối đa',
                 value: maxSell > 0 ? `${formatNumberVN(maxSell, { decimals: 0 })}cp` : '--',
             },
         ];
-    }, [activeSide, isMarginAccount, maxQtty, maxSell, mrratioloan, ppse, trans]);
+    }, [activeSide, isMarginAccount, maxQtty, maxSell, mrratioloan, ppse]);
 
     const isPanelQrVerifyVisible =
         is2FAVisible &&
@@ -621,8 +618,8 @@ export const TradePanel = ({ initialSide, initialPrice }: TradePanelProps = {}) 
                 ? {
                       key: TRADE_LITERAL.BUY,
                       orderSide: ORDER_SIDE.BUY,
-                      ariaLabel: trans.trading.panel.buy_aria,
-                      legendSr: trans.trading.panel.buy_legend,
+                      ariaLabel: 'Lệnh mua',
+                      legendSr: 'Thông tin lệnh mua',
                       priceField: 'buyPrice' as const,
                       qtyField: 'buyQuantity' as const,
                       stepperSide: 'buy' as const,
@@ -633,16 +630,16 @@ export const TradePanel = ({ initialSide, initialPrice }: TradePanelProps = {}) 
                       setStorePrice: setStoreBuyPrice,
                       setStoreQty: setStoreBuyQuantity,
                       maxQty: maxQtty,
-                      totalLabel: trans.trading.panel.total_buy,
-                      ctaLabel: trans.trading.panel.btn_buy,
+                      totalLabel: 'Tổng tiền mua',
+                      ctaLabel: 'Mua',
                       ctaEnabledClass:
                           'bg-highlight text-quaternary hover:opacity-90 active:opacity-80',
                   }
                 : {
                       key: TRADE_LITERAL.SELL,
                       orderSide: ORDER_SIDE.SELL,
-                      ariaLabel: trans.trading.panel.sell_aria,
-                      legendSr: trans.trading.panel.sell_legend,
+                      ariaLabel: 'Lệnh bán',
+                      legendSr: 'Thông tin lệnh bán',
                       priceField: 'sellPrice' as const,
                       qtyField: 'sellQuantity' as const,
                       stepperSide: 'sell' as const,
@@ -653,8 +650,8 @@ export const TradePanel = ({ initialSide, initialPrice }: TradePanelProps = {}) 
                       setStorePrice: setStoreSellPrice,
                       setStoreQty: setStoreSellQuantity,
                       maxQty: maxSell,
-                      totalLabel: trans.trading.panel.total_sell,
-                      ctaLabel: trans.trading.panel.btn_sell,
+                      totalLabel: 'Tổng tiền bán',
+                      ctaLabel: 'Bán',
                       ctaEnabledClass: 'bg-red text-primary hover:opacity-90 active:opacity-80',
                   },
         [
@@ -672,7 +669,6 @@ export const TradePanel = ({ initialSide, initialPrice }: TradePanelProps = {}) 
             validateBuyQty,
             validateSellPrice,
             validateSellQty,
-            trans,
         ],
     );
 
@@ -876,10 +872,7 @@ export const TradePanel = ({ initialSide, initialPrice }: TradePanelProps = {}) 
     }, [exchangeSession]);
 
     return (
-        <section
-            className="flex h-full min-h-0 w-full flex-col gap-1"
-            aria-label={trans.trading.panel.section_aria}
-        >
+        <section className="flex h-full min-h-0 w-full flex-col gap-1" aria-label={'Bảng đặt lệnh'}>
             <SubAccounts permission={SUB_ACCOUNT_PERMISSION.TRADE} />
             <TradePanelSideTabs
                 activeSide={activeSide}

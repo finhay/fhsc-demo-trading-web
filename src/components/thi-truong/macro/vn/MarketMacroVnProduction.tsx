@@ -7,10 +7,9 @@ import {
     createChartMacroLine,
     createChartMacroMulti,
 } from '@/config/market/market-macro';
-import { MACRO_SERIES_COLORS } from '@/constants/market';
+import { MACRO_SERIES_COLORS, MARKET_MACRO } from '@/constants/market';
 import { useEChartsInstance } from '@/hooks/chart/useEChartsInstance';
 import { useEChartsOption } from '@/hooks/chart/useEChartsOption';
-import { useTranslate } from '@/hooks/useTranslate';
 import type { MacroExportPoint, MacroPoint } from '@/types/datafeed/finance';
 import { formatNumberVN } from '@/utils/format';
 import { formatMacroPercent, getLastMacroValue } from '@/utils/market/market-macro';
@@ -22,7 +21,7 @@ type Props = {
 };
 
 export const MarketMacroVnProduction = ({ iip, pmi, exportData }: Props) => {
-    const detail = useTranslate().market.macro.detail;
+    const detail = MARKET_MACRO;
 
     const iipRef = useRef<HTMLDivElement>(null);
     const iipHasData = iip.length > 0;
@@ -36,9 +35,9 @@ export const MarketMacroVnProduction = ({ iip, pmi, exportData }: Props) => {
     const { dates, series } = useMemo(
         () =>
             buildExportChartSeries(exportData, {
-                domestic: detail.export_domestic,
-                fdi: detail.export_fdi,
-                total: detail.export_total,
+                domestic: 'Nội địa',
+                fdi: 'FDI',
+                total: 'Cả nước',
             }),
         [exportData, detail],
     );
@@ -46,19 +45,19 @@ export const MarketMacroVnProduction = ({ iip, pmi, exportData }: Props) => {
     const exportLegends = [
         {
             key: 'domestic',
-            label: detail.export_domestic,
+            label: 'Nội địa',
             colorClass: 'bg-blue',
             value: lastExport?.domestic,
         },
         {
             key: 'fdi',
-            label: detail.export_fdi,
+            label: 'FDI',
             colorClass: 'bg-orange',
             value: lastExport?.fdi,
         },
         {
             key: 'total',
-            label: detail.export_total,
+            label: 'Cả nước',
             colorClass: 'bg-gray',
             value: lastExport?.total,
         },
@@ -71,7 +70,7 @@ export const MarketMacroVnProduction = ({ iip, pmi, exportData }: Props) => {
     useEChartsOption(
         iipInstanceRef,
         () =>
-            createChartMacroLine(iip, detail.iip, {
+            createChartMacroLine(iip, 'IIP (YoY)', {
                 color: MACRO_SERIES_COLORS.orange,
                 valueSuffix: '%',
             }),
@@ -80,7 +79,7 @@ export const MarketMacroVnProduction = ({ iip, pmi, exportData }: Props) => {
 
     useEChartsOption(
         pmiInstanceRef,
-        () => createChartMacroLine(pmi, detail.pmi, { color: MACRO_SERIES_COLORS.blue }),
+        () => createChartMacroLine(pmi, 'PMI', { color: MACRO_SERIES_COLORS.blue }),
         { enabled: pmiHasData, deps: [pmi] },
     );
 
@@ -92,12 +91,12 @@ export const MarketMacroVnProduction = ({ iip, pmi, exportData }: Props) => {
 
     return (
         <section className="bg-secondary flex flex-col gap-4 rounded-2xl p-4">
-            <h3 className="font-body-2-highlight text-primary">{detail.section_production}</h3>
+            <h3 className="font-body-2-highlight text-primary">{'Sản xuất & xuất khẩu'}</h3>
             <div className="flex flex-col gap-4 lg:flex-row">
                 <div className="border-tertiary bg-secondary flex min-w-0 flex-1 flex-col rounded-2xl border">
                     <div className="flex w-full flex-col gap-5 p-4">
                         <div className="flex flex-col gap-1">
-                            <p className="font-body-3 text-secondary">{detail.iip}</p>
+                            <p className="font-body-3 text-secondary">{'IIP (YoY)'}</p>
                             <p className="font-body-2-highlight text-primary">
                                 {formatMacroPercent(getLastMacroValue(iip))}
                             </p>
@@ -116,7 +115,7 @@ export const MarketMacroVnProduction = ({ iip, pmi, exportData }: Props) => {
                     <div className="bg-tertiary h-px w-full" />
                     <div className="flex w-full flex-col gap-5 p-4">
                         <div className="flex flex-col gap-1">
-                            <p className="font-body-3 text-secondary">{detail.pmi}</p>
+                            <p className="font-body-3 text-secondary">{'PMI'}</p>
                             <p className="font-body-2-highlight text-primary">
                                 {pmiLast == null
                                     ? '--'
@@ -137,9 +136,7 @@ export const MarketMacroVnProduction = ({ iip, pmi, exportData }: Props) => {
                 </div>
                 <div className="border-tertiary bg-secondary flex min-w-0 flex-1 flex-col gap-5 rounded-2xl border p-4">
                     <div className="flex flex-col gap-4">
-                        <p className="font-body-3-highlight text-secondary">
-                            {detail.export_title}
-                        </p>
+                        <p className="font-body-3-highlight text-secondary">{'Xuất khẩu (YoY)'}</p>
                         <div className="flex flex-wrap items-center gap-4">
                             {exportLegends.map((legend) => (
                                 <div

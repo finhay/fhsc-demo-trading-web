@@ -8,7 +8,6 @@ import { MarketFlowHeader } from '@/components/thi-truong/money-flow/modal/Marke
 import { MarketFlowHistory } from '@/components/thi-truong/money-flow/modal/MarketFlowHistory';
 import { MarketFlowModalTopNet } from '@/components/thi-truong/money-flow/modal/MarketFlowModalTopNet';
 import { TRADING_FLOW_EXCHANGES, TRADING_FLOW_HISTORY_PERIODS } from '@/constants/market';
-import { useTranslate } from '@/hooks/useTranslate';
 import {
     fetchForeignTradingStats,
     fetchProprietaryTradingStats,
@@ -16,6 +15,24 @@ import {
 import type { ForeignTradingStatsData, TradingStatsPeriod } from '@/types/datafeed/trading-data';
 import type { TradingFlowTab } from '@/types/pages/market';
 import { isSuccessApi } from '@/utils/common';
+
+const FLOW_MODAL = {
+    title_foreign: 'Giao dịch khối ngoại',
+    title_proprietary: 'Giao dịch tự doanh',
+    today: 'Hôm nay',
+    buy_value: 'GT mua',
+    sell_value: 'GT bán',
+    net_value: 'GT ròng',
+    history_title: 'Lịch sử giao dịch',
+    legend_net: 'Mua/bán ròng',
+    legend_cumulative: 'GTGD ròng luỹ kế (bên phải)',
+    period_1y: '1 năm',
+    period_3y: '3 năm',
+    period_5y: '5 năm',
+    period_ytd: 'Từ đầu năm',
+    tab_symbol: 'Mã',
+    tab_sector: 'Ngành',
+};
 
 type Props = {
     activeTab: TradingFlowTab;
@@ -36,8 +53,6 @@ export const MarketFlowModal = ({
     initialStats,
     onClose,
 }: Props) => {
-    const trans = useTranslate();
-
     const [modalPeriod, setModalPeriod] = useState<TradingStatsPeriod>('YTD');
     const [modalExchange, setModalExchange] = useState(activeExchange);
     const [modalStats, setModalStats] = useState<ForeignTradingStatsData | null>(initialStats);
@@ -92,7 +107,7 @@ export const MarketFlowModal = ({
                 <div className="flex min-h-0 flex-1 basis-0 flex-col gap-5">
                     <div className="flex shrink-0 items-center justify-between gap-4">
                         <h3 className="font-body-2-highlight text-primary">
-                            {trans.market.flow.modal.history_title}
+                            {'Lịch sử giao dịch'}
                         </h3>
                         <div className="flex items-center gap-6">
                             <div className="flex items-center gap-1">
@@ -109,7 +124,7 @@ export const MarketFlowModal = ({
                                                     : 'font-body-3 text-secondary'
                                             }`}
                                         >
-                                            {trans.market.flow.modal[item.labelKey]}
+                                            {FLOW_MODAL[item.labelKey]}
                                         </button>
                                     );
                                 })}

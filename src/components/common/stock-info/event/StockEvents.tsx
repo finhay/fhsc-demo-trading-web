@@ -9,7 +9,6 @@ import {
 import { StockEventTable } from '@/components/common/stock-info/event/StockEventTable';
 import type { DropdownOption } from '@/components/common/ui/Dropdown';
 import { Spinner } from '@/components/common/ui/Spinner';
-import { useTranslate } from '@/hooks/useTranslate';
 import { fetchStockNews } from '@/services/api/datafeed/stock-event';
 import { useStockInfoStore } from '@/stores/common/useStockInfoStore';
 import type { StockEvent } from '@/types/datafeed/stock-event';
@@ -17,7 +16,6 @@ import { isSuccessApi } from '@/utils/common';
 import { formatDate, getYearRange } from '@/utils/format';
 
 export const StockEvents = () => {
-    const trans = useTranslate();
     const { selectedStock } = useStockInfoStore();
 
     const [range, setRange] = useState('1');
@@ -27,11 +25,11 @@ export const StockEvents = () => {
 
     const rangeOptions: readonly DropdownOption[] = useMemo(
         () => [
-            { value: '1', label: trans.stockInfo.events.range_1y },
-            { value: '3', label: trans.stockInfo.events.range_3y },
-            { value: '5', label: trans.stockInfo.events.range_5y },
+            { value: '1', label: '1 năm' },
+            { value: '3', label: '3 năm' },
+            { value: '5', label: '5 năm' },
         ],
-        [trans],
+        [],
     );
 
     const eventTypes: EventTypeOption[] = useMemo(() => {
@@ -91,7 +89,7 @@ export const StockEvents = () => {
                     <Spinner isLoading isOverlay={false} />
                 </div>
             ) : filteredEvents.length === 0 ? (
-                <p className="font-body-3 text-secondary">{trans.stockInfo.events.empty}</p>
+                <p className="font-body-3 text-secondary">{'Không có sự kiện nào'}</p>
             ) : (
                 <StockEventTable events={filteredEvents} />
             )}

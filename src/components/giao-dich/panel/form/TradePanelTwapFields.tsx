@@ -8,7 +8,6 @@ import { RiCalendarLine } from 'react-icons/ri';
 import Calendar from '@/components/common/ui/Calendar';
 import { TWAP_LO_URGENCY, TWAP_LO_URGENCY_OPTIONS } from '@/constants/trading';
 import { useClickOutside } from '@/hooks/lib/useClickOutside';
-import { useTranslate } from '@/hooks/useTranslate';
 import type { TwapLoUrgency } from '@/types/trade/twap-lo';
 import { formatDateTime } from '@/utils/format';
 import { getTradingFieldBg } from '@/utils/trading/panel';
@@ -48,7 +47,6 @@ export const TradePanelTwapFields = ({
     onStartAtChange,
     onUrgencyChange,
 }: Props) => {
-    const trans = useTranslate();
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const [isDropUp, setIsDropUp] = useState(false);
     const [isCalendarOpen, setIsCalendarOpen] = useState(false);
@@ -60,9 +58,7 @@ export const TradePanelTwapFields = ({
     }, isDropdownOpen || isCalendarOpen);
 
     const hasStartAt = !!startAt;
-    const displayValue = hasStartAt
-        ? formatDateTime(startAt)
-        : trans.trading.panel.twap_start_at_immediate;
+    const displayValue = hasStartAt ? formatDateTime(startAt) : 'Ngay sau khi đặt lệnh';
 
     const now = dayjs();
     const selectedDay = dayjs(calendarValue ?? undefined);
@@ -82,9 +78,9 @@ export const TradePanelTwapFields = ({
     };
 
     const getUrgencyLabel = (key: TwapLoUrgency) => {
-        if (key === TWAP_LO_URGENCY.SLOW) return trans.trading.panel.twap_urgency_slow;
-        if (key === TWAP_LO_URGENCY.FAST) return trans.trading.panel.twap_urgency_fast;
-        return trans.trading.panel.twap_urgency_normal;
+        if (key === TWAP_LO_URGENCY.SLOW) return 'Chậm';
+        if (key === TWAP_LO_URGENCY.FAST) return 'Nhanh';
+        return 'Bình thường';
     };
 
     const handleOpenDropdown = () => {
@@ -144,9 +140,7 @@ export const TradePanelTwapFields = ({
                         <RiCalendarLine size={14} className="text-primary" />
                     </span>
                     <span className="flex flex-1 flex-col items-center justify-center">
-                        <span className="font-caption text-tertiary">
-                            {trans.trading.panel.twap_start_at_label}
-                        </span>
+                        <span className="font-caption text-tertiary">{'Thời gian bắt đầu'}</span>
                         <span className="font-body-3-highlight text-primary">{displayValue}</span>
                     </span>
                     <span className="w-5 px-1" aria-hidden />
@@ -154,7 +148,7 @@ export const TradePanelTwapFields = ({
                 {isDropdownOpen && (
                     <ul
                         role="listbox"
-                        aria-label={trans.trading.panel.twap_start_at_label}
+                        aria-label={'Thời gian bắt đầu'}
                         className={`absolute left-0 right-0 z-20 overflow-hidden rounded-xl border border-tertiary bg-secondary ${
                             isDropUp ? 'bottom-full mb-1' : 'top-full mt-1'
                         }`}
@@ -171,7 +165,7 @@ export const TradePanelTwapFields = ({
                                         : 'text-secondary hover:bg-tertiary hover:text-primary'
                                 }`}
                             >
-                                {trans.trading.panel.twap_start_at_immediate}
+                                {'Ngay sau khi đặt lệnh'}
                             </button>
                         </li>
                         <li>
@@ -186,9 +180,7 @@ export const TradePanelTwapFields = ({
                                         : 'text-secondary hover:bg-tertiary hover:text-primary'
                                 }`}
                             >
-                                {hasStartAt
-                                    ? formatDateTime(startAt)
-                                    : trans.trading.panel.twap_start_at_custom}
+                                {hasStartAt ? formatDateTime(startAt) : 'Tự chọn'}
                             </button>
                         </li>
                     </ul>
@@ -213,13 +205,11 @@ export const TradePanelTwapFields = ({
                 )}
             </div>
             <div className="flex w-full flex-col gap-1">
-                <p className="font-caption text-secondary">
-                    {trans.trading.panel.twap_urgency_label}
-                </p>
+                <p className="font-caption text-secondary">{'Tốc độ phi lệnh'}</p>
                 <div
                     className="flex w-full items-start gap-3"
                     role="radiogroup"
-                    aria-label={trans.trading.panel.twap_urgency_aria}
+                    aria-label={'Chọn tốc độ phi lệnh'}
                 >
                     {TWAP_LO_URGENCY_OPTIONS.map((option) => {
                         const isSelected = urgency === option;

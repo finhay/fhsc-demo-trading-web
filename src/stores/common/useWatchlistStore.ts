@@ -1,7 +1,6 @@
 import { create } from 'zustand';
 
 import { toast } from '@/hooks/lib/useToast';
-import { getTranslate } from '@/hooks/useTranslate';
 import {
     createWatchlist as createWatchlistApi,
     deleteWatchlistById,
@@ -133,7 +132,7 @@ const hydrateLocalWatchlists = async (
                 });
             }
         } catch (err) {
-            toast.error(getApiErrorMessage(err, getTranslate().dropdown_watchlist.load_error));
+            toast.error(getApiErrorMessage(err, 'Không thể tải danh mục theo dõi'));
         }
     }
 
@@ -165,7 +164,7 @@ export const useWatchlistStore = create<WatchListState & WatchListActions>((set,
         if (isGuest()) {
             let records = getLocalWatchlists();
             if (records.length === 0) {
-                records = [createLocalWatchlist(getTranslate().dropdown_watchlist.default_name)];
+                records = [createLocalWatchlist('Danh mục của tôi')];
             }
 
             const watchlists = await hydrateLocalWatchlists(records);
@@ -209,15 +208,13 @@ export const useWatchlistStore = create<WatchListState & WatchListActions>((set,
 
             const owned: WatchlistItem = {
                 id: OWNED_WATCHLIST_ID,
-                name: getTranslate().dropdown_watchlist.owned,
+                name: 'Đang sở hữu',
                 symbols,
                 items,
             };
             set({ ownedWatchlist: owned, currentWatchList: owned });
         } catch (err) {
-            toast.error(
-                getApiErrorMessage(err, getTranslate().dropdown_watchlist.load_owned_error),
-            );
+            toast.error(getApiErrorMessage(err, 'Không thể tải danh mục đang sở hữu'));
         } finally {
             set({ isOwnedLoading: false });
         }
@@ -257,12 +254,12 @@ export const useWatchlistStore = create<WatchListState & WatchListActions>((set,
 
     updateWatchlist: async (payload: UpdateWatchlistPayload) => {
         if (payload.id === OWNED_WATCHLIST_ID || payload.watchListId === OWNED_WATCHLIST_ID) {
-            toast.error(getTranslate().dropdown_watchlist.select_required);
+            toast.error('Vui lòng chọn danh mục');
             return;
         }
 
         const applyUpdated = () => {
-            toast.success(getTranslate().watchlist_form.update_success);
+            toast.success('Lưu danh mục thành công');
 
             set((state) => {
                 const current = state.currentWatchList;
@@ -310,14 +307,14 @@ export const useWatchlistStore = create<WatchListState & WatchListActions>((set,
 
             applyUpdated();
         } catch (err) {
-            toast.error(getApiErrorMessage(err, getTranslate().watchlist_form.update_error));
+            toast.error(getApiErrorMessage(err, 'Lỗi cập nhật danh mục'));
         }
     },
 
     addStockToWatchlist: async (item: WatchlistStockItem) => {
         const current = get().currentWatchList;
         if (!current || isOwnedWatchlist(current)) {
-            toast.error(getTranslate().dropdown_watchlist.select_required);
+            toast.error('Vui lòng chọn danh mục');
             return false;
         }
 
@@ -341,8 +338,7 @@ export const useWatchlistStore = create<WatchListState & WatchListActions>((set,
                 };
             });
 
-            const t = getTranslate().dropdown_watchlist;
-            toast.success(`${t.add_success_prefix}${symbol}${t.add_success_infix}${current.name}`);
+            toast.success(`Đã thêm ${symbol} vào ${current.name}`);
         };
 
         if (isGuest()) {
@@ -365,7 +361,7 @@ export const useWatchlistStore = create<WatchListState & WatchListActions>((set,
             toast.error(message);
             return false;
         } catch (err) {
-            toast.error(getApiErrorMessage(err, getTranslate().dropdown_watchlist.update_error));
+            toast.error(getApiErrorMessage(err, 'Không thể cập nhật danh mục'));
             return false;
         }
     },
@@ -373,7 +369,7 @@ export const useWatchlistStore = create<WatchListState & WatchListActions>((set,
     removeStockFromWatchlist: async (symbol: string) => {
         const current = get().currentWatchList;
         if (!current || isOwnedWatchlist(current)) {
-            toast.error(getTranslate().dropdown_watchlist.select_required);
+            toast.error('Vui lòng chọn danh mục');
             return false;
         }
 
@@ -397,10 +393,7 @@ export const useWatchlistStore = create<WatchListState & WatchListActions>((set,
                 };
             });
 
-            const t = getTranslate().dropdown_watchlist;
-            toast.success(
-                `${t.remove_success_prefix}${normalized}${t.remove_success_infix}${current.name}`,
-            );
+            toast.success(`Đã xóa ${normalized} khỏi ${current.name}`);
         };
 
         if (isGuest()) {
@@ -423,7 +416,7 @@ export const useWatchlistStore = create<WatchListState & WatchListActions>((set,
             applyRemoved();
             return true;
         } catch (err) {
-            toast.error(getApiErrorMessage(err, getTranslate().dropdown_watchlist.update_error));
+            toast.error(getApiErrorMessage(err, 'Không thể cập nhật danh mục'));
             return false;
         }
     },

@@ -1,7 +1,6 @@
 'use client';
 
 import { Dropdown, type DropdownOption } from '@/components/common/ui/Dropdown';
-import { useTranslate } from '@/hooks/useTranslate';
 
 export type EventTypeOption = {
     eventType: string;
@@ -25,10 +24,8 @@ export const StockEventNav = ({
     rangeValue,
     onRangeChange,
 }: Props) => {
-    const trans = useTranslate();
-
     const tabs: EventTypeOption[] = [
-        { eventType: '', eventTypeName: trans.stockInfo.events.tab_all },
+        { eventType: '', eventTypeName: 'Tất cả sự kiện' },
         ...eventTypes,
     ];
 

@@ -2,7 +2,6 @@
 
 import { TradeOrderBookRowActions } from '@/components/giao-dich/order-book/rows/TradeOrderBookRowActions';
 import { ORDER_TYPE } from '@/constants/trading';
-import { useTranslate } from '@/hooks/useTranslate';
 import type { TradeOrderBookRow } from '@/types/pages/trading';
 import { get247OrderStatus, getOrderStatusColor } from '@/utils/trading/order-book';
 
@@ -13,8 +12,7 @@ type Props = {
 };
 
 export const TradeOrderBookRow247 = ({ order, onEdit, onCancel }: Props) => {
-    const trans = useTranslate();
-    const status = get247OrderStatus(trans, order.status);
+    const status = get247OrderStatus(order.status);
     const canEdit = order.status === 'WAITING_TO_ACTIVATE';
     const canCancel = order.status === 'WAITING_TO_ACTIVATE';
 

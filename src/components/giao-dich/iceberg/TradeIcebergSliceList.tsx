@@ -1,6 +1,5 @@
 'use client';
 
-import { useTranslate } from '@/hooks/useTranslate';
 import type { IcebergSliceDto } from '@/types/trade/iceberg-orders';
 import { formatBoardPrice, formatNumberVN } from '@/utils/format';
 import { getIcebergSliceStatus, getOrderStatusBorder } from '@/utils/trading/order-book';
@@ -12,11 +11,8 @@ type Props = {
 };
 
 export const TradeIcebergSliceList = ({ slices, limitPrice, matchedPrice }: Props) => {
-    const trans = useTranslate();
-    const detailTrans = trans.trading.iceberg_detail;
-
     const getSliceStatus = (slice: IcebergSliceDto) =>
-        getIcebergSliceStatus(trans, slice.order_status, slice.matched_quantity, slice.quantity);
+        getIcebergSliceStatus(slice.order_status, slice.matched_quantity, slice.quantity);
 
     const getSliceMatchedPrice = (slice: IcebergSliceDto) => {
         if (slice.matched_price > 0) return slice.matched_price;
@@ -30,22 +26,22 @@ export const TradeIcebergSliceList = ({ slices, limitPrice, matchedPrice }: Prop
         return (
             <>
                 <div className="flex items-center gap-6 font-body-3 text-secondary">
-                    <dt className="min-w-0 flex-1">{detailTrans.slice_qty}</dt>
+                    <dt className="min-w-0 flex-1">{'KL'}</dt>
                     <dd className="shrink-0 whitespace-nowrap font-body-3-highlight">
-                        {formatNumberVN(slice.quantity, { decimals: 0 })} {detailTrans.unit}
+                        {formatNumberVN(slice.quantity, { decimals: 0 })} {'cp'}
                     </dd>
                 </div>
                 <div className="flex items-center gap-6 font-body-3 text-secondary">
-                    <dt className="min-w-0 flex-1">{detailTrans.slice_price_placed}</dt>
+                    <dt className="min-w-0 flex-1">{'Giá đặt'}</dt>
                     <dd className="shrink-0 whitespace-nowrap font-body-3-highlight">
                         {formatBoardPrice(limitPrice)}
                     </dd>
                 </div>
                 <div className="flex items-center gap-6 font-body-3 text-secondary">
-                    <dt className="min-w-0 flex-1">{detailTrans.slice_value}</dt>
+                    <dt className="min-w-0 flex-1">{'Giá trị lệnh'}</dt>
                     <dd className="shrink-0 whitespace-nowrap font-body-3-highlight">
                         {formatNumberVN(orderValue, { trimTrailingZeros: true })}
-                        {trans.trading.currency.suffix}
+                        {'đ'}
                     </dd>
                 </div>
             </>
@@ -59,19 +55,17 @@ export const TradeIcebergSliceList = ({ slices, limitPrice, matchedPrice }: Prop
         return (
             <>
                 <div className="flex items-center gap-6">
-                    <dt className="min-w-0 flex-1 font-body-3 text-secondary">
-                        {detailTrans.slice_qty_matched}
-                    </dt>
+                    <dt className="min-w-0 flex-1 font-body-3 text-secondary">{'KL Khớp/Tổng'}</dt>
                     <dd className="shrink-0 whitespace-nowrap font-body-3-highlight text-primary">
                         <span>{formatNumberVN(slice.matched_quantity, { decimals: 0 })} / </span>
                         <span className="text-secondary">
-                            {formatNumberVN(slice.quantity, { decimals: 0 })} {detailTrans.unit}
+                            {formatNumberVN(slice.quantity, { decimals: 0 })} {'cp'}
                         </span>
                     </dd>
                 </div>
                 <div className="flex items-center gap-6">
                     <dt className="min-w-0 flex-1 font-body-3 text-secondary">
-                        {detailTrans.slice_price_matched}
+                        {'Giá khớp/Giá đặt'}
                     </dt>
                     <dd className="shrink-0 whitespace-nowrap font-body-3-highlight text-primary">
                         <span>{formatBoardPrice(sliceMatchedPrice)} / </span>
@@ -79,12 +73,10 @@ export const TradeIcebergSliceList = ({ slices, limitPrice, matchedPrice }: Prop
                     </dd>
                 </div>
                 <div className="flex items-center gap-6">
-                    <dt className="min-w-0 flex-1 font-body-3 text-secondary">
-                        {detailTrans.slice_value}
-                    </dt>
+                    <dt className="min-w-0 flex-1 font-body-3 text-secondary">{'Giá trị lệnh'}</dt>
                     <dd className="shrink-0 whitespace-nowrap font-body-3-highlight text-primary">
                         {formatNumberVN(orderValue, { trimTrailingZeros: true })}
-                        {trans.trading.currency.suffix}
+                        {'đ'}
                     </dd>
                 </div>
             </>
@@ -102,7 +94,7 @@ export const TradeIcebergSliceList = ({ slices, limitPrice, matchedPrice }: Prop
                         <dl className="flex flex-col gap-3 py-4">
                             <div className="flex items-center gap-3">
                                 <dt className="min-w-0 flex-1 font-body-3-highlight text-primary">
-                                    {detailTrans.child_title.replace(
+                                    {'Lệnh {index}'.replace(
                                         '{index}',
                                         String(slice.slice_index + 1),
                                     )}

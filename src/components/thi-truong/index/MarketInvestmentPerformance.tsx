@@ -6,9 +6,8 @@ import { EmptyState } from '@/components/common/feature/EmptyState';
 import { Dropdown } from '@/components/common/ui/Dropdown';
 import { Skeleton } from '@/components/common/ui/Skeleton';
 import { createChartInvestmentPerformance } from '@/config/market/market-index';
-import { INVESTMENT_CHANNEL_PERIODS } from '@/constants/market';
+import { INVESTMENT_CHANNEL_PERIODS, INVESTMENT_PERFORMANCE_PERIOD } from '@/constants/market';
 import { useEChartsInstance } from '@/hooks/chart/useEChartsInstance';
-import { useTranslate } from '@/hooks/useTranslate';
 import {
     fetchIndexComparison,
     fetchInvestmentChannelPerformance,
@@ -18,8 +17,6 @@ import type { InvestmentPerformanceBarItem } from '@/types/pages/market';
 import { isSuccessApi } from '@/utils/common';
 
 export const MarketInvestmentPerformance = () => {
-    const trans = useTranslate();
-
     const [view, setView] = useState<string>('market');
     const [period, setPeriod] = useState<InvestmentChannelPeriod>('YTD');
     const [items, setItems] = useState<InvestmentPerformanceBarItem[]>([]);
@@ -32,10 +29,10 @@ export const MarketInvestmentPerformance = () => {
     });
 
     const viewOptions = [
-        { value: 'market', label: trans.market.investment_performance.view.market },
+        { value: 'market', label: 'Thị trường' },
         {
             value: 'investment_channel',
-            label: trans.market.investment_performance.view.investment_channel,
+            label: 'Kênh đầu tư',
         },
     ];
 
@@ -111,9 +108,7 @@ export const MarketInvestmentPerformance = () => {
         <div className="flex shrink-0 flex-col gap-4">
             <div className="flex flex-col gap-3">
                 <div className="flex items-center justify-between gap-2">
-                    <h2 className="font-body-2-highlight text-primary">
-                        {trans.market.investment_performance.heading}
-                    </h2>
+                    <h2 className="font-body-2-highlight text-primary">{'Hiệu suất đầu tư'}</h2>
                     <Dropdown
                         options={viewOptions}
                         value={view}
@@ -132,7 +127,7 @@ export const MarketInvestmentPerformance = () => {
                                     : 'font-caption text-secondary'
                             }`}
                         >
-                            {trans.market.investment_performance.period[value]}
+                            {INVESTMENT_PERFORMANCE_PERIOD[value]}
                         </button>
                     ))}
                 </div>

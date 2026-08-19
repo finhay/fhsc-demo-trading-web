@@ -6,7 +6,6 @@ import { useRouter } from 'next/router';
 
 import { StockPriceStep } from '@/components/common/stock-info/chart/StockPriceStep';
 import { StockTransaction } from '@/components/common/stock-info/chart/StockTransaction';
-import { useTranslate } from '@/hooks/useTranslate';
 import { useStockInfoStore } from '@/stores/common/useStockInfoStore';
 
 type Props = {
@@ -14,7 +13,6 @@ type Props = {
 };
 
 export const StockChartPanel: FC<Props> = ({ onClose }) => {
-    const trans = useTranslate();
     const router = useRouter();
     const { selectedStock } = useStockInfoStore();
 
@@ -42,10 +40,7 @@ export const StockChartPanel: FC<Props> = ({ onClose }) => {
                             onClick={handleTradeNow}
                             className="flex flex-1 items-center justify-center rounded-full bg-highlight px-4 py-2 font-body-2-highlight text-quaternary"
                         >
-                            {trans.stockInfo.chart.trade_now.replace(
-                                '{symbol}',
-                                selectedStock?.symbol ?? '',
-                            )}
+                            {'Giao dịch {symbol}'.replace('{symbol}', selectedStock?.symbol ?? '')}
                         </button>
                     )}
                     {onClose && (
@@ -54,7 +49,7 @@ export const StockChartPanel: FC<Props> = ({ onClose }) => {
                             onClick={onClose}
                             className="flex w-24 shrink-0 items-center justify-center rounded-full bg-tertiary px-4 py-2 font-body-2-highlight text-highlight"
                         >
-                            {trans.dialog.close}
+                            {'Đóng'}
                         </button>
                     )}
                 </div>

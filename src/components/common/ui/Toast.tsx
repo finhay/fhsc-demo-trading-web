@@ -4,7 +4,6 @@ import { createPortal } from 'react-dom';
 import { FaCheck, FaCircleExclamation, FaXmark } from 'react-icons/fa6';
 
 import { ToastItem as ToastItemType, ToastType, useToast } from '@/hooks/lib/useToast';
-import { useTranslate } from '@/hooks/useTranslate';
 
 const CONFIG: Record<
     ToastType,
@@ -40,7 +39,6 @@ const CONFIG: Record<
 };
 
 export function ToastItem({ toast }: { toast: ToastItemType }) {
-    const trans = useTranslate();
     const { remove } = useToast();
     const duration = toast.duration ?? 4000;
 
@@ -126,11 +124,7 @@ export function ToastItem({ toast }: { toast: ToastItemType }) {
                     )}
                 </div>
             </div>
-            <button
-                onClick={dismiss}
-                aria-label={trans.toast.close}
-                className="shrink-0 text-primary"
-            >
+            <button onClick={dismiss} aria-label={'Đóng'} className="shrink-0 text-primary">
                 <FaXmark size={14} className="text-primary" />
             </button>
 

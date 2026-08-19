@@ -5,7 +5,6 @@ import { useEffect, useState } from 'react';
 import ReCAPTCHA from 'react-google-recaptcha';
 import OTPInput from 'react-otp-input';
 
-import { useTranslate } from '@/hooks/useTranslate';
 import { useLoadingStore } from '@/stores/common/useLoadingStore';
 
 export type Props = {
@@ -24,7 +23,6 @@ export const OTPVerification = ({
     onSendOtp,
     onVerifyOtp,
 }: Props) => {
-    const trans = useTranslate();
     const { isLoading } = useLoadingStore();
     const [otp, setOtp] = useState<string>('');
     const [captchaToken, setCaptchaToken] = useState<string>('');
@@ -69,10 +67,10 @@ export const OTPVerification = ({
             {captchaToken && (
                 <p className="font-body-3 text-secondary w-full">
                     {isIndividual
-                        ? trans.otp_verification.sent_via_phone
-                        : trans.otp_verification.sent_via_email}
+                        ? 'Mã OTP đã được gửi qua số điện thoại của bạn.'
+                        : 'Mã OTP đã được gửi qua email của bạn.'}
                     <br />
-                    {trans.otp_verification.please_verify}
+                    {'Vui lòng kiểm tra và thực hiện xác thực.'}
                 </p>
             )}
             <div className="flex w-full flex-col gap-4">
@@ -81,7 +79,7 @@ export const OTPVerification = ({
                         <div
                             className="flex w-full justify-center px-1"
                             role="group"
-                            aria-label={trans.otp_verification.enter_otp}
+                            aria-label={'Nhập mã OTP'}
                         >
                             <OTPInput
                                 value={otp}
@@ -102,9 +100,7 @@ export const OTPVerification = ({
                         </div>
                         <div className="font-body-3 flex w-full flex-col gap-2">
                             <div className="flex items-start gap-1">
-                                <span className="text-secondary">
-                                    {trans.otp_verification.not_received}
-                                </span>
+                                <span className="text-secondary">{'Không nhận được OTP?'}</span>
                                 <button
                                     type="button"
                                     onClick={handleResendOTP}
@@ -115,14 +111,14 @@ export const OTPVerification = ({
                                             : 'text-highlight'
                                     }`}
                                 >
-                                    {trans.otp_verification.resend_prefix}
+                                    {'Gửi lại ('}
                                     {remainSecond}
-                                    {trans.otp_verification.resend_suffix}
+                                    {'s)'}
                                 </button>
                             </div>
                             <div className="flex items-start gap-1">
                                 <span className="text-secondary">
-                                    {trans.otp_verification.need_support}
+                                    {'Tôi cần hỗ trợ. Liên hệ hotline:'}
                                 </span>
                                 <a
                                     href="tel:024777789096"
@@ -142,7 +138,7 @@ export const OTPVerification = ({
                                     : 'bg-disabled text-disabled'
                             }`}
                         >
-                            {trans.otp_verification.verify}
+                            {'Xác thực'}
                         </button>
                         {isResendOTP && (
                             <div className="flex w-full justify-center">

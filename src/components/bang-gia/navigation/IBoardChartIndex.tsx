@@ -14,7 +14,6 @@ import { createChartMarketIndex } from '@/config/iboard';
 import { INDEX_LIST } from '@/constants/common';
 import { useEChartsInstances } from '@/hooks/chart/useEChartsInstances';
 import { useMQTT } from '@/hooks/useMQTT';
-import { useTranslate } from '@/hooks/useTranslate';
 import { IndexData } from '@/proto/stock';
 import { useMarketIndexStore } from '@/stores/common/useMarketIndexStore';
 import type { IndexRealtime } from '@/types/common';
@@ -55,7 +54,6 @@ export const IBoardChartIndex = () => {
     const prevRef = useRef<HTMLButtonElement>(null);
     const nextRef = useRef<HTMLButtonElement>(null);
 
-    const trans = useTranslate();
     const { chartsMapRef } = useEChartsInstances();
     const { data, updateFromMQTT } = useMarketIndexStore();
     const safeData = useMemo(() => (Array.isArray(data) ? data : []), [data]);
@@ -249,17 +247,14 @@ export const IBoardChartIndex = () => {
                                         <div className="flex items-center justify-between text-primary">
                                             <div className="font-caption-highlight">{indexId}</div>
                                             <div className="font-caption bg-disabled rounded-full flex items-center justify-center px-2 py-0.5">
-                                                {getSessionText(
-                                                    sessionInExchange || 'CLOSE',
-                                                    trans,
-                                                )}
+                                                {getSessionText(sessionInExchange || 'CLOSE')}
                                             </div>
                                         </div>
                                         <div className="flex items-center justify-between text-primary font-caption">
                                             <div className="whitespace-nowrap">
-                                                {trans.iboard.index.vol_label}{' '}
+                                                {'KLGD:'}{' '}
                                                 {formatNumberVN(allQuantity || 0, { decimals: 0 })}{' '}
-                                                {trans.iboard.index.shares_unit}
+                                                {'CP'}
                                             </div>
                                             <div
                                                 className={`flex items-center font-caption-highlight gap-1 ${change >= 0 ? 'text-green' : 'text-red'}`}
@@ -275,12 +270,12 @@ export const IBoardChartIndex = () => {
                                         </div>
                                         <div className="flex items-center justify-between text-primary font-caption">
                                             <div className="whitespace-nowrap">
-                                                {trans.iboard.index.val_label}{' '}
+                                                {'GTGD:'}{' '}
                                                 {formatNumberVN(allValue / 1_000_000_000, {
                                                     decimals: 2,
                                                     trimTrailingZeros: false,
                                                 })}{' '}
-                                                {trans.iboard.index.val_unit}
+                                                {'Tỷ'}
                                             </div>
                                             <div className="flex gap-2">
                                                 <div className="flex items-center gap-1">

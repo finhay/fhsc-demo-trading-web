@@ -4,7 +4,6 @@ import { useState } from 'react';
 
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa6';
 
-import { useTranslate } from '@/hooks/useTranslate';
 import type { ExchangeTab } from '@/types/pages/iboard';
 import { getDropdownActiveLabel, getExchangeTabClass, isDropdownActive } from '@/utils/iboard';
 
@@ -15,17 +14,13 @@ type Props = {
 };
 
 export const IBoardExchangeTab = ({ tabs, exchange, onSelectExchange }: Props) => {
-    const trans = useTranslate();
     const [openDropdownKey, setOpenDropdownKey] = useState<string | null>(null);
 
     return (
-        <nav
-            aria-label={trans.iboard.exchange_board_filter_nav}
-            className="flex min-w-0 items-center"
-        >
+        <nav aria-label={'Lọc theo nhóm bảng giá'} className="flex min-w-0 items-center">
             <ul
                 role="tablist"
-                aria-label={trans.iboard.exchange_group_tablist}
+                aria-label={'Nhóm sàn giao dịch'}
                 className="flex items-center gap-2 list-none p-0 m-0"
             >
                 {tabs.map((tab) => {
@@ -85,7 +80,7 @@ export const IBoardExchangeTab = ({ tabs, exchange, onSelectExchange }: Props) =
                                 <div className="absolute left-0 top-full z-50 pt-1">
                                     <ul
                                         role="listbox"
-                                        aria-label={trans.iboard.exchange_options_list_for.replace(
+                                        aria-label={'Danh sách {name}'.replace(
                                             '{name}',
                                             tab.defaultLabel,
                                         )}

@@ -20,7 +20,6 @@ import { MarketDot } from '@/components/thi-truong/shared/MarketDot';
 import { MarketOutOfSession } from '@/components/thi-truong/shared/MarketOutOfSession';
 import { TOP_PRICE_CHANGE_PERIODS } from '@/constants/market';
 import { useMQTT } from '@/hooks/useMQTT';
-import { useTranslate } from '@/hooks/useTranslate';
 import { StockPriceMessageList } from '@/proto/stock';
 import { fetchTopStockPriceChange } from '@/services/api/datafeed/trading-data';
 import { useMarketIndexStore } from '@/stores/common/useMarketIndexStore';
@@ -38,8 +37,14 @@ import {
     mergeRealtimeTopChangeItems,
 } from '@/utils/market/market-perspective';
 
+const PERSPECTIVE_PERIOD = {
+    session: 'Từ đầu phiên',
+    '15m': '15 phút',
+    '1h': '1 tiếng',
+    '2h': '2 tiếng',
+};
+
 export const MarketPerspective = () => {
-    const trans = useTranslate();
     const [trend, setTrend] = useState<TopStockPriceChangeTrend>('increase');
     const [period, setPeriod] = useState<TopStockPriceChangePeriod>('session');
     const [data, setData] = useState<TopStockPriceChangeItem[]>([]);
@@ -94,10 +99,7 @@ export const MarketPerspective = () => {
         fetchData(trend, nextPeriod);
     };
 
-    const columns = useMemo(
-        () => getMarketPerspectiveColumns(trans, openStockDetail),
-        [trans, openStockDetail],
-    );
+    const columns = useMemo(() => getMarketPerspectiveColumns(openStockDetail), [openStockDetail]);
 
     const table = useReactTable({
         data,
@@ -122,16 +124,16 @@ export const MarketPerspective = () => {
             <div className="flex items-center justify-between gap-2">
                 <h2 className="font-body-2-highlight text-primary flex items-center gap-2">
                     <MarketDot />
-                    {trans.market.perspective.heading}
+                    {'Góc nhìn cổ phiếu'}
                 </h2>
                 <div
                     className="border-tertiary flex shrink-0 items-center gap-1 rounded-full border p-1"
                     role="group"
-                    aria-label={trans.market.perspective.aria_filter_trend}
+                    aria-label={'Lọc theo xu hướng giá'}
                 >
                     <button
                         type="button"
-                        aria-label={trans.market.perspective.aria_up}
+                        aria-label={'Cổ phiếu tăng'}
                         aria-pressed={trend === 'increase'}
                         onClick={() => handleTrendChange('increase')}
                         className={`flex items-center justify-center rounded-xl p-0.5 transition-colors ${
@@ -142,7 +144,7 @@ export const MarketPerspective = () => {
                     </button>
                     <button
                         type="button"
-                        aria-label={trans.market.perspective.aria_down}
+                        aria-label={'Cổ phiếu giảm'}
                         aria-pressed={trend === 'decrease'}
                         onClick={() => handleTrendChange('decrease')}
                         className={`flex items-center justify-center rounded-xl p-0.5 transition-colors ${
@@ -166,7 +168,7 @@ export const MarketPerspective = () => {
                                         : 'font-caption text-secondary'
                                 }`}
                             >
-                                {trans.market.perspective.period[value]}
+                                {PERSPECTIVE_PERIOD[value]}
                             </button>
                         </li>
                     ))}
@@ -189,7 +191,7 @@ export const MarketPerspective = () => {
                     <div className="h-full overflow-x-auto overflow-y-auto">
                         <table
                             className="w-full min-w-72 table-fixed border-separate border-spacing-y-1.5"
-                            aria-label={trans.market.perspective.heading}
+                            aria-label={'Góc nhìn cổ phiếu'}
                         >
                             <colgroup>
                                 <col className="w-1/4" />

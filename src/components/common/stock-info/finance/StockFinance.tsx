@@ -10,7 +10,6 @@ import {
     FINANCIAL_REPORT_TABS,
     FINANCIAL_STATEMENT_TYPE,
 } from '@/constants/stock-info';
-import { useTranslate } from '@/hooks/useTranslate';
 import {
     fetchCompanyFinancialAnalysis,
     fetchFinancialStatement,
@@ -21,7 +20,6 @@ import type { FinancialStatementData } from '@/types/pages/stock-info';
 import { isSuccessApi } from '@/utils/common';
 
 export const StockFinance = () => {
-    const trans = useTranslate();
     const [activeTab, setActiveTab] = useState<string>(FINANCE_TAB.ANALYSIS);
     const [isLoading, setIsLoading] = useState(true);
     const [dataAnnual, setDataAnnual] = useState<any>([]);
@@ -32,8 +30,8 @@ export const StockFinance = () => {
     const { selectedStock } = useStockInfoStore();
 
     const financeTabs = [
-        { key: FINANCE_TAB.ANALYSIS, label: trans.stockInfo.finance.tab_analysis },
-        { key: FINANCE_TAB.REPORT, label: trans.stockInfo.finance.tab_report },
+        { key: FINANCE_TAB.ANALYSIS, label: 'Phân tích' },
+        { key: FINANCE_TAB.REPORT, label: 'Báo cáo tài chính' },
     ];
 
     const fetchFinanceData = async (symbol: string) => {
@@ -89,7 +87,7 @@ export const StockFinance = () => {
             <nav
                 className="flex shrink-0 items-center gap-1"
                 role="tablist"
-                aria-label={trans.stockInfo.finance.tab_aria}
+                aria-label={'Chọn loại thông tin tài chính'}
             >
                 {financeTabs.map(({ key, label }) => (
                     <button

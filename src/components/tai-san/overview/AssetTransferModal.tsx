@@ -11,7 +11,6 @@ import { ASSET_TRANSFER_MODAL_STEPS } from '@/constants/assets';
 import { SUB_ACCOUNT_PERMISSION } from '@/constants/common';
 import { useClickOutside } from '@/hooks/lib/useClickOutside';
 import { toast } from '@/hooks/lib/useToast';
-import { useTranslate } from '@/hooks/useTranslate';
 import { calculateTransferFee, transferMoney } from '@/services/api/payments';
 import { useAssetStore } from '@/stores/assets/useAssetStore';
 import { useAuthStore } from '@/stores/auth/useAuthStore';
@@ -27,7 +26,6 @@ type Props = {
 };
 
 export const AssetTransferModal = ({ availableBalance, onClose, onConfirm }: Props) => {
-    const trans = useTranslate();
     const { startLoading, stopLoading, isLoading } = useLoadingStore();
     const [step, setStep] = useState<number>(ASSET_TRANSFER_MODAL_STEPS.amount);
     const [feeData, setFeeData] = useState<{ fee: number; vat: number }>({ fee: 0, vat: 0 });
@@ -80,7 +78,7 @@ export const AssetTransferModal = ({ availableBalance, onClose, onConfirm }: Pro
                             toast.error(message);
                         }
                     } catch (err) {
-                        toast.error(getApiErrorMessage(err, trans.common.try_again_error));
+                        toast.error(getApiErrorMessage(err, 'Có lỗi xảy ra, vui lòng thử lại'));
                     } finally {
                         stopLoading();
                     }
@@ -94,7 +92,7 @@ export const AssetTransferModal = ({ availableBalance, onClose, onConfirm }: Pro
                         toSubAccount.sub_account_id,
                     );
                     if (isSuccessApi(error_code)) {
-                        toast.success(trans.assets.modals.transfer.success);
+                        toast.success('Chuyển tiền thành công');
                         refetchTransactions(fromSubAccount.sub_account_id);
                         if (onConfirm) {
                             onConfirm(
@@ -108,7 +106,7 @@ export const AssetTransferModal = ({ availableBalance, onClose, onConfirm }: Pro
                         toast.error(message);
                     }
                 } catch (err) {
-                    toast.error(getApiErrorMessage(err, trans.common.try_again_error));
+                    toast.error(getApiErrorMessage(err, 'Có lỗi xảy ra, vui lòng thử lại'));
                 } finally {
                     stopLoading();
                 }
@@ -129,42 +127,39 @@ export const AssetTransferModal = ({ availableBalance, onClose, onConfirm }: Pro
 
     const validateAmount = (value: string) => {
         if (!value || value === '0') {
-            return trans.assets.modals.transfer.err_amount_required;
+            return 'Vui lòng nhập số tiền cần chuyển';
         }
         const numValue = Number(value);
         if (numValue <= 0) {
-            return trans.assets.modals.transfer.err_amount_positive;
+            return 'Số tiền phải lớn hơn 0';
         }
         if (numValue > availableBalance) {
-            return trans.assets.modals.transfer.err_amount_exceeds;
+            return 'Số tiền vượt quá số dư khả dụng';
         }
         return undefined;
     };
 
     const formattedAmount = amount
-        ? formatNumberVN(amount, { trimTrailingZeros: true }) + trans.assets.modals.common.currency
-        : `0${trans.assets.modals.common.currency}`;
-    const fee =
-        formatNumberVN(feeData.fee, { trimTrailingZeros: true }) +
-        trans.assets.modals.common.currency;
+        ? formatNumberVN(amount, { trimTrailingZeros: true }) + 'đ'
+        : `0${'đ'}`;
+    const fee = formatNumberVN(feeData.fee, { trimTrailingZeros: true }) + 'đ';
     const received = amount
-        ? formatNumberVN(Number(amount) - feeData.fee, { trimTrailingZeros: true }) +
-          trans.assets.modals.common.currency
-        : `0${trans.assets.modals.common.currency}`;
+        ? formatNumberVN(Number(amount) - feeData.fee, { trimTrailingZeros: true }) + 'đ'
+        : `0${'đ'}`;
 
     let dialogTitle: string;
     let dialogOnBack: (() => void) | undefined;
 
     switch (step) {
         case ASSET_TRANSFER_MODAL_STEPS.amount:
-            dialogTitle = trans.assets.modals.transfer.title_amount;
+            dialogTitle = 'Bạn cần chuyển bao nhiêu?';
             break;
         case ASSET_TRANSFER_MODAL_STEPS.confirm:
-            dialogTitle = trans.assets.modals.transfer.title_confirm;
+            dialogTitle = 'Xác nhận chuyển tiền';
             dialogOnBack = handleBack;
             break;
         default:
-            dialogTitle = trans.assets.modals.transfer.title_amount;
+            dialogTitle = 'Bạn cần chuyển bao nhiêu?';
     }
 
     return (
@@ -181,7 +176,7 @@ export const AssetTransferModal = ({ availableBalance, onClose, onConfirm }: Pro
                         <div className="flex flex-col gap-4">
                             <div className="flex gap-2 items-center">
                                 <span className="font-body-3 text-secondary">
-                                    {trans.assets.modals.transfer.direction_to}
+                                    {'Chuyển sang tiểu khoản'}
                                 </span>
                                 {toSubAccounts.length > 1 ? (
                                     <div ref={dropdownRef} className="relative">
@@ -263,13 +258,11 @@ export const AssetTransferModal = ({ availableBalance, onClose, onConfirm }: Pro
                                                     )
                                                 }
                                                 onBlur={field.handleBlur}
-                                                placeholder={
-                                                    trans.assets.modals.transfer.placeholder_amount
-                                                }
+                                                placeholder={'Nhập số tiền cần chuyển'}
                                                 className="w-full bg-tertiary rounded-xl px-4 py-3 font-body-3 text-primary placeholder:text-secondary border border-transparent focus:border-highlight focus:outline-none transition-colors pr-8"
                                             />
                                             <span className="absolute right-4 top-1/2 -translate-y-1/2 font-body-2 text-secondary">
-                                                {trans.assets.modals.common.currency}
+                                                {'đ'}
                                             </span>
                                         </div>
                                         {field.state.meta.errors.length > 0 && (
@@ -283,11 +276,11 @@ export const AssetTransferModal = ({ availableBalance, onClose, onConfirm }: Pro
 
                             <div className="flex items-center justify-between">
                                 <span className="font-body-3 text-secondary">
-                                    {trans.assets.modals.transfer.available}
+                                    {'Tiền khả dụng'}
                                 </span>
                                 <span className="font-body-3 text-primary">
                                     {formatNumberVN(availableBalance, { trimTrailingZeros: true })}
-                                    {trans.assets.modals.common.currency}
+                                    {'đ'}
                                 </span>
                             </div>
 
@@ -300,7 +293,7 @@ export const AssetTransferModal = ({ availableBalance, onClose, onConfirm }: Pro
                                         : 'bg-disabled text-disabled cursor-not-allowed'
                                 }`}
                             >
-                                {trans.assets.modals.transfer.continue}
+                                {'Tiếp tục'}
                             </button>
                         </div>
                     ) : (
@@ -308,9 +301,7 @@ export const AssetTransferModal = ({ availableBalance, onClose, onConfirm }: Pro
                             <div className="bg-tertiary rounded-xl overflow-hidden">
                                 <div className="flex items-center justify-between px-4 py-3">
                                     <div className="flex flex-col gap-0.5">
-                                        <span className="font-caption text-secondary">
-                                            {trans.assets.modals.transfer.from}
-                                        </span>
+                                        <span className="font-caption text-secondary">{'Từ'}</span>
                                         <span className="font-body-2-highlight text-primary">
                                             {fromAccount}
                                         </span>
@@ -331,9 +322,7 @@ export const AssetTransferModal = ({ availableBalance, onClose, onConfirm }: Pro
 
                                 <div className="flex items-center justify-between px-4 py-3">
                                     <div className="flex flex-col gap-0.5">
-                                        <span className="font-caption text-secondary">
-                                            {trans.assets.modals.transfer.to}
-                                        </span>
+                                        <span className="font-caption text-secondary">{'Tới'}</span>
                                         <span className="font-body-2-highlight text-primary">
                                             {toAccount}
                                         </span>
@@ -349,21 +338,19 @@ export const AssetTransferModal = ({ availableBalance, onClose, onConfirm }: Pro
                             <div className="bg-tertiary rounded-xl px-4 py-3 flex flex-col gap-3">
                                 <div className="flex items-center justify-between">
                                     <span className="font-body-3 text-secondary">
-                                        {trans.assets.modals.transfer.amount_label}
+                                        {'Số tiền chuyển'}
                                     </span>
                                     <span className="font-body-3 text-primary">
                                         {formattedAmount}
                                     </span>
                                 </div>
                                 <div className="flex items-center justify-between">
-                                    <span className="font-body-3 text-secondary">
-                                        {trans.assets.modals.transfer.fee}
-                                    </span>
+                                    <span className="font-body-3 text-secondary">{'Phí'}</span>
                                     <span className="font-body-3 text-primary">{fee}</span>
                                 </div>
                                 <div className="flex items-center justify-between">
                                     <span className="font-body-3 text-secondary">
-                                        {trans.assets.modals.transfer.received}
+                                        {'Thực nhận'}
                                     </span>
                                     <span className="font-body-3 text-primary">{received}</span>
                                 </div>
@@ -374,7 +361,7 @@ export const AssetTransferModal = ({ availableBalance, onClose, onConfirm }: Pro
                                 disabled={isLoading}
                                 className="w-full py-3 rounded-xl bg-highlight font-body-3-highlight text-quaternary hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
                             >
-                                {trans.assets.modals.transfer.confirm}
+                                {'Xác nhận'}
                             </button>
                         </div>
                     )}

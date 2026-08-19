@@ -7,7 +7,6 @@ import QRCode from 'react-qr-code';
 import { Spinner } from '@/components/common/ui/Spinner';
 import { TRADE_UI_CONFIG } from '@/constants/trading';
 import { useTradeVerifyQr } from '@/hooks/trading/useTradeVerifyQr';
-import { useTranslate } from '@/hooks/useTranslate';
 
 type Props = {
     onClose: () => void;
@@ -15,7 +14,6 @@ type Props = {
 };
 
 export const TradeVerifyQrPanel = ({ onClose, onSuccess }: Props) => {
-    const trans = useTranslate();
     const [isLoading, setIsLoading] = useState(true);
     const { qrId, generateQR } = useTradeVerifyQr({ onClose, onSuccess });
 
@@ -36,7 +34,7 @@ export const TradeVerifyQrPanel = ({ onClose, onSuccess }: Props) => {
             ) : (
                 <>
                     <h3 className="font-body-2-highlight shrink-0 text-primary">
-                        {trans.trading.qr_panel.title}
+                        {'Xác thực giao dịch'}
                     </h3>
                     <div className="shrink-0 rounded-xl bg-quinary p-1">
                         <QRCode
@@ -44,18 +42,18 @@ export const TradeVerifyQrPanel = ({ onClose, onSuccess }: Props) => {
                             value={qrId}
                             viewBox="0 0 256 256"
                             className="w-48 h-48"
-                            aria-label={trans.trading.qr_panel.qr_aria}
+                            aria-label={'Mã QR xác thực giao dịch'}
                         />
                     </div>
                     <p className="font-body-3 shrink-0 text-center text-primary whitespace-pre-line">
-                        {trans.trading.qr_panel.description}
+                        {'Mở ứng dụng trên điện thoại,\nquét mã để xác thực.'}
                     </p>
                     <button
                         type="button"
                         onClick={onClose}
                         className="font-body-3-highlight flex w-full shrink-0 items-center justify-center rounded-full bg-error px-4 py-2 text-red"
                     >
-                        {trans.trading.qr_panel.btn_cancel}
+                        {'Huỷ'}
                     </button>
                 </>
             )}

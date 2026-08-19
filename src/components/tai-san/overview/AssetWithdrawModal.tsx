@@ -8,7 +8,6 @@ import { OTPVerification } from '@/components/common/feature/OTPVerification';
 import { Dialog } from '@/components/common/ui/Dialog';
 import { ASSET_WITHDRAW_MODAL_STEPS, MIN_WITHDRAW_AMOUNT } from '@/constants/assets';
 import { toast } from '@/hooks/lib/useToast';
-import { useTranslate } from '@/hooks/useTranslate';
 import { postSendOtpPublic } from '@/services/api/auth/otp';
 import { withdrawToDefaultBank } from '@/services/api/payments';
 import { useAssetStore } from '@/stores/assets/useAssetStore';
@@ -18,13 +17,32 @@ import { sanitizeQuantityInput } from '@/utils/assets';
 import { getApiErrorMessage, isSuccessApi } from '@/utils/common';
 import { formatNumberVN } from '@/utils/format';
 
+const MODALS_WITHDRAW = {
+    title_amount: 'Bạn muốn rút bao nhiêu tiền?',
+    title_confirm: 'Xác nhận yêu cầu rút tiền',
+    withdraw_amount: 'Số tiền rút',
+    placeholder_amount: '0',
+    available: 'Tiền khả dụng',
+    continue: 'Tiếp tục',
+    source: 'Nguồn tiền',
+    withdraw_fee: 'Phí rút',
+    received: 'Thực nhận',
+    destination_account: 'Tài khoản nhận',
+    confirm: 'Xác nhận',
+    success: 'Rút tiền thành công',
+    err_amount_required: 'Vui lòng nhập số tiền cần rút',
+    err_amount_positive: 'Số tiền phải lớn hơn 0',
+    err_amount_exceeds: 'Số tiền vượt quá số dư khả dụng',
+    err_min_withdraw: 'Số tiền rút tối thiểu là {amount}',
+    otp_send_failed: 'Không thể gửi OTP',
+};
+
 type Props = {
     availableBalance: number;
     onClose: () => void;
 };
 
 export const AssetWithdrawModal = ({ availableBalance, onClose }: Props) => {
-    const trans = useTranslate();
     const { startLoading, stopLoading, isLoading: isGlobalLoading } = useLoadingStore();
     const [step, setStep] = useState<number>(ASSET_WITHDRAW_MODAL_STEPS.amount);
 
@@ -53,9 +71,9 @@ export const AssetWithdrawModal = ({ availableBalance, onClose }: Props) => {
                 const numAmount = Number(value.amount);
                 if (numAmount < MIN_WITHDRAW_AMOUNT) {
                     toast.error(
-                        trans.assets.modals.withdraw.err_min_withdraw.replace(
+                        'Số tiền rút tối thiểu là {amount}'.replace(
                             '{amount}',
-                            `${formatNumberVN(MIN_WITHDRAW_AMOUNT, { trimTrailingZeros: true })}${trans.assets.modals.common.currency}`,
+                            `${formatNumberVN(MIN_WITHDRAW_AMOUNT, { trimTrailingZeros: true })}${'đ'}`,
                         ),
                     );
                     return;
@@ -81,19 +99,19 @@ export const AssetWithdrawModal = ({ availableBalance, onClose }: Props) => {
 
     const validateAmount = (value: string) => {
         if (!value || value === '0') {
-            return trans.assets.modals.withdraw.err_amount_required;
+            return 'Vui lòng nhập số tiền cần rút';
         }
         const numValue = Number(value);
         if (numValue <= 0) {
-            return trans.assets.modals.withdraw.err_amount_positive;
+            return 'Số tiền phải lớn hơn 0';
         }
         if (numValue > availableBalance) {
-            return trans.assets.modals.withdraw.err_amount_exceeds;
+            return 'Số tiền vượt quá số dư khả dụng';
         }
         if (numValue < MIN_WITHDRAW_AMOUNT) {
-            return trans.assets.modals.withdraw.err_min_withdraw.replace(
+            return 'Số tiền rút tối thiểu là {amount}'.replace(
                 '{amount}',
-                `${formatNumberVN(MIN_WITHDRAW_AMOUNT, { trimTrailingZeros: true })}${trans.assets.modals.common.currency}`,
+                `${formatNumberVN(MIN_WITHDRAW_AMOUNT, { trimTrailingZeros: true })}${'đ'}`,
             );
         }
         return undefined;
@@ -117,10 +135,10 @@ export const AssetWithdrawModal = ({ availableBalance, onClose }: Props) => {
                 return { success: true, remainSecond: result.remain_second };
             }
 
-            toast.error(message || trans.assets.modals.withdraw.otp_send_failed);
+            toast.error(message || 'Không thể gửi OTP');
             return { success: false };
         } catch (error) {
-            toast.error(getApiErrorMessage(error, trans.assets.modals.withdraw.otp_send_failed));
+            toast.error(getApiErrorMessage(error, 'Không thể gửi OTP'));
             return { success: false };
         } finally {
             stopLoading();
@@ -147,7 +165,7 @@ export const AssetWithdrawModal = ({ availableBalance, onClose }: Props) => {
                     refetchTransactions(activeSubAccount.sub_account_id);
                 }
 
-                toast.success(trans.assets.modals.withdraw.success);
+                toast.success('Rút tiền thành công');
                 onClose();
                 return true;
             }
@@ -155,7 +173,7 @@ export const AssetWithdrawModal = ({ availableBalance, onClose }: Props) => {
             toast.error(message);
             return false;
         } catch (err) {
-            toast.error(getApiErrorMessage(err, trans.common.try_again_error));
+            toast.error(getApiErrorMessage(err, 'Có lỗi xảy ra, vui lòng thử lại'));
             return false;
         } finally {
             stopLoading();
@@ -163,9 +181,9 @@ export const AssetWithdrawModal = ({ availableBalance, onClose }: Props) => {
     };
 
     const formattedAmount = amount
-        ? formatNumberVN(amount, { trimTrailingZeros: true }) + trans.assets.modals.common.currency
-        : `0${trans.assets.modals.common.currency}`;
-    const fee = `0${trans.assets.modals.common.currency}`;
+        ? formatNumberVN(amount, { trimTrailingZeros: true }) + 'đ'
+        : `0${'đ'}`;
+    const fee = `0${'đ'}`;
     const received = formattedAmount;
 
     let dialogTitle: string;
@@ -173,18 +191,18 @@ export const AssetWithdrawModal = ({ availableBalance, onClose }: Props) => {
 
     switch (step) {
         case ASSET_WITHDRAW_MODAL_STEPS.amount:
-            dialogTitle = trans.assets.modals.withdraw.title_amount;
+            dialogTitle = 'Bạn muốn rút bao nhiêu tiền?';
             break;
         case ASSET_WITHDRAW_MODAL_STEPS.confirm:
-            dialogTitle = trans.assets.modals.withdraw.title_confirm;
+            dialogTitle = 'Xác nhận yêu cầu rút tiền';
             dialogOnBack = handleBack;
             break;
         case ASSET_WITHDRAW_MODAL_STEPS.otp:
-            dialogTitle = trans.otp_verification.title;
+            dialogTitle = 'Xác thực OTP';
             dialogOnBack = handleBack;
             break;
         default:
-            dialogTitle = trans.assets.modals.withdraw.title_amount;
+            dialogTitle = 'Bạn muốn rút bao nhiêu tiền?';
     }
 
     return (
@@ -223,11 +241,11 @@ export const AssetWithdrawModal = ({ availableBalance, onClose }: Props) => {
                                     <div className="flex flex-col gap-2">
                                         <div className="relative">
                                             <label htmlFor="withdraw-input" className="sr-only">
-                                                {trans.assets.modals.withdraw.withdraw_amount}
+                                                {'Số tiền rút'}
                                             </label>
                                             <div className="bg-tertiary rounded-xl px-4 py-0.5 border border-transparent focus-within:border-highlight transition-colors">
                                                 <span className="font-caption text-secondary">
-                                                    {trans.assets.modals.withdraw.withdraw_amount}
+                                                    {'Số tiền rút'}
                                                 </span>
                                                 <input
                                                     id="withdraw-input"
@@ -247,10 +265,7 @@ export const AssetWithdrawModal = ({ availableBalance, onClose }: Props) => {
                                                         )
                                                     }
                                                     onBlur={field.handleBlur}
-                                                    placeholder={
-                                                        trans.assets.modals.withdraw
-                                                            .placeholder_amount
-                                                    }
+                                                    placeholder={MODALS_WITHDRAW.placeholder_amount}
                                                     className="w-full bg-transparent font-body-3 text-primary placeholder:text-secondary focus:outline-none"
                                                 />
                                             </div>
@@ -266,11 +281,11 @@ export const AssetWithdrawModal = ({ availableBalance, onClose }: Props) => {
 
                             <div className="flex items-center justify-between">
                                 <span className="font-body-3 text-secondary">
-                                    {trans.assets.modals.withdraw.available}
+                                    {'Tiền khả dụng'}
                                 </span>
                                 <span className="font-body-3 text-primary">
                                     {formatNumberVN(availableBalance, { trimTrailingZeros: true })}
-                                    {trans.assets.modals.common.currency}
+                                    {'đ'}
                                 </span>
                             </div>
 
@@ -283,7 +298,7 @@ export const AssetWithdrawModal = ({ availableBalance, onClose }: Props) => {
                                         : 'bg-disabled text-disabled cursor-not-allowed'
                                 }`}
                             >
-                                {trans.assets.modals.withdraw.continue}
+                                {'Tiếp tục'}
                             </button>
                         </div>
                     ) : (
@@ -291,7 +306,7 @@ export const AssetWithdrawModal = ({ availableBalance, onClose }: Props) => {
                             <div className="bg-tertiary rounded-xl px-4 py-3 flex flex-col gap-3">
                                 <div className="flex items-center justify-between">
                                     <span className="font-body-3 text-secondary">
-                                        {trans.assets.modals.withdraw.source}
+                                        {'Nguồn tiền'}
                                     </span>
                                     <span className="font-body-3 text-primary text-right">
                                         {sourceAccount}
@@ -299,21 +314,19 @@ export const AssetWithdrawModal = ({ availableBalance, onClose }: Props) => {
                                 </div>
                                 <div className="flex items-center justify-between">
                                     <span className="font-body-3 text-secondary">
-                                        {trans.assets.modals.withdraw.withdraw_amount}
+                                        {'Số tiền rút'}
                                     </span>
                                     <span className="font-body-3 text-primary">
                                         {formattedAmount}
                                     </span>
                                 </div>
                                 <div className="flex items-center justify-between">
-                                    <span className="font-body-3 text-secondary">
-                                        {trans.assets.modals.withdraw.withdraw_fee}
-                                    </span>
+                                    <span className="font-body-3 text-secondary">{'Phí rút'}</span>
                                     <span className="font-body-3 text-primary">{fee}</span>
                                 </div>
                                 <div className="flex items-center justify-between">
                                     <span className="font-body-3 text-secondary">
-                                        {trans.assets.modals.withdraw.received}
+                                        {'Thực nhận'}
                                     </span>
                                     <span className="font-body-3 text-primary">{received}</span>
                                 </div>
@@ -322,7 +335,7 @@ export const AssetWithdrawModal = ({ availableBalance, onClose }: Props) => {
                             <div className="bg-tertiary rounded-xl px-4 py-3 flex flex-col gap-1">
                                 <div className="flex items-start justify-between gap-4">
                                     <span className="font-body-3 text-secondary shrink-0">
-                                        {trans.assets.modals.withdraw.destination_account}
+                                        {'Tài khoản nhận'}
                                     </span>
                                     <div className="flex flex-col items-end gap-0.5">
                                         <span className="font-body-3-highlight text-primary text-right">
@@ -343,7 +356,7 @@ export const AssetWithdrawModal = ({ availableBalance, onClose }: Props) => {
                                 disabled={isLoading}
                                 className="w-full py-3 rounded-xl bg-highlight font-body-3-highlight text-quaternary hover:opacity-90 transition-opacity disabled:opacity-50 disabled:cursor-not-allowed"
                             >
-                                {trans.assets.modals.withdraw.confirm}
+                                {'Xác nhận'}
                             </button>
                         </div>
                     )}

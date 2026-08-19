@@ -3,15 +3,13 @@
 import { useEffect, useMemo, useRef } from 'react';
 
 import { AnalysisSection } from '@/components/common/stock-info/finance/analysis/common/AnalysisSection';
-import { ANALYSIS_CONTENT_CARD } from '@/constants/stock-info';
+import { ANALYSIS_CONTENT_CARD, FINANCE_ANALYSIS_LABELS } from '@/constants/stock-info';
 import { useEChartsInstance } from '@/hooks/chart/useEChartsInstance';
-import { useTranslate } from '@/hooks/useTranslate';
 import { formatNumberVN, formatPeriodMMYYYY } from '@/utils/format';
 import { sortByYearAsc, trendColor } from '@/utils/stock-info';
 
 export const SecuritiesLeverage = ({ dataQuarterly }: { dataQuarterly: any }) => {
-    const trans = useTranslate();
-    const fa = trans.stockInfo.finance_analysis as Record<string, string>;
+    const fa = FINANCE_ANALYSIS_LABELS as Record<string, string>;
     const latestQuarterly = dataQuarterly?.[0] ?? {};
 
     const chartRef = useRef<HTMLDivElement>(null);
@@ -96,16 +94,16 @@ export const SecuritiesLeverage = ({ dataQuarterly }: { dataQuarterly: any }) =>
 
     return (
         <AnalysisSection
-            title={fa.securities_leverage_question}
+            title={'Đòn bẩy margin có an toàn không?'}
             right={
                 <span className="shrink-0 rounded-full border border-tertiary px-2 py-1 font-body-3 text-primary">
-                    {fa.qoq}
+                    {'QoQ'}
                 </span>
             }
         >
             <div className={ANALYSIS_CONTENT_CARD}>
                 <div className="flex shrink-0 flex-col gap-0.5">
-                    <p className="font-body-3 text-secondary">{fa.loan_to_kqvcsh}</p>
+                    <p className="font-body-3 text-secondary">{'Cho vay KQ/VCSH'}</p>
                     <p className="font-body-2-highlight text-primary">
                         {formatNumberVN(latestQuarterly?.tilechovaykq)}x
                     </p>

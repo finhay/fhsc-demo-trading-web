@@ -5,11 +5,18 @@ import { useEffect, useRef, useState } from 'react';
 import { createChartFundNavHistory } from '@/config/market/market-fund-detail';
 import { FUND_NAV_CHART_DEFAULT_PERIOD, FUND_NAV_CHART_PERIODS } from '@/constants/market';
 import { useEChartsInstance } from '@/hooks/chart/useEChartsInstance';
-import { useTranslate } from '@/hooks/useTranslate';
 import { fetchFundNavHistories } from '@/services/api/fund';
 import type { FundNavChartPeriod, FundNavHistoryItem } from '@/types/pages/fund';
 import { isSuccessApi } from '@/utils/common';
 import { formatDate, formatNumberVN } from '@/utils/format';
+
+const FUND_MODAL_CHART_PERIODS = {
+    ONE_MONTH: '1 tháng',
+    THREE_MONTHS: '3 tháng',
+    SIX_MONTHS: '6 tháng',
+    ONE_YEAR: '1 năm',
+    FIVE_YEARS: '5 năm',
+};
 
 type Props = {
     fundName: string;
@@ -25,8 +32,7 @@ const isChartDate = (value: string) =>
     /^\d{1,2}-\d{4}$/.test(value);
 
 export const MarketFundDetailChart = ({ fundName, latestNav, initialChartData }: Props) => {
-    const trans = useTranslate();
-    const d = trans.market.assets.fund_modal.detail;
+    const d = FUND_MODAL_CHART_PERIODS;
 
     const [period, setPeriod] = useState<FundNavChartPeriod>(FUND_NAV_CHART_DEFAULT_PERIOD);
     const [chartData, setChartData] = useState<FundNavHistoryItem[]>(initialChartData);
@@ -92,8 +98,7 @@ export const MarketFundDetailChart = ({ fundName, latestNav, initialChartData }:
             <div className="flex flex-wrap items-start justify-between gap-3">
                 <div className="flex flex-col gap-1">
                     <span className="font-body-3 text-secondary">
-                        {d.latest_price_label}{' '}
-                        {formattedDate ? d.latest_price_date_fn(formattedDate) : null}
+                        {'Giá gần nhất'} {formattedDate ? `(${formattedDate})` : null}
                     </span>
                     <span className="font-heading-4 text-primary">
                         {displayNavpf == null
@@ -115,7 +120,7 @@ export const MarketFundDetailChart = ({ fundName, latestNav, initialChartData }:
                                         : 'font-body-3 text-secondary'
                                 }`}
                             >
-                                {d.chart_periods[item]}
+                                {d[item]}
                             </button>
                         );
                     })}

@@ -1,13 +1,15 @@
 'use client';
 
 import { AnalysisSection } from '@/components/common/stock-info/finance/analysis/common/AnalysisSection';
-import { ANALYSIS_CONTENT_CARD, INSURANCE_HEALTH_ITEMS } from '@/constants/stock-info';
-import { useTranslate } from '@/hooks/useTranslate';
+import {
+    ANALYSIS_CONTENT_CARD,
+    FINANCE_ANALYSIS_LABELS,
+    INSURANCE_HEALTH_ITEMS,
+} from '@/constants/stock-info';
 import { formatNumberVN } from '@/utils/format';
 
 export const InsuranceHealth = ({ dataQuarterly }: { dataQuarterly: any }) => {
-    const trans = useTranslate();
-    const fa = trans.stockInfo.finance_analysis as Record<string, string>;
+    const fa = FINANCE_ANALYSIS_LABELS as Record<string, string>;
     const latestQuarterly = dataQuarterly?.[0] ?? {};
 
     const investmentItems = INSURANCE_HEALTH_ITEMS.map((item) => ({
@@ -40,16 +42,16 @@ export const InsuranceHealth = ({ dataQuarterly }: { dataQuarterly: any }) => {
 
     return (
         <AnalysisSection
-            title={fa.insurance_health_question}
+            title={'Tài chính có khoẻ không?'}
             right={
                 <span className="shrink-0 rounded-full border border-tertiary px-2 py-1 font-body-3 text-primary">
-                    {fa.yoy}
+                    {'YoY'}
                 </span>
             }
         >
             <div className={ANALYSIS_CONTENT_CARD}>
                 <div className="flex flex-col gap-3">
-                    <p className="font-body-3 text-primary">{fa.investment_allocation}</p>
+                    <p className="font-body-3 text-primary">{'Tỷ trọng đầu tư'}</p>
                     <div className="flex gap-3">
                         {investmentItems.map((item) => (
                             <div key={item.labelKey} className="flex min-w-0 flex-1 flex-col gap-2">
@@ -91,7 +93,7 @@ export const InsuranceHealth = ({ dataQuarterly }: { dataQuarterly: any }) => {
                                 </span>
                                 {s.withYoY && (
                                     <span className="shrink-0 rounded-full border border-tertiary px-2 py-0.5 font-tiny-highlight text-primary">
-                                        {fa.yoy}
+                                        {'YoY'}
                                     </span>
                                 )}
                             </div>

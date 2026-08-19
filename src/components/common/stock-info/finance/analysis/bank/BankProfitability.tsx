@@ -5,18 +5,17 @@ import { useEffect, useMemo, useRef } from 'react';
 import { AnalysisSection } from '@/components/common/stock-info/finance/analysis/common/AnalysisSection';
 import {
     ANALYSIS_CONTENT_CARD,
+    FINANCE_ANALYSIS_LABELS,
     PROFITABILITY,
     PROFITABILITY_SERIES_COLORS,
 } from '@/constants/stock-info';
 import { useEChartsInstance } from '@/hooks/chart/useEChartsInstance';
-import { useTranslate } from '@/hooks/useTranslate';
 import { getChangeColor } from '@/utils/common';
 import { formatNumberVN, formatPeriodMMYYYY } from '@/utils/format';
 import { appendPercentTooltip, sortByYearAsc } from '@/utils/stock-info';
 
 export const BankProfitability = ({ dataAnnual }: { dataAnnual: any }) => {
-    const trans = useTranslate();
-    const fa = trans.stockInfo.finance_analysis as Record<string, string>;
+    const fa = FINANCE_ANALYSIS_LABELS as Record<string, string>;
     const profitabilityItems = useMemo(() => {
         const sorted = sortByYearAsc(dataAnnual);
         const data = dataAnnual?.[0] ?? {};

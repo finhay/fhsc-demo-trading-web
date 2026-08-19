@@ -3,14 +3,11 @@ import { type ColumnDef } from '@tanstack/react-table';
 import { FaArrowDown, FaArrowUp } from 'react-icons/fa6';
 
 import { MarketPerspectiveWatchlistCell } from '@/components/thi-truong/perspective/MarketPerspectiveWatchlistCell';
-import type { useTranslate } from '@/hooks/useTranslate';
 import type { TopStockPriceChangeItem } from '@/types/datafeed/trading-data';
 import type { PerspectiveColMeta } from '@/types/pages/market';
 import { getMarketPriceColor } from '@/utils/common';
 import { getChangeColor } from '@/utils/common';
 import { formatNumberVN } from '@/utils/format';
-
-type Trans = ReturnType<typeof useTranslate>;
 
 const renderSortIcon = (sorted: false | 'asc' | 'desc') => {
     if (sorted === 'asc') return <FaArrowUp size={12} />;
@@ -19,7 +16,6 @@ const renderSortIcon = (sorted: false | 'asc' | 'desc') => {
 };
 
 export const getMarketPerspectiveColumns = (
-    trans: Trans,
     onSelectSymbol: (symbol: string) => void,
 ): ColumnDef<TopStockPriceChangeItem>[] => [
     {
@@ -31,7 +27,7 @@ export const getMarketPerspectiveColumns = (
                 className="inline-flex w-full items-center justify-start gap-1 font-caption text-secondary"
                 onClick={column.getToggleSortingHandler()}
             >
-                {trans.market.perspective.col_symbol}
+                {'Mã'}
                 <span className="inline-flex items-center">
                     {renderSortIcon(column.getIsSorted())}
                 </span>
@@ -64,7 +60,7 @@ export const getMarketPerspectiveColumns = (
                 className="inline-flex w-full items-center justify-end gap-1 font-caption text-secondary"
                 onClick={column.getToggleSortingHandler()}
             >
-                {trans.market.perspective.col_price}
+                {'Giá'}
                 <span className="inline-flex items-center">
                     {renderSortIcon(column.getIsSorted())}
                 </span>
@@ -98,10 +94,10 @@ export const getMarketPerspectiveColumns = (
             <button
                 type="button"
                 className="inline-flex w-full items-center justify-end gap-1 font-caption text-secondary"
-                aria-label={trans.market.perspective.aria_sort_change}
+                aria-label={'Sắp xếp theo thay đổi'}
                 onClick={column.getToggleSortingHandler()}
             >
-                {trans.market.perspective.col_change}
+                {'Thay đổi'}
                 <span className="inline-flex items-center">
                     {renderSortIcon(column.getIsSorted())}
                 </span>

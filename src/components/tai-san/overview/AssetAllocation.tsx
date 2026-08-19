@@ -11,7 +11,6 @@ import { Skeleton } from '@/components/common/ui/Skeleton';
 import { createChartAllocationPie } from '@/config/assets';
 import { ALLOCATION_COLORS } from '@/constants/assets';
 import { useEChartsInstance } from '@/hooks/chart/useEChartsInstance';
-import { useTranslate } from '@/hooks/useTranslate';
 import { getLatestMonthlyReport } from '@/services/api/accounts/profile';
 import type { AssetAllocationItem, AssetSummaryProps } from '@/types/pages/assets';
 import { calcAssetPercent, formatPnlDisplay } from '@/utils/assets';
@@ -21,7 +20,6 @@ import { formatNumberVN, formatPercentVN } from '@/utils/format';
 type Props = AssetSummaryProps;
 
 export const AssetAllocation = ({ data, isLoading }: Props) => {
-    const trans = useTranslate();
     const [isDownloadAppModalOpen, setIsDownloadAppModalOpen] = useState(false);
     const [isReportModalOpen, setIsReportModalOpen] = useState(false);
     const [reportUrl, setReportUrl] = useState('');
@@ -44,49 +42,49 @@ export const AssetAllocation = ({ data, isLoading }: Props) => {
 
         return [
             {
-                label: trans.assets.allocation.money,
+                label: 'Tiền mặt',
                 value: formatNumberVN(moneyTotal, { trimTrailingZeros: true }),
                 color: ALLOCATION_COLORS.money,
                 percentage: calcAssetPercent(moneyTotal, totalAssets),
                 pnlChange: null,
             },
             {
-                label: trans.assets.allocation.hay0,
+                label: 'Hay0',
                 value: formatNumberVN(hay0, { trimTrailingZeros: true }),
                 color: ALLOCATION_COLORS.hay0,
                 percentage: calcAssetPercent(hay0, totalAssets),
                 pnlChange: null,
             },
             {
-                label: trans.assets.allocation.stock,
+                label: 'Chứng Khoán',
                 value: formatNumberVN(stock, { trimTrailingZeros: true }),
                 color: ALLOCATION_COLORS.stock,
                 percentage: calcAssetPercent(stock, totalAssets),
                 pnlChange: formatPnlDisplay(pnl?.stock),
             },
             {
-                label: trans.assets.allocation.fund,
+                label: 'Chứng chỉ quỹ',
                 value: formatNumberVN(fund, { trimTrailingZeros: true }),
                 color: ALLOCATION_COLORS.fund,
                 percentage: calcAssetPercent(fund, totalAssets),
                 pnlChange: formatPnlDisplay(pnl?.fund),
             },
             {
-                label: trans.assets.allocation.bond,
+                label: 'Tích luỹ HayBond',
                 value: formatNumberVN(bond, { trimTrailingZeros: true }),
                 color: ALLOCATION_COLORS.bond,
                 percentage: calcAssetPercent(bond, totalAssets),
                 pnlChange: null,
             },
             {
-                label: trans.assets.allocation.child_savings,
+                label: 'Cho con',
                 value: formatNumberVN(childSavings, { trimTrailingZeros: true }),
                 color: ALLOCATION_COLORS.childSavings,
                 percentage: calcAssetPercent(childSavings, totalAssets),
                 pnlChange: formatPnlDisplay(pnl?.child_savings),
             },
         ];
-    }, [data, trans.assets.allocation]);
+    }, [data]);
 
     const handleOpenReportModal = async () => {
         setIsLoadingReport(true);
@@ -119,9 +117,7 @@ export const AssetAllocation = ({ data, isLoading }: Props) => {
     return (
         <section className="flex flex-col w-full bg-secondary rounded-xl p-3 gap-4 shrink-0">
             <header className="flex items-center justify-between gap-2">
-                <h2 className="font-body-2-highlight text-primary">
-                    {trans.assets.allocation.heading}
-                </h2>
+                <h2 className="font-body-2-highlight text-primary">{'Phân bổ tài sản'}</h2>
                 <button
                     type="button"
                     onClick={handleOpenReportModal}
@@ -129,7 +125,7 @@ export const AssetAllocation = ({ data, isLoading }: Props) => {
                     className="flex items-center gap-2 shrink-0 disabled:opacity-50"
                 >
                     <span className="font-body-3 text-highlight whitespace-nowrap">
-                        {trans.assets.allocation.report_button}
+                        {'Xuất báo cáo tài sản'}
                     </span>
                     <RiTodoLine className="text-highlight text-base shrink-0" aria-hidden />
                 </button>
@@ -210,7 +206,7 @@ export const AssetAllocation = ({ data, isLoading }: Props) => {
             )}
             {isReportModalOpen && (
                 <Dialog
-                    title={trans.assets.allocation.report_button}
+                    title={'Xuất báo cáo tài sản'}
                     maxWidth="max-w-5xl"
                     maxHeight="h-[70vh]"
                     onClose={() => setIsReportModalOpen(false)}
@@ -221,7 +217,7 @@ export const AssetAllocation = ({ data, isLoading }: Props) => {
                             height="100%"
                             data={reportUrl}
                             type="application/pdf"
-                            aria-label={trans.assets.allocation.report_button}
+                            aria-label={'Xuất báo cáo tài sản'}
                         />
                     </div>
                 </Dialog>

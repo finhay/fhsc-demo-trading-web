@@ -9,7 +9,6 @@ import {
 import { StockStatisticsTable } from '@/components/common/stock-info/statistics/StockStatisticsTable';
 import { Skeleton } from '@/components/common/ui/Skeleton';
 import { STATISTICS_TAB, STATISTICS_TABS } from '@/constants/stock-info';
-import { useTranslate } from '@/hooks/useTranslate';
 import {
     fetchForeignTradingHistory,
     fetchPriceHistoriesChart,
@@ -20,10 +19,32 @@ import type { PriceHistoriesChartData, TradingHistoryItem } from '@/types/datafe
 import type { StockStatisticsPriceHistoryRow } from '@/types/pages/stock-info';
 import { isSuccessApi } from '@/utils/common';
 
+const STOCK_INFO_STATISTICS = {
+    tab_aria: 'Chọn loại thống kê',
+    section_aria: 'Bảng thống kê',
+    tab_price_history: 'Giá quá khứ',
+    tab_foreign: 'GD nước ngoài',
+    tab_proprietary: 'GD tự doanh',
+    empty: 'Chưa có dữ liệu',
+    col_date: 'Ngày',
+    col_change: 'Thay đổi',
+    col_change_percent: '%',
+    col_close: 'Đóng ĐC',
+    col_open: 'Mở',
+    col_high: 'Cao',
+    col_low: 'Thấp',
+    col_volume: 'KLGD',
+    col_net_volume: 'KL ròng',
+    col_net_value: 'GT ròng',
+    col_buy_volume: 'KL mua',
+    col_buy_value: 'GT mua',
+    col_sell_volume: 'KL bán',
+    col_sell_value: 'GT bán',
+};
+
 type StatisticsTab = (typeof STATISTICS_TAB)[keyof typeof STATISTICS_TAB];
 
 export const StockStatistics = () => {
-    const trans = useTranslate();
     const { selectedStock } = useStockInfoStore();
     const [activeTab, setActiveTab] = useState<StatisticsTab>(STATISTICS_TAB.PRICE_HISTORY);
     const [isLoading, setIsLoading] = useState(false);
@@ -101,20 +122,20 @@ export const StockStatistics = () => {
         return rows.reverse();
     }, [priceData]);
 
-    const priceColumns = useMemo(() => getStockStatisticsPriceColumns(trans), [trans]);
-    const tradingColumns = useMemo(() => getStockStatisticsTradingColumns(trans), [trans]);
+    const priceColumns = useMemo(() => getStockStatisticsPriceColumns(), []);
+    const tradingColumns = useMemo(() => getStockStatisticsTradingColumns(), []);
 
     const tradingRows = activeTab === STATISTICS_TAB.FOREIGN ? foreignRows : proprietaryRows;
 
     return (
         <section
             className="flex h-full min-h-0 flex-col gap-2 overflow-hidden"
-            aria-label={trans.stockInfo.statistics.section_aria}
+            aria-label={'Bảng thống kê'}
         >
             <nav
                 className="flex shrink-0 items-center gap-1"
                 role="tablist"
-                aria-label={trans.stockInfo.statistics.tab_aria}
+                aria-label={'Chọn loại thống kê'}
             >
                 {STATISTICS_TABS.map(({ key, labelKey }) => {
                     const isActive = activeTab === key;
@@ -131,7 +152,7 @@ export const StockStatistics = () => {
                                     : 'font-body-3 text-secondary'
                             }`}
                         >
-                            {trans.stockInfo.statistics[labelKey]}
+                            {STOCK_INFO_STATISTICS[labelKey]}
                         </button>
                     );
                 })}

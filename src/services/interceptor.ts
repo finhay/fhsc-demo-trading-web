@@ -85,10 +85,7 @@ export const createBaseInterceptor = (options: BaseInterceptorOptions): AxiosIns
             req.headers['x-access-key'] = getAccessKey() || '';
 
             if (options.withLanguage !== false) {
-                const url = new URL(window.location.href);
-                const locale = url.pathname.split('/')[1];
-                const language = ['en', 'vi'].includes(locale) ? locale : 'vi';
-                req.headers['Accept-Language'] = language;
+                req.headers['Accept-Language'] = 'vi';
             }
 
             return req;
@@ -146,8 +143,4 @@ export const vnscServiceDatafeed = createBaseInterceptor({
     timeout: 60000,
     withAuth: true,
     withDeviceId: true,
-});
-
-export const vnscTracking = createBaseInterceptor({
-    baseURL: process.env.NEXT_PUBLIC_TRACKING_URL,
 });

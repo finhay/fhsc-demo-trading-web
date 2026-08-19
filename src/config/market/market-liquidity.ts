@@ -1,6 +1,5 @@
 import type * as echarts from 'echarts';
 
-import type { useTranslate } from '@/hooks/useTranslate';
 import type { MarketLiquidityItem } from '@/types/datafeed/trading-data';
 import { formatNumberVN, formatTimeHm } from '@/utils/format';
 
@@ -18,7 +17,6 @@ const getNiceYMax = (value: number): number => {
 export const createChartMarketLiquidityV2 = (
     todayData: MarketLiquidityItem[],
     avgData: MarketLiquidityItem[],
-    trans: ReturnType<typeof useTranslate>,
 ): echarts.EChartsOption => {
     const today: [number, number][] = todayData.map((item, index) => [index, item.accumulated_val]);
     const avg: [number, number][] = avgData.map((item, index) => [index, item.accumulated_val]);
@@ -30,8 +28,8 @@ export const createChartMarketLiquidityV2 = (
     const yMax = getNiceYMax(rawYMax);
     const yInterval = yMax / 4;
 
-    const nameOpen = trans.market.liquidity.value_open;
-    const nameAvg5 = trans.market.liquidity.value_avg5;
+    const nameOpen = 'GTGD từ đầu phiên';
+    const nameAvg5 = 'GTGD TB 5 phiên';
 
     const getSeriesDotClass = (seriesName: string) =>
         seriesName === nameOpen ? 'bg-blue' : 'bg-orange';

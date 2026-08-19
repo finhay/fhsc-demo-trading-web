@@ -5,7 +5,6 @@ import { useState } from 'react';
 import { RiArrowRightSLine } from 'react-icons/ri';
 
 import { Dialog } from '@/components/common/ui/Dialog';
-import { useTranslate } from '@/hooks/useTranslate';
 import type { StockEvent } from '@/types/datafeed/stock-event';
 import { formatDate } from '@/utils/format';
 
@@ -14,16 +13,15 @@ type Props = {
 };
 
 export const StockEventTable = ({ events }: Props) => {
-    const trans = useTranslate();
     const [selectedEvent, setSelectedEvent] = useState<StockEvent | null>(null);
 
     return (
         <div className="flex flex-col gap-3 rounded-2xl border border-tertiary p-3">
             <div className="flex items-start gap-8 overflow-hidden font-body-3 text-secondary">
-                <span className="min-w-0 flex-1">{trans.stockInfo.events.col_event}</span>
-                <span className="w-40 shrink-0">{trans.stockInfo.events.col_event_type}</span>
-                <span className="w-32 shrink-0">{trans.stockInfo.events.col_record_date}</span>
-                <span className="w-32 shrink-0">{trans.stockInfo.events.col_ex_right_date}</span>
+                <span className="min-w-0 flex-1">{'Sự kiện'}</span>
+                <span className="w-40 shrink-0">{'Loại sự kiện'}</span>
+                <span className="w-32 shrink-0">{'Ngày chốt'}</span>
+                <span className="w-32 shrink-0">{'Ngày GDKHQ'}</span>
                 <span className="w-12 shrink-0" aria-hidden />
             </div>
             <div className="flex flex-col gap-6">
@@ -46,7 +44,7 @@ export const StockEventTable = ({ events }: Props) => {
                             type="button"
                             onClick={() => setSelectedEvent(event)}
                             className="flex w-12 shrink-0 items-start justify-center text-secondary transition-opacity hover:opacity-80"
-                            aria-label={trans.stockInfo.events.view_detail_aria}
+                            aria-label={'Xem chi tiết sự kiện'}
                         >
                             <RiArrowRightSLine size={20} aria-hidden />
                         </button>

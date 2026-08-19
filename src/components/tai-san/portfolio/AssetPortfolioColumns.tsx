@@ -4,32 +4,25 @@ import { FaArrowDown, FaArrowUp } from 'react-icons/fa6';
 
 import { SortableHeader } from '@/components/common/table/SortableHeader';
 import { TRADE_LITERAL } from '@/constants/trading';
-import type { useTranslate } from '@/hooks/useTranslate';
 import type { SortableColMeta } from '@/types/pages/common';
 import type { PortfolioItem } from '@/types/trade/portfolio';
 import { calcPortfolioMarketValue, formatPortfolioPrice } from '@/utils/assets';
 import { formatNumberVN, formatPercentVN } from '@/utils/format';
-
-type Trans = ReturnType<typeof useTranslate>;
 
 type ColumnHandlers = {
     onSymbolClick: (symbol: string) => void;
     onTradeClick: (side: string, item: PortfolioItem, rect: DOMRect) => void;
 };
 
-export const getAssetPortfolioColumns = (
-    trans: Trans,
-    { onSymbolClick, onTradeClick }: ColumnHandlers,
-): ColumnDef<PortfolioItem, unknown>[] => {
-    const t = trans.assets.portfolio;
-
+export const getAssetPortfolioColumns = ({
+    onSymbolClick,
+    onTradeClick,
+}: ColumnHandlers): ColumnDef<PortfolioItem, unknown>[] => {
     return [
         {
             id: 'symbol',
             accessorKey: 'symbol',
-            header: ({ column }) => (
-                <SortableHeader label={t.col_symbol} column={column} align="left" />
-            ),
+            header: ({ column }) => <SortableHeader label={'Mã'} column={column} align="left" />,
             meta: { align: 'left' } satisfies SortableColMeta,
             cell: ({ row }) => (
                 <button
@@ -44,9 +37,7 @@ export const getAssetPortfolioColumns = (
         {
             id: 'total',
             accessorKey: 'total',
-            header: ({ column }) => (
-                <SortableHeader label={t.col_total} column={column} align="right" />
-            ),
+            header: ({ column }) => <SortableHeader label={'Tổng'} column={column} align="right" />,
             meta: { align: 'right' } satisfies SortableColMeta,
             cell: ({ getValue }) => formatNumberVN(getValue<number>(), { decimals: 0 }),
         },
@@ -54,7 +45,7 @@ export const getAssetPortfolioColumns = (
             id: 'trade',
             accessorKey: 'trade',
             header: ({ column }) => (
-                <SortableHeader label={t.col_trade} column={column} align="right" />
+                <SortableHeader label={'Có thể GD'} column={column} align="right" />
             ),
             meta: { align: 'right' } satisfies SortableColMeta,
             cell: ({ getValue }) => formatNumberVN(getValue<number>(), { decimals: 0 }),
@@ -63,7 +54,7 @@ export const getAssetPortfolioColumns = (
             id: 'cost_price',
             accessorKey: 'cost_price',
             header: ({ column }) => (
-                <SortableHeader label={t.col_cost_price} column={column} align="right" />
+                <SortableHeader label={'Giá vốn'} column={column} align="right" />
             ),
             meta: { align: 'right' } satisfies SortableColMeta,
             cell: ({ getValue }) => formatPortfolioPrice(getValue<number>()),
@@ -72,7 +63,7 @@ export const getAssetPortfolioColumns = (
             id: 'basic_price',
             accessorKey: 'basic_price',
             header: ({ column }) => (
-                <SortableHeader label={t.col_basic_price} column={column} align="right" />
+                <SortableHeader label={'Giá TT'} column={column} align="right" />
             ),
             meta: { align: 'right' } satisfies SortableColMeta,
             cell: ({ getValue }) => formatPortfolioPrice(getValue<number>()),
@@ -81,7 +72,7 @@ export const getAssetPortfolioColumns = (
             id: 'cost_price_amount',
             accessorKey: 'cost_price_amount',
             header: ({ column }) => (
-                <SortableHeader label={t.col_cost_price_amount} column={column} align="right" />
+                <SortableHeader label={'Giá trị vốn'} column={column} align="right" />
             ),
             meta: { align: 'right' } satisfies SortableColMeta,
             cell: ({ getValue }) => formatNumberVN(getValue<number>(), { trimTrailingZeros: true }),
@@ -90,7 +81,7 @@ export const getAssetPortfolioColumns = (
             id: 'market_value',
             accessorFn: (row) => calcPortfolioMarketValue(row),
             header: ({ column }) => (
-                <SortableHeader label={t.col_market_value} column={column} align="right" />
+                <SortableHeader label={'Giá trị thị trường'} column={column} align="right" />
             ),
             meta: { align: 'right' } satisfies SortableColMeta,
             cell: ({ getValue }) => formatNumberVN(getValue<number>(), { trimTrailingZeros: true }),
@@ -99,7 +90,7 @@ export const getAssetPortfolioColumns = (
             id: 'pnl_amount',
             accessorKey: 'pnl_amount',
             header: ({ column }) => (
-                <SortableHeader label={t.col_pnl_amount} column={column} align="right" />
+                <SortableHeader label={'Lãi/lỗ'} column={column} align="right" />
             ),
             meta: { align: 'right' } satisfies SortableColMeta,
             cell: ({ row }) => {
@@ -141,7 +132,7 @@ export const getAssetPortfolioColumns = (
                         }
                         className="flex h-8 w-20 shrink-0 items-center justify-center rounded-full bg-success px-4 font-body-3 text-green"
                     >
-                        {t.buy}
+                        {'Mua'}
                     </button>
                     <button
                         type="button"
@@ -154,7 +145,7 @@ export const getAssetPortfolioColumns = (
                         }
                         className="flex h-8 w-20 shrink-0 items-center justify-center rounded-full bg-error px-4 font-body-3 text-red"
                     >
-                        {t.sell}
+                        {'Bán'}
                     </button>
                 </div>
             ),

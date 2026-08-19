@@ -1,4 +1,3 @@
-import type { useTranslate } from '@/hooks/useTranslate';
 import type { HeatmapTreemapNode } from '@/types/pages/market';
 import { formatNumberVN, formatNumberVNWithUnit } from '@/utils/format';
 import { getStockChangeColor } from '@/utils/market/market-heatmap';
@@ -9,7 +8,7 @@ const formatSectorTooltip = (
         <span class="block whitespace-normal break-words font-caption text-primary">${data.name ?? ''}</span>
     </div>`;
 
-const formatHeatmapTooltip = (params: any, trans: ReturnType<typeof useTranslate>): string => {
+const formatHeatmapTooltip = (params: any): string => {
     const data = params?.data;
     if (!data) return '';
     if (!data.symbol) return data.name ? formatSectorTooltip(data) : '';
@@ -27,9 +26,9 @@ const formatHeatmapTooltip = (params: any, trans: ReturnType<typeof useTranslate
     });
     const statusLabel =
         price >= ceiling
-            ? `<span class="font-caption text-purple">${trans.market.heatmap.ceiling}</span>`
+            ? `<span class="font-caption text-purple">${'Tăng trần'}</span>`
             : price <= floor
-              ? `<span class="font-caption text-blue">${trans.market.heatmap.floor}</span>`
+              ? `<span class="font-caption text-blue">${'Giảm sàn'}</span>`
               : '';
 
     return `<div class="flex w-52 flex-col gap-2 rounded-lg bg-tertiary p-2">
@@ -44,21 +43,18 @@ const formatHeatmapTooltip = (params: any, trans: ReturnType<typeof useTranslate
         ${statusLabel}
         <div class="flex flex-col gap-1.5 border-t border-quaternary pt-2">
             <div class="flex items-center justify-between gap-4">
-                <span class="font-caption text-secondary">${trans.market.flow.row_value}</span>
+                <span class="font-caption text-secondary">${'GTGD'}</span>
                 <span class="font-caption-highlight text-primary">${formatNumberVNWithUnit(totalValue)}</span>
             </div>
             <div class="flex items-center justify-between gap-4">
-                <span class="font-caption text-secondary">${trans.market.flow.row_volume}</span>
+                <span class="font-caption text-secondary">${'KLGD'}</span>
                 <span class="font-caption-highlight text-primary">${formatNumberVN(totalVolume, { decimals: 0 })}</span>
             </div>
         </div>
     </div>`;
 };
 
-export const createMarketHeatmapEChartsOptions = (
-    hierarchicalData: HeatmapTreemapNode[],
-    trans: ReturnType<typeof useTranslate>,
-): any => ({
+export const createMarketHeatmapEChartsOptions = (hierarchicalData: HeatmapTreemapNode[]): any => ({
     tooltip: {
         trigger: 'item',
         backgroundColor: 'transparent',
@@ -92,7 +88,7 @@ export const createMarketHeatmapEChartsOptions = (
                     : point[1] + 10;
             return [x, y];
         },
-        formatter: (params: any) => formatHeatmapTooltip(params, trans),
+        formatter: (params: any) => formatHeatmapTooltip(params),
     },
     series: [
         {

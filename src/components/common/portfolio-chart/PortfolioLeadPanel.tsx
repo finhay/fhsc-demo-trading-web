@@ -4,7 +4,6 @@ import { FaArrowDown, FaArrowUp } from 'react-icons/fa6';
 
 import { PortfolioDonutChart } from '@/components/common/portfolio-chart/PortfolioDonutChart';
 import { PORTFOLIO_THEME_STYLES } from '@/constants/market';
-import { useTranslate } from '@/hooks/useTranslate';
 import type { MarketPortfolioChartItem, MarketPortfolioTheme } from '@/types/pages/market';
 import { formatPercentVN } from '@/utils/format';
 
@@ -31,7 +30,6 @@ export const PortfolioLeadPanel = ({
     variant = 'card',
     className = '',
 }: Props) => {
-    const trans = useTranslate();
     const themeStyle = PORTFOLIO_THEME_STYLES[theme];
     const isUp = impactPercent >= 0;
     const isCard = variant === 'card';
@@ -99,9 +97,7 @@ export const PortfolioLeadPanel = ({
                     <span className="font-body-3 text-secondary">{heading}</span>
                     <div className="flex items-center justify-center gap-2">
                         <div className="flex items-center gap-1">
-                            <span className="font-body-3 text-secondary">
-                                {trans.market.portfolio.impact_label}
-                            </span>
+                            <span className="font-body-3 text-secondary">{'Tác động:'}</span>
                             <span
                                 className={`inline-flex items-center gap-0.5 font-body-3 ${
                                     isUp ? 'text-green' : 'text-red'
@@ -116,7 +112,7 @@ export const PortfolioLeadPanel = ({
                             </span>
                         </div>
                         <span className="font-body-3 text-secondary">
-                            {trans.market.portfolio.weight_label}{' '}
+                            {'Tỷ trọng:'}{' '}
                             <span className="text-primary">{formatPercentVN(weightPercent)}</span>
                         </span>
                     </div>

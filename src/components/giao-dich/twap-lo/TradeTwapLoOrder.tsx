@@ -7,7 +7,6 @@ import { FaChevronDown, FaChevronUp } from 'react-icons/fa6';
 import { ACCOUNT_TYPE, ERROR_CODES } from '@/constants/common';
 import { ORDER_SIDE, TWO_FA_PLACEMENT } from '@/constants/trading';
 import { toast } from '@/hooks/lib/useToast';
-import { useTranslate } from '@/hooks/useTranslate';
 import { createTwapLoOrder, previewTwapLoOrder } from '@/services/api/trade/twap-lo';
 import { useAuthStore } from '@/stores/auth/useAuthStore';
 import { useLoadingStore } from '@/stores/common/useLoadingStore';
@@ -34,7 +33,6 @@ export const TradeTwapLoOrder = ({
     onClose,
     onSuccess,
 }: Props) => {
-    const trans = useTranslate();
     const { activeSubAccount, profile } = useAuthStore();
     const { startLoading, stopLoading, isLoading } = useLoadingStore();
     const { request2FA, handle2FATokenExpired } = useTradingStore();
@@ -54,13 +52,14 @@ export const TradeTwapLoOrder = ({
     const sliceCount = preview?.n ?? slices.length;
     const totalMoney = displayPrice > 0 ? displayPrice * displayQty : 0;
 
-    const title = (
-        isBuy ? trans.trading.twap_lo_order.title_buy : trans.trading.twap_lo_order.title_sell
-    ).replace('{symbol}', symbol);
+    const title = (isBuy ? 'Xác nhận lệnh mua {symbol}' : 'Xác nhận lệnh bán {symbol}').replace(
+        '{symbol}',
+        symbol,
+    );
 
     const startAtLabel = startAt
         ? formatDateTime(preview?.startAt || startAt)
-        : trans.trading.panel.twap_start_at_immediate;
+        : 'Ngay sau khi đặt lệnh';
 
     const isConfirmDisabled = isLoading || isPreviewLoading || !preview;
 
@@ -73,24 +72,16 @@ export const TradeTwapLoOrder = ({
                 {index > 0 && <div className="my-4 h-px w-full bg-quaternary" />}
                 <dl className="flex flex-col gap-3">
                     <dt className="font-body-3-highlight text-secondary">
-                        {trans.trading.twap_lo_order.child_title.replace(
-                            '{index}',
-                            String(slice.seq ?? index + 1),
-                        )}
+                        {'Lệnh {index}'.replace('{index}', String(slice.seq ?? index + 1))}
                     </dt>
                     <div className="flex items-center justify-between gap-2">
-                        <dt className="font-body-3 text-secondary">
-                            {trans.trading.twap_lo_order.child_qty}
-                        </dt>
+                        <dt className="font-body-3 text-secondary">{'KL đặt'}</dt>
                         <dd className="shrink-0 whitespace-nowrap font-body-3-highlight text-primary">
-                            {formatNumberVN(qty, { decimals: 0 })}{' '}
-                            {trans.trading.twap_lo_order.unit}
+                            {formatNumberVN(qty, { decimals: 0 })} {'cp'}
                         </dd>
                     </div>
                     <div className="flex items-center justify-between gap-2">
-                        <dt className="font-body-3 text-secondary">
-                            {trans.trading.twap_lo_order.child_scheduled_at}
-                        </dt>
+                        <dt className="font-body-3 text-secondary">{'Thời gian đặt dự kiến'}</dt>
                         <dd className="shrink-0 whitespace-nowrap font-body-3-highlight text-primary">
                             {scheduledLabel}
                         </dd>
@@ -103,7 +94,7 @@ export const TradeTwapLoOrder = ({
     const loadPreview = async () => {
         if (!subAccountId) {
             setIsPreviewLoading(false);
-            toast.error(trans.common.try_again_error);
+            toast.error('Có lỗi xảy ra, vui lòng thử lại');
             return;
         }
 
@@ -118,10 +109,10 @@ export const TradeTwapLoOrder = ({
                 setPreview(data);
                 onPreviewLoaded?.(data);
             } else {
-                toast.error(message || trans.common.try_again_error);
+                toast.error(message || 'Có lỗi xảy ra, vui lòng thử lại');
             }
         } catch (err: unknown) {
-            toast.error(getApiErrorMessage(err, trans.common.try_again_error));
+            toast.error(getApiErrorMessage(err, 'Có lỗi xảy ra, vui lòng thử lại'));
         } finally {
             setIsPreviewLoading(false);
         }
@@ -137,12 +128,12 @@ export const TradeTwapLoOrder = ({
             });
 
             if (isSuccessApi(error_code)) {
-                toast.success(trans.trading.toast.place_success);
+                toast.success('Đặt lệnh thành công');
                 onSuccess();
             } else if (error_code === ERROR_CODES.FAILED_2FA_TOKEN_EXPIRED) {
                 is2FAExpired = true;
             } else {
-                toast.error(message || trans.common.try_again_error);
+                toast.error(message || 'Có lỗi xảy ra, vui lòng thử lại');
             }
         } catch (err: unknown) {
             const errCode =
@@ -152,7 +143,7 @@ export const TradeTwapLoOrder = ({
             if (errCode === ERROR_CODES.FAILED_2FA_TOKEN_EXPIRED) {
                 is2FAExpired = true;
             } else {
-                toast.error(getApiErrorMessage(err, trans.common.try_again_error));
+                toast.error(getApiErrorMessage(err, 'Có lỗi xảy ra, vui lòng thử lại'));
             }
         } finally {
             stopLoading();
@@ -174,44 +165,34 @@ export const TradeTwapLoOrder = ({
             <div className="flex min-h-0 flex-1 flex-col gap-2 overflow-y-auto">
                 <div className="flex shrink-0 flex-col gap-3">
                     <h3 className="font-body-2-highlight w-full text-primary">{title}</h3>
-                    <p className="font-body-3 text-primary">
-                        {trans.trading.order_book.tab_twap_lo}
-                    </p>
+                    <p className="font-body-3 text-primary">{'Lệnh CD LO'}</p>
                 </div>
 
                 <dl className="flex shrink-0 flex-col gap-1">
                     <div className="flex items-start justify-between gap-2">
-                        <dt className="font-body-3 text-secondary">
-                            {trans.trading.twap_lo_order.qty}
-                        </dt>
+                        <dt className="font-body-3 text-secondary">{'Tổng KL'}</dt>
                         <dd className="shrink-0 whitespace-nowrap font-body-3 text-primary">
                             {formatNumberVN(displayQty, { decimals: 0 })}
-                            {trans.trading.twap_lo_order.unit}
+                            {'cp'}
                         </dd>
                     </div>
                     <div className="flex items-start justify-between gap-2">
-                        <dt className="font-body-3 text-secondary">
-                            {trans.trading.twap_lo_order.price}
-                        </dt>
+                        <dt className="font-body-3 text-secondary">{'Giá'}</dt>
                         <dd className="shrink-0 whitespace-nowrap font-body-3 text-primary">
                             {formatBoardPrice(displayPrice)}
                         </dd>
                     </div>
                     <div className="flex items-start justify-between gap-2">
                         <dt className="font-body-3 text-secondary">
-                            {isBuy
-                                ? trans.trading.twap_lo_order.money_buy
-                                : trans.trading.twap_lo_order.money_sell}
+                            {isBuy ? 'Tổng tiền mua' : 'Tổng tiền bán'}
                         </dt>
                         <dd className="shrink-0 whitespace-nowrap font-body-3 text-primary">
                             {formatNumberVN(totalMoney, { trimTrailingZeros: true })}
-                            {trans.trading.currency.suffix}
+                            {'đ'}
                         </dd>
                     </div>
                     <div className="flex items-start justify-between gap-2">
-                        <dt className="font-body-3 text-secondary">
-                            {trans.trading.twap_lo_order.start_at}
-                        </dt>
+                        <dt className="font-body-3 text-secondary">{'Thời gian bắt đầu'}</dt>
                         <dd className="shrink-0 whitespace-nowrap font-body-3 text-primary">
                             {startAtLabel}
                         </dd>
@@ -227,7 +208,7 @@ export const TradeTwapLoOrder = ({
                         aria-expanded={isSlicesOpen}
                     >
                         <span className="font-body-3 text-secondary">
-                            {trans.trading.twap_lo_order.child_list.replace(
+                            {'Danh sách lệnh con ({count} lệnh)'.replace(
                                 '{count}',
                                 String(sliceCount),
                             )}
@@ -256,7 +237,7 @@ export const TradeTwapLoOrder = ({
                               : 'bg-red text-primary hover:opacity-90 active:opacity-80'
                     }`}
                 >
-                    {trans.trading.place_modal.btn_confirm}
+                    {'Xác nhận'}
                 </button>
                 <button
                     type="button"
@@ -264,7 +245,7 @@ export const TradeTwapLoOrder = ({
                     disabled={isLoading}
                     className="font-body-3-highlight flex w-full items-center justify-center rounded-full bg-error px-4 py-2 text-red transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
                 >
-                    {trans.trading.place_modal.btn_cancel}
+                    {'Huỷ'}
                 </button>
             </div>
         </section>

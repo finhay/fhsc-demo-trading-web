@@ -1,6 +1,5 @@
 import type * as echarts from 'echarts';
 
-import type { useTranslate } from '@/hooks/useTranslate';
 import type { ExchangeRateChartItem, MacroPoint, OmoHistoryItem } from '@/types/datafeed/finance';
 import type { ChartAxisDateStyle, OmoChartTab } from '@/types/pages/market';
 import { getNetColor } from '@/utils/common';
@@ -277,9 +276,7 @@ export const createChartInterbank = (
 export const createChartOmo = (
     items: OmoHistoryItem[],
     tab: OmoChartTab,
-    trans: ReturnType<typeof useTranslate>,
 ): echarts.EChartsOption => {
-    const detail = trans.market.currency.detail;
     const dates = items.map((item) => item.date);
 
     if (tab === 'net') {
@@ -307,12 +304,7 @@ export const createChartOmo = (
                     const raw =
                         typeof point?.value === 'object' ? point.value?.value : point?.value;
                     const value = Number(raw ?? 0);
-                    const label =
-                        value > 0
-                            ? detail.omo_net_inject
-                            : value < 0
-                              ? detail.omo_net_absorb
-                              : detail.omo_tab_net;
+                    const label = value > 0 ? 'Bơm ròng' : value < 0 ? 'Hút ròng' : 'Bơm hút ròng';
                     const absVal = formatNumberVN(Math.abs(value), { trimTrailingZeros: true });
                     const valueClass = getNetColor(value);
 
@@ -328,7 +320,7 @@ export const createChartOmo = (
             series: [
                 {
                     type: 'bar',
-                    name: detail.omo_tab_net,
+                    name: 'Bơm hút ròng',
                     barWidth: '55%',
                     barMaxWidth: 16,
                     barMinHeight: 2,
@@ -350,7 +342,7 @@ export const createChartOmo = (
         series: [
             {
                 type: 'line',
-                name: detail.omo_tab_outstanding,
+                name: 'Tổng lưu hành',
                 data: values,
                 showSymbol: false,
                 smooth: 0.15,

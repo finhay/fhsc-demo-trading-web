@@ -8,14 +8,12 @@ import { EmptyState } from '@/components/common/feature/EmptyState';
 import { Skeleton } from '@/components/common/ui/Skeleton';
 import { Spinner } from '@/components/common/ui/Spinner';
 import { Tooltip } from '@/components/common/ui/Tooltip';
-import { useTranslate } from '@/hooks/useTranslate';
 import { useAssetStore } from '@/stores/assets/useAssetStore';
 import { useAuthStore } from '@/stores/auth/useAuthStore';
 import { isInflowTransaction } from '@/utils/assets';
 import { formatNumberVN } from '@/utils/format';
 
 export const AssetTransactions = () => {
-    const trans = useTranslate();
     const { activeSubAccount } = useAuthStore();
     const subAccountId = activeSubAccount?.sub_account_id ?? null;
 
@@ -65,9 +63,7 @@ export const AssetTransactions = () => {
 
     return (
         <section className="flex w-full shrink-0 flex-col gap-3 rounded-xl bg-secondary p-3">
-            <h2 className="shrink-0 font-body-2-highlight text-primary">
-                {trans.assets.transaction_history.heading}
-            </h2>
+            <h2 className="shrink-0 font-body-2-highlight text-primary">{'Lịch sử tiền'}</h2>
             <div className="h-96 overflow-y-auto">
                 {isInitialLoading ? (
                     <div className="h-full w-full">

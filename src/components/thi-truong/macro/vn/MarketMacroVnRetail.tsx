@@ -3,10 +3,9 @@
 import { useRef } from 'react';
 
 import { createChartMacroLine } from '@/config/market/market-macro';
-import { MACRO_SERIES_COLORS } from '@/constants/market';
+import { MACRO_SERIES_COLORS, MARKET_MACRO } from '@/constants/market';
 import { useEChartsInstance } from '@/hooks/chart/useEChartsInstance';
 import { useEChartsOption } from '@/hooks/chart/useEChartsOption';
-import { useTranslate } from '@/hooks/useTranslate';
 import type { MacroPoint } from '@/types/datafeed/finance';
 import { formatMacroPercent, getLastMacroValue } from '@/utils/market/market-macro';
 
@@ -17,7 +16,7 @@ type Props = {
 };
 
 export const MarketMacroVnRetail = ({ serviceRetail, goodsRetail, cpi }: Props) => {
-    const detail = useTranslate().market.macro.detail;
+    const detail = MARKET_MACRO;
 
     const serviceRef = useRef<HTMLDivElement>(null);
     const serviceHasData = serviceRetail.length > 0;
@@ -34,7 +33,7 @@ export const MarketMacroVnRetail = ({ serviceRetail, goodsRetail, cpi }: Props) 
     useEChartsOption(
         serviceInstanceRef,
         () =>
-            createChartMacroLine(serviceRetail, detail.service_retail, {
+            createChartMacroLine(serviceRetail, 'Dịch vụ (YoY)', {
                 color: MACRO_SERIES_COLORS.orange,
                 valueSuffix: '%',
             }),
@@ -44,7 +43,7 @@ export const MarketMacroVnRetail = ({ serviceRetail, goodsRetail, cpi }: Props) 
     useEChartsOption(
         goodsInstanceRef,
         () =>
-            createChartMacroLine(goodsRetail, detail.goods_retail, {
+            createChartMacroLine(goodsRetail, 'Hàng hoá (YoY)', {
                 color: MACRO_SERIES_COLORS.blue,
                 valueSuffix: '%',
             }),
@@ -54,7 +53,7 @@ export const MarketMacroVnRetail = ({ serviceRetail, goodsRetail, cpi }: Props) 
     useEChartsOption(
         cpiInstanceRef,
         () =>
-            createChartMacroLine(cpi, detail.cpi, {
+            createChartMacroLine(cpi, 'Lạm phát (YoY)', {
                 color: MACRO_SERIES_COLORS.gray,
                 valueSuffix: '%',
             }),
@@ -63,12 +62,12 @@ export const MarketMacroVnRetail = ({ serviceRetail, goodsRetail, cpi }: Props) 
 
     return (
         <section className="bg-secondary flex flex-col gap-4 rounded-2xl p-4">
-            <h3 className="font-body-2-highlight text-primary">{detail.section_retail}</h3>
+            <h3 className="font-body-2-highlight text-primary">{'Bán lẻ & tiêu dùng'}</h3>
             <div className="flex flex-col gap-4 lg:flex-row">
                 <div className="border-tertiary bg-secondary flex min-w-0 flex-1 flex-col rounded-2xl border">
                     <div className="flex w-full flex-col gap-5 p-4">
                         <div className="flex flex-col gap-1">
-                            <p className="font-body-3 text-secondary">{detail.service_retail}</p>
+                            <p className="font-body-3 text-secondary">{'Dịch vụ (YoY)'}</p>
                             <p className="font-body-2-highlight text-primary">
                                 {formatMacroPercent(getLastMacroValue(serviceRetail))}
                             </p>
@@ -87,7 +86,7 @@ export const MarketMacroVnRetail = ({ serviceRetail, goodsRetail, cpi }: Props) 
                     <div className="bg-tertiary h-px w-full" />
                     <div className="flex w-full flex-col gap-5 p-4">
                         <div className="flex flex-col gap-1">
-                            <p className="font-body-3 text-secondary">{detail.goods_retail}</p>
+                            <p className="font-body-3 text-secondary">{'Hàng hoá (YoY)'}</p>
                             <p className="font-body-2-highlight text-primary">
                                 {formatMacroPercent(getLastMacroValue(goodsRetail))}
                             </p>
@@ -107,7 +106,7 @@ export const MarketMacroVnRetail = ({ serviceRetail, goodsRetail, cpi }: Props) 
                 <div className="border-tertiary bg-secondary flex min-w-0 flex-1 flex-col rounded-2xl border">
                     <div className="flex w-full flex-1 flex-col gap-5 p-4">
                         <div className="flex flex-col gap-1">
-                            <p className="font-body-3 text-secondary">{detail.cpi}</p>
+                            <p className="font-body-3 text-secondary">{'Lạm phát (YoY)'}</p>
                             <p className="font-body-2-highlight text-primary">
                                 {formatMacroPercent(getLastMacroValue(cpi))}
                             </p>

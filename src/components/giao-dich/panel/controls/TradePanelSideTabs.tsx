@@ -1,7 +1,6 @@
 'use client';
 
 import { TRADE_LITERAL } from '@/constants/trading';
-import { useTranslate } from '@/hooks/useTranslate';
 
 type Props = {
     activeSide: string;
@@ -9,8 +8,6 @@ type Props = {
 };
 
 export const TradePanelSideTabs = ({ activeSide, onChange }: Props) => {
-    const trans = useTranslate();
-
     return (
         <header className="flex w-full shrink-0 flex-col items-start">
             <div className="flex w-full items-center gap-1 rounded-full bg-secondary p-1">
@@ -25,7 +22,7 @@ export const TradePanelSideTabs = ({ activeSide, onChange }: Props) => {
                             : 'bg-transparent text-secondary'
                     }`}
                 >
-                    {trans.trading.panel.btn_buy}
+                    {'Mua'}
                 </button>
                 <button
                     type="button"
@@ -38,7 +35,7 @@ export const TradePanelSideTabs = ({ activeSide, onChange }: Props) => {
                             : 'bg-transparent text-secondary'
                     }`}
                 >
-                    {trans.trading.panel.btn_sell}
+                    {'Bán'}
                 </button>
             </div>
         </header>

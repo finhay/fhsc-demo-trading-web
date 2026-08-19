@@ -10,7 +10,6 @@ import {
     TWO_FA_PLACEMENT,
 } from '@/constants/trading';
 import { toast } from '@/hooks/lib/useToast';
-import { useTranslate } from '@/hooks/useTranslate';
 import { placeSubAccountOrder } from '@/services/api/trade/orders';
 import { useAuthStore } from '@/stores/auth/useAuthStore';
 import { useLoadingStore } from '@/stores/common/useLoadingStore';
@@ -31,7 +30,6 @@ type Props = {
 };
 
 export const TradePlaceOrderPanel = ({ symbol, pendingOrder, onClose, onSuccess }: Props) => {
-    const trans = useTranslate();
     const { handle2FATokenExpired, request2FA, addPlacedOrdersToBook } = useTradingStore();
     const { side, price, orderType, orderLots, orderMode, stockType, executionDate, expiredDate } =
         pendingOrder;
@@ -52,22 +50,16 @@ export const TradePlaceOrderPanel = ({ symbol, pendingOrder, onClose, onSuccess 
 
     const priceDisplay = isMarket ? orderType : formatNumberVN(price / 1000);
 
-    const title = `${isBuy ? trans.trading.place_modal.title_buy : trans.trading.place_modal.title_sell} ${symbol}`;
+    const title = `${isBuy ? 'Xác nhận lệnh mua' : 'Xác nhận lệnh bán'} ${symbol}`;
 
     const placeSuccessDetail = `${
-        isBuy
-            ? trans.trading.toast.place_success_action_buy
-            : trans.trading.toast.place_success_action_sell
-    } ${formatNumberVN(totalQty, { decimals: 0 })} ${trans.trading.place_modal.qty_unit} ${
-        trans.trading.toast.place_success_with_price
-    } ${priceDisplay}`;
+        isBuy ? 'Mua' : 'Bán'
+    } ${formatNumberVN(totalQty, { decimals: 0 })} ${'cp'} ${'với giá'} ${priceDisplay}`;
 
     const placementOrders = useMemo(() => buildPlacementOrders(orderLots), [orderLots]);
 
     const getBlockTitle = (order: PlacementOrder) =>
-        order.kind === 'even'
-            ? trans.trading.place_modal.block_even
-            : trans.trading.place_modal.block_odd;
+        order.kind === 'even' ? 'Lệnh lô chẵn' : 'Lệnh lô lẻ';
 
     const handleConfirmClick = () => {
         request2FA(handleConfirm, TWO_FA_PLACEMENT.PANEL);
@@ -117,11 +109,8 @@ export const TradePlaceOrderPanel = ({ symbol, pendingOrder, onClose, onSuccess 
                             }
                             chunkAccepted = false;
                             toast.error(
-                                mapOrderErrorCodeToStatus(
-                                    raw.code,
-                                    trans,
-                                    raw.rejected_reason ?? '',
-                                ) || trans.common.try_again_error,
+                                mapOrderErrorCodeToStatus(raw.code, raw.rejected_reason ?? '') ||
+                                    'Có lỗi xảy ra, vui lòng thử lại',
                             );
                         });
                     }
@@ -134,7 +123,7 @@ export const TradePlaceOrderPanel = ({ symbol, pendingOrder, onClose, onSuccess 
                     is2FAExpired = true;
                     break;
                 } else {
-                    toast.error(message || trans.common.try_again_error);
+                    toast.error(message || 'Có lỗi xảy ra, vui lòng thử lại');
                     break;
                 }
             }
@@ -144,7 +133,7 @@ export const TradePlaceOrderPanel = ({ symbol, pendingOrder, onClose, onSuccess 
                     acceptedItems.map(mapPlacedOrderItemToRow),
                     is247 ? ORDER_MODE_KEY.TAB_247 : ORDER_MODE_KEY.NORMAL,
                 );
-                toast.success(trans.trading.toast.place_success, {
+                toast.success('Đặt lệnh thành công', {
                     description: placeSuccessDetail,
                 });
                 onSuccess();
@@ -156,7 +145,7 @@ export const TradePlaceOrderPanel = ({ symbol, pendingOrder, onClose, onSuccess 
             ) {
                 is2FAExpired = true;
             } else {
-                toast.error(getApiErrorMessage(err, trans.common.try_again_error));
+                toast.error(getApiErrorMessage(err, 'Có lỗi xảy ra, vui lòng thử lại'));
             }
         } finally {
             stopLoading();
@@ -175,8 +164,8 @@ export const TradePlaceOrderPanel = ({ symbol, pendingOrder, onClose, onSuccess 
                 {isLargeOrder && (
                     <p className="font-body-3 shrink-0 text-secondary">
                         {isBuy
-                            ? trans.trading.place_modal.split_notice_buy
-                            : trans.trading.place_modal.split_notice_sell}
+                            ? 'Do khối lượng mua lớn, hệ thống tự động chia thành các lệnh như sau:'
+                            : 'Do khối lượng bán lớn, hệ thống tự động chia thành các lệnh như sau:'}
                     </p>
                 )}
                 <div className="flex w-full shrink-0 flex-col gap-3">
@@ -187,31 +176,26 @@ export const TradePlaceOrderPanel = ({ symbol, pendingOrder, onClose, onSuccess 
                                 <p className="font-body-3 text-primary">{getBlockTitle(order)}</p>
                                 <div className="flex w-full items-start justify-between gap-2">
                                     <dt className="font-body-3 shrink-0 text-secondary">
-                                        {trans.trading.place_modal.row_qty}
+                                        {'Số lượng'}
                                     </dt>
                                     <dd className="font-body-3 text-primary">
-                                        {formatNumberVN(order.qty, { decimals: 0 })}{' '}
-                                        {trans.trading.place_modal.qty_unit}
+                                        {formatNumberVN(order.qty, { decimals: 0 })} {'cp'}
                                     </dd>
                                 </div>
                                 <div className="flex w-full items-start justify-between gap-2">
-                                    <dt className="font-body-3 shrink-0 text-secondary">
-                                        {trans.trading.place_modal.row_price}
-                                    </dt>
+                                    <dt className="font-body-3 shrink-0 text-secondary">{'Giá'}</dt>
                                     <dd className="font-body-3 text-primary">{priceDisplay}</dd>
                                 </div>
                                 <div className="flex w-full items-start justify-between gap-2">
                                     <dl className="flex w-full items-start justify-between gap-2">
                                         <dt className="font-body-3 shrink-0 text-secondary">
-                                            {isBuy
-                                                ? trans.trading.place_modal.total_buy
-                                                : trans.trading.place_modal.total_sell}
+                                            {isBuy ? 'Tổng tiền mua' : 'Tổng tiền bán'}
                                         </dt>
                                         <dd className="font-body-3 text-primary">
                                             {formatNumberVN(order.qty * price, {
                                                 trimTrailingZeros: true,
                                             })}
-                                            {trans.trading.currency.suffix}
+                                            {'đ'}
                                         </dd>
                                     </dl>
                                 </div>
@@ -233,7 +217,7 @@ export const TradePlaceOrderPanel = ({ symbol, pendingOrder, onClose, onSuccess 
                               : 'bg-red text-primary'
                     }`}
                 >
-                    {trans.trading.place_modal.btn_confirm}
+                    {'Xác nhận'}
                 </button>
                 <button
                     type="button"
@@ -241,7 +225,7 @@ export const TradePlaceOrderPanel = ({ symbol, pendingOrder, onClose, onSuccess 
                     disabled={isLoading}
                     className="font-body-3-highlight flex w-full items-center justify-center rounded-full bg-error px-4 py-2 text-red transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
                 >
-                    {trans.trading.place_modal.btn_cancel}
+                    {'Huỷ'}
                 </button>
             </div>
         </section>

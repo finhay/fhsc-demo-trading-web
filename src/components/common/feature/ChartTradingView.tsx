@@ -5,7 +5,6 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { useRouter } from 'next/router';
 
 import { Spinner } from '@/components/common/ui/Spinner';
-import { useTranslate } from '@/hooks/useTranslate';
 import { buildChartUrl } from '@/utils/common';
 
 type Props = {
@@ -14,7 +13,6 @@ type Props = {
 
 export const ChartTradingView = ({ symbol }: Props) => {
     const router = useRouter();
-    const trans = useTranslate();
 
     const [status, setStatus] = useState<string>('loading');
     const [reloadKey, setReloadKey] = useState(0);
@@ -25,8 +23,8 @@ export const ChartTradingView = ({ symbol }: Props) => {
 
     const chartUrl = useMemo(() => {
         if (!router.isReady || !symbol) return '';
-        return buildChartUrl(symbol.toUpperCase(), router.locale);
-    }, [symbol, router.isReady, router.locale]);
+        return buildChartUrl(symbol.toUpperCase());
+    }, [symbol, router.isReady]);
 
     if (chartUrl && !initialUrlRef.current) {
         initialUrlRef.current = chartUrl;
@@ -101,13 +99,15 @@ export const ChartTradingView = ({ symbol }: Props) => {
 
             {status === 'error' && (
                 <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 bg-secondary px-4 text-center">
-                    <p className="text-secondary font-body-2">{trans.chart_view.load_error}</p>
+                    <p className="text-secondary font-body-2">
+                        {'Không thể tải biểu đồ. Vui lòng thử lại.'}
+                    </p>
                     <button
                         type="button"
                         onClick={handleRetry}
                         className="bg-highlight px-6 py-2 rounded-full font-body-2"
                     >
-                        {trans.chart_view.retry}
+                        {'Tải lại'}
                     </button>
                 </div>
             )}

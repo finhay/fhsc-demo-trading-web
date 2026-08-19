@@ -2,7 +2,6 @@
 
 import { RiBarChart2Fill, RiHandCoinFill, RiTeamFill } from 'react-icons/ri';
 
-import { useTranslate } from '@/hooks/useTranslate';
 import type { FundCertificateDetail } from '@/types/pages/fund';
 import { getChangeColor } from '@/utils/common';
 import {
@@ -16,8 +15,6 @@ type Props = {
 };
 
 export const MarketFundDetailMonthlyStats = ({ detail }: Props) => {
-    const trans = useTranslate();
-    const d = trans.market.assets.fund_modal.detail;
     const stats = detail.monthly_stats;
 
     if (!stats?.month || !stats?.year) return null;
@@ -27,20 +24,24 @@ export const MarketFundDetailMonthlyStats = ({ detail }: Props) => {
             key: 'aum',
             icon: RiBarChart2Fill,
             value: stats.aum_change_percent,
-            label: d.monthly_stats_aum_label,
+            label: 'tài sản quản lý',
         },
         {
             key: 'investor',
             icon: RiTeamFill,
             value: stats.investor_change_percent,
-            label: d.monthly_stats_investor_label,
+            label: 'số nhà đầu tư',
         },
     ];
 
     return (
         <section className="flex flex-col gap-4">
             <h3 className="font-body-2-highlight text-primary">
-                {d.monthly_stats_title_fn(stats.month, stats.year, detail.name)}
+                {`Trong tháng ${
+                    stats.year === new Date().getFullYear()
+                        ? `${stats.month}`
+                        : `${stats.month}/${stats.year}`
+                }, ${detail.name} có...`}
             </h3>
             <div className="flex flex-col gap-3 md:flex-row">
                 {cards.map((card) => {
@@ -75,7 +76,7 @@ export const MarketFundDetailMonthlyStats = ({ detail }: Props) => {
                         </span>
                     </div>
                     <span className="font-body-2 text-primary whitespace-nowrap">
-                        {d.monthly_stats_net_inflow_label}
+                        {'tiền vào ròng'}
                     </span>
                 </div>
             </div>

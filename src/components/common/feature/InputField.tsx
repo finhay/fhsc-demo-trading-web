@@ -4,8 +4,6 @@ import React, { useState } from 'react';
 
 import { FaEye, FaEyeSlash } from 'react-icons/fa6';
 
-import { useTranslate } from '@/hooks/useTranslate';
-
 type Props = {
     id: string;
     label: string;
@@ -26,7 +24,6 @@ export function InputField({
     ariaDescribedBy,
     ...rest
 }: Props) {
-    const trans = useTranslate();
     const [showPassword, setShowPassword] = useState(false);
 
     const isPassword = type === 'password';
@@ -63,11 +60,7 @@ export function InputField({
                         type="button"
                         onClick={() => setShowPassword(!showPassword)}
                         className="text-tertiary hover:text-primary absolute right-3 top-1/2 -translate-y-1/2 transition-colors"
-                        aria-label={
-                            showPassword
-                                ? trans.input_field.hide_password
-                                : trans.input_field.show_password
-                        }
+                        aria-label={showPassword ? 'Ẩn mật khẩu' : 'Hiện mật khẩu'}
                     >
                         {showPassword ? (
                             <FaEye size={20} aria-hidden="true" className="text-primary" />

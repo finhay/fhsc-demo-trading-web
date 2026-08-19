@@ -1,7 +1,6 @@
 'use client';
 
 import { MarketDot } from '@/components/thi-truong/shared/MarketDot';
-import { useTranslate } from '@/hooks/useTranslate';
 import type { ForeignTradingStatsData } from '@/types/datafeed/trading-data';
 import type { TradingFlowTab } from '@/types/pages/market';
 import { getNetColor } from '@/utils/common';
@@ -14,12 +13,7 @@ type Props = {
 };
 
 export const MarketFlowHeader = ({ activeTab, stats }: Props) => {
-    const trans = useTranslate();
-
-    const title =
-        activeTab === 'foreign'
-            ? trans.market.flow.modal.title_foreign
-            : trans.market.flow.modal.title_proprietary;
+    const title = activeTab === 'foreign' ? 'Giao dịch khối ngoại' : 'Giao dịch tự doanh';
 
     const buyValue = toTradingFlowBillions(stats?.total_buy_value ?? 0);
     const sellValue = toTradingFlowBillions(stats?.total_sell_value ?? 0);
@@ -34,26 +28,24 @@ export const MarketFlowHeader = ({ activeTab, stats }: Props) => {
                 <div className="bg-secondary flex shrink-0 items-center gap-6 rounded-full px-4 py-2">
                     <div className="flex items-center gap-2">
                         {activeTab === 'foreign' && <MarketDot />}
-                        <span className="font-body-3-highlight text-primary">
-                            {trans.market.flow.modal.today}
-                        </span>
+                        <span className="font-body-3-highlight text-primary">{'Hôm nay'}</span>
                     </div>
                     <span className="h-4 w-px bg-quaternary" aria-hidden />
                     <div className="flex items-center gap-6">
                         <span className="font-body-3 text-secondary">
-                            {trans.market.flow.modal.buy_value}:{' '}
+                            {'GT mua'}:{' '}
                             <span className="font-body-3-highlight text-green">
                                 {formatNumberVN(buyValue, { decimals: 2 })} tỷ
                             </span>
                         </span>
                         <span className="font-body-3 text-secondary">
-                            {trans.market.flow.modal.sell_value}:{' '}
+                            {'GT bán'}:{' '}
                             <span className="font-body-3-highlight text-red">
                                 {formatNumberVN(sellValue, { decimals: 2 })} tỷ
                             </span>
                         </span>
                         <span className="font-body-3 text-secondary">
-                            {trans.market.flow.modal.net_value}:{' '}
+                            {'GT ròng'}:{' '}
                             <span
                                 className={`font-body-3-highlight ${getNetColor(stats.delta_buy_sell ?? 0)}`}
                             >

@@ -6,7 +6,6 @@ import { Dialog } from '@/components/common/ui/Dialog';
 import { ACCOUNT_TYPE, ERROR_CODES } from '@/constants/common';
 import { TWO_FA_PLACEMENT } from '@/constants/trading';
 import { toast } from '@/hooks/lib/useToast';
-import { useTranslate } from '@/hooks/useTranslate';
 import { cancelSubAccountOrder247, cancelSubAccountStockOrder } from '@/services/api/trade/orders';
 import { useAuthStore } from '@/stores/auth/useAuthStore';
 import { useLoadingStore } from '@/stores/common/useLoadingStore';
@@ -38,7 +37,6 @@ export const TradeCancelOrderModal = ({
     onSuccess,
     onExpired2FA,
 }: Props) => {
-    const trans = useTranslate();
     const { activeSubAccount, profile } = useAuthStore();
     const { startLoading, stopLoading, isLoading } = useLoadingStore();
     const { request2FA, handle2FATokenExpired, patchOrdersInBook } = useTradingStore();
@@ -48,13 +46,13 @@ export const TradeCancelOrderModal = ({
 
     const isBuy = side === 'Mua';
     const displayPrice = rawPrice / 1000;
-    const title = `${isBuy ? trans.trading.cancel_modal.title_buy : trans.trading.cancel_modal.title_sell} ${symbol}`;
+    const title = `${isBuy ? 'Huỷ lệnh mua' : 'Huỷ lệnh bán'} ${symbol}`;
 
     const summaryRows = useMemo(
         () =>
             [
                 {
-                    label: trans.trading.cancel_modal.row_type,
+                    label: 'Loại lệnh',
                     value: (
                         <dd
                             className={`font-body-3-highlight ${isBuy ? 'text-green' : 'text-red'}`}
@@ -64,26 +62,25 @@ export const TradeCancelOrderModal = ({
                     ),
                 },
                 {
-                    label: trans.trading.cancel_modal.row_symbol,
+                    label: 'Mã CK',
                     value: <dd className="font-body-3-highlight text-primary">{symbol}</dd>,
                 },
                 {
-                    label: trans.trading.cancel_modal.row_price,
+                    label: 'Giá đặt',
                     value: (
                         <dd className="font-body-3 text-primary">{formatNumberVN(displayPrice)}</dd>
                     ),
                 },
                 {
-                    label: trans.trading.cancel_modal.row_qty,
+                    label: 'Số lượng',
                     value: (
                         <dd className="font-body-3 text-primary">
-                            {formatNumberVN(rawQty, { decimals: 0 })}{' '}
-                            {trans.trading.cancel_modal.qty_unit}
+                            {formatNumberVN(rawQty, { decimals: 0 })} {'cp'}
                         </dd>
                     ),
                 },
             ] as { label: string; value: ReactNode }[],
-        [displayPrice, isBuy, rawQty, side, symbol, trans],
+        [displayPrice, isBuy, rawQty, side, symbol],
     );
 
     const handleConfirmClick = () => {
@@ -115,14 +112,10 @@ export const TradeCancelOrderModal = ({
                                 allowAmend: false,
                             },
                         ]);
-                        toast.success(trans.trading.order_status_message.success);
+                        toast.success('Thành công');
                     } else {
                         toast.error(
-                            mapOrderErrorCodeToStatus(
-                                data[0].code,
-                                trans,
-                                data[0].rejected_reason ?? '',
-                            ),
+                            mapOrderErrorCodeToStatus(data[0].code, data[0].rejected_reason ?? ''),
                         );
                     }
                 }
@@ -140,7 +133,7 @@ export const TradeCancelOrderModal = ({
             if (errCode === ERROR_CODES.FAILED_2FA_TOKEN_EXPIRED) {
                 is2FAExpired = true;
             } else {
-                toast.error(getApiErrorMessage(err, trans.common.try_again_error));
+                toast.error(getApiErrorMessage(err, 'Có lỗi xảy ra, vui lòng thử lại'));
             }
         } finally {
             stopLoading();
@@ -166,7 +159,7 @@ export const TradeCancelOrderModal = ({
                         onClick={onClose}
                         className="flex-1 py-2 rounded-xl font-body-3-highlight bg-tertiary text-primary hover:bg-quaternary transition-colors"
                     >
-                        {trans.trading.cancel_modal.btn_close}
+                        {'Đóng'}
                     </button>
                     <button
                         type="button"
@@ -178,7 +171,7 @@ export const TradeCancelOrderModal = ({
                                 : 'bg-red text-primary hover:opacity-90'
                         }`}
                     >
-                        {trans.trading.cancel_modal.btn_confirm}
+                        {'Xác nhận huỷ'}
                     </button>
                 </div>
             </div>

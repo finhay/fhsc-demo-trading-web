@@ -9,7 +9,6 @@ import {
     PROFIT_PERIOD_THREE_YEARS,
     PROFIT_PERIOD_YEAR_TO_DATE,
 } from '@/constants/market';
-import type { useTranslate } from '@/hooks/useTranslate';
 import type { FundCertificateItem, FundTableColMeta } from '@/types/pages/fund';
 import { formatNumberVN } from '@/utils/format';
 import {
@@ -18,8 +17,6 @@ import {
     getLatestNav,
     getProfitByPeriod,
 } from '@/utils/market/market-fund';
-
-type Trans = ReturnType<typeof useTranslate>;
 
 type ProfitColumnConfig = {
     id: string;
@@ -65,9 +62,7 @@ const createProfitColumn = ({
     },
 });
 
-export const getMarketFundTableColumns = (trans: Trans): ColumnDef<FundCertificateItem>[] => {
-    const t = trans.market.assets.fund_modal;
-
+export const getMarketFundTableColumns = (): ColumnDef<FundCertificateItem>[] => {
     return [
         {
             id: 'fund',
@@ -75,8 +70,8 @@ export const getMarketFundTableColumns = (trans: Trans): ColumnDef<FundCertifica
             enableSorting: false,
             header: () => (
                 <span className="inline-flex flex-col items-start leading-5">
-                    <span>{t.col_fund}</span>
-                    <span>{t.col_issuer}</span>
+                    <span>{'Quỹ/'}</span>
+                    <span>{'Tổ chức phát hành'}</span>
                 </span>
             ),
             meta: createColMeta('left', 'w-1/3'),
@@ -109,7 +104,7 @@ export const getMarketFundTableColumns = (trans: Trans): ColumnDef<FundCertifica
             id: 'nav',
             accessorFn: (row) => getLatestNav(row).navpf,
             enableSorting: false,
-            header: () => t.col_nav,
+            header: () => 'Giá gần nhất',
             meta: createColMeta('right', 'w-1/6'),
             cell: ({ row }) => {
                 const { navpf, date } = getLatestNav(row.original);
@@ -125,20 +120,20 @@ export const getMarketFundTableColumns = (trans: Trans): ColumnDef<FundCertifica
         createProfitColumn({
             id: 'profit_3y',
             period: PROFIT_PERIOD_THREE_YEARS,
-            line1: t.col_profit_3y_line1,
-            line2: t.col_profit_3y_line2,
+            line1: 'LNTB',
+            line2: '3 năm',
         }),
         createProfitColumn({
             id: 'profit_1y',
             period: PROFIT_PERIOD_ONE_YEAR,
-            line1: t.col_profit_1y_line1,
-            line2: t.col_profit_1y_line2,
+            line1: 'LNTB',
+            line2: '1 năm',
         }),
         createProfitColumn({
             id: 'profit_ytd',
             period: PROFIT_PERIOD_YEAR_TO_DATE,
-            line1: t.col_profit_ytd_line1,
-            line2: t.col_profit_ytd_line2,
+            line1: 'LNTB',
+            line2: 'từ đầu năm',
         }),
     ];
 };

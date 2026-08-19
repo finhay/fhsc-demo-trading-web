@@ -1,10 +1,6 @@
 import Image from 'next/image';
 
-import { useTranslate } from '@/hooks/useTranslate';
-
 export const MarketOutOfSession = () => {
-    const trans = useTranslate();
-
     return (
         <figure className="flex flex-col items-center justify-center h-full m-0 p-0">
             <div className="flex flex-col items-center justify-center gap-4">
@@ -17,7 +13,7 @@ export const MarketOutOfSession = () => {
                     className="w-30 h-30 object-contain"
                 />
                 <figcaption className="font-body-3 text-secondary text-center">
-                    {trans.market.out_of_session.empty}
+                    {'Dữ liệu sẽ được cập nhật khi vào phiên giao dịch'}
                 </figcaption>
             </div>
         </figure>

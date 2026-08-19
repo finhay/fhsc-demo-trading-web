@@ -5,7 +5,6 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { InputSearch } from '@/components/common/feature/InputSearch';
 import { Tooltip } from '@/components/common/ui/Tooltip';
 import { useMQTT } from '@/hooks/useMQTT';
-import { useTranslate } from '@/hooks/useTranslate';
 import { StockPriceMessage } from '@/proto/stock';
 import { useStockInfoStore } from '@/stores/common/useStockInfoStore';
 import type { SymbolInfoRealtimeSnapshot, SymbolInfoStatItem } from '@/types/pages/stock-info';
@@ -17,7 +16,6 @@ type Props = {
 };
 
 export const StockInfo = ({ enableIndexSearch = false }: Props) => {
-    const trans = useTranslate();
     const { selectedStock, fetchStockInfo, openIndexDetail } = useStockInfoStore();
 
     const [realtimeData, setRealtimeData] = useState<SymbolInfoRealtimeSnapshot>({
@@ -55,37 +53,37 @@ export const StockInfo = ({ enableIndexSearch = false }: Props) => {
     const stats: SymbolInfoStatItem[] = useMemo(
         () => [
             {
-                label: trans.stockInfo.symbol_info.stat_floor,
+                label: 'Sàn',
                 value: realtimeData.floor,
                 ddClassName: 'font-caption text-blue',
             },
             {
-                label: trans.stockInfo.symbol_info.stat_tc,
+                label: 'TC',
                 value: realtimeData.reference,
                 ddClassName: 'font-caption text-orange',
             },
             {
-                label: trans.stockInfo.symbol_info.stat_ceiling,
+                label: 'Trần',
                 value: realtimeData.ceiling,
                 ddClassName: 'font-caption text-purple',
             },
             {
-                label: trans.stockInfo.symbol_info.stat_low,
+                label: 'Thấp',
                 value: realtimeData.low,
                 ddClassName: `font-caption ${getSymbolInfoPriceColor(realtimeData.low, realtimeData)}`,
             },
             {
-                label: trans.stockInfo.symbol_info.stat_avg,
+                label: 'TB',
                 value: realtimeData.average,
                 ddClassName: `font-caption ${getSymbolInfoPriceColor(realtimeData.average, realtimeData)}`,
             },
             {
-                label: trans.stockInfo.symbol_info.stat_high,
+                label: 'Cao',
                 value: realtimeData.high,
                 ddClassName: `font-caption ${getSymbolInfoPriceColor(realtimeData.high, realtimeData)}`,
             },
         ],
-        [realtimeData, trans],
+        [realtimeData],
     );
 
     useEffect(() => {

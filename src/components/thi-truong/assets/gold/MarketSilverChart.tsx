@@ -3,9 +3,9 @@
 import { useEffect, useRef, useState } from 'react';
 
 import { createChartSilverPriceHistory } from '@/config/market/market-assets';
+import { ASSETS_MODAL } from '@/constants/assets';
 import { METAL_CHART_DEFAULT_DAYS, METAL_CHART_PERIODS } from '@/constants/market';
 import { useEChartsInstance } from '@/hooks/chart/useEChartsInstance';
-import { useTranslate } from '@/hooks/useTranslate';
 import { fetchSilverChart } from '@/services/api/datafeed/finance';
 import type { MetalChartDays, SilverChartItem, SilverItem } from '@/types/datafeed/finance';
 import { isSuccessApi } from '@/utils/common';
@@ -22,8 +22,7 @@ const formatLegendValue = (value?: number | null) =>
     value == null ? '--' : formatNumberVN(value, { trimTrailingZeros: true });
 
 export const MarketSilverChart = ({ globalItem, initialChartData }: Props) => {
-    const trans = useTranslate();
-    const modal = trans.market.assets.modal;
+    const modal = ASSETS_MODAL;
     const [days, setDays] = useState<MetalChartDays>(METAL_CHART_DEFAULT_DAYS);
     const [chartData, setChartData] = useState<SilverChartItem[]>(initialChartData);
 

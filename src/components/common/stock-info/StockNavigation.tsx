@@ -5,7 +5,6 @@ import { FC, useEffect } from 'react';
 import { RiFullscreenExitLine, RiFullscreenLine } from 'react-icons/ri';
 
 import { STOCK_TYPE, TAB_INFORMATION } from '@/constants/trading';
-import { useTranslate } from '@/hooks/useTranslate';
 import { useStockInfoStore } from '@/stores/common/useStockInfoStore';
 import { useTradingStore } from '@/stores/trading/useTradingStore';
 import { getTabInformationLabel } from '@/utils/stock-info';
@@ -17,7 +16,6 @@ type Props = {
 };
 
 export const StockNavigation: FC<Props> = ({ hideFullscreenToggle = false }) => {
-    const trans = useTranslate();
     const { selectedStock } = useStockInfoStore();
     const { selectedTabInfor, setSelectedTabInfor, isChartFullscreen, toggleChartFullscreen } =
         useTradingStore();
@@ -34,11 +32,14 @@ export const StockNavigation: FC<Props> = ({ hideFullscreenToggle = false }) => 
     }, [isNonStock, selectedTabInfor, setSelectedTabInfor]);
 
     return (
-        <nav className="border-b border-tertiary" aria-label={trans.stockInfo.navigation.aria_nav}>
+        <nav
+            className="border-b border-tertiary"
+            aria-label={'Điều hướng khu vực biểu đồ và thông tin'}
+        >
             <div className="flex items-center justify-between px-3">
                 <ul
                     role="tablist"
-                    aria-label={trans.stockInfo.navigation.aria_tablist}
+                    aria-label={'Danh sách tab khu vực biểu đồ'}
                     className="flex list-none items-center gap-6"
                 >
                     {tabs.map(({ key }) => (
@@ -54,7 +55,7 @@ export const StockNavigation: FC<Props> = ({ hideFullscreenToggle = false }) => 
                                 setSelectedTabInfor(key);
                             }}
                         >
-                            {getTabInformationLabel(key, trans)}
+                            {getTabInformationLabel(key)}
                             <span
                                 className={`mt-1.5 block h-0.5 w-full bg-quinary ${
                                     selectedTabInfor === key ? '' : 'opacity-0'
@@ -69,9 +70,7 @@ export const StockNavigation: FC<Props> = ({ hideFullscreenToggle = false }) => 
                         onClick={toggleChartFullscreen}
                         aria-pressed={isChartFullscreen}
                         aria-label={
-                            isChartFullscreen
-                                ? trans.stockInfo.navigation.fullscreen_exit
-                                : trans.stockInfo.navigation.fullscreen_expand
+                            isChartFullscreen ? 'Thu nhỏ biểu đồ' : 'Mở rộng toàn màn hình biểu đồ'
                         }
                         className="shrink-0 cursor-pointer"
                     >

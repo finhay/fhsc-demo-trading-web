@@ -8,7 +8,6 @@ import { EmptyState } from '@/components/common/feature/EmptyState';
 import { Skeleton } from '@/components/common/ui/Skeleton';
 import { createChartTradingFlowHistory } from '@/config/market/market-flow';
 import { useEChartsInstance } from '@/hooks/chart/useEChartsInstance';
-import { useTranslate } from '@/hooks/useTranslate';
 import type { TradingStatsPeriod } from '@/types/datafeed/trading-data';
 import type { TradingFlowSession } from '@/types/pages/market';
 
@@ -19,7 +18,6 @@ type Props = {
 };
 
 export const MarketFlowHistory = ({ isLoading, sessions, period }: Props) => {
-    const trans = useTranslate();
     const chartRef = useRef<HTMLDivElement>(null);
     const hasData = sessions.length > 0;
     const chartInstanceRef = useEChartsInstance(chartRef, {
@@ -28,16 +26,13 @@ export const MarketFlowHistory = ({ isLoading, sessions, period }: Props) => {
 
     useEffect(() => {
         if (isLoading || !hasData) return;
-        chartInstanceRef.current?.setOption(
-            createChartTradingFlowHistory(sessions, trans, period),
-            {
-                notMerge: true,
-            },
-        );
+        chartInstanceRef.current?.setOption(createChartTradingFlowHistory(sessions, period), {
+            notMerge: true,
+        });
         requestAnimationFrame(() => {
             chartInstanceRef.current?.resize();
         });
-    }, [isLoading, hasData, sessions, trans, period, chartInstanceRef]);
+    }, [isLoading, hasData, sessions, period, chartInstanceRef]);
 
     useEffect(() => {
         const container = chartRef.current;
@@ -63,14 +58,12 @@ export const MarketFlowHistory = ({ isLoading, sessions, period }: Props) => {
                         <FaCircle className="shrink-0 text-green" size={8} />
                         <FaCircle className="shrink-0 text-red" size={8} />
                     </span>
-                    <span className="font-body-3 text-secondary">
-                        {trans.market.flow.modal.legend_net}
-                    </span>
+                    <span className="font-body-3 text-secondary">{'Mua/bán ròng'}</span>
                 </div>
                 <div className="flex items-center gap-2">
                     <FaCircle className="shrink-0 text-orange" size={8} />
                     <span className="font-body-3 text-secondary">
-                        {trans.market.flow.modal.legend_cumulative}
+                        {'GTGD ròng luỹ kế (bên phải)'}
                     </span>
                 </div>
             </div>

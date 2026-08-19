@@ -1,21 +1,23 @@
 'use client';
 
-import { Fragment } from 'react';
-
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 
 import { NavAuth } from '@/components/common/header/navigation/NavAuth';
-import { NavProducts } from '@/components/common/header/navigation/NavProducts';
 import { StatusBadge } from '@/components/common/header/network-status/StatusBadge';
 import { HEADER_ROUTES } from '@/constants/common';
-import { useTranslate } from '@/hooks/useTranslate';
 import { useAuthStore } from '@/stores/auth/useAuthStore';
 import { useMarketIndexStore } from '@/stores/common/useMarketIndexStore';
 
+const NAV_BAR = {
+    market: 'Thị trường',
+    board: 'Bảng giá',
+    assets: 'Tài sản',
+    trade: 'Giao dịch',
+};
+
 export const NavBar = () => {
-    const trans = useTranslate();
     const { profile } = useAuthStore();
     const { now } = useMarketIndexStore();
     const time = now
@@ -58,25 +60,18 @@ export const NavBar = () => {
                         const active = isRouteActive(item);
 
                         return (
-                            <Fragment key={item.path}>
-                                <li className="group relative">
-                                    <Link
-                                        href={item.path}
-                                        className={`flex items-center gap-2 py-2 ${
-                                            active
-                                                ? 'text-primary font-body-3-highlight'
-                                                : 'text-secondary font-body-3'
-                                        }`}
-                                    >
-                                        {
-                                            trans.nav_bar[
-                                                item.translationKey as keyof typeof trans.nav_bar
-                                            ]
-                                        }
-                                    </Link>
-                                </li>
-                                {item.translationKey === 'assets' && <NavProducts />}
-                            </Fragment>
+                            <li key={item.path} className="group relative">
+                                <Link
+                                    href={item.path}
+                                    className={`flex items-center gap-2 py-2 ${
+                                        active
+                                            ? 'text-primary font-body-3-highlight'
+                                            : 'text-secondary font-body-3'
+                                    }`}
+                                >
+                                    {NAV_BAR[item.translationKey as keyof typeof NAV_BAR]}
+                                </Link>
+                            </li>
                         );
                     })}
                 </ul>
