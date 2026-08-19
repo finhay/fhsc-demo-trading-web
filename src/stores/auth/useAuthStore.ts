@@ -29,6 +29,7 @@ type AuthCredentials = {
     userId: string;
     custId: string;
     accessToken2FA?: string;
+    requiredChangePassword?: boolean;
 };
 
 type UserProfile = {
@@ -45,6 +46,7 @@ type ProfileState = {
     userId: string | null;
     custId: string | null;
     accessToken2FA: string | null;
+    requiredChangePassword: boolean;
     isInitialized: boolean;
     profile: UserProfile | null;
     avatarUrl: string;
@@ -74,6 +76,7 @@ const initialState: ProfileState = {
     userId: null,
     custId: null,
     accessToken2FA: null,
+    requiredChangePassword: false,
     isInitialized: false,
     profile: null,
     avatarUrl: '',
@@ -104,6 +107,7 @@ export const useAuthStore = create<ProfileState & ProfileActions>((set, get) => 
             userId: credentials.userId,
             custId: credentials.custId,
             accessToken2FA: credentials.accessToken2FA ?? null,
+            requiredChangePassword: credentials.requiredChangePassword ?? false,
         });
     },
 

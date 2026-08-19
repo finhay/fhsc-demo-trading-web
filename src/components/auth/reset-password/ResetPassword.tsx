@@ -25,7 +25,7 @@ export const ResetPassword = () => {
     const [focusedField, setFocusedField] = useState<string | null>(null);
 
     const { resetPassword, resetPasswordSetIsSuccess, openAuthDialog } = useAuthFlowStore();
-    const { otpToken } = resetPassword;
+    const { accountType, otpToken } = resetPassword;
 
     const form = useForm({
         defaultValues: {
@@ -55,10 +55,12 @@ export const ResetPassword = () => {
 
     const handleResetPassword = async (passwordParam: string) => {
         try {
+            const userType =
+                accountType === 'individual' ? ACCOUNT_TYPE.INDIVIDUAL : ACCOUNT_TYPE.ENTERPRISE;
             const { error_code, message } = await putResetPassword(
                 otpToken,
                 passwordParam,
-                ACCOUNT_TYPE.INDIVIDUAL,
+                userType,
             );
 
             if (isSuccessApi(error_code)) {

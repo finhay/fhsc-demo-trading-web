@@ -3,3 +3,9 @@ export type ResetPasswordResponse = {
     message: string;
     result?: any;
 };
+
+export type ChangePasswordResponse = {
+    error_code: string;
+    message: string;
+    result?: any;
+};

@@ -3,9 +3,9 @@
 import { useForm, useStore } from '@tanstack/react-form';
 
 import { InputField } from '@/components/common/feature/InputField';
-import { AUTH_MODE, AUTH_VALIDATE, LOGIN_ACCOUNT_FIELD } from '@/constants/auth';
+import { ACCOUNT_TYPES, AUTH_MODE, AUTH_VALIDATE, LOGIN_ACCOUNT_FIELDS } from '@/constants/auth';
 import { toast } from '@/hooks/lib/useToast';
-import { loginIndividual } from '@/services/api/accounts/login';
+import { loginEnterprise, loginIndividual } from '@/services/api/accounts/login';
 import {
     setAccessKey,
     setAccessToken,
@@ -27,17 +27,26 @@ export const LoginForm = () => {
         defaultValues: {
             username: '',
             password: '',
+            accountType: ACCOUNT_TYPES[0].key as (typeof ACCOUNT_TYPES)[number]['key'],
         },
         onSubmit: async ({ value }) => {
-            handleLogin(value.username || '', value.password);
+            handleLogin(value.username || '', value.password, value.accountType);
         },
     });
+    const watchedAccountType = useStore(form.store, (state) => state.values.accountType);
     const username = useStore(form.store, (state) => state.values.username);
     const password = useStore(form.store, (state) => state.values.password);
     const canSubmit = useStore(
         form.store,
         (state) => state.canSubmit && !state.isSubmitting && !!username && !!password,
     );
+    const currentField = LOGIN_ACCOUNT_FIELDS[watchedAccountType];
+
+    const handleAccountTypeChange = (key: (typeof ACCOUNT_TYPES)[number]['key']) => {
+        form.setFieldValue('accountType', key);
+        form.setFieldValue('username', '');
+        form.setFieldMeta('username', (prev) => ({ ...prev, errors: [], errorMap: {} }));
+    };
 
     const handleSaveAuthTokens = (data: {
         access_token: string;
@@ -53,14 +62,28 @@ export const LoginForm = () => {
         setCustId(data.cust_id);
     };
 
-    const handleLogin = async (usernameParam: string, passwordParam: string) => {
+    const handleLogin = async (
+        usernameParam: string,
+        passwordParam: string,
+        accountType: string,
+    ) => {
         startLoading();
         try {
-            const {
-                error_code,
-                message,
-                result: responseData,
-            } = await loginIndividual({ username: usernameParam, password: passwordParam });
+            const credentials = { username: usernameParam, password: passwordParam };
+            const { error_code, message, responseData } =
+                accountType === ACCOUNT_TYPES[0].key
+                    ? await loginIndividual(credentials).then(
+                          ({ error_code, message, result }) => ({
+                              error_code,
+                              message,
+                              responseData: result,
+                          }),
+                      )
+                    : await loginEnterprise(credentials).then(({ error_code, message, data }) => ({
+                          error_code,
+                          message,
+                          responseData: data,
+                      }));
 
             if (isSuccessApi(error_code)) {
                 handleSaveAuthTokens(responseData);
@@ -71,7 +94,13 @@ export const LoginForm = () => {
                     refreshToken: responseData.refresh_token,
                     userId: responseData.user_id,
                     custId: responseData.cust_id,
+                    requiredChangePassword: responseData.required_change_password,
                 });
+
+                if (accountType === ACCOUNT_TYPES[1].key && responseData.required_change_password) {
+                    openAuthDialog(AUTH_MODE.CHANGE_PASSWORD);
+                    return;
+                }
 
                 await initialize();
 
@@ -97,27 +126,50 @@ export const LoginForm = () => {
             }}
             className="flex w-1/2 flex-col gap-4 rounded-xl"
         >
+            <header className="flex w-full flex-col gap-2">
+                <nav className="flex w-full gap-2" role="tablist">
+                    {ACCOUNT_TYPES.map(({ key, label }) => {
+                        const isActive = watchedAccountType === key;
+                        return (
+                            <button
+                                key={key}
+                                type="button"
+                                role="tab"
+                                aria-selected={isActive}
+                                onClick={() => handleAccountTypeChange(key)}
+                                className={`rounded-full px-3 py-1 transition-colors ${
+                                    isActive
+                                        ? 'bg-tertiary text-highlight font-caption-highlight'
+                                        : 'text-secondary font-caption'
+                                }`}
+                            >
+                                {label}
+                            </button>
+                        );
+                    })}
+                </nav>
+            </header>
             <section className="flex w-full flex-col gap-4">
                 <form.Field
                     name="username"
                     validators={{
-                        onChange: ({ value }) => validateLoginUsername(value, AUTH_VALIDATE),
+                        onChange: ({ value }) =>
+                            validateLoginUsername(value, watchedAccountType, AUTH_VALIDATE),
                     }}
                 >
                     {(field) => (
                         <InputField
                             id="auth-dialog-login-username"
-                            type={LOGIN_ACCOUNT_FIELD.type}
-                            label={LOGIN_ACCOUNT_FIELD.label}
-                            placeholder={LOGIN_ACCOUNT_FIELD.placeholder}
+                            type={currentField.type}
+                            label={currentField.label}
+                            placeholder={currentField.placeholder}
                             error={field.state.meta.errors?.[0]}
                             value={field.state.value || ''}
                             onInput={(e) => {
                                 const input = e.target as HTMLInputElement;
-                                input.value = input.value.replace(
-                                    LOGIN_ACCOUNT_FIELD.inputFilter,
-                                    '',
-                                );
+                                if (currentField.inputFilter) {
+                                    input.value = input.value.replace(currentField.inputFilter, '');
+                                }
                             }}
                             onChange={(e) => field.handleChange(e.target.value)}
                             onBlur={field.handleBlur}
@@ -166,8 +218,13 @@ export const LoginForm = () => {
                 <p className="font-body-3 text-primary">{'Hoặc'}</p>
                 <button
                     type="button"
+                    disabled={watchedAccountType !== ACCOUNT_TYPES[0].key}
                     onClick={() => openAuthDialog(AUTH_MODE.REGISTER)}
-                    className="w-2/3 font-body-3-highlight rounded-full px-4 py-2 transition-all mx-auto text-center border-none bg-success text-highlight cursor-pointer hover:opacity-90"
+                    className={`w-2/3 font-body-3-highlight rounded-full px-4 py-2 transition-all mx-auto text-center border-none ${
+                        watchedAccountType === ACCOUNT_TYPES[0].key
+                            ? 'bg-success text-highlight cursor-pointer hover:opacity-90'
+                            : 'bg-disabled text-disabled cursor-not-allowed'
+                    }`}
                 >
                     {'Bạn chưa có tài khoản'}
                 </button>

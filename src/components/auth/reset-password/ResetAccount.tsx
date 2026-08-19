@@ -4,68 +4,71 @@ import { useForm, useStore } from '@tanstack/react-form';
 
 import { InputField } from '@/components/common/feature/InputField';
 import {
+    ACCOUNT_TYPES,
     AUTH_MODE,
     AUTH_VALIDATE,
-    RESET_PASSWORD_ACCOUNT_FIELD,
+    RESET_PASSWORD_ACCOUNT_FIELDS,
     STEPS_RESET_PASSWORD,
 } from '@/constants/auth';
 import { toast } from '@/hooks/lib/useToast';
-import { checkPhoneRegisteredStatus } from '@/services/api/accounts/register';
+import {
+    checkEnterpriseEmailRegisteredStatus,
+    checkPhoneRegisteredStatus,
+} from '@/services/api/accounts/register';
 import { useAuthFlowStore } from '@/stores/auth/useAuthFlowStore';
 import { useLoadingStore } from '@/stores/common/useLoadingStore';
 import { validateResetPasswordUsername } from '@/utils/auth';
 import { getApiErrorMessage, isSuccessApi } from '@/utils/common';
 
-const AUTH_RESET = {
-    title: 'Đặt lại mật khẩu',
-    msg_pass_updated: 'Mật khẩu đã được cập nhật thành công',
-    acct_info_title: 'Thông tin tài khoản',
-    phone_lbl: 'Số điện thoại',
-    email: 'Email',
-    input_phone: 'Nhập số điện thoại của bạn',
-    input_email: 'Nhập email của bạn',
-    btn_continue: 'Tiếp tục',
-    or_sep: 'Hoặc',
-    back_login: 'Quay lại đăng nhập',
-    back: 'Quay lại',
-    resend: 'Gửi lại',
-    new_pass_title: 'Tạo mật khẩu mới',
-    new_pass_lbl: 'Mật khẩu mới',
-    confirm_new_pass_lbl: 'Xác nhận mật khẩu mới',
-    input_new_pass: 'Nhập mật khẩu mới',
-    input_confirm_new_pass: 'Nhập lại mật khẩu mới',
-    pass_rules_title: 'Yêu cầu mật khẩu',
-    btn_update: 'Cập nhật',
-};
-
 export const ResetAccount = () => {
     const { startLoading, stopLoading } = useLoadingStore();
-    const { resetPasswordSetStep, resetPasswordSetUsername, openAuthDialog } = useAuthFlowStore();
+    const {
+        resetPasswordSetStep,
+        resetPasswordSetUsername,
+        resetPasswordSetAccountType,
+        openAuthDialog,
+    } = useAuthFlowStore();
 
     const form = useForm({
-        defaultValues: { username: '' },
+        defaultValues: {
+            username: '',
+            accountType: ACCOUNT_TYPES[0].key as (typeof ACCOUNT_TYPES)[number]['key'],
+        },
         onSubmit: async ({ value }) => {
             startLoading();
             try {
-                await handleCheckAccount(value.username);
+                await handleCheckAccount(value.username, value.accountType);
             } finally {
                 stopLoading();
             }
         },
     });
 
+    const watchedAccountType = useStore(form.store, (state) => state.values.accountType);
     const username = useStore(form.store, (state) => state.values.username);
     const canSubmit = useStore(
         form.store,
         (state) => state.canSubmit && !state.isSubmitting && !!username,
     );
 
-    const handleCheckAccount = async (usernameParam: string) => {
+    const currentField = RESET_PASSWORD_ACCOUNT_FIELDS[watchedAccountType];
+
+    const handleAccountTypeChange = (key: (typeof ACCOUNT_TYPES)[number]['key']) => {
+        form.setFieldValue('accountType', key);
+        form.setFieldValue('username', '');
+        form.setFieldMeta('username', (prev) => ({ ...prev, errors: [], errorMap: {} }));
+    };
+
+    const handleCheckAccount = async (usernameParam: string, accountType: string) => {
         try {
-            const { error_code, message } = await checkPhoneRegisteredStatus(usernameParam);
+            const isIndividual = accountType === ACCOUNT_TYPES[0].key;
+            const { error_code, message } = isIndividual
+                ? await checkPhoneRegisteredStatus(usernameParam)
+                : await checkEnterpriseEmailRegisteredStatus(usernameParam);
 
             if (isSuccessApi(error_code)) {
                 resetPasswordSetUsername(usernameParam);
+                resetPasswordSetAccountType(accountType);
                 resetPasswordSetStep(STEPS_RESET_PASSWORD.VERIFY_OTP);
             } else {
                 toast.error(message);
@@ -84,28 +87,50 @@ export const ResetAccount = () => {
             }}
             className="flex w-1/2 flex-col gap-4 rounded-xl"
         >
+            <header className="flex w-full flex-col gap-2">
+                <nav className="flex w-full gap-2" role="tablist">
+                    {ACCOUNT_TYPES.map(({ key, label }) => {
+                        const isActive = watchedAccountType === key;
+                        return (
+                            <button
+                                key={key}
+                                type="button"
+                                role="tab"
+                                aria-selected={isActive}
+                                onClick={() => handleAccountTypeChange(key)}
+                                className={`rounded-full px-3 py-1 transition-colors ${
+                                    isActive
+                                        ? 'bg-tertiary text-primary font-caption-highlight'
+                                        : 'text-secondary font-caption'
+                                }`}
+                            >
+                                {label}
+                            </button>
+                        );
+                    })}
+                </nav>
+            </header>
             <section className="flex w-full flex-col gap-6">
                 <form.Field
                     name="username"
                     validators={{
                         onChange: ({ value }) =>
-                            validateResetPasswordUsername(value, AUTH_VALIDATE),
+                            validateResetPasswordUsername(value, watchedAccountType, AUTH_VALIDATE),
                     }}
                 >
                     {(field) => (
                         <InputField
                             id="auth-dialog-reset-username"
-                            type={RESET_PASSWORD_ACCOUNT_FIELD.type}
-                            label={RESET_PASSWORD_ACCOUNT_FIELD.label}
-                            placeholder={RESET_PASSWORD_ACCOUNT_FIELD.placeholder}
+                            type={currentField.type}
+                            label={currentField.label}
+                            placeholder={currentField.placeholder}
                             error={field.state.meta.errors?.[0]}
                             value={field.state.value || ''}
                             onInput={(e) => {
                                 const input = e.target as HTMLInputElement;
-                                input.value = input.value.replace(
-                                    RESET_PASSWORD_ACCOUNT_FIELD.inputFilter,
-                                    '',
-                                );
+                                if (currentField.inputFilter) {
+                                    input.value = input.value.replace(currentField.inputFilter, '');
+                                }
                             }}
                             onChange={(e) => field.handleChange(e.target.value)}
                             onBlur={field.handleBlur}

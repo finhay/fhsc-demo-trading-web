@@ -18,6 +18,14 @@ export type CheckPhoneResponse = {
     };
 };
 
+export type CheckEmailEnterpriseExistResponse = {
+    error_code: string;
+    message: string;
+    result: {
+        registered: boolean;
+    };
+};
+
 export type UpdateEmailResponse = {
     error_code: string;
     message: string;

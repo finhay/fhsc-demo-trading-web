@@ -16,7 +16,9 @@ export const ResetContent = () => {
     const { resetPassword, resetPasswordSendOtp, resetPasswordVerifyOtp, setInitResetState } =
         useAuthFlowStore();
 
-    const { step, username } = resetPassword;
+    const { step, username, accountType } = resetPassword;
+
+    const isIndividual = accountType === 'individual';
 
     useEffect(() => {
         return () => {
@@ -51,6 +53,7 @@ export const ResetContent = () => {
                     <OTPVerification
                         width="w-1/2"
                         identifier={username}
+                        isIndividual={isIndividual}
                         onSendOtp={wrappedSendOtp}
                         onVerifyOtp={wrappedVerifyOtp}
                     />

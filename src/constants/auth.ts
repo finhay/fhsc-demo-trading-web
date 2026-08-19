@@ -1,6 +1,7 @@
 export const AUTH_REGEX = {
     PHONE: /^(0[0-9]{8,11}|84[0-9]{7,10})$/,
     PHONE_NUMBER_ONLY: /^[0-9]+$/,
+    EMAIL: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
     PASSWORD_SPECIAL_CHAR: /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/,
 };
 
@@ -74,31 +75,55 @@ export const REGISTER_PASSWORD_FIELDS = [
     },
 ] as const;
 
-export const LOGIN_ACCOUNT_FIELD = {
-    key: 'username',
-    type: 'tel',
-    label: 'Số điện thoại',
-    placeholder: 'Nhập số điện thoại của bạn',
-    inputFilter: /[^0-9]/g,
+export const ACCOUNT_TYPES = [
+    { key: 'individual', label: 'Cá nhân' },
+    { key: 'business', label: 'Doanh nghiệp' },
+] as const;
+
+export const LOGIN_ACCOUNT_FIELDS = {
+    individual: {
+        key: 'username',
+        type: 'tel',
+        label: 'Số điện thoại',
+        placeholder: 'Nhập số điện thoại của bạn',
+        inputFilter: /[^0-9]/g as RegExp | null,
+    },
+    business: {
+        key: 'username',
+        type: 'text',
+        label: 'Số lưu ký',
+        placeholder: 'Nhập số lưu ký của bạn',
+        inputFilter: null as RegExp | null,
+    },
 } as const;
 
-export const RESET_PASSWORD_ACCOUNT_FIELD = {
-    type: 'tel' as const,
-    label: 'Số điện thoại',
-    placeholder: 'Nhập số điện thoại của bạn',
-    inputFilter: /[^0-9]/g,
+export const RESET_PASSWORD_ACCOUNT_FIELDS = {
+    individual: {
+        type: 'tel' as const,
+        label: 'Số điện thoại',
+        placeholder: 'Nhập số điện thoại của bạn',
+        inputFilter: /[^0-9]/g as RegExp | null,
+    },
+    business: {
+        type: 'email' as const,
+        label: 'Email',
+        placeholder: 'Nhập email của bạn',
+        inputFilter: null as RegExp | null,
+    },
 };
 
 export const AUTH_MODE = {
     LOGIN: 'login',
     REGISTER: 'register',
     RESET_PASSWORD: 'resetPassword',
+    CHANGE_PASSWORD: 'changePassword',
 };
 
 export const AUTH_VALIDATE = {
     phone_required: 'Vui lòng nhập số điện thoại',
     phone_digits_only: 'Số điện thoại chỉ được nhập số',
     phone_invalid: 'Số điện thoại không hợp lệ',
+    email_invalid: 'Email không hợp lệ',
     password_required: 'Vui lòng nhập mật khẩu',
     password_min_8: 'Mật khẩu phải có tối thiểu 8 ký tự',
     password_need_upper: 'Mật khẩu phải có ký tự viết hoa',
@@ -106,6 +131,7 @@ export const AUTH_VALIDATE = {
     password_need_special: 'Mật khẩu phải có ký tự đặc biệt',
     confirm_password_required: 'Vui lòng nhập lại mật khẩu',
     confirm_password_mismatch: 'Mật khẩu không khớp',
+    custody_required: 'Vui lòng nhập số lưu ký',
     reset_account_required: 'Vui lòng nhập thông tin tài khoản',
 };
 

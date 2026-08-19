@@ -1,5 +1,6 @@
 'use client';
 
+import { ChangePasswordContent } from '@/components/auth/change-password/ChangePasswordContent';
 import { LoginContent } from '@/components/auth/login/LoginContent';
 import { RegisterContent } from '@/components/auth/register/RegisterContent';
 import { ResetContent } from '@/components/auth/reset-password/ResetContent';
@@ -25,6 +26,9 @@ export const AuthFlow = () => {
     switch (authDialogMode) {
         case AUTH_MODE.LOGIN:
             dialogTitle = 'Đăng nhập Finhay';
+            break;
+        case AUTH_MODE.CHANGE_PASSWORD:
+            dialogTitle = 'Đổi mật khẩu';
             break;
         case AUTH_MODE.REGISTER:
             switch (register.step) {
@@ -80,6 +84,8 @@ export const AuthFlow = () => {
                 return <RegisterContent />;
             case AUTH_MODE.RESET_PASSWORD:
                 return <ResetContent />;
+            case AUTH_MODE.CHANGE_PASSWORD:
+                return <ChangePasswordContent />;
             default:
                 return null;
         }

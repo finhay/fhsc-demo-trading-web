@@ -1,5 +1,9 @@
 import { vnscService } from '@/services/interceptor';
-import type { CheckPhoneResponse, RegisterV3Response } from '@/types/accounts/register';
+import type {
+    CheckEmailEnterpriseExistResponse,
+    CheckPhoneResponse,
+    RegisterV3Response,
+} from '@/types/accounts/register';
 
 export const registerAccountV3 = (
     phone: string,
@@ -37,6 +41,21 @@ export const checkPhoneRegisteredStatus = (phone: string): Promise<CheckPhoneRes
             .get(`/accounts/v1/register`, {
                 params: {
                     phone,
+                },
+            })
+            .then((res) => resolve(res.data))
+            .catch((err) => reject(err.response?.data || err));
+    });
+};
+
+export const checkEnterpriseEmailRegisteredStatus = (
+    email: string,
+): Promise<CheckEmailEnterpriseExistResponse> => {
+    return new Promise((resolve, reject) => {
+        vnscService
+            .get(`/accounts/public/v2/register/enterprise`, {
+                params: {
+                    email,
                 },
             })
             .then((res) => resolve(res.data))

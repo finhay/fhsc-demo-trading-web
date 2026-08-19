@@ -25,6 +25,7 @@ type RegisterState = {
 type ResetState = {
     step: string;
     username: string;
+    accountType: string;
     otpToken: string;
     isSuccess: boolean;
 };
@@ -42,6 +43,7 @@ type AuthFlowActions = {
     registerSetPhone: (phone: string) => void;
     resetPasswordSetStep: (step: string) => void;
     resetPasswordSetUsername: (username: string) => void;
+    resetPasswordSetAccountType: (accountType: string) => void;
     resetPasswordSetIsSuccess: (isSuccess: boolean) => void;
 
     openAuthDialog: (mode: AuthDialogOpenMode) => void;
@@ -65,6 +67,7 @@ const registerInitial: RegisterState = {
 const resetPasswordInitial: ResetState = {
     step: STEPS_RESET_PASSWORD.ACCOUNT_INFO,
     username: '',
+    accountType: 'individual',
     otpToken: '',
     isSuccess: false,
 };
@@ -88,6 +91,8 @@ export const useAuthFlowStore = create<AuthFlowState & AuthFlowActions>()((set, 
     resetPasswordSetStep: (step) => set((s) => ({ resetPassword: { ...s.resetPassword, step } })),
     resetPasswordSetUsername: (username) =>
         set((s) => ({ resetPassword: { ...s.resetPassword, username } })),
+    resetPasswordSetAccountType: (accountType) =>
+        set((s) => ({ resetPassword: { ...s.resetPassword, accountType } })),
     resetPasswordSetIsSuccess: (isSuccess) =>
         set((s) => ({ resetPassword: { ...s.resetPassword, isSuccess } })),
 
@@ -161,15 +166,17 @@ export const useAuthFlowStore = create<AuthFlowState & AuthFlowActions>()((set, 
     },
 
     resetPasswordSendOtp: async (captchaToken: string) => {
-        const { username } = get().resetPassword;
+        const { username, accountType } = get().resetPassword;
         if (!captchaToken || !username) return { success: false };
+
+        const isIndividual = accountType === 'individual';
 
         try {
             const { error_code, message, result } = await postSendOtpPublic(
                 TYPE_OTP.FORGOT_PASSWORD,
                 captchaToken,
-                username,
-                '',
+                isIndividual ? username : '',
+                !isIndividual ? username : '',
             );
 
             if (isSuccessApi(error_code)) {
@@ -183,15 +190,17 @@ export const useAuthFlowStore = create<AuthFlowState & AuthFlowActions>()((set, 
     },
 
     resetPasswordVerifyOtp: async (otp: string) => {
-        const { username } = get().resetPassword;
+        const { username, accountType } = get().resetPassword;
         if (!otp || otp.length !== 6) return false;
+
+        const isIndividual = accountType === 'individual';
 
         try {
             const { error_code, message, result } = await postVerifyOtp(
                 TYPE_OTP.FORGOT_PASSWORD,
                 otp,
-                username,
-                '',
+                isIndividual ? username : '',
+                !isIndividual ? username : '',
             );
 
             if (isSuccessApi(error_code)) {
