@@ -12,26 +12,23 @@ import { AssetDebt } from '@/components/tai-san/overview/AssetDebt';
 import { AssetOverview } from '@/components/tai-san/overview/AssetOverview';
 import { AssetPortfolio } from '@/components/tai-san/portfolio/AssetPortfolio';
 import { AssetStructure } from '@/components/tai-san/portfolio/AssetStructure';
-import { AssetRights } from '@/components/tai-san/rights/AssetRights';
 import { AssetTradeHistory } from '@/components/tai-san/trade-history/AssetTradeHistory';
 import { MarketDetailModal } from '@/components/thi-truong/index/modal/MarketDetailModal';
 import { useAssetStore } from '@/stores/assets/useAssetStore';
-import { useAuthStore } from '@/stores/auth/useAuthStore';
 import { useStockInfoStore } from '@/stores/common/useStockInfoStore';
+import { usePaperAccountStore } from '@/stores/paper-trading/usePaperAccountStore';
 
 export const AssetView = () => {
-    const { activeSubAccount } = useAuthStore();
+    const { accountId } = usePaperAccountStore();
     const { assetsSummary, isSummaryLoading, fetchAssetsSummary, fetchPortfolio } = useAssetStore();
     const { isOpenDetailModal, detailModalType, detailIndex, closeStockDetail } =
         useStockInfoStore();
 
     useEffect(() => {
+        if (!accountId) return;
+        fetchPortfolio();
         fetchAssetsSummary();
-    }, []);
-
-    useEffect(() => {
-        fetchPortfolio(activeSubAccount?.sub_account_id);
-    }, [activeSubAccount?.sub_account_id]);
+    }, [accountId]);
 
     return (
         <>
@@ -56,9 +53,8 @@ export const AssetView = () => {
                         <AssetStructure />
                     </div>
                     <AssetPortfolio />
-                    <div className="grid h-96 shrink-0 grid-cols-2 items-stretch gap-2">
+                    <div className="h-96 shrink-0">
                         <AssetPnl />
-                        <AssetRights />
                     </div>
                     <AssetTradeHistory />
                 </section>

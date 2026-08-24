@@ -6,26 +6,17 @@ import { type ReactDebouncerOptions, useDebouncer } from '@tanstack/react-pacer'
 import { useEffect, useState } from 'react';
 
 import { Dialog } from '@/components/common/ui/Dialog';
-import { Trade247DateRange } from '@/components/giao-dich/shared/Trade247DateRange';
-import { ACCOUNT_TYPE, ERROR_CODES } from '@/constants/common';
-import { ORDER_TYPE, TRADE_UI_CONFIG, TWO_FA_PLACEMENT } from '@/constants/trading';
+import { ORDER_TYPE } from '@/constants/trading';
 import { toast } from '@/hooks/lib/useToast';
 import { fetchStockRealtime } from '@/services/api/datafeed/stock-info';
-import { updateSubAccountOrder247, updateSubAccountStockOrder } from '@/services/api/trade/orders';
-import { useAuthStore } from '@/stores/auth/useAuthStore';
+import { updatePaperOrder } from '@/services/api/paper-trading/orders';
 import { useLoadingStore } from '@/stores/common/useLoadingStore';
+import { usePaperAccountStore } from '@/stores/paper-trading/usePaperAccountStore';
 import { useTradingStore } from '@/stores/trading/useTradingStore';
 import type { TradeOrderAmendStockInfo } from '@/types/pages/trading';
 import { getApiErrorMessage, isSuccessApi } from '@/utils/common';
-import {
-    addMonths,
-    formatApiDate,
-    formatBoardPrice,
-    formatNumberVN,
-    formatNumberVNInput,
-} from '@/utils/format';
-import { getStepSize, makePriceValidator, parsePrice, parseQuantity } from '@/utils/trading/panel';
-import { mapOrderErrorCodeToStatus } from '@/utils/trading/shared';
+import { formatBoardPrice, formatNumberVN, formatNumberVNInput } from '@/utils/format';
+import { getStepSize, parsePrice, parseQuantity } from '@/utils/trading/panel';
 
 type Props = {
     orderId: string;
@@ -33,12 +24,8 @@ type Props = {
     side: string;
     rawPrice: number;
     rawQty: number;
-    orderConditionType?: string | null;
-    executionDate?: string;
-    expiredDate?: string;
     onClose: () => void;
     onSuccess: () => void;
-    onExpired2FA?: () => void;
 };
 
 export const TradeUpdateOrderModal = ({
@@ -47,53 +34,29 @@ export const TradeUpdateOrderModal = ({
     side,
     rawPrice,
     rawQty,
-    orderConditionType,
-    executionDate,
-    expiredDate,
     onClose,
     onSuccess,
-    onExpired2FA,
 }: Props) => {
     const { startLoading, stopLoading, isLoading } = useLoadingStore();
     const [stockInfo, setStockInfo] = useState<TradeOrderAmendStockInfo | null>(null);
 
-    const { handle2FATokenExpired, request2FA, patchOrdersInBook } = useTradingStore();
-    const { activeSubAccount, profile } = useAuthStore();
-    const validationType = profile?.user_type === ACCOUNT_TYPE.ENTERPRISE ? 'OTP' : 'SMART_OTP';
+    const { patchOrdersInBook, fetchOrders } = useTradingStore();
+    const { accountId } = usePaperAccountStore();
 
-    const subAccountId = activeSubAccount?.sub_account_id ?? '';
-    const subAccountExt = activeSubAccount?.sub_account_ext ?? '';
-    const custId = profile?.cust_id ?? '';
-
-    const is247 = !!orderConditionType;
-
-    const toApiDate = (v?: string) => (v ? formatApiDate(v) : '');
     const initialDisplayPrice = formatBoardPrice(rawPrice);
-    const initialExecutionDate = toApiDate(executionDate) || formatApiDate();
-    const initialExpiredDate =
-        toApiDate(expiredDate) ||
-        formatApiDate(addMonths(TRADE_UI_CONFIG.DEFAULT_247_MONTH_OFFSET));
 
     const form = useForm({
         defaultValues: {
             qty: formatNumberVN(rawQty, { decimals: 0 }),
             price: initialDisplayPrice,
-            executionDate: initialExecutionDate,
-            expiredDate: initialExpiredDate,
         },
         onSubmit: ({ value }) => {
-            request2FA(
-                () => handleConfirm(value.qty, value.price, value.executionDate, value.expiredDate),
-                TWO_FA_PLACEMENT.GLOBAL,
-            );
-            onClose();
+            handleConfirm(value.qty, value.price);
         },
     });
 
     const currentPrice = useStore(form.store, (s) => s.values.price);
     const currentQty = useStore(form.store, (s) => s.values.qty);
-    const currentExecutionDate = useStore(form.store, (s) => s.values.executionDate);
-    const currentExpiredDate = useStore(form.store, (s) => s.values.expiredDate);
     const validateFieldsDebouncer = useDebouncer(
         () => {
             form.validateField('qty', 'change');
@@ -115,13 +78,9 @@ export const TradeUpdateOrderModal = ({
 
     const priceChanged = getPriceChanged();
     const qtyChanged = getQtyChanged();
-    const datesChanged =
-        is247 &&
-        (currentExecutionDate !== initialExecutionDate ||
-            currentExpiredDate !== initialExpiredDate);
 
     const hasValueChanged = () => {
-        return priceChanged || qtyChanged || datesChanged;
+        return priceChanged || qtyChanged;
     };
 
     const isPriceDirty = (priceStr: string) =>
@@ -129,7 +88,6 @@ export const TradeUpdateOrderModal = ({
     const isQtyDirty = (qtyStr: string) => parseQuantity(qtyStr) !== rawQty;
 
     const validateKrxSingleField = (priceStr: string, qtyStr: string): string | undefined => {
-        if (is247) return undefined;
         if (isPriceDirty(priceStr) && isQtyDirty(qtyStr))
             return 'Yêu cầu sửa lệnh có thể không được thực thi nếu lệnh đã khớp';
         return undefined;
@@ -138,7 +96,7 @@ export const TradeUpdateOrderModal = ({
     const canSubmit =
         useStore(form.store, (s) => s.canSubmit && !s.isSubmitting) &&
         hasValueChanged() &&
-        (is247 || !(priceChanged && qtyChanged)) &&
+        !(priceChanged && qtyChanged) &&
         !isLoading;
 
     const validateQty = (value: string): string | undefined => {
@@ -163,17 +121,6 @@ export const TradeUpdateOrderModal = ({
     const validatePrice = (value: string): string | undefined => {
         const krx = validateKrxSingleField(value, form.getFieldValue('qty'));
         if (krx) return krx;
-
-        if (is247) {
-            return makePriceValidator(
-                0,
-                0,
-                true,
-                stockInfo?.exchange ?? '',
-                stockInfo?.stockType ?? '',
-                symbol,
-            )({ value });
-        }
 
         if (!value.trim()) return undefined;
         const price = parsePrice(value);
@@ -233,73 +180,47 @@ export const TradeUpdateOrderModal = ({
         validateFieldsDebouncer.maybeExecute();
     };
 
-    const handleConfirm = async (
-        qtyStr: string,
-        priceStr: string,
-        execDateStr: string,
-        expDateStr: string,
-    ) => {
+    const handleConfirm = async (qtyStr: string, priceStr: string) => {
         const qty = parseQuantity(qtyStr);
         const apiPrice = parsePrice(priceStr);
-        if (!is247 && isPriceDirty(priceStr) && isQtyDirty(qtyStr)) {
+        const isPriceEdited = isPriceDirty(priceStr);
+        const isQtyEdited = isQtyDirty(qtyStr);
+
+        if (isPriceEdited && isQtyEdited) {
             toast.warning('Yêu cầu sửa lệnh có thể không được thực thi nếu lệnh đã khớp');
             return;
         }
 
         startLoading();
-        let is2FAExpired = false;
         try {
-            const updateFn = is247 ? updateSubAccountOrder247 : updateSubAccountStockOrder;
-            const { error_code, data, message } = await updateFn(subAccountId, orderId, {
-                sub_account: subAccountExt,
-                cus_id: custId,
-                quantity: qty,
-                price: apiPrice,
-                validation_type: validationType,
-                order_condition_type: orderConditionType,
-                execution_date: is247 ? execDateStr : undefined,
-                expired_date: is247 ? expDateStr : undefined,
-            });
+            // API paper nhận PATCH từng phần — chỉ gửi đúng trường người dùng vừa sửa.
+            const { error_code, message } = await updatePaperOrder(
+                accountId,
+                orderId,
+                isPriceEdited ? { limit_price: apiPrice } : { quantity: qty },
+            );
 
             if (isSuccessApi(error_code)) {
-                if (data && data.length > 0) {
-                    if (data[0].code === '0') {
-                        patchOrdersInBook([
-                            {
-                                orderId,
-                                rawPrice: apiPrice,
-                                rawQty: qty,
-                                placedPrice: formatBoardPrice(apiPrice),
-                                totalQty: formatNumberVN(qty, { decimals: 0 }),
-                                ...(is247
-                                    ? { executionDate: execDateStr, expiredDate: expDateStr }
-                                    : {}),
-                            },
-                        ]);
-                        toast.success('Thành công');
-                    } else {
-                        toast.error(
-                            mapOrderErrorCodeToStatus(data[0].code, data[0].rejected_reason ?? ''),
-                        );
-                    }
-                }
+                patchOrdersInBook([
+                    {
+                        orderId,
+                        rawPrice: isPriceEdited ? apiPrice : rawPrice,
+                        rawQty: isQtyEdited ? qty : rawQty,
+                        placedPrice: formatBoardPrice(isPriceEdited ? apiPrice : rawPrice),
+                        totalQty: formatNumberVN(isQtyEdited ? qty : rawQty, { decimals: 0 }),
+                    },
+                ]);
+                toast.success('Sửa lệnh thành công');
+                fetchOrders(accountId, { silent: true });
                 onSuccess();
-            } else if (error_code === ERROR_CODES.FAILED_2FA_TOKEN_EXPIRED) {
-                is2FAExpired = true;
             } else {
                 toast.warning(message);
             }
-        } catch (err: any) {
-            const errCode = err?.error_code ?? err?.response?.data?.error_code;
-            if (errCode === ERROR_CODES.FAILED_2FA_TOKEN_EXPIRED) {
-                is2FAExpired = true;
-            } else {
-                toast.error(getApiErrorMessage(err, 'Có lỗi xảy ra, vui lòng thử lại'));
-            }
+        } catch (err: unknown) {
+            toast.error(getApiErrorMessage(err, 'Có lỗi xảy ra, vui lòng thử lại'));
         } finally {
             stopLoading();
             onClose();
-            if (is2FAExpired) handle2FATokenExpired(onExpired2FA, TWO_FA_PLACEMENT.GLOBAL);
         }
     };
 
@@ -357,7 +278,7 @@ export const TradeUpdateOrderModal = ({
                                 </label>
                                 <div
                                     className={`bg-tertiary rounded-xl border flex items-center px-4 py-3 gap-3 transition-colors ${
-                                        !is247 && priceChanged
+                                        priceChanged
                                             ? 'border-quaternary opacity-50 cursor-not-allowed'
                                             : field.state.meta.errors.length > 0
                                               ? 'border-red'
@@ -366,10 +287,10 @@ export const TradeUpdateOrderModal = ({
                                 >
                                     <button
                                         type="button"
-                                        disabled={!is247 && priceChanged}
+                                        disabled={priceChanged}
                                         onClick={() => adjustQty(-1)}
                                         className={`w-8 h-8 flex items-center justify-center rounded-full font-body-2-highlight transition-colors shrink-0 ${
-                                            !is247 && priceChanged
+                                            priceChanged
                                                 ? 'bg-quaternary text-secondary cursor-not-allowed'
                                                 : 'bg-quaternary text-primary hover:bg-highlight hover:text-quaternary'
                                         }`}
@@ -380,7 +301,7 @@ export const TradeUpdateOrderModal = ({
                                         id="order-qty"
                                         type="text"
                                         inputMode="numeric"
-                                        disabled={!is247 && priceChanged}
+                                        disabled={priceChanged}
                                         value={field.state.value}
                                         onChange={(e) => {
                                             const sanitized = formatNumberVNInput(e.target.value, {
@@ -398,17 +319,17 @@ export const TradeUpdateOrderModal = ({
                                             field.handleBlur();
                                         }}
                                         className={`flex-1 bg-transparent font-body-2 text-center focus:outline-none ${
-                                            !is247 && priceChanged
+                                            priceChanged
                                                 ? 'text-secondary cursor-not-allowed'
                                                 : 'text-primary'
                                         }`}
                                     />
                                     <button
                                         type="button"
-                                        disabled={!is247 && priceChanged}
+                                        disabled={priceChanged}
                                         onClick={() => adjustQty(1)}
                                         className={`w-8 h-8 flex items-center justify-center rounded-full font-body-2-highlight transition-colors shrink-0 ${
-                                            !is247 && priceChanged
+                                            priceChanged
                                                 ? 'bg-quaternary text-secondary cursor-not-allowed'
                                                 : 'bg-quaternary text-primary hover:bg-highlight hover:text-quaternary'
                                         }`}
@@ -437,7 +358,7 @@ export const TradeUpdateOrderModal = ({
                                 </label>
                                 <div
                                     className={`bg-tertiary rounded-xl border flex items-center px-4 py-3 gap-3 transition-colors ${
-                                        !is247 && qtyChanged
+                                        qtyChanged
                                             ? 'border-quaternary opacity-50 cursor-not-allowed'
                                             : field.state.meta.errors.length > 0
                                               ? 'border-red'
@@ -446,10 +367,10 @@ export const TradeUpdateOrderModal = ({
                                 >
                                     <button
                                         type="button"
-                                        disabled={!is247 && qtyChanged}
+                                        disabled={qtyChanged}
                                         onClick={() => adjustPrice(-1)}
                                         className={`w-8 h-8 flex items-center justify-center rounded-full font-body-2-highlight transition-colors shrink-0 ${
-                                            !is247 && qtyChanged
+                                            qtyChanged
                                                 ? 'bg-quaternary text-secondary cursor-not-allowed'
                                                 : 'bg-quaternary text-primary hover:bg-highlight hover:text-quaternary'
                                         }`}
@@ -460,7 +381,7 @@ export const TradeUpdateOrderModal = ({
                                         id="order-price"
                                         type="text"
                                         inputMode="decimal"
-                                        disabled={!is247 && qtyChanged}
+                                        disabled={qtyChanged}
                                         value={field.state.value}
                                         onChange={(e) => {
                                             const formatted = formatNumberVNInput(e.target.value, {
@@ -485,17 +406,17 @@ export const TradeUpdateOrderModal = ({
                                             field.handleBlur();
                                         }}
                                         className={`flex-1 bg-transparent font-body-2 text-center focus:outline-none ${
-                                            !is247 && qtyChanged
+                                            qtyChanged
                                                 ? 'text-secondary cursor-not-allowed'
                                                 : 'text-primary'
                                         }`}
                                     />
                                     <button
                                         type="button"
-                                        disabled={!is247 && qtyChanged}
+                                        disabled={qtyChanged}
                                         onClick={() => adjustPrice(1)}
                                         className={`w-8 h-8 flex items-center justify-center rounded-full font-body-2-highlight transition-colors shrink-0 ${
-                                            !is247 && qtyChanged
+                                            qtyChanged
                                                 ? 'bg-quaternary text-secondary cursor-not-allowed'
                                                 : 'bg-quaternary text-primary hover:bg-highlight hover:text-quaternary'
                                         }`}
@@ -508,7 +429,6 @@ export const TradeUpdateOrderModal = ({
                                         {field.state.meta.errors[0]}
                                     </span>
                                 ) : (
-                                    !orderConditionType &&
                                     stockInfo &&
                                     stockInfo.floor > 0 &&
                                     stockInfo.ceiling > 0 && (
@@ -525,9 +445,6 @@ export const TradeUpdateOrderModal = ({
                             </div>
                         )}
                     </form.Field>
-                    {is247 && (
-                        <Trade247DateRange form={form} isBuySide={isBuy} isExecutionDateReadonly />
-                    )}
                     <div className="bg-tertiary rounded-xl px-4 py-3 flex items-start gap-2">
                         <span className="text-yellow font-caption shrink-0 mt-0.5">⚠</span>
                         <p className="font-caption text-secondary">

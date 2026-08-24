@@ -1,110 +1,31 @@
 'use client';
 
-import { Fragment, useEffect, useMemo, useState } from 'react';
-
-import { RiDownloadLine } from 'react-icons/ri';
+import { Fragment, useMemo, useState } from 'react';
 
 import { Skeleton } from '@/components/common/ui/Skeleton';
 import { ORDER_SIDE } from '@/constants/trading';
-import { toast } from '@/hooks/lib/useToast';
-import { fetchSubAccountMatchedOrdersReport } from '@/services/api/trade/history';
-import { exportTradingReport, fetchTradingReportResult } from '@/services/api/trade/reports';
-import { useAuthStore } from '@/stores/auth/useAuthStore';
-import { useLoadingStore } from '@/stores/common/useLoadingStore';
 import { useTradingStore } from '@/stores/trading/useTradingStore';
 import type { TradeMatchedHistoryTableRow } from '@/types/pages/trading';
-import type { MatchedOrderHistoryItem, MatchedOrderSymbol } from '@/types/trade/history';
-import { getApiErrorMessage, isSuccessApi } from '@/utils/common';
-import { formatApiDate, formatNumberVN } from '@/utils/format';
+import { formatNumberVN } from '@/utils/format';
+import { groupPaperOrdersBySymbol } from '@/utils/paper-trading/order-book';
 
 export const TradeOrderHistory = () => {
-    const { activeSubAccount } = useAuthStore();
-    const { startLoading, stopLoading } = useLoadingStore();
-    const { realtimeMatches, clearRealtimeMatches } = useTradingStore();
+    const { orders, isLoadingOrders } = useTradingStore();
     const [side, setSide] = useState<string>(ORDER_SIDE.BUY);
-    const [data, setData] = useState<MatchedOrderSymbol[]>([]);
-    const [isLoading, setIsLoading] = useState(false);
 
     const sides = [
         { key: ORDER_SIDE.BUY, label: 'Mua' },
         { key: ORDER_SIDE.SELL, label: 'Bán' },
     ];
 
-    const mergedData = useMemo<MatchedOrderSymbol[]>(() => {
-        const entries = Object.values(realtimeMatches).filter((entry) => entry.side === side);
-        if (entries.length === 0) return data;
-
-        const result = data.map((group) => ({ ...group, history: [...group.history] }));
-        const bySymbol = new Map(result.map((group) => [group.symbol, group]));
-        const touched = new Set<string>();
-
-        for (const entry of entries) {
-            let group = bySymbol.get(entry.symbol);
-            if (!group) {
-                group = {
-                    symbol: entry.symbol,
-                    total_quantity: 0,
-                    total_volume: 0,
-                    average_price: 0,
-                    history: [],
-                };
-                bySymbol.set(entry.symbol, group);
-                result.push(group);
-            }
-
-            const existingIndex = group.history.findIndex((h) => h.order_id === entry.orderId);
-            const item: MatchedOrderHistoryItem = {
-                order_id: entry.orderId,
-                quantity_matched: entry.quantity,
-                price_matched: entry.price,
-                order_side: entry.side,
-                transaction_date:
-                    existingIndex >= 0 ? group.history[existingIndex].transaction_date : '',
-                volume: entry.volume,
-            };
-
-            if (existingIndex >= 0) {
-                group.history[existingIndex] = item;
-            } else {
-                group.history.push(item);
-            }
-            touched.add(entry.symbol);
-        }
-
-        for (const group of result) {
-            if (!touched.has(group.symbol)) continue;
-            const totalQty = group.history.reduce((sum, h) => sum + h.quantity_matched, 0);
-            const totalVol = group.history.reduce((sum, h) => sum + h.volume, 0);
-            group.total_quantity = totalQty;
-            group.total_volume = totalVol;
-            group.average_price = totalQty > 0 ? (totalVol * 1000) / totalQty : 0;
-        }
-
-        return result;
-    }, [data, realtimeMatches, side]);
-
-    const flatRows = useMemo<TradeMatchedHistoryTableRow[]>(
+    // Dựng lại từ sổ lệnh đang có sẵn trong store — không tốn thêm request nào.
+    const flatRows = useMemo(
         () =>
-            mergedData.flatMap(
-                ({ symbol, history, total_quantity, average_price, total_volume }) => [
-                    ...history.map((order) => ({
-                        symbol,
-                        order_id: order.order_id,
-                        isTotal: false,
-                        quantity: order.quantity_matched,
-                        price: order.price_matched,
-                        volume: order.volume,
-                    })),
-                    {
-                        symbol,
-                        isTotal: true,
-                        quantity: total_quantity,
-                        price: average_price,
-                        volume: total_volume,
-                    },
-                ],
+            groupPaperOrdersBySymbol(
+                orders.flatMap((row) => (row.paperOrder ? [row.paperOrder] : [])),
+                side,
             ),
-        [mergedData],
+        [orders, side],
     );
 
     const rowsBySymbol = useMemo(() => {
@@ -117,55 +38,6 @@ export const TradeOrderHistory = () => {
         return grouped;
     }, [flatRows]);
     const symbolOrder = Array.from(rowsBySymbol.keys());
-
-    const fetchMatchedOrders = async (accountId: string, orderSide: string) => {
-        setIsLoading(true);
-        try {
-            const { data, error_code } = await fetchSubAccountMatchedOrdersReport(
-                accountId,
-                orderSide,
-                formatApiDate(),
-            );
-            if (isSuccessApi(error_code)) {
-                setData(data ?? []);
-                clearRealtimeMatches();
-            }
-        } finally {
-            setIsLoading(false);
-        }
-    };
-
-    const exportMatchedOrders = async () => {
-        startLoading();
-        try {
-            const { data, error_code, message } = await exportTradingReport(
-                activeSubAccount?.sub_account_id ?? '',
-                side,
-            );
-            if (isSuccessApi(error_code)) {
-                setTimeout(async () => {
-                    const res = await fetchTradingReportResult(data);
-                    if (isSuccessApi(res.error_code) && res.data.url) {
-                        window.open(res.data.url, '_blank');
-                    } else {
-                        toast.error(res.data.error);
-                    }
-                    stopLoading();
-                }, 3000);
-            } else {
-                toast.error(message);
-                stopLoading();
-            }
-        } catch (err) {
-            toast.error(getApiErrorMessage(err, 'Có lỗi xảy ra, vui lòng thử lại'));
-            stopLoading();
-        }
-    };
-
-    useEffect(() => {
-        if (!activeSubAccount?.sub_account_id) return;
-        fetchMatchedOrders(activeSubAccount.sub_account_id, side);
-    }, [side, activeSubAccount?.sub_account_id]);
 
     return (
         <section
@@ -196,23 +68,13 @@ export const TradeOrderHistory = () => {
                         ))}
                     </nav>
                 </div>
-                {flatRows.length > 0 && (
-                    <button
-                        type="button"
-                        className="p-2 rounded-full bg-tertiary disabled:opacity-50 disabled:cursor-not-allowed"
-                        onClick={exportMatchedOrders}
-                        disabled={isLoading}
-                    >
-                        <RiDownloadLine size={16} className="text-primary shrink-0" />
-                    </button>
-                )}
             </header>
             <div
                 role="tabpanel"
                 aria-label={sides.find((s) => s.key === side)?.label}
                 className="min-w-0 w-full flex-1 overflow-auto"
             >
-                {isLoading ? (
+                {isLoadingOrders ? (
                     <Skeleton />
                 ) : flatRows.length === 0 ? (
                     <div className="flex items-center justify-center h-full">

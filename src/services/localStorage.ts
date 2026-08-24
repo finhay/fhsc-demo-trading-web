@@ -46,22 +46,6 @@ export const setUserType = (userType: string) => {
     window.localStorage.setItem('user_type', userType);
 };
 
-export const getAccessToken2FA = () => {
-    return window.localStorage.getItem('access_token_2FA');
-};
-
-export const setAccessToken2FA = (token: string) => {
-    if (token && token.trim()) {
-        window.localStorage.setItem('access_token_2FA', token);
-    } else {
-        window.localStorage.removeItem('access_token_2FA');
-    }
-};
-
-export const removeAccessToken2FA = () => {
-    window.localStorage.removeItem('access_token_2FA');
-};
-
 export const getDeviceId = () => {
     return window.localStorage.getItem('device_id');
 };

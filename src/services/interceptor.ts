@@ -6,7 +6,7 @@ import {
     clearLocalStorage,
     getAccessKey,
     getAccessToken,
-    getAccessToken2FA,
+    getCustId,
     getDeviceId,
     getUserId,
 } from '@/services/localStorage';
@@ -20,11 +20,21 @@ type BaseInterceptorOptions = {
     withRefreshToken?: boolean;
     withDeviceId?: boolean;
     withLanguage?: boolean;
+    withUserInfo?: boolean;
 };
 
 type RefreshFn = () => Promise<RefreshTokenResponse>;
 
 let inflight: Promise<string> | null = null;
+
+/** Header `x-userinfo` của paper-trading: Base64(JSON {sub, cust_id}) */
+const encodeUserInfoHeader = (): string => {
+    const userId = getUserId();
+    if (!userId) return '';
+
+    const custId = getCustId() || userId;
+    return window.btoa(JSON.stringify({ sub: String(userId), cust_id: String(custId) }));
+};
 
 function runOrWaitRefresh(refreshFn: RefreshFn): Promise<string> {
     if (inflight) return inflight;
@@ -55,15 +65,7 @@ export const createBaseInterceptor = (options: BaseInterceptorOptions): AxiosIns
             if (options.withAuth && !req.headers?.skipAutoAuth) {
                 req.url = req.url?.replace(':user_id', String(getUserId()));
                 const token = getAccessToken();
-                const token2FA = getAccessToken2FA();
-
-                if (req.headers?.tokenType === '2FA') {
-                    if (token2FA) {
-                        req.headers['Authorization'] = `Bearer ${token2FA}`;
-                    } else if (token) {
-                        req.headers['Authorization'] = `Bearer ${token}`;
-                    }
-                } else if (token) {
+                if (token) {
                     req.headers['Authorization'] = `Bearer ${token}`;
                 }
             }
@@ -86,6 +88,13 @@ export const createBaseInterceptor = (options: BaseInterceptorOptions): AxiosIns
 
             if (options.withLanguage !== false) {
                 req.headers['Accept-Language'] = 'vi';
+            }
+
+            if (options.withUserInfo) {
+                const userInfo = encodeUserInfoHeader();
+                if (userInfo) {
+                    req.headers['x-userinfo'] = userInfo;
+                }
             }
 
             return req;
@@ -143,4 +152,12 @@ export const vnscServiceDatafeed = createBaseInterceptor({
     timeout: 60000,
     withAuth: true,
     withDeviceId: true,
+});
+
+export const paperTradingService = createBaseInterceptor({
+    baseURL: process.env.NEXT_PUBLIC_PAPER_TRADING_URL,
+    timeout: 60000,
+    withDeviceId: true,
+    withLanguage: true,
+    withUserInfo: true,
 });

@@ -8,11 +8,11 @@ import { Skeleton } from '@/components/common/ui/Skeleton';
 import { useMQTT } from '@/hooks/useMQTT';
 import { StockPriceMessage } from '@/proto/stock';
 import { fetchStocksMetadataBySymbolsV4 } from '@/services/api/datafeed/stock-info';
-import { fetchSubAccountStockPortfolio } from '@/services/api/trade/portfolio';
+import { fetchPaperAccountPortfolio } from '@/services/api/paper-trading/account';
 import { useAuthStore } from '@/stores/auth/useAuthStore';
+import { usePaperAccountStore } from '@/stores/paper-trading/usePaperAccountStore';
 import type { StocksInfoItem } from '@/types/datafeed/stock-info';
 import type { MarketPortfolioTheme } from '@/types/pages/market';
-import { calcPortfolioHoldingQuantity } from '@/utils/assets';
 import { buildStockPriceTopics, isSuccessApi } from '@/utils/common';
 import {
     buildMarketPortfolioView,
@@ -22,7 +22,8 @@ import {
 import { MarketWatchlistStockList } from './MarketWatchlistStockList';
 
 export const MarketWatchlistPortfolio = () => {
-    const { profile, activeSubAccount } = useAuthStore();
+    const { profile } = useAuthStore();
+    const { accountId } = usePaperAccountStore();
     const [quantities, setQuantities] = useState<Record<string, number>>({});
     const [stocks, setStocks] = useState<StocksInfoItem[]>([]);
     const [isLoading, setIsLoading] = useState(true);
@@ -88,23 +89,21 @@ export const MarketWatchlistPortfolio = () => {
     };
 
     const fetchData = async () => {
-        if (!profile || !activeSubAccount) {
+        if (!profile || !accountId) {
             resetData();
             setIsLoading(false);
             return;
         }
         setIsLoading(true);
         try {
-            const { data, error_code } = await fetchSubAccountStockPortfolio(
-                activeSubAccount.sub_account_id,
-            );
+            const { data, error_code } = await fetchPaperAccountPortfolio(accountId);
             if (!isSuccessApi(error_code)) {
                 resetData();
                 return;
             }
             const quantityMap: Record<string, number> = {};
-            (data.portfolio || []).forEach((item) => {
-                const quantity = calcPortfolioHoldingQuantity(item);
+            (data || []).forEach((item) => {
+                const quantity = item.quantity ?? 0;
                 if (quantity > 0) quantityMap[item.symbol] = quantity;
             });
             const symbols = Object.keys(quantityMap);
@@ -139,7 +138,7 @@ export const MarketWatchlistPortfolio = () => {
 
     useEffect(() => {
         fetchData();
-    }, [profile, activeSubAccount?.sub_account_id]);
+    }, [profile, accountId]);
 
     if (isLoading) {
         return (

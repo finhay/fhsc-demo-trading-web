@@ -1,15 +1,10 @@
 'use client';
 
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo } from 'react';
 
 import { EmptyState } from '@/components/common/feature/EmptyState';
 import { Skeleton } from '@/components/common/ui/Skeleton';
-import { SUB_ACCOUNT_TYPE } from '@/constants/common';
-import { getSubAccountAssetSummary } from '@/services/api/trade/assets';
 import { useAssetStore } from '@/stores/assets/useAssetStore';
-import { useAuthStore } from '@/stores/auth/useAuthStore';
-import type { SubAccountAsset } from '@/types/trade/assets';
-import { isSuccessApi } from '@/utils/common';
 import { formatNumberVN } from '@/utils/format';
 
 type DebtRow = {
@@ -31,18 +26,11 @@ const toDebtRows = (rows: DebtAmountRow[]): DebtRow[] =>
         }));
 
 export const AssetDebt = () => {
-    const { subAccounts } = useAuthStore();
     const { assetsSummary, isSummaryLoading } = useAssetStore();
-    const [normalAsset, setNormalAsset] = useState<SubAccountAsset | null>(null);
-    const [marginAsset, setMarginAsset] = useState<SubAccountAsset | null>(null);
-    const [isLoading, setIsLoading] = useState(true);
-
-    const normalSubAccount = subAccounts.find(
-        (account) => account.account_type === SUB_ACCOUNT_TYPE.NORMAL,
-    );
-    const marginSubAccount = subAccounts.find(
-        (account) => account.account_type === SUB_ACCOUNT_TYPE.MARGIN,
-    );
+    // Simulator không có margin/ứng trước — hai tiểu khoản này luôn rỗng.
+    const normalAsset = null;
+    const marginAsset = null;
+    const isLoading = false;
 
     const buildSummaryRows = (): DebtRow[] => {
         const debt = assetsSummary?.debt;
@@ -66,7 +54,15 @@ export const AssetDebt = () => {
         ]);
     };
 
-    const buildDebtRows = (asset: SubAccountAsset | null, includeMargin = false): DebtRow[] => {
+    type SubAccountDebt = {
+        cidepo_fee_acr?: number;
+        cidepo_fee?: number;
+        advanced_amount?: number;
+        t0_debt_amount?: number;
+        margin_amount?: number;
+    };
+
+    const buildDebtRows = (asset: SubAccountDebt | null, includeMargin = false): DebtRow[] => {
         const rows = [
             {
                 label: 'Nợ phí lưu ký',
@@ -111,41 +107,6 @@ export const AssetDebt = () => {
         ],
         [assetsSummary, isSummaryLoading, normalAsset, marginAsset, isLoading],
     );
-
-    useEffect(() => {
-        const fetchSubAccountAssets = async () => {
-            setIsLoading(true);
-            try {
-                const [normalResult, marginResult] = await Promise.all([
-                    normalSubAccount?.sub_account_id
-                        ? getSubAccountAssetSummary(normalSubAccount.sub_account_id)
-                        : Promise.resolve(null),
-                    marginSubAccount?.sub_account_id
-                        ? getSubAccountAssetSummary(marginSubAccount.sub_account_id)
-                        : Promise.resolve(null),
-                ]);
-
-                if (normalResult && isSuccessApi(normalResult.error_code)) {
-                    setNormalAsset(normalResult.data.asset);
-                } else {
-                    setNormalAsset(null);
-                }
-
-                if (marginResult && isSuccessApi(marginResult.error_code)) {
-                    setMarginAsset(marginResult.data.asset);
-                } else {
-                    setMarginAsset(null);
-                }
-            } catch {
-                setNormalAsset(null);
-                setMarginAsset(null);
-            } finally {
-                setIsLoading(false);
-            }
-        };
-
-        fetchSubAccountAssets();
-    }, [normalSubAccount?.sub_account_id, marginSubAccount?.sub_account_id]);
 
     const isAllEmpty =
         !isSummaryLoading && !isLoading && sections.every((section) => section.rows.length === 0);

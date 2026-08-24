@@ -7,9 +7,11 @@ import { getMqttService } from '@/services/mqtt';
 import { useAuthStore } from '@/stores/auth/useAuthStore';
 import { useMarketIndexStore } from '@/stores/common/useMarketIndexStore';
 import { useNetworkHealthStore } from '@/stores/common/useNetworkHealthStore';
+import { usePaperAccountStore } from '@/stores/paper-trading/usePaperAccountStore';
 
 export function Providers({ children }: { children: React.ReactNode }) {
     const { isInitialized, initFromStorage, initialize } = useAuthStore();
+    const userId = useAuthStore((state) => state.userId);
     const { fetchIndexData, startClock, stopClock } = useMarketIndexStore();
     const { recordFailure, setOffline } = useNetworkHealthStore();
     const hiddenAtRef = useRef(0);
@@ -20,6 +22,11 @@ export function Providers({ children }: { children: React.ReactNode }) {
             initialize();
         }
     }, [isInitialized, initFromStorage, initialize]);
+
+    // Cấp tiểu khoản SIM cho mọi luồng vào app: đăng nhập form, đăng nhập QR, đăng ký mới.
+    useEffect(() => {
+        if (userId) usePaperAccountStore.getState().ensureAccount();
+    }, [userId]);
 
     useEffect(() => {
         fetchIndexData();

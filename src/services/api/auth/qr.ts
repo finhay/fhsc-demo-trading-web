@@ -5,7 +5,6 @@ import {
     getRefreshToken,
     setAccessKey,
     setAccessToken,
-    setAccessToken2FA,
     setCustId,
     setRefreshToken,
     setUserId,
@@ -33,12 +32,8 @@ export const pollQrLoginChallengeStatus = (
             })
             .then((res) => {
                 if (res.data.result.status === 'APPROVED') {
-                    if (scope === 'TRADING') {
-                        setAccessToken2FA(res.data.result.access_token);
-                    } else {
-                        setAccessToken(res.data.result.access_token);
-                        setAccessKey(res.data.result.access_key);
-                    }
+                    setAccessToken(res.data.result.access_token);
+                    setAccessKey(res.data.result.access_key);
                     setUserId(res.data.result.uid || res.data.result.user_id);
                     if (res.data.result.cust_id) {
                         setCustId(res.data.result.cust_id);

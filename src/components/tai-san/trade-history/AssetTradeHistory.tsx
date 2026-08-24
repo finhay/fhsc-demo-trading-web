@@ -1,7 +1,6 @@
 'use client';
 
 import {
-    type ColumnDef,
     type SortingState,
     flexRender,
     getCoreRowModel,
@@ -13,63 +12,23 @@ import { useEffect, useMemo, useState } from 'react';
 
 import { EmptyState } from '@/components/common/feature/EmptyState';
 import { Skeleton } from '@/components/common/ui/Skeleton';
-import {
-    getCashAdvanceColumns,
-    getLoansColumns,
-    getOrderHistoryColumns,
-} from '@/components/tai-san/trade-history/AssetTradeHistoryColumns';
-import {
-    ASSETS_TRADE_HISTORY,
-    TRADE_HISTORY_RANGE_DAYS,
-    TRADE_HISTORY_TABS,
-    TRADE_HISTORY_TAB_KEYS,
-} from '@/constants/assets';
-import { toast } from '@/hooks/lib/useToast';
-import {
-    fetchSubAccountCashAdvanceHistory,
-    fetchSubAccountOrderHistoryPage,
-} from '@/services/api/trade/history';
-import {
-    fetchSubAccountLoanRepaymentHistory,
-    fetchSubAccountOutstandingLoans,
-} from '@/services/api/trade/loans';
-import { useAuthStore } from '@/stores/auth/useAuthStore';
+import { getPaperOrderHistoryColumns } from '@/components/tai-san/trade-history/AssetTradeHistoryColumns';
+import { PAPER_HISTORY_RANGE_DAYS } from '@/constants/paper-trading';
+import { fetchPaperOrderHistory } from '@/services/api/paper-trading/orders';
+import { usePaperAccountStore } from '@/stores/paper-trading/usePaperAccountStore';
 import type { SortableColMeta } from '@/types/pages/common';
-import type { CashAdvance, OrderHistory } from '@/types/trade/history';
-import type { Loans } from '@/types/trade/loans';
+import type { PaperOrder } from '@/types/paper-trading/orders';
 import { isSuccessApi } from '@/utils/common';
 import { getDateRange } from '@/utils/format';
 
-type TradeHistoryRow = OrderHistory | CashAdvance | Loans;
-
 export const AssetTradeHistory = () => {
-    const [activeTab, setActiveTab] = useState<string>(TRADE_HISTORY_TAB_KEYS.ORDER);
-    const [orderHistory, setOrderHistory] = useState<OrderHistory[]>([]);
-    const [cashAdvance, setCashAdvance] = useState<CashAdvance[]>([]);
-    const [loans, setLoans] = useState<Loans[]>([]);
+    const [data, setData] = useState<PaperOrder[]>([]);
     const [isLoading, setIsLoading] = useState(false);
     const [sorting, setSorting] = useState<SortingState>([]);
 
-    const { activeSubAccount } = useAuthStore();
-
-    const { fromDate, toDate } = useMemo(() => getDateRange(TRADE_HISTORY_RANGE_DAYS), []);
-    const t = ASSETS_TRADE_HISTORY;
-
-    const data = useMemo<TradeHistoryRow[]>(() => {
-        if (activeTab === TRADE_HISTORY_TAB_KEYS.ORDER) return orderHistory;
-        if (activeTab === TRADE_HISTORY_TAB_KEYS.CASH_ADVANCE) return cashAdvance;
-        return loans;
-    }, [activeTab, orderHistory, cashAdvance, loans]);
-
-    const columns = useMemo(() => {
-        if (activeTab === TRADE_HISTORY_TAB_KEYS.ORDER) {
-            return getOrderHistoryColumns() as ColumnDef<TradeHistoryRow, unknown>[];
-        }
-        if (activeTab === TRADE_HISTORY_TAB_KEYS.CASH_ADVANCE) {
-            return getCashAdvanceColumns() as ColumnDef<TradeHistoryRow, unknown>[];
-        }
-        return getLoansColumns() as ColumnDef<TradeHistoryRow, unknown>[];
-    }, [activeTab]);
+    const { accountId } = usePaperAccountStore();
+    const { fromDate, toDate } = useMemo(() => getDateRange(PAPER_HISTORY_RANGE_DAYS), []);
+    const columns = useMemo(() => getPaperOrderHistoryColumns(), []);
 
     const table = useReactTable({
         data,
@@ -81,100 +40,30 @@ export const AssetTradeHistory = () => {
     });
 
     const fetchData = async () => {
-        if (!activeSubAccount?.sub_account_id) return;
+        if (!accountId) return;
 
         setIsLoading(true);
         try {
-            const accountId = activeSubAccount.sub_account_id;
-
-            if (activeTab === TRADE_HISTORY_TAB_KEYS.ORDER) {
-                const { result, error_code, message } = await fetchSubAccountOrderHistoryPage(
-                    accountId,
-                    fromDate,
-                    toDate,
-                    1,
-                );
-
-                if (isSuccessApi(error_code)) {
-                    setOrderHistory(result.data || []);
-                } else {
-                    throw new Error(message);
-                }
-            } else if (activeTab === TRADE_HISTORY_TAB_KEYS.CASH_ADVANCE) {
-                const { result, error_code, message } = await fetchSubAccountCashAdvanceHistory(
-                    accountId,
-                    fromDate,
-                    toDate,
-                );
-
-                if (isSuccessApi(error_code)) {
-                    setCashAdvance(result || []);
-                } else {
-                    throw new Error(message);
-                }
-            } else if (activeTab === TRADE_HISTORY_TAB_KEYS.LOANS) {
-                const [unpaidRes, paidRes] = await Promise.all([
-                    fetchSubAccountOutstandingLoans(accountId, fromDate, toDate),
-                    fetchSubAccountLoanRepaymentHistory(accountId, fromDate, toDate),
-                ]);
-
-                const unpaidData = isSuccessApi(unpaidRes.error_code) ? unpaidRes.data || [] : [];
-                const paidData = isSuccessApi(paidRes.error_code) ? paidRes.data || [] : [];
-
-                if (!isSuccessApi(unpaidRes.error_code)) {
-                    toast.error(unpaidRes.message);
-                }
-                if (!isSuccessApi(paidRes.error_code)) {
-                    toast.error(paidRes.message);
-                }
-
-                setLoans([...unpaidData, ...paidData]);
-            }
+            const { data: result, error_code } = await fetchPaperOrderHistory(accountId, {
+                from_date: fromDate,
+                to_date: toDate,
+                page: 1,
+            });
+            if (isSuccessApi(error_code)) setData(result?.data ?? []);
         } catch {
-            if (activeTab === TRADE_HISTORY_TAB_KEYS.ORDER) setOrderHistory([]);
-            if (activeTab === TRADE_HISTORY_TAB_KEYS.CASH_ADVANCE) setCashAdvance([]);
-            if (activeTab === TRADE_HISTORY_TAB_KEYS.LOANS) setLoans([]);
+            setData([]);
         } finally {
             setIsLoading(false);
         }
     };
 
     useEffect(() => {
-        setSorting([]);
-    }, [activeTab]);
-
-    useEffect(() => {
         fetchData();
-    }, [activeSubAccount?.sub_account_id, activeTab, fromDate, toDate]);
+    }, [accountId, fromDate, toDate]);
 
     return (
         <section className="flex h-96 w-full shrink-0 flex-col gap-3 overflow-hidden rounded-xl bg-secondary p-3">
             <h2 className="shrink-0 font-body-2-highlight text-primary">{'Lịch sử giao dịch'}</h2>
-            <nav
-                className="flex shrink-0 gap-3 overflow-x-auto"
-                role="tablist"
-                aria-label={'Lịch sử giao dịch'}
-            >
-                {TRADE_HISTORY_TABS.map((tab) => {
-                    const isActive = tab.key === activeTab;
-                    return (
-                        <button
-                            key={tab.key}
-                            type="button"
-                            role="tab"
-                            aria-selected={isActive}
-                            onClick={() => setActiveTab(tab.key)}
-                            className={`flex h-8 shrink-0 items-center justify-center rounded-full px-4 font-body-3 transition-colors ${
-                                isActive
-                                    ? 'bg-tertiary font-body-3-highlight text-primary'
-                                    : 'text-secondary'
-                            }`}
-                        >
-                            {t[tab.labelKey as keyof typeof t]}
-                        </button>
-                    );
-                })}
-            </nav>
             <div className="min-h-0 w-full flex-1">
                 {isLoading ? (
                     <div className="h-full w-full">

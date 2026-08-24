@@ -1,9 +1,6 @@
 import type { FormatPnlDisplayInput, FormatPnlDisplayResult } from '@/types/pages/assets';
-import { SubAccountTransactionItem } from '@/types/payments';
 import { PortfolioItem } from '@/types/trade/portfolio';
 import { formatNumberVN } from '@/utils/format';
-
-export const isInflowTransaction = (tx: SubAccountTransactionItem) => tx.transaction_flow === 'IN';
 
 export const calcAssetPercent = (value: number, total: number): number => {
     if (total === 0) return 0;
@@ -60,13 +57,6 @@ export const formatSubAccountLabel = (account?: {
     sub_account_ext: string;
 }): string => (account ? `TK ${account.account_type_name}: ${account.sub_account_ext}` : '');
 
-export const getRightLabel = (labels: Record<string, string>, key: string): string =>
-    labels[key.toLowerCase()] ?? '';
-
-export const formatOrderSide = (side: string): string => {
-    return side === 'BUY' ? 'Mua' : 'Bán';
-};
-
 const ATO_BOARD_PRICE = -1;
 const ATC_BOARD_PRICE = -2;
 
@@ -84,28 +74,4 @@ export const formatPortfolioPrice = (price: number, percent?: boolean) => {
         return price;
     }
     return formatNumberVN(price, { trimTrailingZeros: true });
-};
-
-export const calculateMaxCanBuy = (
-    availableBalance: number,
-    buyPrice: number | undefined,
-    totalStocksCanBuy: number | undefined,
-    numberOfWaitingStock: number | undefined,
-): number => {
-    if (!buyPrice || buyPrice === 0) return 0;
-
-    const maxByBalance = Math.floor(availableBalance / buyPrice);
-    const availableStocks = (totalStocksCanBuy || 0) - (numberOfWaitingStock || 0);
-
-    return Math.min(maxByBalance, availableStocks);
-};
-
-export const calculatePaymentAmount = (quantity: string, buyPrice: number | undefined): number => {
-    const qty = Number(quantity) || 0;
-    const price = buyPrice || 0;
-    return qty * price;
-};
-
-export const sanitizeQuantityInput = (value: string): string => {
-    return value.replace(/[^0-9]/g, '');
 };

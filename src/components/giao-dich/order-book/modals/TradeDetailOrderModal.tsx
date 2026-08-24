@@ -3,12 +3,13 @@
 import { Fragment } from 'react';
 
 import { Dialog } from '@/components/common/ui/Dialog';
-import type { OrderBookHistoryReportItem } from '@/types/trade/orders';
+import type { PaperOrder } from '@/types/paper-trading/orders';
 import { formatDateTime, formatNumberVN } from '@/utils/format';
-import { getNormalOrderStatus, getOrderStatusColor } from '@/utils/trading/order-book';
+import { getPaperOrderStatus } from '@/utils/paper-trading/order-book';
+import { getOrderStatusColor } from '@/utils/trading/order-book';
 
 type Props = {
-    items: OrderBookHistoryReportItem[];
+    items: PaperOrder[];
     onClose: () => void;
 };
 
@@ -66,14 +67,14 @@ export const TradeDetailOrderModal = ({ items, onClose }: Props) => {
         },
     ];
 
-    const renderRow = (item: OrderBookHistoryReportItem) => {
-        const status = getNormalOrderStatus(item.order_status);
+    const renderRow = (item: PaperOrder) => {
+        const status = getPaperOrderStatus(item);
         const timeText = item.created_date ? formatDateTime(item.created_date) : '--';
 
         return (
             <>
                 <td className={`${CELL_CLASS} w-2/12`}>{timeText}</td>
-                <td className={`${CELL_CLASS} w-1/12`}>{item.order_type}</td>
+                <td className={`${CELL_CLASS} w-1/12`}>{item.type}</td>
                 <td className={`${CELL_CLASS} w-1/12`}>
                     {formatNumberVN(item.quantity, { decimals: 0 })}
                 </td>
@@ -81,9 +82,8 @@ export const TradeDetailOrderModal = ({ items, onClose }: Props) => {
                 <td className={`${CELL_CLASS} w-2/12`}>
                     {formatNumberVN(item.fill_quantity, { decimals: 0 })}
                 </td>
-                <td className={`${CELL_CLASS} w-2/12`}>
-                    {formatNumberVN(item.average_price / 1000)}
-                </td>
+                {/* API paper không trả giá khớp trung bình */}
+                <td className={`${CELL_CLASS} w-2/12`}>{'--'}</td>
                 <td className={`${CELL_CLASS} w-1/12`}>
                     {formatNumberVN(item.leave_quantity, { decimals: 0 })}
                 </td>
@@ -96,7 +96,7 @@ export const TradeDetailOrderModal = ({ items, onClose }: Props) => {
 
     return (
         <Dialog
-            title={'Lịch sử lệnh'}
+            title={'Chi tiết lệnh'}
             maxWidth="max-w-4xl"
             maxHeight="max-h-screen"
             onClose={onClose}
@@ -119,7 +119,7 @@ export const TradeDetailOrderModal = ({ items, onClose }: Props) => {
                     </thead>
                     <tbody>
                         {items.map((item, index) => (
-                            <Fragment key={item.id ?? index}>
+                            <Fragment key={item.id || index}>
                                 {index > 0 && (
                                     <tr aria-hidden>
                                         <td colSpan={columns.length} className="p-0">

@@ -3,16 +3,13 @@
 import { type ReactNode, useMemo } from 'react';
 
 import { Dialog } from '@/components/common/ui/Dialog';
-import { ACCOUNT_TYPE, ERROR_CODES } from '@/constants/common';
-import { TWO_FA_PLACEMENT } from '@/constants/trading';
 import { toast } from '@/hooks/lib/useToast';
-import { cancelSubAccountOrder247, cancelSubAccountStockOrder } from '@/services/api/trade/orders';
-import { useAuthStore } from '@/stores/auth/useAuthStore';
+import { cancelPaperOrder } from '@/services/api/paper-trading/orders';
 import { useLoadingStore } from '@/stores/common/useLoadingStore';
+import { usePaperAccountStore } from '@/stores/paper-trading/usePaperAccountStore';
 import { useTradingStore } from '@/stores/trading/useTradingStore';
 import { getApiErrorMessage, isSuccessApi } from '@/utils/common';
 import { formatNumberVN } from '@/utils/format';
-import { mapOrderErrorCodeToStatus } from '@/utils/trading/shared';
 
 type Props = {
     orderId: string;
@@ -20,10 +17,8 @@ type Props = {
     side: string;
     rawPrice: number;
     rawQty: number;
-    orderConditionType?: string | null;
     onClose: () => void;
     onSuccess: () => void;
-    onExpired2FA?: () => void;
 };
 
 export const TradeCancelOrderModal = ({
@@ -32,17 +27,12 @@ export const TradeCancelOrderModal = ({
     side,
     rawPrice,
     rawQty,
-    orderConditionType,
     onClose,
     onSuccess,
-    onExpired2FA,
 }: Props) => {
-    const { activeSubAccount, profile } = useAuthStore();
     const { startLoading, stopLoading, isLoading } = useLoadingStore();
-    const { request2FA, handle2FATokenExpired, patchOrdersInBook } = useTradingStore();
-
-    const validationType = profile?.user_type === ACCOUNT_TYPE.ENTERPRISE ? 'OTP' : 'SMART_OTP';
-    const subAccountId = activeSubAccount?.sub_account_id ?? '';
+    const { accountId } = usePaperAccountStore();
+    const { patchOrdersInBook, fetchOrders } = useTradingStore();
 
     const isBuy = side === 'Mua';
     const displayPrice = rawPrice / 1000;
@@ -83,62 +73,32 @@ export const TradeCancelOrderModal = ({
         [displayPrice, isBuy, rawQty, side, symbol],
     );
 
-    const handleConfirmClick = () => {
-        request2FA(handleConfirm, TWO_FA_PLACEMENT.GLOBAL);
-        onClose();
-    };
-
     const handleConfirm = async () => {
         startLoading();
-        let is2FAExpired = false;
         try {
-            const is247 = !!orderConditionType;
-            const cancelFn = is247 ? cancelSubAccountOrder247 : cancelSubAccountStockOrder;
-            const { error_code, data, message } = await cancelFn(subAccountId, orderId, {
-                sub_account: activeSubAccount?.sub_account_ext,
-                cus_id: profile?.cust_id,
-                validation_type: validationType,
-                order_condition_type: orderConditionType,
-            });
+            const { error_code, message } = await cancelPaperOrder(accountId, orderId);
 
             if (isSuccessApi(error_code)) {
-                if (data && data.length > 0) {
-                    if (data[0].code === '0') {
-                        patchOrdersInBook([
-                            {
-                                orderId,
-                                status: data[0].order_status ?? (is247 ? 'CANCELLED' : '3'),
-                                allowCancel: false,
-                                allowAmend: false,
-                            },
-                        ]);
-                        toast.success('Thành công');
-                    } else {
-                        toast.error(
-                            mapOrderErrorCodeToStatus(data[0].code, data[0].rejected_reason ?? ''),
-                        );
-                    }
-                }
+                patchOrdersInBook([
+                    {
+                        orderId,
+                        status: 'CANCELLED',
+                        isActive: false,
+                        allowCancel: false,
+                        allowAmend: false,
+                    },
+                ]);
+                toast.success('Huỷ lệnh thành công');
+                fetchOrders(accountId, { silent: true });
                 onSuccess();
-            } else if (error_code === ERROR_CODES.FAILED_2FA_TOKEN_EXPIRED) {
-                is2FAExpired = true;
             } else {
                 toast.error(message);
             }
         } catch (err: unknown) {
-            const errCode =
-                (err as { error_code?: string })?.error_code ??
-                (err as { response?: { data?: { error_code?: string } } })?.response?.data
-                    ?.error_code;
-            if (errCode === ERROR_CODES.FAILED_2FA_TOKEN_EXPIRED) {
-                is2FAExpired = true;
-            } else {
-                toast.error(getApiErrorMessage(err, 'Có lỗi xảy ra, vui lòng thử lại'));
-            }
+            toast.error(getApiErrorMessage(err, 'Có lỗi xảy ra, vui lòng thử lại'));
         } finally {
             stopLoading();
             onClose();
-            if (is2FAExpired) handle2FATokenExpired(onExpired2FA, TWO_FA_PLACEMENT.GLOBAL);
         }
     };
 
@@ -163,7 +123,7 @@ export const TradeCancelOrderModal = ({
                     </button>
                     <button
                         type="button"
-                        onClick={handleConfirmClick}
+                        onClick={handleConfirm}
                         disabled={isLoading}
                         className={`flex-1 py-2 rounded-xl font-body-3-highlight transition-colors ${
                             isLoading

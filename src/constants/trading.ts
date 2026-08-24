@@ -1,5 +1,4 @@
 import type { StockPrice } from '@/types/datafeed/stock-info';
-import type { TwapLoSliceStatus } from '@/types/trade/twap-lo';
 
 export const ORDER_TYPE = {
     BUY: 'Mua',
@@ -9,27 +8,6 @@ export const ORDER_TYPE = {
 export const ORDER_STATUS = {
     PENDING: 'Chờ khớp',
 } as const;
-
-export const ICEBERG_TERMINAL_STATUSES = new Set([
-    'CANCELLED',
-    'COMPLETED',
-    'FAILED',
-    'CANCELLING',
-]);
-
-export const TWAP_LO_TERMINAL_STATUSES = new Set([
-    'COMPLETED',
-    'PARTIALLY_MATCHED',
-    'EXPIRED',
-    'CANCELLED',
-    'CANCELLING',
-]);
-
-export const TWAP_LO_SLICE_PENDING_STATUSES = new Set<TwapLoSliceStatus>([
-    'PENDING',
-    'DISPATCHING',
-    'CARRIED_OVER',
-]);
 
 export const PRICE_COLOR_VARIANT = {
     ORANGE: 'orange',
@@ -121,30 +99,8 @@ export const LOT_TYPE = {
 
 export const LOT_TABS = [{ key: LOT_TYPE.EVEN }, { key: LOT_TYPE.ODD }] as const;
 
-export const ORDER_MODE_KEY = {
-    NORMAL: 'NORMAL',
-    TAB_247: '_247',
-    ICEBERG: 'ICEBERG',
-    TWAP_LO: 'TWAP_LO',
-} as const;
-
-export const TWAP_LO_URGENCY = {
-    SLOW: 'SLOW',
-    NORMAL: 'NORMAL',
-    FAST: 'FAST',
-} as const;
-
-export const TWAP_LO_URGENCY_OPTIONS = [
-    TWAP_LO_URGENCY.SLOW,
-    TWAP_LO_URGENCY.NORMAL,
-    TWAP_LO_URGENCY.FAST,
-] as const;
-
 export const ORDER_TYPE_KEY = {
     LO: 'LO',
-    MARKET: 'MARKET',
-    LIMIT: 'LIMIT',
-    ORDER_247: 'ORDER247',
 } as const;
 
 export const ORDER_SIDE = {
@@ -156,32 +112,11 @@ export const EXCHANGE = {
     HCX: 'HCX',
 } as const;
 
-export const QR_CONTEXT = {
-    TRADING: 'TRADING',
-} as const;
-
-export const QR_STATUS = {
-    APPROVED: 'APPROVED',
-} as const;
-
-export const TWO_FA_PLACEMENT = {
-    GLOBAL: 'global',
-    PANEL: 'panel',
-} as const;
-
-export type TwoFAPlacement = (typeof TWO_FA_PLACEMENT)[keyof typeof TWO_FA_PLACEMENT];
-
-export const TRADE_SESSION_NEAR_BOUNDARY = ['ATO_IN_1_MIN', 'OPEN_IN_1_MIN', 'PCA_CLOSE'] as const;
-
 export const TRADE_UI_CONFIG = {
     AVAILABLE_TRADE_REFRESH_DELAY_MS: 1000,
     DEFAULT_PRICE_DONG: 1000,
     DEFAULT_QUANTITY: 100,
-    MAX_ORDER_QTY_PER_REQUEST: 500000,
-    DEFAULT_247_MONTH_OFFSET: 2,
-    MAX_247_MONTH_OFFSET: 6,
     FLASH_HIGHLIGHT_MS: 500,
-    QR_SIZE: 192,
 } as const;
 
 export const TRADE_PAGE_META = {
@@ -205,30 +140,6 @@ export const TRADE_LITERAL = {
 
 export const TRADE_TOPIC = {
     TRANSLOG_PREFIX: '/translog',
-} as const;
-
-export const EXCHANGE_SESSION = {
-    CLOSED: 'CLOSED',
-} as const;
-
-export const ORDER_MODES: { key: string }[] = [
-    { key: ORDER_MODE_KEY.NORMAL },
-    { key: ORDER_MODE_KEY.TAB_247 },
-    { key: ORDER_MODE_KEY.ICEBERG },
-    { key: ORDER_MODE_KEY.TWAP_LO },
-];
-
-export const PANEL_ORDER_MODES: { key: string }[] = [...ORDER_MODES];
-
-export const QR_AUTH_CONFIG = {
-    POLL_INTERVAL: 3000,
-    TIMEOUT: 60000,
-} as const;
-
-export const OTP_CONFIG = {
-    LENGTH: 6,
-    INITIAL_COUNTDOWN: 59,
-    TYPE: 'TRADING_OTP',
 } as const;
 
 export const SPECIAL_FUND_SYMBOLS: string[] = [
@@ -286,5 +197,3 @@ export const TAB_INFORMATION = [
     { key: 'EVENTS' },
     { key: 'PROFILE' },
 ] as const;
-
-export const NORMAL_HISTORY_STATUSES = new Set(['MATCHED', 'MATCHED_ALL']);

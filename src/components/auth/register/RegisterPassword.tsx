@@ -24,6 +24,7 @@ import {
 import { useAuthFlowStore } from '@/stores/auth/useAuthFlowStore';
 import { useAuthStore } from '@/stores/auth/useAuthStore';
 import { useLoadingStore } from '@/stores/common/useLoadingStore';
+import { usePaperAccountStore } from '@/stores/paper-trading/usePaperAccountStore';
 import { getPasswordRequirements, validateConfirmPassword, validatePassword } from '@/utils/auth';
 import { getApiErrorMessage, isSuccessApi } from '@/utils/common';
 
@@ -65,6 +66,7 @@ export const RegisterPassword = () => {
     const { register, registerSetStep } = useAuthFlowStore();
     const { phone, verifiedOtp } = register;
     const { setAuth, initialize } = useAuthStore();
+    const { ensureAccount } = usePaperAccountStore();
 
     const form = useForm({
         defaultValues: {
@@ -115,6 +117,7 @@ export const RegisterPassword = () => {
                     custId: responseData.cust_id,
                 });
                 await initialize();
+                await ensureAccount();
                 registerSetStep(STEPS_REGISTER.SUCCESS);
                 return;
             }

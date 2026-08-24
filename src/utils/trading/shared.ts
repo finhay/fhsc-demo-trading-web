@@ -112,39 +112,6 @@ export const buildDepthRawRows = (d: StockPrice): DepthRawRow[] => {
     ];
 };
 
-export const mapOrderErrorCodeToStatus = (code: string, text: string): string => {
-    switch (code) {
-        case '-400099':
-            return 'Mã chứng khoán không hợp lệ với tiểu khoản';
-        case '-400116':
-            return 'Vượt quá sức mua';
-        case '-900017':
-            return 'Vượt quá số lượng';
-        case '-100522':
-            return 'Lệnh không hợp lệ';
-        case '-700114':
-            return 'Loại lệnh không hợp lệ';
-        case '-700069':
-            return 'Mã chứng khoán không hợp lệ';
-        case '-10011':
-            return 'Bước giá không hợp lệ';
-        case '-100113':
-            return 'Lệnh sai phiên';
-        case '-700106':
-            return 'Lệnh sửa không khác lệnh gốc';
-        case '-700104':
-            return 'Không thể sửa từ lô chẵn sang lô lẻ';
-        case '-700105':
-            return 'Không thể sửa từ lô lẻ sang lô chẵn';
-        case '-701111':
-            return 'Khối lượng sửa nhỏ hơn khối lượng đã khớp';
-        case '-300025':
-            return 'Đã hết phiên giao dịch';
-        default:
-            return text;
-    }
-};
-
 export const mapWatchlistItemToStock = (item: WatchlistStockItem): StocksInfoItem => ({
     symbol: item.symbol,
     name: item.name,

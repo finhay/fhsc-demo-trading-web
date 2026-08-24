@@ -7,13 +7,11 @@ import {
     clearLocalStorage,
     getAccessKey,
     getAccessToken,
-    getAccessToken2FA,
     getCustId,
     getRefreshToken,
     getUserId,
     setAccessKey,
     setAccessToken,
-    setAccessToken2FA,
     setCustId,
     setRefreshToken,
     setUserId,
@@ -21,6 +19,7 @@ import {
 import { resetAllStores } from '@/stores/reset-registry';
 import type { SubAccount } from '@/types/accounts/profile';
 import { getApiErrorMessage, isSuccessApi } from '@/utils/common';
+import { buildPaperSubAccount } from '@/utils/paper-trading/account';
 
 type AuthCredentials = {
     accessToken: string;
@@ -28,7 +27,6 @@ type AuthCredentials = {
     refreshToken: string;
     userId: string;
     custId: string;
-    accessToken2FA?: string;
     requiredChangePassword?: boolean;
 };
 
@@ -45,7 +43,6 @@ type ProfileState = {
     refreshToken: string | null;
     userId: string | null;
     custId: string | null;
-    accessToken2FA: string | null;
     requiredChangePassword: boolean;
     isInitialized: boolean;
     profile: UserProfile | null;
@@ -75,7 +72,6 @@ const initialState: ProfileState = {
     refreshToken: null,
     userId: null,
     custId: null,
-    accessToken2FA: null,
     requiredChangePassword: false,
     isInitialized: false,
     profile: null,
@@ -95,10 +91,6 @@ export const useAuthStore = create<ProfileState & ProfileActions>((set, get) => 
         setRefreshToken(credentials.refreshToken);
         setUserId(credentials.userId);
         setCustId(credentials.custId);
-        if (credentials.accessToken2FA) {
-            setAccessToken2FA(credentials.accessToken2FA);
-        }
-
         set({
             isAuthenticated: true,
             accessToken: credentials.accessToken,
@@ -106,7 +98,6 @@ export const useAuthStore = create<ProfileState & ProfileActions>((set, get) => 
             refreshToken: credentials.refreshToken,
             userId: credentials.userId,
             custId: credentials.custId,
-            accessToken2FA: credentials.accessToken2FA ?? null,
             requiredChangePassword: credentials.requiredChangePassword ?? false,
         });
     },
@@ -127,7 +118,6 @@ export const useAuthStore = create<ProfileState & ProfileActions>((set, get) => 
                 refreshToken: getRefreshToken(),
                 userId,
                 custId: getCustId(),
-                accessToken2FA: getAccessToken2FA(),
             });
         }
     },
@@ -169,7 +159,9 @@ export const useAuthStore = create<ProfileState & ProfileActions>((set, get) => 
         try {
             const { error_code, data } = await getUserProfile();
             if (isSuccessApi(error_code)) {
-                const subAccounts = data.sub_accounts ?? [];
+                // Bản demo giao dịch trên tiểu khoản SIM, không dùng tiểu khoản thật từ profile.
+                const paperSubAccount = buildPaperSubAccount(data.user_id ?? getUserId());
+                const subAccounts = paperSubAccount ? [paperSubAccount] : [];
                 set({
                     profile: data,
                     custId: data.cust_id,

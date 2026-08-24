@@ -13,6 +13,5 @@ declare module 'axios' {
 
     export interface HeadersDefaults {
         skipAutoAuth?: boolean;
-        tokenType?: '2FA' | string;
     }
 }

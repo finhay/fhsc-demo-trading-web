@@ -8,13 +8,14 @@ import {
     updateWatchlistById,
 } from '@/services/api/accounts/watchlist';
 import { fetchStocksMetadataBySymbolsV4 } from '@/services/api/datafeed/stock-info';
-import { fetchSubAccountStockPortfolio } from '@/services/api/trade/portfolio';
+import { fetchPaperAccountPortfolio } from '@/services/api/paper-trading/account';
 import {
     type LocalWatchlistRecord,
     getLocalWatchlists,
     setLocalWatchlists,
 } from '@/services/localStorage';
 import { useAuthStore } from '@/stores/auth/useAuthStore';
+import { usePaperAccountStore } from '@/stores/paper-trading/usePaperAccountStore';
 import { registerResettableStore } from '@/stores/reset-registry';
 import type {
     UpdateWatchlistPayload,
@@ -185,17 +186,17 @@ export const useWatchlistStore = create<WatchListState & WatchListActions>((set,
     },
 
     fetchOwnedPortfolio: async () => {
-        const { activeSubAccount } = useAuthStore.getState();
-        if (!activeSubAccount) return;
+        const { accountId } = usePaperAccountStore.getState();
+        if (!accountId) return;
 
         set({ isOwnedLoading: true });
         try {
-            const { data, error_code } = await fetchSubAccountStockPortfolio(
-                activeSubAccount.sub_account_id,
-            );
+            // Danh mục "Đang sở hữu" là dữ liệu của người dùng nên chạy trên simulator;
+            // metadata mã cổ phiếu bên dưới vẫn lấy từ datafeed thật.
+            const { data, error_code } = await fetchPaperAccountPortfolio(accountId);
             if (!isSuccessApi(error_code)) return;
 
-            const symbols = (data.portfolio || []).map((item) => item.symbol);
+            const symbols = (data || []).map((item) => item.symbol);
 
             let items: WatchlistStockItem[] = [];
             if (symbols.length > 0) {

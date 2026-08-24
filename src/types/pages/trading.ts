@@ -2,7 +2,7 @@ import type { FormAsyncValidateOrFn, FormValidateOrFn } from '@tanstack/form-cor
 import type { ReactFormExtendedApi } from '@tanstack/react-form';
 
 import { TransactionLogItem } from '@/types/datafeed/stock-info';
-import type { TwapLoOrderDto } from '@/types/trade/twap-lo';
+import type { PaperOrder } from '@/types/paper-trading/orders';
 
 export type DepthRawRow = {
     buyPrice: number;
@@ -11,26 +11,12 @@ export type DepthRawRow = {
     sellVol: number;
 };
 
-export type OrderLotSplit = { evenLotQty: number; oddLotQty: number };
-
 export type PendingOrder = {
     side: string;
     price: number;
+    quantity: number;
     orderType: string;
-    orderLots: OrderLotSplit[];
-    orderMode: string;
     stockType: string;
-    executionDate: string;
-    expiredDate: string;
-};
-
-export type OrderModeOption = {
-    key: string;
-};
-
-export type PlacementOrder = {
-    kind: 'even' | 'odd';
-    qty: number;
 };
 
 export type TradeMatchedHistoryTableRow = {
@@ -42,35 +28,28 @@ export type TradeMatchedHistoryTableRow = {
     volume: number;
 };
 
-export type RealtimeMatchEntry = {
-    orderId: string;
-    symbol: string;
-    side: 'BUY' | 'SELL';
-    quantity: number;
-    price: number;
-    volume: number;
-    status: string;
-};
+export type OrderStatusTone = 'success' | 'error' | 'pending' | 'neutral';
+
+export type OrderStatusView = { text: string; tone: OrderStatusTone };
 
 export type TradeOrderBookRow = {
     orderId: string;
     symbol: string;
-    filledQty: number;
-    totalQty: number;
-    filledPrice: number;
+    filledQty: string;
+    totalQty: string;
+    filledPrice: string;
     placedPrice: string;
     marketPrice: string | null;
     rawPrice: number;
     rawQty: number;
     type: string;
     status: string;
+    /** Suy ở FE — API paper không trả allowcancel/allowamend */
+    isActive?: boolean;
     allowCancel?: boolean;
     allowAmend?: boolean;
-    orderConditionType?: string | null;
     priceType?: string | null;
-    executionDate?: string;
-    expiredDate?: string;
-    twapLoOrder?: TwapLoOrderDto;
+    paperOrder?: PaperOrder;
 };
 
 export type TradeOrderAmendStockInfo = {
@@ -118,9 +97,6 @@ export type PanelFormValues = {
     buyQuantity: string;
     sellPrice: string;
     sellQuantity: string;
-    childQuantity: string;
-    executionDate: string;
-    expiredDate: string;
 };
 
 type FormValidator = undefined | FormValidateOrFn<PanelFormValues>;

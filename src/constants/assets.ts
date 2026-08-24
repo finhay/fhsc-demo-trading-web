@@ -1,5 +1,4 @@
 import type { OrderStatusLabelKey } from '@/types/pages/assets';
-import { UserRightEventType, UserRightRegisterStatus } from '@/types/trade/user-rights';
 
 export const GROWTH_TIME_PERIODS = [
     { id: 'd7', value: 7 },
@@ -25,12 +24,6 @@ export const PORTFOLIO_TREEMAP_COLORS = {
 } as const;
 
 export const TRADE_HISTORY_RANGE_DAYS = 30;
-
-export const RIGHT_EVENT_TYPES = {
-    STOCK_RIGHT: 'STOCK_RIGHT',
-    STOCK_DIVIDEND: 'STOCK_DIVIDEND',
-    CASH_DIVIDEND: 'CASH_DIVIDEND',
-} as const satisfies Record<string, UserRightEventType>;
 
 export const ORDER_STATUS_MAP: Record<
     string,
@@ -85,21 +78,6 @@ export const ASSET_TRANSFER_MODAL_STEPS = {
     amount: 1,
     confirm: 2,
 } as const;
-
-export const RIGHT_STATUS_COLORS: Record<UserRightRegisterStatus, string> = {
-    UNREGISTER: 'text-yellow',
-    REGISTERED: 'text-blue',
-    EXPIRED: 'text-secondary',
-    RECEIVED: 'text-green',
-};
-
-export const RIGHTS_EVENT_TYPES: Record<string, string> = {
-    stock_right: 'Quyền mua',
-    stock_dividend: 'Cổ tức bằng cổ phiếu',
-    cash_dividend: 'Cổ tức bằng tiền',
-    shareholder_meeting: 'Đại hội cổ đông',
-    bonus_shares: 'Cổ phiếu thưởng',
-};
 
 export const ASSETS_TRADE_HISTORY: Record<string, string> = {
     heading: 'Lịch sử giao dịch',

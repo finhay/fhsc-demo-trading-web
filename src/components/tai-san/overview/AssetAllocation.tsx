@@ -3,27 +3,20 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 
 import { FaArrowTrendDown, FaArrowTrendUp, FaChevronRight } from 'react-icons/fa6';
-import { RiTodoLine } from 'react-icons/ri';
 
 import { DownloadAppModal } from '@/components/common/modal/DownloadAppModal';
-import { Dialog } from '@/components/common/ui/Dialog';
 import { Skeleton } from '@/components/common/ui/Skeleton';
 import { createChartAllocationPie } from '@/config/assets';
 import { ALLOCATION_COLORS } from '@/constants/assets';
 import { useEChartsInstance } from '@/hooks/chart/useEChartsInstance';
-import { getLatestMonthlyReport } from '@/services/api/accounts/profile';
 import type { AssetAllocationItem, AssetSummaryProps } from '@/types/pages/assets';
 import { calcAssetPercent, formatPnlDisplay } from '@/utils/assets';
-import { isSuccessApi } from '@/utils/common';
 import { formatNumberVN, formatPercentVN } from '@/utils/format';
 
 type Props = AssetSummaryProps;
 
 export const AssetAllocation = ({ data, isLoading }: Props) => {
     const [isDownloadAppModalOpen, setIsDownloadAppModalOpen] = useState(false);
-    const [isReportModalOpen, setIsReportModalOpen] = useState(false);
-    const [reportUrl, setReportUrl] = useState('');
-    const [isLoadingReport, setIsLoadingReport] = useState(false);
     const chartContainerRef = useRef<HTMLDivElement>(null);
     const chartInstanceRef = useEChartsInstance(chartContainerRef);
 
@@ -86,22 +79,6 @@ export const AssetAllocation = ({ data, isLoading }: Props) => {
         ];
     }, [data]);
 
-    const handleOpenReportModal = async () => {
-        setIsLoadingReport(true);
-        try {
-            const { error_code, message, data: reportData } = await getLatestMonthlyReport();
-            if (isSuccessApi(error_code)) {
-                setReportUrl(reportData);
-                setIsReportModalOpen(true);
-            } else {
-                throw new Error(message);
-            }
-        } catch {
-        } finally {
-            setIsLoadingReport(false);
-        }
-    };
-
     useEffect(() => {
         const chartData = allocationItems.map((item) => ({
             name: item.label,
@@ -118,17 +95,6 @@ export const AssetAllocation = ({ data, isLoading }: Props) => {
         <section className="flex flex-col w-full bg-secondary rounded-xl p-3 gap-4 shrink-0">
             <header className="flex items-center justify-between gap-2">
                 <h2 className="font-body-2-highlight text-primary">{'Phân bổ tài sản'}</h2>
-                <button
-                    type="button"
-                    onClick={handleOpenReportModal}
-                    disabled={isLoadingReport}
-                    className="flex items-center gap-2 shrink-0 disabled:opacity-50"
-                >
-                    <span className="font-body-3 text-highlight whitespace-nowrap">
-                        {'Xuất báo cáo tài sản'}
-                    </span>
-                    <RiTodoLine className="text-highlight text-base shrink-0" aria-hidden />
-                </button>
             </header>
             <div className="flex flex-row gap-6 w-full items-center">
                 <div className="w-1/3 shrink-0 flex items-center justify-center">
@@ -203,24 +169,6 @@ export const AssetAllocation = ({ data, isLoading }: Props) => {
             </div>
             {isDownloadAppModalOpen && (
                 <DownloadAppModal onClose={() => setIsDownloadAppModalOpen(false)} />
-            )}
-            {isReportModalOpen && (
-                <Dialog
-                    title={'Xuất báo cáo tài sản'}
-                    maxWidth="max-w-5xl"
-                    maxHeight="h-[70vh]"
-                    onClose={() => setIsReportModalOpen(false)}
-                >
-                    <div className="flex-1 min-h-[70vh]">
-                        <object
-                            width="100%"
-                            height="100%"
-                            data={reportUrl}
-                            type="application/pdf"
-                            aria-label={'Xuất báo cáo tài sản'}
-                        />
-                    </div>
-                </Dialog>
             )}
         </section>
     );

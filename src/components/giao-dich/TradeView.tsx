@@ -6,15 +6,11 @@ import { useRouter, useSearchParams } from 'next/navigation';
 
 import { StockSection } from '@/components/common/stock-info/StockSection';
 import { StockChartPanel } from '@/components/common/stock-info/chart/StockChartPanel';
-import { Dialog } from '@/components/common/ui/Dialog';
 import { TradeOrderBook } from '@/components/giao-dich/order-book/TradeOrderBook';
 import { TradeOrderHistory } from '@/components/giao-dich/order-history/TradeOrderHistory';
 import { TradePanel } from '@/components/giao-dich/panel/TradePanel';
-import { TradeVerifyOtpPanel } from '@/components/giao-dich/verification/TradeVerifyOtpPanel';
-import { TradeVerifyQrCard } from '@/components/giao-dich/verification/TradeVerifyQrCard';
 import { TradeWatchlist } from '@/components/giao-dich/watchlist/TradeWatchlist';
-import { ACCOUNT_TYPE } from '@/constants/common';
-import { TRADE_PAGE_ARIA, TRADE_PAGE_META, TWO_FA_PLACEMENT } from '@/constants/trading';
+import { TRADE_PAGE_ARIA, TRADE_PAGE_META } from '@/constants/trading';
 import { useAuthStore } from '@/stores/auth/useAuthStore';
 import { useLoadingStore } from '@/stores/common/useLoadingStore';
 import { useStockInfoStore } from '@/stores/common/useStockInfoStore';
@@ -29,21 +25,8 @@ export const TradeView = () => {
     const isAuthenticated = !!profile;
     const { stopLoading } = useLoadingStore();
     const { selectedStock, fetchStockInfo, setSelectedStock } = useStockInfoStore();
-    const {
-        is2FAVisible,
-        twoFAPlacement,
-        close2FA,
-        init2FA,
-        resetStore,
-        isChartFullscreen,
-        onAfter2FASuccess,
-    } = useTradingStore();
+    const { resetStore, isChartFullscreen } = useTradingStore();
     const { setCurrentWatchList } = useWatchlistStore();
-
-    const handle2FASuccess = () => {
-        close2FA();
-        onAfter2FASuccess?.();
-    };
 
     const fetchData = useCallback(
         async (symbol: string) => {
@@ -55,12 +38,6 @@ export const TradeView = () => {
         },
         [fetchStockInfo, stopLoading],
     );
-
-    useEffect(() => {
-        if (isAuthenticated) {
-            init2FA();
-        }
-    }, [isAuthenticated]);
 
     useEffect(() => {
         const currentSymbol = useStockInfoStore.getState().selectedStock?.symbol ?? '';
@@ -148,15 +125,6 @@ export const TradeView = () => {
                     </div>
                 )}
             </div>
-            {is2FAVisible &&
-                twoFAPlacement === TWO_FA_PLACEMENT.GLOBAL &&
-                (profile?.user_type === ACCOUNT_TYPE.ENTERPRISE ? (
-                    <Dialog onClose={close2FA}>
-                        <TradeVerifyOtpPanel onClose={close2FA} onSuccess={handle2FASuccess} />
-                    </Dialog>
-                ) : (
-                    <TradeVerifyQrCard onClose={close2FA} onSuccess={handle2FASuccess} />
-                ))}
         </>
     );
 };

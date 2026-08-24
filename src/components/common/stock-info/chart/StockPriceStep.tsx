@@ -6,7 +6,6 @@ import {
     INITIAL_STOCK_PRICE_DATA,
     LOT_TABS,
     LOT_TYPE,
-    ORDER_MODE_KEY,
     PRICE_COLOR_MAP,
     TRADE_LITERAL,
 } from '@/constants/trading';
@@ -24,15 +23,8 @@ import { buildDepthRawRows, calculatePriceRows } from '@/utils/trading/shared';
 
 export const StockPriceStep = () => {
     const { selectedStock } = useStockInfoStore();
-    const {
-        activeTradeSide,
-        setBuyPrice,
-        setBuyQuantity,
-        setSellPrice,
-        setSellQuantity,
-        orders,
-        activeOrderTab,
-    } = useTradingStore();
+    const { activeTradeSide, setBuyPrice, setBuyQuantity, setSellPrice, setSellQuantity, orders } =
+        useTradingStore();
 
     const [activeTab, setActiveTab] = useState<typeof LOT_TYPE.EVEN | typeof LOT_TYPE.ODD>(
         LOT_TYPE.EVEN,
@@ -64,12 +56,8 @@ export const StockPriceStep = () => {
     const rawRows = buildDepthRawRows(stockPriceData);
 
     const priceMarkers = useMemo(
-        () =>
-            buildActiveOrderPriceMarkers(
-                activeOrderTab === ORDER_MODE_KEY.NORMAL ? orders : [],
-                selectedStock?.symbol ?? '',
-            ),
-        [orders, activeOrderTab, selectedStock?.symbol],
+        () => buildActiveOrderPriceMarkers(orders, selectedStock?.symbol ?? ''),
+        [orders, selectedStock?.symbol],
     );
 
     const pressure = useMemo(() => {
