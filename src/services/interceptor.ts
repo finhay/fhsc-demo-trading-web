@@ -157,6 +157,8 @@ export const vnscServiceDatafeed = createBaseInterceptor({
 export const paperTradingService = createBaseInterceptor({
     baseURL: process.env.NEXT_PUBLIC_PAPER_TRADING_URL,
     timeout: 60000,
+    withAuth: true,
+    withRefreshToken: true,
     withDeviceId: true,
     withLanguage: true,
     withUserInfo: true,
