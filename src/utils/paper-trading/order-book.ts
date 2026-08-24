@@ -23,9 +23,8 @@ export const normalizePaperStatus = (raw?: string | null): string =>
         .replace(/[\s-]+/g, '_');
 
 /**
- * BE chưa chốt bộ `order_status`, nên phân giải theo 3 tầng: bảng nhãn → suy từ khối lượng
- * khớp → cuối cùng trả chính chuỗi gốc. Tuyệt đối không trả chuỗi rỗng: nhãn sai vẫn đọc được,
- * ô trống thì không.
+ * BE chưa chốt bộ `order_status`. Tra bảng nhãn, không khớp thì trả nguyên chuỗi của server —
+ * không tự suy diễn trạng thái, và cũng không bao giờ trả ô trống.
  */
 export const getPaperOrderStatus = (order: PaperOrder): OrderStatusView => {
     const key = normalizePaperStatus(order.order_status);
@@ -37,12 +36,6 @@ export const getPaperOrderStatus = (order: PaperOrder): OrderStatusView => {
         console.warn('[paper-trading] order_status chưa có trong bảng nhãn:', order.order_status);
     }
 
-    const quantity = order.quantity ?? 0;
-    const fillQuantity = order.fill_quantity ?? 0;
-    if (quantity > 0 && fillQuantity >= quantity) return { text: 'Khớp hết', tone: 'success' };
-    if (fillQuantity > 0) return { text: 'Khớp một phần', tone: 'success' };
-    if ((order.leave_quantity ?? 0) > 0) return { text: 'Chờ khớp', tone: 'pending' };
-
     return { text: String(order.order_status || '--'), tone: 'neutral' };
 };
 
@@ -50,16 +43,8 @@ export const getPaperOrderStatus = (order: PaperOrder): OrderStatusView => {
  * API paper không trả `allowcancel` / `allowamend` nên FE tự suy. Cố tình nới tay: thà hiện
  * nút rồi để server từ chối, còn hơn ẩn nút khiến người dùng kẹt lệnh không huỷ được.
  */
-export const isPaperOrderActive = (order: PaperOrder): boolean => {
-    const key = normalizePaperStatus(order.order_status);
-    if (PAPER_TERMINAL_STATUSES.has(key)) return false;
-    if ((order.leave_quantity ?? 0) <= 0) return false;
-
-    const quantity = order.quantity ?? 0;
-    if (quantity > 0 && (order.fill_quantity ?? 0) >= quantity) return false;
-
-    return true;
-};
+export const isPaperOrderActive = (order: PaperOrder): boolean =>
+    !PAPER_TERMINAL_STATUSES.has(normalizePaperStatus(order.order_status));
 
 export const mapPaperOrderToRow = (order: PaperOrder): TradeOrderBookRow => {
     const isActive = isPaperOrderActive(order);

@@ -5,23 +5,18 @@ import { useState } from 'react';
 import { FaEye, FaEyeSlash } from 'react-icons/fa6';
 
 import { Skeleton } from '@/components/common/ui/Skeleton';
-import { usePaperAccountStore } from '@/stores/paper-trading/usePaperAccountStore';
 import type { AssetSummaryProps } from '@/types/pages/assets';
 import { formatNumberVN } from '@/utils/format';
 
 type Props = AssetSummaryProps;
 
-const formatMoney = (value?: number) =>
-    value ? `${formatNumberVN(value, { trimTrailingZeros: true })}đ` : '0đ';
-
 export const AssetOverview = ({ data, isLoading }: Props) => {
-    const { asset } = usePaperAccountStore();
     const [isAmountHidden, setIsAmountHidden] = useState(false);
 
-    const cashRows = [
-        { label: 'Tiền khả dụng', value: formatMoney(asset?.available_cash) },
-        { label: 'Tiền chờ khớp', value: formatMoney(asset?.reserved_cash) },
-    ];
+    const displayValue = data?.net_asset_value;
+    const formattedNetAssetValue = displayValue
+        ? `${formatNumberVN(displayValue, { trimTrailingZeros: true })}đ`
+        : '0đ';
 
     return (
         <section className="flex flex-col gap-4 bg-secondary rounded-xl p-3 w-full shrink-0">
@@ -36,7 +31,7 @@ export const AssetOverview = ({ data, isLoading }: Props) => {
                             </div>
                         ) : (
                             <p className="font-heading-3 text-primary whitespace-nowrap">
-                                {isAmountHidden ? '******' : formatMoney(data?.net_asset_value)}
+                                {isAmountHidden ? '******' : formattedNetAssetValue}
                             </p>
                         )}
                         <button
@@ -54,16 +49,6 @@ export const AssetOverview = ({ data, isLoading }: Props) => {
                     </div>
                 </div>
             </div>
-            <dl className="flex w-full flex-col gap-2">
-                {cashRows.map((row) => (
-                    <div key={row.label} className="flex items-center justify-between gap-2">
-                        <dt className="font-body-3 text-secondary">{row.label}</dt>
-                        <dd className="font-body-3-highlight text-primary">
-                            {isAmountHidden ? '******' : row.value}
-                        </dd>
-                    </div>
-                ))}
-            </dl>
         </section>
     );
 };

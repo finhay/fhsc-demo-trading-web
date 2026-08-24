@@ -9,21 +9,21 @@ import { TradePanelInfoBar } from '@/components/giao-dich/panel/controls/TradePa
 import { TradePanelSideTabs } from '@/components/giao-dich/panel/controls/TradePanelSideTabs';
 import { TradePanelForm, TradePanelSubmit } from '@/components/giao-dich/panel/form/TradePanelForm';
 import { TradePanelOverlays } from '@/components/giao-dich/panel/overlays/TradePanelOverlays';
-import { PAPER_ORDER_TYPE } from '@/constants/paper-trading';
-import { ORDER_SIDE, TRADE_LITERAL, TRADE_UI_CONFIG } from '@/constants/trading';
+import { SUB_ACCOUNT_PERMISSION } from '@/constants/common';
+import { ORDER_SIDE, ORDER_TYPE_KEY, TRADE_LITERAL, TRADE_UI_CONFIG } from '@/constants/trading';
 import {
     fetchPaperAccountBuyingPower,
     fetchPaperAccountPortfolio,
 } from '@/services/api/paper-trading/account';
-import { fetchPaperMarketSessions } from '@/services/api/paper-trading/market';
+import { useAuthStore } from '@/stores/auth/useAuthStore';
 import { useStockInfoStore } from '@/stores/common/useStockInfoStore';
 import { usePaperAccountStore } from '@/stores/paper-trading/usePaperAccountStore';
 import { useTradingStore } from '@/stores/trading/useTradingStore';
 import type { PendingOrder } from '@/types/pages/trading';
 import { isSuccessApi } from '@/utils/common';
 import { formatBoardPrice, formatNumberVN } from '@/utils/format';
-import { normalizePaperStatus } from '@/utils/paper-trading/order-book';
 import {
+    buildOrderLotSplits,
     calcQtyFromPercentage,
     getStepSize,
     makeBuyQtyValidator,
@@ -50,20 +50,20 @@ export const TradePanel = ({ initialSide, initialPrice }: TradePanelProps = {}) 
     );
 
     const [activeSide, setActiveSide] = useState<string>(initialSide ?? TRADE_LITERAL.BUY);
+    const [selectedOrderType] = useState<string>(ORDER_TYPE_KEY.LO);
     const [availableCash, setAvailableCash] = useState(0);
     const [maxQtty, setMaxQtty] = useState(0);
     const [maxSell, setMaxSell] = useState(0);
     const [buyPercentage, setBuyPercentage] = useState(0);
     const [sellPercentage, setSellPercentage] = useState(0);
-    // Mặc định coi phiên đang mở: nếu API sessions lỗi hoặc trả shape lạ thì không chặn đặt lệnh.
-    const [isSessionOpen, setIsSessionOpen] = useState(true);
     const [realtimePrices, setRealtimePrices] = useState({
         buyPrice1: 0,
         sellPrice1: 0,
     });
     const [pendingOrder, setPendingOrder] = useState<PendingOrder | null>(null);
+    const { activeSubAccount } = useAuthStore();
     const { selectedStock } = useStockInfoStore();
-    const { accountId, asset, fetchAsset } = usePaperAccountStore();
+    const { accountId, fetchAsset } = usePaperAccountStore();
 
     const {
         buyPrice: storeBuyPrice,
@@ -86,6 +86,14 @@ export const TradePanel = ({ initialSide, initialPrice }: TradePanelProps = {}) 
         },
     });
 
+    const isLO = selectedOrderType === ORDER_TYPE_KEY.LO;
+
+    const canTrade = !!activeSubAccount?.permissions?.some(
+        (permission) =>
+            permission === SUB_ACCOUNT_PERMISSION.ALL ||
+            permission === SUB_ACCOUNT_PERMISSION.TRADE,
+    );
+
     const priceValidator = useMemo(
         () =>
             makePriceValidator(
@@ -105,17 +113,16 @@ export const TradePanel = ({ initialSide, initialPrice }: TradePanelProps = {}) 
         ],
     );
 
-    // Simulator chỉ nhận lô chẵn nên luôn bật kiểm tra bội số 100.
     const validateBuyQty = makeTradePanelQtyValidator(
         makeBuyQtyValidator(maxQtty),
-        true,
-        'KL phải là bội số của 100',
+        isLO,
+        'KL phải chia hết cho 100',
     );
 
     const validateSellQty = makeTradePanelQtyValidator(
         makeSellQtyValidator(maxSell),
-        true,
-        'KL phải là bội số của 100',
+        isLO,
+        'KL phải chia hết cho 100',
     );
 
     const infoItems = useMemo(() => {
@@ -297,12 +304,12 @@ export const TradePanel = ({ initialSide, initialPrice }: TradePanelProps = {}) 
             setPendingOrder({
                 side,
                 price: rawPrice,
-                quantity: qty,
-                orderType: PAPER_ORDER_TYPE.LO,
+                orderType: selectedOrderType,
+                orderLots: buildOrderLotSplits(qty),
                 stockType: selectedStock?.stockType ?? '',
             });
         },
-        [form, selectedStock],
+        [form, selectedOrderType, selectedStock],
     );
 
     const handlePlaceOrderSuccess = useCallback(() => {
@@ -545,21 +552,6 @@ export const TradePanel = ({ initialSide, initialPrice }: TradePanelProps = {}) 
         }
     }, [storeSellQuantity, maxSell]);
 
-    useEffect(() => {
-        const exchange = selectedStock?.exchange;
-        if (!exchange) return;
-
-        fetchPaperMarketSessions()
-            .then(({ error_code, data }) => {
-                if (!isSuccessApi(error_code)) return;
-                const sessions = data ?? [];
-                const matched =
-                    sessions.find((item) => item.exchange === exchange) ?? sessions[0] ?? null;
-                setIsSessionOpen(!matched || normalizePaperStatus(matched.session) !== 'CLOSED');
-            })
-            .catch(() => setIsSessionOpen(true));
-    }, [selectedStock?.exchange]);
-
     return (
         <section className="flex h-full min-h-0 w-full flex-col gap-1" aria-label={'Bảng đặt lệnh'}>
             <SubAccounts variant="embedded" />
@@ -596,8 +588,9 @@ export const TradePanel = ({ initialSide, initialPrice }: TradePanelProps = {}) 
                         <TradePanelSubmit
                             form={form}
                             activeConfig={activeConfig}
+                            isLO={isLO}
                             symbol={selectedStock?.symbol ?? ''}
-                            isSessionOpen={isSessionOpen}
+                            canTrade={canTrade}
                             onOpenConfirm={handleOpenConfirm}
                         />
                     </>

@@ -76,19 +76,19 @@ export const TradeCancelOrderModal = ({
     const handleConfirm = async () => {
         startLoading();
         try {
-            const { error_code, message } = await cancelPaperOrder(accountId, orderId);
+            const { error_code, message, data } = await cancelPaperOrder(accountId, orderId);
 
             if (isSuccessApi(error_code)) {
                 patchOrdersInBook([
                     {
                         orderId,
-                        status: 'CANCELLED',
+                        status: data?.order_status ?? 'CANCELLED',
                         isActive: false,
                         allowCancel: false,
                         allowAmend: false,
                     },
                 ]);
-                toast.success('Huỷ lệnh thành công');
+                toast.success('Thành công');
                 fetchOrders(accountId, { silent: true });
                 onSuccess();
             } else {

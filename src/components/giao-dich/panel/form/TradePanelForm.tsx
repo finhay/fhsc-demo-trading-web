@@ -168,16 +168,18 @@ export const TradePanelForm = ({
 type SubmitProps = {
     form: TradePanelFormInstance;
     activeConfig: TradePanelActiveConfig;
+    isLO: boolean;
     symbol: string;
-    isSessionOpen: boolean;
+    canTrade: boolean;
     onOpenConfirm: (side: string) => void;
 };
 
 export const TradePanelSubmit = ({
     form,
     activeConfig,
+    isLO,
     symbol,
-    isSessionOpen,
+    canTrade,
     onOpenConfirm,
 }: SubmitProps) => {
     return (
@@ -193,21 +195,19 @@ export const TradePanelSubmit = ({
                 {({ pv, qv, pErrors, qErrors }) => {
                     const hasErrors = pErrors.length > 0 || qErrors.length > 0;
                     const qty = parseQuantity(qv);
-                    const canSubmit =
-                        parsePrice(pv) > 0 &&
-                        qty > 0 &&
-                        !hasErrors &&
-                        isSessionOpen &&
-                        activeConfig.maxQty > 0;
+                    const hasMaxQty = activeConfig.maxQty > 0;
+                    const canSubmit = isLO
+                        ? parsePrice(pv) > 0 && qty > 0 && !hasErrors && hasMaxQty
+                        : qty > 0 && !hasErrors && hasMaxQty;
                     const ctaLabel = `${activeConfig.ctaLabel} ${symbol}`;
-                    const isDisabled = !canSubmit;
+                    const isDisabled = !canTrade || !canSubmit;
 
                     const ctaButton = (
                         <button
                             type="button"
                             disabled={isDisabled}
                             onClick={() => {
-                                if (!canSubmit) return;
+                                if (!canTrade || !canSubmit) return;
                                 onOpenConfirm(activeConfig.orderSide);
                             }}
                             className={`flex w-full items-center justify-center rounded-full px-4 py-2 font-body-3-highlight transition-opacity ${
@@ -220,10 +220,10 @@ export const TradePanelSubmit = ({
                         </button>
                     );
 
-                    if (!isSessionOpen) {
+                    if (!canTrade) {
                         return (
                             <Tooltip
-                                content={'Ngoài giờ giao dịch'}
+                                content={'TK không thể giao dịch'}
                                 placement="top"
                                 className="block w-full"
                             >

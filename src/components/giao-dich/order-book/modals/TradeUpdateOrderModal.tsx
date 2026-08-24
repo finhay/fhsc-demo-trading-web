@@ -183,31 +183,26 @@ export const TradeUpdateOrderModal = ({
     const handleConfirm = async (qtyStr: string, priceStr: string) => {
         const qty = parseQuantity(qtyStr);
         const apiPrice = parsePrice(priceStr);
-        const isPriceEdited = isPriceDirty(priceStr);
-        const isQtyEdited = isQtyDirty(qtyStr);
-
-        if (isPriceEdited && isQtyEdited) {
+        if (isPriceDirty(priceStr) && isQtyDirty(qtyStr)) {
             toast.warning('Yêu cầu sửa lệnh có thể không được thực thi nếu lệnh đã khớp');
             return;
         }
 
         startLoading();
         try {
-            // API paper nhận PATCH từng phần — chỉ gửi đúng trường người dùng vừa sửa.
-            const { error_code, message } = await updatePaperOrder(
-                accountId,
-                orderId,
-                isPriceEdited ? { limit_price: apiPrice } : { quantity: qty },
-            );
+            const { error_code, message } = await updatePaperOrder(accountId, orderId, {
+                limit_price: apiPrice,
+                quantity: qty,
+            });
 
             if (isSuccessApi(error_code)) {
                 patchOrdersInBook([
                     {
                         orderId,
-                        rawPrice: isPriceEdited ? apiPrice : rawPrice,
-                        rawQty: isQtyEdited ? qty : rawQty,
-                        placedPrice: formatBoardPrice(isPriceEdited ? apiPrice : rawPrice),
-                        totalQty: formatNumberVN(isQtyEdited ? qty : rawQty, { decimals: 0 }),
+                        rawPrice: apiPrice,
+                        rawQty: qty,
+                        placedPrice: formatBoardPrice(apiPrice),
+                        totalQty: formatNumberVN(qty, { decimals: 0 }),
                     },
                 ]);
                 toast.success('Sửa lệnh thành công');

@@ -1,5 +1,5 @@
-import { PAPER_LOT_SIZE } from '@/constants/paper-trading';
-import { ORDER_TYPE, SPECIAL_FUND_SYMBOLS, STOCK_TYPE } from '@/constants/trading';
+import { ORDER_TYPE, SPECIAL_FUND_SYMBOLS, STOCK_TYPE, TRADE_UI_CONFIG } from '@/constants/trading';
+import type { OrderLotSplit, PlacementOrder } from '@/types/pages/trading';
 import { formatBoardPrice, formatNumberVN } from '@/utils/format';
 
 export const getTradingFieldBg = (
@@ -107,14 +107,14 @@ export const makeBuyQtyValidator =
 export const makeTradePanelQtyValidator =
     (
         maxQtyValidator: (input: { value: string }) => string | undefined,
-        enforceEvenLot: boolean,
+        isLOOrder: boolean,
         divisibleError: string,
     ) =>
     ({ value }: { value: string }) => {
         const qty = parseQuantity(value);
         const maxErr = maxQtyValidator({ value });
         if (maxErr) return maxErr;
-        if (enforceEvenLot && qty > 0 && qty % PAPER_LOT_SIZE !== 0) {
+        if (!isLOOrder && qty > 0 && qty % 100 !== 0) {
             return divisibleError;
         }
         return undefined;
@@ -130,6 +130,41 @@ export const makeSellQtyValidator =
             return `Vượt KL bán tối đa (${formatNumberVN(maxSell, { decimals: 0 })})`;
         return undefined;
     };
+
+const splitLotQty = (qty: number): OrderLotSplit => {
+    const oddLotQty = qty >= 100 ? qty % 100 : qty;
+    const evenLotQty = qty >= 100 ? qty - oddLotQty : 0;
+    return { evenLotQty, oddLotQty };
+};
+
+export const buildOrderLotSplits = (
+    qty: number,
+    maxChunk = TRADE_UI_CONFIG.MAX_ORDER_QTY_PER_REQUEST,
+): OrderLotSplit[] => {
+    if (qty <= maxChunk) {
+        return [splitLotQty(qty)];
+    }
+
+    const chunkQtys: number[] = [];
+    let remaining = qty;
+    while (remaining > maxChunk) {
+        chunkQtys.push(maxChunk);
+        remaining -= maxChunk;
+    }
+    if (remaining > 0) {
+        chunkQtys.push(remaining);
+    }
+
+    return chunkQtys.map((chunkQty) => splitLotQty(chunkQty));
+};
+
+export const buildPlacementOrders = (orderLots: OrderLotSplit[]): PlacementOrder[] =>
+    orderLots.flatMap((lot) => {
+        const orders: PlacementOrder[] = [];
+        if (lot.evenLotQty > 0) orders.push({ kind: 'even', qty: lot.evenLotQty });
+        if (lot.oddLotQty > 0) orders.push({ kind: 'odd', qty: lot.oddLotQty });
+        return orders;
+    });
 
 export const calcQtyFromPercentage = (pct: number, max: number): number => {
     return pct >= 100 ? max : Math.round((pct / 100) * max);

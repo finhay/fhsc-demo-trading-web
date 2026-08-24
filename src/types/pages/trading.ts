@@ -11,12 +11,19 @@ export type DepthRawRow = {
     sellVol: number;
 };
 
+export type OrderLotSplit = { evenLotQty: number; oddLotQty: number };
+
 export type PendingOrder = {
     side: string;
     price: number;
-    quantity: number;
     orderType: string;
+    orderLots: OrderLotSplit[];
     stockType: string;
+};
+
+export type PlacementOrder = {
+    kind: 'even' | 'odd';
+    qty: number;
 };
 
 export type TradeMatchedHistoryTableRow = {
