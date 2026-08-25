@@ -1,4 +1,11 @@
-import { ORDER_TYPE, SPECIAL_FUND_SYMBOLS, STOCK_TYPE, TRADE_UI_CONFIG } from '@/constants/trading';
+import {
+    ORDER_TYPE,
+    SPECIAL_FUND_SYMBOLS,
+    STOCK_TYPE,
+    TRADE_LITERAL,
+    TRADE_UI_CONFIG,
+} from '@/constants/trading';
+import type { StockPrice } from '@/types/datafeed/stock-info';
 import type { OrderLotSplit, PlacementOrder } from '@/types/pages/trading';
 import { formatBoardPrice, formatNumberVN } from '@/utils/format';
 
@@ -186,4 +193,33 @@ export const stepDecreaseVolume = (volume: number) => {
     } else {
         return 1;
     }
+};
+
+/**
+ * Bảng giá realtime có mã chỉ trả đủ 3 mức, có mã chỉ có 1 mức, và thứ tự mức giá
+ * (`*Price1` hay `*Price3` là mức sát giá khớp) không thống nhất giữa các nguồn.
+ * Vì vậy lấy mức tốt nhất theo giá trị: mua cao nhất / bán thấp nhất trong 3 mức.
+ */
+export const getBestBidPrice = (stock?: StockPrice | null) => {
+    const prices = [stock?.buyPrice1, stock?.buyPrice2, stock?.buyPrice3].filter(
+        (price): price is number => !!price && price > 0,
+    );
+    return prices.length > 0 ? Math.max(...prices) : 0;
+};
+
+export const getBestAskPrice = (stock?: StockPrice | null) => {
+    const prices = [stock?.sellPrice1, stock?.sellPrice2, stock?.sellPrice3].filter(
+        (price): price is number => !!price && price > 0,
+    );
+    return prices.length > 0 ? Math.min(...prices) : 0;
+};
+
+/**
+ * Lệnh MUA lấy giá bán tốt nhất, lệnh BÁN lấy giá mua tốt nhất. Ngoài phiên khớp
+ * lệnh liên tục bảng giá có thể trống, khi đó lùi về giá khớp rồi tới giá tham chiếu
+ * để không bao giờ gửi giá 0 lên API sức mua.
+ */
+export const getBestPriceForSide = (stock: StockPrice | null | undefined, side: string) => {
+    const best = side === TRADE_LITERAL.BUY ? getBestAskPrice(stock) : getBestBidPrice(stock);
+    return best || stock?.price || stock?.reference || 0;
 };

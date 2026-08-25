@@ -25,6 +25,7 @@ import { formatBoardPrice, formatNumberVN } from '@/utils/format';
 import {
     buildOrderLotSplits,
     calcQtyFromPercentage,
+    getBestPriceForSide,
     getStepSize,
     makeBuyQtyValidator,
     makePriceValidator,
@@ -45,20 +46,21 @@ export const TradePanel = ({ initialSide, initialPrice }: TradePanelProps = {}) 
     const priceDebounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
     const lastAvailTradeArgsRef = useRef<string>('');
     const skipNextDefaultQtyRef = useRef({ buy: false, sell: false });
+    /** KL mặc định đã tự điền — để phân biệt với KL do user nhập tay. */
+    const lastDefaultQtyRef = useRef({ buy: 0, sell: 0 });
     const injectedSideRef = useRef<string | null>(
         initialPrice && initialPrice > 0 ? (initialSide ?? TRADE_LITERAL.BUY) : null,
     );
 
     const [activeSide, setActiveSide] = useState<string>(initialSide ?? TRADE_LITERAL.BUY);
     const [selectedOrderType] = useState<string>(ORDER_TYPE_KEY.LO);
-    const [availableCash, setAvailableCash] = useState(0);
     const [maxQtty, setMaxQtty] = useState(0);
     const [maxSell, setMaxSell] = useState(0);
     const [buyPercentage, setBuyPercentage] = useState(0);
     const [sellPercentage, setSellPercentage] = useState(0);
-    const [realtimePrices, setRealtimePrices] = useState({
-        buyPrice1: 0,
-        sellPrice1: 0,
+    const [defaultPrices, setDefaultPrices] = useState({
+        buy: 0,
+        sell: 0,
     });
     const [pendingOrder, setPendingOrder] = useState<PendingOrder | null>(null);
     const { activeSubAccount } = useAuthStore();
@@ -129,13 +131,6 @@ export const TradePanel = ({ initialSide, initialPrice }: TradePanelProps = {}) 
         if (activeSide === TRADE_LITERAL.BUY) {
             return [
                 {
-                    label: 'Sức mua tối đa',
-                    value:
-                        availableCash > 0
-                            ? `${formatNumberVN(availableCash, { trimTrailingZeros: true })}${'đ'}`
-                            : '--',
-                },
-                {
                     label: 'KL mua tối đa',
                     value: maxQtty > 0 ? `${formatNumberVN(maxQtty, { decimals: 0 })}cp` : '--',
                 },
@@ -148,7 +143,7 @@ export const TradePanel = ({ initialSide, initialPrice }: TradePanelProps = {}) 
                 value: maxSell > 0 ? `${formatNumberVN(maxSell, { decimals: 0 })}cp` : '--',
             },
         ];
-    }, [activeSide, availableCash, maxQtty, maxSell]);
+    }, [activeSide, maxQtty, maxSell]);
 
     const isPanelPlaceOrderVisible = !!pendingOrder && !!selectedStock?.symbol;
 
@@ -196,18 +191,23 @@ export const TradePanel = ({ initialSide, initialPrice }: TradePanelProps = {}) 
         [fetchAsset],
     );
 
-    const realtimePriceForSide = useCallback(
-        (side: string) =>
-            side === TRADE_LITERAL.BUY
-                ? selectedStock?.sellPrice1 || 0
-                : selectedStock?.buyPrice1 || 0,
-        [selectedStock?.sellPrice1, selectedStock?.buyPrice1],
+    /** Giá dùng để hỏi sức mua: ưu tiên giá đang nhập, chưa có thì lấy giá tốt nhất. */
+    const priceForSide = useCallback(
+        (side: string) => {
+            const field = side === TRADE_LITERAL.BUY ? 'buyPrice' : 'sellPrice';
+            return (
+                parsePrice(form.getFieldValue(field)) || getBestPriceForSide(selectedStock, side)
+            );
+        },
+        [form, selectedStock],
     );
 
     const requestAvailableTrade = useCallback(
         (side: string, price: number, options?: { immediate?: boolean }) => {
             const symbol = selectedStock?.symbol;
             if (!accountId || !symbol) return;
+            // API sức mua tính theo giá — chưa có giá thì đừng hỏi với giá 0.
+            if (side === TRADE_LITERAL.BUY && price <= 0) return;
 
             const fire = () => {
                 const key = `${accountId}|${symbol}|${side}|${price}`;
@@ -428,7 +428,8 @@ export const TradePanel = ({ initialSide, initialPrice }: TradePanelProps = {}) 
         setStoreSellQuantity(0);
         setBuyPercentage(0);
         setSellPercentage(0);
-        setRealtimePrices({ buyPrice1: 0, sellPrice1: 0 });
+        setDefaultPrices({ buy: 0, sell: 0 });
+        lastDefaultQtyRef.current = { buy: 0, sell: 0 };
     }, [
         selectedStock,
         form,
@@ -445,74 +446,86 @@ export const TradePanel = ({ initialSide, initialPrice }: TradePanelProps = {}) 
     useEffect(() => {
         if (!selectedStock) return;
 
-        if (selectedStock.buyPrice1 && selectedStock.sellPrice1) {
-            setRealtimePrices({
-                buyPrice1: selectedStock.buyPrice1,
-                sellPrice1: selectedStock.sellPrice1,
-            });
-        }
+        setDefaultPrices({
+            buy: getBestPriceForSide(selectedStock, TRADE_LITERAL.BUY),
+            sell: getBestPriceForSide(selectedStock, TRADE_LITERAL.SELL),
+        });
     }, [selectedStock]);
 
+    /**
+     * Điền giá mặc định: chiều MUA lấy giá bán tốt nhất, chiều BÁN lấy giá mua tốt nhất.
+     * Chiều được mở kèm giá (`initialPrice`) thì giữ nguyên giá đó.
+     */
     useEffect(() => {
-        if (initialPrice && initialPrice > 0) {
-            requestAvailableTrade(initialSide ?? TRADE_LITERAL.BUY, initialPrice, {
-                immediate: true,
-            });
-        } else {
-            requestAvailableTrade(activeSide, realtimePriceForSide(activeSide), {
-                immediate: true,
-            });
-        }
-    }, [requestAvailableTrade]);
+        const injectedPrice = initialPrice && initialPrice > 0 ? initialPrice : 0;
+        const buyPrice =
+            injectedSideRef.current === TRADE_LITERAL.BUY ? injectedPrice : defaultPrices.buy;
+        const sellPrice =
+            injectedSideRef.current === TRADE_LITERAL.SELL ? injectedPrice : defaultPrices.sell;
 
-    useEffect(() => {
-        if (realtimePrices.buyPrice1 > 0 && realtimePrices.sellPrice1 > 0) {
-            if (injectedSideRef.current !== TRADE_LITERAL.BUY) {
-                form.setFieldValue('buyPrice', formatBoardPrice(realtimePrices.sellPrice1));
-            }
-            if (injectedSideRef.current !== TRADE_LITERAL.SELL) {
-                form.setFieldValue('sellPrice', formatBoardPrice(realtimePrices.buyPrice1));
-            }
-        }
-    }, [realtimePrices, form]);
+        if (buyPrice > 0) form.setFieldValue('buyPrice', formatBoardPrice(buyPrice));
+        if (sellPrice > 0) form.setFieldValue('sellPrice', formatBoardPrice(sellPrice));
+    }, [defaultPrices, form]);
 
+    /**
+     * Hỏi KL tối đa bằng đúng giá đang hiển thị trong ô giá. Chạy lại khi có accountId /
+     * đổi mã / có giá mặc định, nên lần gọi đầu tiên đã có giá thật thay vì 0.
+     */
     useEffect(() => {
-        if (!initialPrice || initialPrice <= 0) return;
-        const side = initialSide ?? TRADE_LITERAL.BUY;
-        const field = side === TRADE_LITERAL.BUY ? 'buyPrice' : 'sellPrice';
-        form.setFieldValue(field, formatBoardPrice(initialPrice));
-    }, []);
+        requestAvailableTrade(activeSide, priceForSide(activeSide), { immediate: true });
+    }, [requestAvailableTrade, defaultPrices]);
 
+    /**
+     * KL mặc định = 100, hoặc bằng KL tối đa nếu KL tối đa nhỏ hơn 100. KL tối đa đổi
+     * theo giá nên default được tính lại; KL do user tự nhập thì giữ nguyên, chỉ tính lại %.
+     */
     useEffect(() => {
-        if (maxQtty > 0) {
-            if (skipNextDefaultQtyRef.current.buy) {
-                skipNextDefaultQtyRef.current.buy = false;
-                form.setFieldValue('buyQuantity', '');
-                setBuyPercentage(0);
-            } else {
-                const defaultBuyQty = Math.min(TRADE_UI_CONFIG.DEFAULT_QUANTITY, maxQtty);
-                form.setFieldValue('buyQuantity', formatNumberVN(defaultBuyQty, { decimals: 0 }));
-                setBuyPercentage(Math.min(100, Math.round((defaultBuyQty / maxQtty) * 100)));
-            }
-        } else {
-            form.setFieldValue('buyQuantity', '');
+        if (maxQtty <= 0) {
             setBuyPercentage(0);
+            return;
         }
-        if (maxSell > 0) {
-            if (skipNextDefaultQtyRef.current.sell) {
-                skipNextDefaultQtyRef.current.sell = false;
-                form.setFieldValue('sellQuantity', '');
-                setSellPercentage(0);
-            } else {
-                const defaultSellQty = Math.min(TRADE_UI_CONFIG.DEFAULT_QUANTITY, maxSell);
-                form.setFieldValue('sellQuantity', formatNumberVN(defaultSellQty, { decimals: 0 }));
-                setSellPercentage(Math.min(100, Math.round((defaultSellQty / maxSell) * 100)));
-            }
-        } else {
-            form.setFieldValue('sellQuantity', '');
+        if (skipNextDefaultQtyRef.current.buy) {
+            skipNextDefaultQtyRef.current.buy = false;
+            form.setFieldValue('buyQuantity', '');
+            lastDefaultQtyRef.current.buy = 0;
+            setBuyPercentage(0);
+            return;
+        }
+        const currentQty = parseQuantity(form.getFieldValue('buyQuantity'));
+        const isUserQty = currentQty > 0 && currentQty !== lastDefaultQtyRef.current.buy;
+        const defaultQty = Math.min(TRADE_UI_CONFIG.DEFAULT_QUANTITY, maxQtty);
+        const buyQty = isUserQty ? currentQty : defaultQty;
+        if (!isUserQty) {
+            lastDefaultQtyRef.current.buy = defaultQty;
+            form.setFieldValue('buyQuantity', formatNumberVN(defaultQty, { decimals: 0 }));
+        }
+        setBuyPercentage(Math.min(100, Math.round((buyQty / maxQtty) * 100)));
+        form.validateField('buyQuantity', 'change');
+    }, [maxQtty, form]);
+
+    useEffect(() => {
+        if (maxSell <= 0) {
             setSellPercentage(0);
+            return;
         }
-    }, [maxQtty, maxSell, form]);
+        if (skipNextDefaultQtyRef.current.sell) {
+            skipNextDefaultQtyRef.current.sell = false;
+            form.setFieldValue('sellQuantity', '');
+            lastDefaultQtyRef.current.sell = 0;
+            setSellPercentage(0);
+            return;
+        }
+        const currentQty = parseQuantity(form.getFieldValue('sellQuantity'));
+        const isUserQty = currentQty > 0 && currentQty !== lastDefaultQtyRef.current.sell;
+        const defaultQty = Math.min(TRADE_UI_CONFIG.DEFAULT_QUANTITY, maxSell);
+        const sellQty = isUserQty ? currentQty : defaultQty;
+        if (!isUserQty) {
+            lastDefaultQtyRef.current.sell = defaultQty;
+            form.setFieldValue('sellQuantity', formatNumberVN(defaultQty, { decimals: 0 }));
+        }
+        setSellPercentage(Math.min(100, Math.round((sellQty / maxSell) * 100)));
+        form.validateField('sellQuantity', 'change');
+    }, [maxSell, form]);
 
     useEffect(() => {
         if (storeBuyPrice > 0) {
@@ -559,7 +572,7 @@ export const TradePanel = ({ initialSide, initialPrice }: TradePanelProps = {}) 
                 activeSide={activeSide}
                 onChange={(side) => {
                     setActiveSide(side);
-                    requestAvailableTrade(side, realtimePriceForSide(side), { immediate: true });
+                    requestAvailableTrade(side, priceForSide(side), { immediate: true });
                 }}
             />
             <div className="flex min-h-0 w-full flex-1 flex-col items-center gap-2 rounded-xl bg-secondary p-3">
