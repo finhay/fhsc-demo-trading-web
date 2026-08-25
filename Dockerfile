@@ -1,4 +1,4 @@
-FROM node:18.20.4-alpine
+FROM node:20-alpine
 
 ENV TZ=Asia/Ho_Chi_Minh
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone

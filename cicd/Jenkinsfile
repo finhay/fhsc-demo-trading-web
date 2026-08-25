@@ -1,33 +1,29 @@
 pipeline {
     agent any
+    parameters {
+        choice(name: 'WORKSPACE', choices: ['develop', 'products'], description: 'Môi trường build')
+        string(name: 'IMAGES', defaultValue: 'fhsc-demo-trading', description: 'Tên image')
+        string(name: 'DOCKERFILE', defaultValue: 'Dockerfile', description: 'Đường dẫn Dockerfile')
+        string(name: 'DEPLOYMENT', defaultValue: 'develop-fhsc-demo-trading', description: 'Tên deployment trên K8s')
+        string(name: 'K8SCLS', defaultValue: 'devk8scls2', description: 'Tên cluster K8s')
+        string(name: 'URL_PRIVATE_REGISTRY', defaultValue: 'dockerhub.finhay.lan', description: 'URL private registry')
+    }
     environment {
         BRANCH_NAME = "${GIT_BRANCH.split("/")[1]}"
     }
-
     stages {
-        stage('Setup') {
-            steps {
-                script {
-                    env.K8SCLS = 'cls2'
-                    env.WORKSPACE = 'products'
-                    env.DOCKERFILE = 'Dockerfile'
-                    env.DEPLOYMENT = 'products-demo-trading-web'
-                    env.IMAGES = 'demo-trading-web'
-                    env.URL_PRIVATE_REGISTRY = 'registry.vnsc.vn'
-                    echo "pipline for stg: $WORKSPACE , $DOCKERFILE , $DEPLOYMENT , $IMAGES ,$URL_PRIVATE_REGISTRY "
-                
-                }
-            }
-        }
         stage('load env') {
             steps {
                 script {
                     try {
-                        if ("$WORKSPACE"=="products") {
-                            sh '''
-                                sudo cp ../update-env-for-service-demo/demo-trading-web/.env ./.env
+                        if (params.WORKSPACE == "develop") {
+                            sh """
+                                sudo cp ./env/${params.WORKSPACE}.${params.IMAGES}.env ./.env || true
                                 ls -lah
-                            '''
+                            """
+                        }
+                        if (params.WORKSPACE == "products") {
+                            echo "Products environment - do nothing!"
                         }
                     }
                     catch (err) {
@@ -36,13 +32,13 @@ pipeline {
                     }
                 }
             }
-	    }
+        }
         stage('Build and upload image') {
             steps {
                 script {
                     try {
-                        sh 'bash ./cicd/build_image.sh $WORKSPACE ${DEPLOYMENT} ${IMAGES}  $BUILD_NUMBER ${URL_PRIVATE_REGISTRY}'
-                        sh 'sudo docker images "${URL_PRIVATE_REGISTRY}/${WORKSPACE}-${IMAGES}" --digests'
+                        sh "bash ./cicd/build_image.sh ${params.WORKSPACE} ${params.DEPLOYMENT} ${params.IMAGES} ${BUILD_NUMBER} ${params.URL_PRIVATE_REGISTRY}"
+                        sh "sudo docker images \"${params.URL_PRIVATE_REGISTRY}/${params.IMAGES}\" --digests"
                     }
                     catch (err) {
                         currentBuild.result = "FAILED"
@@ -50,13 +46,12 @@ pipeline {
                     }
                 }
             }
-	    }
-
-        stage('Promote to Deployment') {
+        }
+        stage('Promote to Develop') {
             steps {
                 script {
                     try {
-                        sh 'bash ./cicd/update_image_to_service_on_k8s.sh $WORKSPACE ${DEPLOYMENT} ${IMAGES}  $BUILD_NUMBER ${URL_PRIVATE_REGISTRY} $K8SCLS'
+                        sh "bash ./cicd/update_image_to_service_on_k8s.sh ${params.WORKSPACE} ${params.DEPLOYMENT} ${params.IMAGES} ${BUILD_NUMBER} ${params.URL_PRIVATE_REGISTRY} ${params.K8SCLS}"
                     }
                     catch (err) {
                         currentBuild.result = "FAILED"
@@ -69,41 +64,23 @@ pipeline {
     post {
         always {
             script {
-                // Extract git commit information
                 env.GIT_COMMIT_MSG = sh (script: 'git log -1 --pretty=%B ${GIT_COMMIT}', returnStdout: true).trim()
                 env.GIT_AUTHOR = sh (script: 'git log -1 --pretty=%an ${GIT_COMMIT}', returnStdout: true).trim()
-
-                // Determine build status
                 def buildStatus = currentBuild.result ?: 'SUCCESS'
-
-                // Build environment name
-                def environment = "${params.K8SCLS}-${WORKSPACE}"
-
-                echo "Sending card-based notification to Google Chat..."
-                echo "Status: ${buildStatus}"
-                echo "Build: ${BUILD_NUMBER}"
-                echo "Image: ${IMAGES}"
-                echo "Environment: ${environment}"
-                echo "Commit: ${GIT_COMMIT_MSG}"
-                echo "Author: ${GIT_AUTHOR}"
-                echo "Branch: ${BRANCH_NAME}"
-                echo "URL: ${BUILD_URL}"
-
-                // Send card-based notification
-                // Parameters: BUILD_STATUS BUILD_NUMBER IMAGE_NAME ENVIRONMENT COMMIT_MESSAGE BUILD_URL GIT_AUTHOR BRANCH_NAME
+                def environmentName = "${params.K8SCLS}-${params.WORKSPACE}"
+                echo "Sending notification to Google Chat..."
                 sh """
                     bash ./cicd/send-noti-to-ggchat.sh \
                         '${buildStatus}' \
                         '${BUILD_NUMBER}' \
-                        '${IMAGES}' \
-                        '${environment}' \
-                        '${GIT_COMMIT_MSG}' \
+                        '${params.IMAGES}' \
+                        '${environmentName}' \
+                        '${env.GIT_COMMIT_MSG}' \
                         '${BUILD_URL}' \
-                        '${GIT_AUTHOR}' \
+                        '${env.GIT_AUTHOR}' \
                         '${BRANCH_NAME}'
                 """
             }
         }
-        // success {
     }
 }

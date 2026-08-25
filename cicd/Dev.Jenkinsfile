@@ -11,8 +11,8 @@ pipeline {
                     env.K8SCLS = 'devk8scls2'
                     env.WORKSPACE = 'develop'
                     env.DOCKERFILE = 'Dockerfile'
-                    env.DEPLOYMENT = 'develop-demo-trading-web'
-                    env.IMAGES = 'develop-demo-trading-web'
+                    env.DEPLOYMENT = 'develop-fhsc-demo-trading'
+                    env.IMAGES = 'fhsc-demo-trading'
                     env.URL_PRIVATE_REGISTRY = ' dockerhub.finhay.lan'
                     echo "pipline for stg: $WORKSPACE , $DOCKERFILE , $DEPLOYMENT , $IMAGES ,$URL_PRIVATE_REGISTRY "
                 
