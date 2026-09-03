@@ -5,7 +5,7 @@ import { PAPER_ORDER_SIDE } from '@/constants/paper-trading';
 import type { SortableColMeta } from '@/types/pages/common';
 import type { PaperOrder } from '@/types/paper-trading/orders';
 import { formatDateOrDash, formatNumberVN } from '@/utils/format';
-import { getPaperOrderStatus } from '@/utils/paper-trading/order-book';
+import { getPaperOrderStatus, resolvePaperOrderId } from '@/utils/paper-trading/order-book';
 import { getOrderStatusColor } from '@/utils/trading/order-book';
 
 const renderOrderStatus = (order: PaperOrder) => {
@@ -31,7 +31,7 @@ export const getPaperOrderHistoryColumns = (): ColumnDef<PaperOrder, unknown>[] 
     },
     {
         id: 'id',
-        accessorKey: 'id',
+        accessorFn: (row) => resolvePaperOrderId(row),
         header: ({ column }) => (
             <SortableHeader label={'Số hiệu lệnh'} column={column} align="right" />
         ),

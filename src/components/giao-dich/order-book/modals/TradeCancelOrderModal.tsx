@@ -82,7 +82,7 @@ export const TradeCancelOrderModal = ({
                 patchOrdersInBook([
                     {
                         orderId,
-                        status: data?.order_status ?? 'CANCELLED',
+                        status: data?.status ?? 'Đã hủy',
                         isActive: false,
                         allowCancel: false,
                         allowAmend: false,

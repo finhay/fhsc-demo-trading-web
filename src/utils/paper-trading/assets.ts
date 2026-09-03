@@ -1,30 +1,22 @@
 import type { AssetsSummary } from '@/types/accounts/assets';
 import type { PaperAccountAsset } from '@/types/paper-trading/account';
-import type { PortfolioItem } from '@/types/trade/portfolio';
-import { calcPortfolioMarketValue, calcPortfolioTotals } from '@/utils/assets';
 
 const EMPTY_PNL = { pnl: 0, pnl_rate: 0 };
 
 /**
- * Simulator chỉ trả tiền mặt + danh mục, trong khi `AssetOverview` / `AssetAllocation` /
- * `AssetDebt` đang nhận `AssetsSummary` nhiều tầng. Dựng lại đúng shape đó để 3 component
- * này không phải viết lại — các nhánh không có nguồn dữ liệu để 0.
+ * Map `GET /v1/accounts/{id}/asset` sang `AssetsSummary` để Overview / Allocation /
+ * Debt dùng lại shape cũ. Simulator chỉ có tiền mặt + chứng khoán — các nhánh còn lại để 0.
  *
  * `debt` toàn 0 khiến `AssetDebt` tự rơi vào empty state "Bạn đang không có khoản nợ nào!".
  */
-export const buildPaperAssetsSummary = (
-    asset: PaperAccountAsset | null,
-    portfolio: PortfolioItem[],
-): AssetsSummary => {
-    const cashTotal = (asset?.available_cash ?? 0) + (asset?.reserved_cash ?? 0);
-    const stockValue = portfolio.reduce((sum, item) => sum + calcPortfolioMarketValue(item), 0);
-    const { totalPnl, totalPnlRate } = calcPortfolioTotals(portfolio);
+export const buildPaperAssetsSummary = (asset: PaperAccountAsset | null): AssetsSummary => {
+    const stockPnl = asset?.pnl?.stock;
 
     return {
-        net_asset_value: cashTotal + stockValue,
+        net_asset_value: asset?.net_asset_value ?? 0,
         products: {
-            total: stockValue,
-            stock: stockValue,
+            total: asset?.products?.total ?? 0,
+            stock: asset?.products?.stock ?? 0,
             fund: 0,
             saving: null,
             bond: 0,
@@ -35,12 +27,12 @@ export const buildPaperAssetsSummary = (
             hay0_withdrawing: 0,
         },
         money: {
-            total: cashTotal,
-            ci_balance: asset?.available_cash ?? 0,
+            total: asset?.money?.total ?? 0,
+            ci_balance: asset?.money?.ci_balance ?? 0,
             ca_receiving: 0,
             emk_amt: 0,
-            receiving_amt: asset?.reserved_cash ?? 0,
-            baldefovd: 0,
+            receiving_amt: asset?.money?.reserved ?? 0,
+            baldefovd: asset?.money?.baldefovd ?? 0,
         },
         debt: {
             total: 0,
@@ -52,7 +44,7 @@ export const buildPaperAssetsSummary = (
             cidepo_fee: 0,
         },
         pnl: {
-            stock: { pnl: totalPnl, pnl_rate: totalPnlRate },
+            stock: stockPnl ?? EMPTY_PNL,
             fund: EMPTY_PNL,
             child_savings: EMPTY_PNL,
         },

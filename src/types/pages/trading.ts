@@ -2,7 +2,7 @@ import type { FormAsyncValidateOrFn, FormValidateOrFn } from '@tanstack/form-cor
 import type { ReactFormExtendedApi } from '@tanstack/react-form';
 
 import { TransactionLogItem } from '@/types/datafeed/stock-info';
-import type { PaperOrder } from '@/types/paper-trading/orders';
+import type { PaperOrderBookItem } from '@/types/paper-trading/orders';
 
 export type DepthRawRow = {
     buyPrice: number;
@@ -51,14 +51,13 @@ export type TradeOrderBookRow = {
     rawQty: number;
     type: string;
     status: string;
-    /** Suy ở FE — API paper không trả allowcancel/allowamend */
+    /** Cho phép sửa/huỷ lấy từ `allowamend` / `allowcancel` của API sổ lệnh */
     isActive?: boolean;
     allowCancel?: boolean;
     allowAmend?: boolean;
     priceType?: string | null;
-    paperOrder?: PaperOrder;
+    paperOrder?: PaperOrderBookItem;
 };
-
 export type TradeOrderAmendStockInfo = {
     floor: number;
     ceiling: number;

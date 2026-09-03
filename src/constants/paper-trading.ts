@@ -16,8 +16,6 @@ export const PAPER_ORDER_CHANNEL = 'ONLINE';
 /** Simulator chỉ nhận lô chẵn */
 export const PAPER_LOT_SIZE = 100;
 
-export const PAPER_ORDER_BOOK_POLL_MS = 5000;
-
 export const PAPER_HISTORY_RANGE_DAYS = 30;
 
 /**

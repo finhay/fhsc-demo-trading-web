@@ -30,16 +30,16 @@ const initialState: AssetState = {
     isPortfolioLoading: true,
 };
 
-export const useAssetStore = create<AssetState & AssetActions>((set, get) => ({
+export const useAssetStore = create<AssetState & AssetActions>((set) => ({
     ...initialState,
 
-    /** Tổng quan tài sản dựng từ tiền của simulator + danh mục đã tải. */
+    /** Tổng quan / phân bổ dựng từ `GET /v1/accounts/{id}/asset`. */
     fetchAssetsSummary: async () => {
         set({ isSummaryLoading: true });
         try {
             await usePaperAccountStore.getState().fetchAsset();
             const { asset } = usePaperAccountStore.getState();
-            set({ assetsSummary: buildPaperAssetsSummary(asset, get().portfolio) });
+            set({ assetsSummary: buildPaperAssetsSummary(asset) });
         } finally {
             set({ isSummaryLoading: false });
         }
@@ -56,11 +56,8 @@ export const useAssetStore = create<AssetState & AssetActions>((set, get) => ({
         try {
             const { data, error_code } = await fetchPaperAccountPortfolio(accountId);
             if (isSuccessApi(error_code)) {
-                const portfolio = (data ?? []).map((item) =>
-                    mapPaperPortfolioItem(item, accountId),
-                );
-                const { asset } = usePaperAccountStore.getState();
-                set({ portfolio, assetsSummary: buildPaperAssetsSummary(asset, portfolio) });
+                const portfolio = (data?.portfolio ?? []).map(mapPaperPortfolioItem);
+                set({ portfolio });
             }
         } catch {
             set({ portfolio: [] });

@@ -26,12 +26,13 @@ export const AssetAllocation = ({ data, isLoading }: Props) => {
         const pnl = data?.pnl;
 
         const moneyTotal = money?.total ?? 0;
-        const hay0 = product?.hay0 ?? 0;
         const stock = product?.stock ?? 0;
-        const fund = product?.fund ?? 0;
-        const bond = product?.bond ?? 0;
-        const childSavings = product?.child_savings ?? 0;
-        const totalAssets = moneyTotal + hay0 + stock + fund + bond + childSavings;
+        // Demo chỉ có tiền mặt + chứng khoán
+        // const hay0 = product?.hay0 ?? 0;
+        // const fund = product?.fund ?? 0;
+        // const bond = product?.bond ?? 0;
+        // const childSavings = product?.child_savings ?? 0;
+        const totalAssets = moneyTotal + stock;
 
         return [
             {
@@ -41,13 +42,13 @@ export const AssetAllocation = ({ data, isLoading }: Props) => {
                 percentage: calcAssetPercent(moneyTotal, totalAssets),
                 pnlChange: null,
             },
-            {
-                label: 'Hay0',
-                value: formatNumberVN(hay0, { trimTrailingZeros: true }),
-                color: ALLOCATION_COLORS.hay0,
-                percentage: calcAssetPercent(hay0, totalAssets),
-                pnlChange: null,
-            },
+            // {
+            //     label: 'Hay0',
+            //     value: formatNumberVN(hay0, { trimTrailingZeros: true }),
+            //     color: ALLOCATION_COLORS.hay0,
+            //     percentage: calcAssetPercent(hay0, totalAssets),
+            //     pnlChange: null,
+            // },
             {
                 label: 'Chứng Khoán',
                 value: formatNumberVN(stock, { trimTrailingZeros: true }),
@@ -55,27 +56,27 @@ export const AssetAllocation = ({ data, isLoading }: Props) => {
                 percentage: calcAssetPercent(stock, totalAssets),
                 pnlChange: formatPnlDisplay(pnl?.stock),
             },
-            {
-                label: 'Chứng chỉ quỹ',
-                value: formatNumberVN(fund, { trimTrailingZeros: true }),
-                color: ALLOCATION_COLORS.fund,
-                percentage: calcAssetPercent(fund, totalAssets),
-                pnlChange: formatPnlDisplay(pnl?.fund),
-            },
-            {
-                label: 'Tích luỹ HayBond',
-                value: formatNumberVN(bond, { trimTrailingZeros: true }),
-                color: ALLOCATION_COLORS.bond,
-                percentage: calcAssetPercent(bond, totalAssets),
-                pnlChange: null,
-            },
-            {
-                label: 'Cho con',
-                value: formatNumberVN(childSavings, { trimTrailingZeros: true }),
-                color: ALLOCATION_COLORS.childSavings,
-                percentage: calcAssetPercent(childSavings, totalAssets),
-                pnlChange: formatPnlDisplay(pnl?.child_savings),
-            },
+            // {
+            //     label: 'Chứng chỉ quỹ',
+            //     value: formatNumberVN(fund, { trimTrailingZeros: true }),
+            //     color: ALLOCATION_COLORS.fund,
+            //     percentage: calcAssetPercent(fund, totalAssets),
+            //     pnlChange: formatPnlDisplay(pnl?.fund),
+            // },
+            // {
+            //     label: 'Tích luỹ HayBond',
+            //     value: formatNumberVN(bond, { trimTrailingZeros: true }),
+            //     color: ALLOCATION_COLORS.bond,
+            //     percentage: calcAssetPercent(bond, totalAssets),
+            //     pnlChange: null,
+            // },
+            // {
+            //     label: 'Cho con',
+            //     value: formatNumberVN(childSavings, { trimTrailingZeros: true }),
+            //     color: ALLOCATION_COLORS.childSavings,
+            //     percentage: calcAssetPercent(childSavings, totalAssets),
+            //     pnlChange: formatPnlDisplay(pnl?.child_savings),
+            // },
         ];
     }, [data]);
 
