@@ -102,8 +102,8 @@ export const MarketWatchlistPortfolio = () => {
                 return;
             }
             const quantityMap: Record<string, number> = {};
-            (data || []).forEach((item) => {
-                const quantity = item.quantity ?? 0;
+            (data?.portfolio ?? []).forEach((item) => {
+                const quantity = item.total ?? 0;
                 if (quantity > 0) quantityMap[item.symbol] = quantity;
             });
             const symbols = Object.keys(quantityMap);

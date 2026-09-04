@@ -196,7 +196,7 @@ export const useWatchlistStore = create<WatchListState & WatchListActions>((set,
             const { data, error_code } = await fetchPaperAccountPortfolio(accountId);
             if (!isSuccessApi(error_code)) return;
 
-            const symbols = (data || []).map((item) => item.symbol);
+            const symbols = (data?.portfolio ?? []).map((item) => item.symbol);
 
             let items: WatchlistStockItem[] = [];
             if (symbols.length > 0) {

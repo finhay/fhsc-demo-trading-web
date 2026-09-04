@@ -37,6 +37,10 @@ export const calcPortfolioHoldingQuantity = (portfolio: PortfolioItem): number =
     portfolio.matching_amount;
 
 export const calcPortfolioMarketValue = (portfolio: PortfolioItem): number => {
+    // Simulator có thể trả basic_price = 0; ưu tiên basic_price_amount từ API.
+    if (portfolio.basic_price_amount != null) {
+        return portfolio.basic_price_amount;
+    }
     return calcPortfolioHoldingQuantity(portfolio) * portfolio.basic_price;
 };
 

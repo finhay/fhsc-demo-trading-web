@@ -21,8 +21,45 @@ export type UpdatePaperOrderPayload = {
     quantity?: number;
 };
 
+/** Item sổ lệnh từ `GET /v1/accounts/{id}/orders`. */
+export type PaperOrderBookItem = {
+    side_code: string;
+    status_code: string;
+    lot_type: string;
+    fee_amount: number;
+    tax_amount: number;
+    odorderid: string;
+    symbol: string;
+    /** Nhãn hiển thị: "Mua" | "Bán" */
+    side: string;
+    price: number;
+    pricetype: string;
+    qtty: number;
+    execqtty: number;
+    execamt: number;
+    execprice: number | null;
+    remainqtty: number;
+    remainamt: number;
+    /** Nhãn trạng thái hiển thị từ BE */
+    status: string;
+    allowcancel: string;
+    allowamend: string;
+    feedbackmsg: string | null;
+    txdate: string;
+    txtime: string;
+};
+
+export type PaperOrderBookResponse = PaperTradingResponse<PaperOrderBookItem[]>;
+
+export type PaperOrderBookItemResponse = PaperTradingResponse<PaperOrderBookItem>;
+
+/**
+ * Shape cũ — còn dùng cho place/history khi BE chưa đổi hết.
+ * Ưu tiên `id` / `order_id` / `cl_ord_id` khi resolve id.
+ */
 export type PaperOrder = {
-    id: string;
+    id?: string;
+    order_id?: string;
     cl_ord_id: string;
     account_id: string;
     symbol: string;
@@ -38,8 +75,6 @@ export type PaperOrder = {
 };
 
 export type PaperOrderResponse = PaperTradingResponse<PaperOrder>;
-
-export type PaperOrderBookResponse = PaperTradingResponse<PaperOrder[]>;
 
 export type PaperOrderHistoryParams = {
     /** YYYY-MM-DD — bắt buộc */

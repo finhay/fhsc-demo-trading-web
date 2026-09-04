@@ -11,10 +11,16 @@ import type {
     TradeMatchedHistoryTableRow,
     TradeOrderBookRow,
 } from '@/types/pages/trading';
-import type { PaperOrder } from '@/types/paper-trading/orders';
+import type { PaperOrder, PaperOrderBookItem } from '@/types/paper-trading/orders';
 import { formatBoardPrice, formatNumberVN } from '@/utils/format';
 
 const warnedStatuses = new Set<string>();
+
+export const resolvePaperOrderId = (order: PaperOrder): string =>
+    String(order.id || order.order_id || order.cl_ord_id || '').trim();
+
+export const resolvePaperOrderBookId = (order: PaperOrderBookItem): string =>
+    String(order.odorderid ?? '').trim();
 
 export const normalizePaperStatus = (raw?: string | null): string =>
     String(raw ?? '')
@@ -22,9 +28,11 @@ export const normalizePaperStatus = (raw?: string | null): string =>
         .toUpperCase()
         .replace(/[\s-]+/g, '_');
 
+const isYesFlag = (value?: string | null): boolean => String(value ?? '').trim().toUpperCase() === 'Y';
+
 /**
- * BE chưa chốt bộ `order_status`. Tra bảng nhãn, không khớp thì trả nguyên chuỗi của server —
- * không tự suy diễn trạng thái, và cũng không bao giờ trả ô trống.
+ * Lịch sử lệnh (shape cũ): tra bảng nhãn theo `order_status`.
+ * Không khớp thì trả nguyên chuỗi server.
  */
 export const getPaperOrderStatus = (order: PaperOrder): OrderStatusView => {
     const key = normalizePaperStatus(order.order_status);
@@ -39,33 +47,45 @@ export const getPaperOrderStatus = (order: PaperOrder): OrderStatusView => {
     return { text: String(order.order_status || '--'), tone: 'neutral' };
 };
 
-/**
- * API paper không trả `allowcancel` / `allowamend` nên FE tự suy. Cố tình nới tay: thà hiện
- * nút rồi để server từ chối, còn hơn ẩn nút khiến người dùng kẹt lệnh không huỷ được.
- */
-export const isPaperOrderActive = (order: PaperOrder): boolean =>
-    !PAPER_TERMINAL_STATUSES.has(normalizePaperStatus(order.order_status));
+/** Sổ lệnh: text lấy `status`, tone suy từ `status_code`. */
+export const getPaperOrderBookStatus = (order: PaperOrderBookItem): OrderStatusView => {
+    const key = normalizePaperStatus(order.status_code);
+    const mapped = PAPER_ORDER_STATUS_LABEL[key];
+    return {
+        text: String(order.status || mapped?.text || '--'),
+        tone: (mapped?.tone as OrderStatusTone) || 'neutral',
+    };
+};
 
-export const mapPaperOrderToRow = (order: PaperOrder): TradeOrderBookRow => {
-    const isActive = isPaperOrderActive(order);
+export const isPaperOrderBookActive = (order: PaperOrderBookItem): boolean =>
+    isYesFlag(order.allowcancel) ||
+    isYesFlag(order.allowamend) ||
+    !PAPER_TERMINAL_STATUSES.has(normalizePaperStatus(order.status_code));
+
+export const mapPaperOrderToRow = (order: PaperOrderBookItem): TradeOrderBookRow => {
+    const allowCancel = isYesFlag(order.allowcancel);
+    const allowAmend = isYesFlag(order.allowamend);
+    const isActive = allowCancel || allowAmend;
+    const execPrice = order.execprice;
 
     return {
-        orderId: String(order.id ?? ''),
+        orderId: resolvePaperOrderBookId(order),
         symbol: order.symbol,
-        filledQty: formatNumberVN(order.fill_quantity ?? 0, { decimals: 0 }),
-        totalQty: formatNumberVN(order.quantity ?? 0, { decimals: 0 }),
-        // API paper không trả giá khớp trung bình — để trống, ô sẽ chỉ hiện giá đặt.
-        filledPrice: '',
+        filledQty: formatNumberVN(order.execqtty ?? 0, { decimals: 0 }),
+        totalQty: formatNumberVN(order.qtty ?? 0, { decimals: 0 }),
+        filledPrice: execPrice != null && execPrice > 0 ? formatBoardPrice(execPrice) : '',
         placedPrice: formatBoardPrice(order.price ?? 0),
         marketPrice: null,
         rawPrice: order.price ?? 0,
-        rawQty: order.quantity ?? 0,
-        type: order.side === PAPER_ORDER_SIDE.BUY ? ORDER_TYPE.BUY : ORDER_TYPE.SELL,
-        status: order.order_status ?? '',
+        rawQty: order.qtty ?? 0,
+        // Loại lệnh — lấy thẳng nhãn `side` từ BE ("Mua" / "Bán")
+        type: order.side || (order.side_code === PAPER_ORDER_SIDE.BUY ? ORDER_TYPE.BUY : ORDER_TYPE.SELL),
+        // Trạng thái — lấy thẳng `status` từ BE
+        status: order.status ?? '',
         isActive,
-        allowCancel: isActive,
-        allowAmend: isActive,
-        priceType: order.type ?? PAPER_ORDER_TYPE.LO,
+        allowCancel,
+        allowAmend,
+        priceType: order.pricetype ?? PAPER_ORDER_TYPE.LO,
         paperOrder: order,
     };
 };
@@ -75,15 +95,15 @@ export const mapPaperOrderToRow = (order: PaperOrder): TradeOrderBookRow => {
  * lọc lệnh có KL khớp > 0, gom theo mã và chèn một dòng "Tổng" cho mỗi mã.
  */
 export const groupPaperOrdersBySymbol = (
-    orders: PaperOrder[],
+    orders: PaperOrderBookItem[],
     side: string,
 ): TradeMatchedHistoryTableRow[] => {
     const wantedSide = side === ORDER_SIDE.BUY ? PAPER_ORDER_SIDE.BUY : PAPER_ORDER_SIDE.SELL;
-    const bySymbol = new Map<string, PaperOrder[]>();
+    const bySymbol = new Map<string, PaperOrderBookItem[]>();
 
     for (const order of orders) {
-        if (order.side !== wantedSide) continue;
-        if ((order.fill_quantity ?? 0) <= 0) continue;
+        if (order.side_code !== wantedSide) continue;
+        if ((order.execqtty ?? 0) <= 0) continue;
         if (!bySymbol.has(order.symbol)) bySymbol.set(order.symbol, []);
         bySymbol.get(order.symbol)!.push(order);
     }
@@ -91,11 +111,11 @@ export const groupPaperOrdersBySymbol = (
     return Array.from(bySymbol.entries()).flatMap(([symbol, items]) => {
         const rows = items.map((order) => ({
             symbol,
-            order_id: String(order.id ?? ''),
+            order_id: resolvePaperOrderBookId(order),
             isTotal: false,
-            quantity: order.fill_quantity ?? 0,
-            price: order.price ?? 0,
-            volume: (order.fill_quantity ?? 0) * (order.price ?? 0),
+            quantity: order.execqtty ?? 0,
+            price: order.execprice ?? order.price ?? 0,
+            volume: (order.execqtty ?? 0) * (order.execprice ?? order.price ?? 0),
         }));
 
         const totalQuantity = rows.reduce((sum, row) => sum + row.quantity, 0);

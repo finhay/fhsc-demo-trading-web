@@ -3,13 +3,13 @@
 import { Fragment } from 'react';
 
 import { Dialog } from '@/components/common/ui/Dialog';
-import type { PaperOrder } from '@/types/paper-trading/orders';
-import { formatDateTime, formatNumberVN } from '@/utils/format';
-import { getPaperOrderStatus } from '@/utils/paper-trading/order-book';
+import type { PaperOrderBookItem } from '@/types/paper-trading/orders';
+import { formatNumberVN } from '@/utils/format';
+import { getPaperOrderBookStatus, resolvePaperOrderBookId } from '@/utils/paper-trading/order-book';
 import { getOrderStatusColor } from '@/utils/trading/order-book';
 
 type Props = {
-    items: PaperOrder[];
+    items: PaperOrderBookItem[];
     onClose: () => void;
 };
 
@@ -67,25 +67,32 @@ export const TradeDetailOrderModal = ({ items, onClose }: Props) => {
         },
     ];
 
-    const renderRow = (item: PaperOrder) => {
-        const status = getPaperOrderStatus(item);
-        const timeText = item.created_date ? formatDateTime(item.created_date) : '--';
+    const renderRow = (item: PaperOrderBookItem) => {
+        const status = getPaperOrderBookStatus(item);
+        const timeText =
+            item.txdate && item.txtime
+                ? `${item.txdate} ${item.txtime.split('.')[0]}`
+                : item.txdate || '--';
+        const execPrice = item.execprice;
 
         return (
             <>
                 <td className={`${CELL_CLASS} w-2/12`}>{timeText}</td>
-                <td className={`${CELL_CLASS} w-1/12`}>{item.type}</td>
+                <td className={`${CELL_CLASS} w-1/12`}>{item.side}</td>
                 <td className={`${CELL_CLASS} w-1/12`}>
-                    {formatNumberVN(item.quantity, { decimals: 0 })}
+                    {formatNumberVN(item.qtty, { decimals: 0 })}
                 </td>
                 <td className={`${CELL_CLASS} w-1/12`}>{formatNumberVN(item.price / 1000)}</td>
                 <td className={`${CELL_CLASS} w-2/12`}>
-                    {formatNumberVN(item.fill_quantity, { decimals: 0 })}
+                    {formatNumberVN(item.execqtty, { decimals: 0 })}
                 </td>
-                {/* API paper không trả giá khớp trung bình */}
-                <td className={`${CELL_CLASS} w-2/12`}>{'--'}</td>
+                <td className={`${CELL_CLASS} w-2/12`}>
+                    {execPrice != null && execPrice > 0
+                        ? formatNumberVN(execPrice / 1000)
+                        : '--'}
+                </td>
                 <td className={`${CELL_CLASS} w-1/12`}>
-                    {formatNumberVN(item.leave_quantity, { decimals: 0 })}
+                    {formatNumberVN(item.remainqtty, { decimals: 0 })}
                 </td>
                 <td className="w-2/12 py-0 font-caption whitespace-nowrap text-right">
                     <span className={getOrderStatusColor(status.tone)}>{status.text}</span>
@@ -119,7 +126,7 @@ export const TradeDetailOrderModal = ({ items, onClose }: Props) => {
                     </thead>
                     <tbody>
                         {items.map((item, index) => (
-                            <Fragment key={item.id || index}>
+                            <Fragment key={resolvePaperOrderBookId(item) || index}>
                                 {index > 0 && (
                                     <tr aria-hidden>
                                         <td colSpan={columns.length} className="p-0">

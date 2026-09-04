@@ -1,5 +1,6 @@
 import { paperTradingService } from '@/services/interceptor';
 import type {
+    PaperOrderBookItemResponse,
     PaperOrderBookResponse,
     PaperOrderHistoryParams,
     PaperOrderHistoryResponse,
@@ -39,7 +40,7 @@ export const fetchPaperOrderBook = (
 export const fetchPaperOrderDetail = (
     subAccountId: string,
     orderId: string,
-): Promise<PaperOrderResponse> => {
+): Promise<PaperOrderBookItemResponse> => {
     return new Promise((resolve, reject) => {
         paperTradingService
             .get(`/v1/accounts/${subAccountId}/orders/${orderId}`)
@@ -52,7 +53,7 @@ export const updatePaperOrder = (
     subAccountId: string,
     orderId: string,
     payload: UpdatePaperOrderPayload,
-): Promise<PaperOrderResponse> => {
+): Promise<PaperOrderBookItemResponse> => {
     return new Promise((resolve, reject) => {
         paperTradingService
             .patch(`/v1/accounts/${subAccountId}/orders/${orderId}`, payload)
@@ -64,7 +65,7 @@ export const updatePaperOrder = (
 export const cancelPaperOrder = (
     subAccountId: string,
     orderId: string,
-): Promise<PaperOrderResponse> => {
+): Promise<PaperOrderBookItemResponse> => {
     return new Promise((resolve, reject) => {
         paperTradingService
             .delete(`/v1/accounts/${subAccountId}/orders/${orderId}`)

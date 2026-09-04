@@ -159,7 +159,7 @@ export const TradePanel = ({ initialSide, initialPrice }: TradePanelProps = {}) 
     );
 
     /**
-     * API paper chỉ có sức mua chiều MUA. Chiều BÁN suy từ `available_quantity` của mã
+     * API paper chỉ có sức mua chiều MUA. Chiều BÁN suy từ `available` của mã
      * trong danh mục; số dư tiền lấy thẳng từ endpoint asset.
      */
     const fetchTradeCapacity = useCallback(
@@ -180,8 +180,8 @@ export const TradePanel = ({ initialSide, initialPrice }: TradePanelProps = {}) 
 
                 const { error_code, data } = await fetchPaperAccountPortfolio(paperAccountId);
                 if (isSuccessApi(error_code)) {
-                    const holding = (data ?? []).find((item) => item.symbol === symbol);
-                    setMaxSell(holding?.available_quantity ?? 0);
+                    const holding = (data?.portfolio ?? []).find((item) => item.symbol === symbol);
+                    setMaxSell(holding?.available ?? 0);
                 }
             } catch {
                 setMaxQtty(0);

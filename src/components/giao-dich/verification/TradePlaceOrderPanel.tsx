@@ -10,10 +10,8 @@ import { useLoadingStore } from '@/stores/common/useLoadingStore';
 import { usePaperAccountStore } from '@/stores/paper-trading/usePaperAccountStore';
 import { useTradingStore } from '@/stores/trading/useTradingStore';
 import type { PendingOrder, PlacementOrder } from '@/types/pages/trading';
-import type { PaperOrder } from '@/types/paper-trading/orders';
 import { getApiErrorMessage, isSuccessApi } from '@/utils/common';
 import { formatNumberVN } from '@/utils/format';
-import { mapPaperOrderToRow } from '@/utils/paper-trading/order-book';
 import { buildPlacementOrders } from '@/utils/trading/panel';
 
 type Props = {
@@ -24,7 +22,7 @@ type Props = {
 };
 
 export const TradePlaceOrderPanel = ({ symbol, pendingOrder, onClose, onSuccess }: Props) => {
-    const { addPlacedOrdersToBook, fetchOrders } = useTradingStore();
+    const { fetchOrders } = useTradingStore();
     const { accountId, fetchAsset } = usePaperAccountStore();
     const { side, price, orderType, orderLots } = pendingOrder;
     const { startLoading, stopLoading, isLoading } = useLoadingStore();
@@ -52,11 +50,10 @@ export const TradePlaceOrderPanel = ({ symbol, pendingOrder, onClose, onSuccess 
         startLoading();
 
         let placedCount = 0;
-        const acceptedItems: PaperOrder[] = [];
 
         try {
             for (const order of placementOrders) {
-                const { error_code, message, data } = await placePaperOrder(accountId, {
+                const { error_code, message } = await placePaperOrder(accountId, {
                     cl_ord_id: '',
                     side: isBuy ? PAPER_ORDER_SIDE.BUY : PAPER_ORDER_SIDE.SELL,
                     symbol,
@@ -67,7 +64,6 @@ export const TradePlaceOrderPanel = ({ symbol, pendingOrder, onClose, onSuccess 
                 });
 
                 if (isSuccessApi(error_code)) {
-                    if (data) acceptedItems.push(data);
                     placedCount += 1;
                 } else {
                     toast.error(message || 'Có lỗi xảy ra, vui lòng thử lại');
@@ -76,10 +72,10 @@ export const TradePlaceOrderPanel = ({ symbol, pendingOrder, onClose, onSuccess 
             }
 
             if (placedCount === placementOrders.length) {
-                addPlacedOrdersToBook(acceptedItems.map(mapPaperOrderToRow));
                 toast.success('Đặt lệnh thành công', {
                     description: placeSuccessDetail,
                 });
+                // Refresh sổ lệnh từ API list (shape PaperOrderBookItem).
                 fetchOrders(accountId, { silent: true });
                 fetchAsset();
                 onSuccess();

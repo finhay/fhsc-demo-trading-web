@@ -8,13 +8,12 @@ import { TradeDetailOrderModal } from '@/components/giao-dich/order-book/modals/
 import { TradeUpdateOrderModal } from '@/components/giao-dich/order-book/modals/TradeUpdateOrderModal';
 import { TradeOrderBookRowNormal } from '@/components/giao-dich/order-book/rows/TradeOrderBookRowNormal';
 import { toast } from '@/hooks/lib/useToast';
-import { usePaperOrderPolling } from '@/hooks/trading/usePaperOrderPolling';
 import { fetchPaperOrderDetail } from '@/services/api/paper-trading/orders';
 import { useLoadingStore } from '@/stores/common/useLoadingStore';
 import { usePaperAccountStore } from '@/stores/paper-trading/usePaperAccountStore';
 import { useTradingStore } from '@/stores/trading/useTradingStore';
 import type { TradeOrderBookRow } from '@/types/pages/trading';
-import type { PaperOrder } from '@/types/paper-trading/orders';
+import type { PaperOrderBookItem } from '@/types/paper-trading/orders';
 import { getApiErrorMessage, isSuccessApi } from '@/utils/common';
 
 const ORDER_BOOK_COLUMN_COUNT = 6;
@@ -22,14 +21,12 @@ const ORDER_BOOK_COLUMN_COUNT = 6;
 export const TradeOrderBook = () => {
     const [updateOrder, setUpdateOrder] = useState<TradeOrderBookRow | null>(null);
     const [cancelOrder, setCancelOrder] = useState<TradeOrderBookRow | null>(null);
-    const [detailOrderItems, setDetailOrderItems] = useState<PaperOrder[] | null>(null);
+    const [detailOrderItems, setDetailOrderItems] = useState<PaperOrderBookItem[] | null>(null);
     const scrollContainerRef = useRef<HTMLDivElement>(null);
 
     const { startLoading, stopLoading } = useLoadingStore();
     const { accountId } = usePaperAccountStore();
     const { orders, isLoadingOrders, fetchOrders } = useTradingStore();
-
-    usePaperOrderPolling(accountId);
 
     const handleOpenOrderDetail = async (orderId: string) => {
         startLoading();
@@ -107,9 +104,9 @@ export const TradeOrderBook = () => {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {orders.map((order) => (
+                                    {orders.map((order, index) => (
                                         <TradeOrderBookRowNormal
-                                            key={order.orderId}
+                                            key={order.orderId || `order-${index}`}
                                             order={order}
                                             onOpenDetail={handleOpenOrderDetail}
                                             onEdit={setUpdateOrder}
