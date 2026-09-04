@@ -87,9 +87,7 @@ export const TradeDetailOrderModal = ({ items, onClose }: Props) => {
                     {formatNumberVN(item.execqtty, { decimals: 0 })}
                 </td>
                 <td className={`${CELL_CLASS} w-2/12`}>
-                    {execPrice != null && execPrice > 0
-                        ? formatNumberVN(execPrice / 1000)
-                        : '--'}
+                    {execPrice != null && execPrice > 0 ? formatNumberVN(execPrice / 1000) : '--'}
                 </td>
                 <td className={`${CELL_CLASS} w-1/12`}>
                     {formatNumberVN(item.remainqtty, { decimals: 0 })}

@@ -23,6 +23,7 @@ export const PAPER_HISTORY_RANGE_DAYS = 30;
  * Text nhãn lấy thẳng từ field `status` của BE.
  */
 export const PAPER_ORDER_STATUS_TONE: Record<string, 'success' | 'error'> = {
+    '2': 'success',
     '4': 'success',
     '12': 'success',
     '3': 'error',
@@ -32,10 +33,4 @@ export const PAPER_ORDER_STATUS_TONE: Record<string, 'success' | 'error'> = {
 };
 
 /** Trạng thái cuối — không cho sửa/huỷ nữa (fallback khi thiếu allowcancel/allowamend). */
-export const PAPER_TERMINAL_STATUSES: ReadonlySet<string> = new Set([
-    '3',
-    '5',
-    '6',
-    '12',
-    '100',
-]);
+export const PAPER_TERMINAL_STATUSES: ReadonlySet<string> = new Set(['3', '5', '6', '12', '100']);

@@ -27,14 +27,14 @@ src/app/{route}/page.tsx          # Server Component — metadata + compose
 
 ## 1. Routes & page file
 
-| Quy tắc       | Chi tiết                                                                                                    |
-| ------------- | ----------------------------------------------------------------------------------------------------------- |
-| Thư mục route | **kebab-case**, khớp URL: `bang-gia`, `giao-dich`, `tai-san`; dynamic dùng `[param]`                        |
-| Entry         | `src/app/{route}/page.tsx` — **Server Component**, không có `'use client'`                                  |
+| Quy tắc       | Chi tiết                                                                                                     |
+| ------------- | ------------------------------------------------------------------------------------------------------------ |
+| Thư mục route | **kebab-case**, khớp URL: `bang-gia`, `giao-dich`, `tai-san`; dynamic dùng `[param]`                         |
+| Entry         | `src/app/{route}/page.tsx` — **Server Component**, không có `'use client'`                                   |
 | Metadata      | `export const metadata: Metadata = { title, description }` — chỉ tên page cơ bản, **không** OG/canonical/SEO |
-| View          | UI thật đặt ở `src/components/{feature}/{Feature}View.tsx` với `'use client'`                               |
+| View          | UI thật đặt ở `src/components/{feature}/{Feature}View.tsx` với `'use client'`                                |
 | Loading       | Không cần tạo — `src/app/loading.tsx` (root) đã phủ mọi route con                                            |
-| Text          | Viết thẳng chuỗi tiếng Việt trong component; map/label động đặt trong `const` cùng file hoặc `constants/`   |
+| Text          | Viết thẳng chuỗi tiếng Việt trong component; map/label động đặt trong `const` cùng file hoặc `constants/`    |
 
 Vì sao tách `*View`: `page.tsx` phải là Server Component để `export const metadata`, còn UI cần
 hook / browser API nên phải `'use client'`. `page.tsx` giữ **mỏng** — chỉ metadata + render view.

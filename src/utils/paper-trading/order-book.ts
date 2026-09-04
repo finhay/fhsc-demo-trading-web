@@ -20,7 +20,10 @@ export const resolvePaperOrderBookId = (order: PaperOrderBookItem): string =>
 
 const normalizeStatusCode = (raw?: string | null): string => String(raw ?? '').trim();
 
-const isYesFlag = (value?: string | null): boolean => String(value ?? '').trim().toUpperCase() === 'Y';
+const isYesFlag = (value?: string | null): boolean =>
+    String(value ?? '')
+        .trim()
+        .toUpperCase() === 'Y';
 
 /** Text từ `status`, màu từ `status_code`. */
 export const getPaperStatusView = (
@@ -53,7 +56,9 @@ export const mapPaperOrderToRow = (order: PaperOrderBookItem): TradeOrderBookRow
         rawPrice: order.price ?? 0,
         rawQty: order.qtty ?? 0,
         // Loại lệnh — lấy thẳng nhãn `side` từ BE ("Mua" / "Bán")
-        type: order.side || (order.side_code === PAPER_ORDER_SIDE.BUY ? ORDER_TYPE.BUY : ORDER_TYPE.SELL),
+        type:
+            order.side ||
+            (order.side_code === PAPER_ORDER_SIDE.BUY ? ORDER_TYPE.BUY : ORDER_TYPE.SELL),
         // Trạng thái — lấy thẳng `status` từ BE
         status: order.status ?? '',
         isActive,
