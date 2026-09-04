@@ -6,7 +6,7 @@ import { useEffect } from 'react';
 import { StockDetailModal } from '@/components/common/modal/StockDetailModal';
 // import { AssetPnl } from '@/components/tai-san/AssetPnl';
 // import { AssetStocks } from '@/components/tai-san/AssetStocks';
-import { AssetTransactions } from '@/components/tai-san/AssetTransactions';
+// import { AssetTransactions } from '@/components/tai-san/AssetTransactions';
 import { AssetAllocation } from '@/components/tai-san/overview/AssetAllocation';
 // import { AssetDebt } from '@/components/tai-san/overview/AssetDebt';
 import { AssetOverview } from '@/components/tai-san/overview/AssetOverview';
@@ -38,7 +38,8 @@ export const AssetView = () => {
                     <AssetAllocation data={assetsSummary} isLoading={isSummaryLoading} />
                     {/* Demo Figma không có khối Nợ */}
                     {/* <AssetDebt /> */}
-                    <AssetTransactions />
+                    {/* Demo không có Lịch sử tiền */}
+                    {/* <AssetTransactions /> */}
                 </section>
                 <section className="flex flex-1 min-w-0 flex-col gap-2 h-full min-h-0 overflow-y-auto">
                     <header className="flex shrink-0 items-center gap-4">
