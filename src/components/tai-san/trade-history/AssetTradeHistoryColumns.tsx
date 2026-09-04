@@ -5,11 +5,11 @@ import { PAPER_ORDER_SIDE } from '@/constants/paper-trading';
 import type { SortableColMeta } from '@/types/pages/common';
 import type { PaperOrder } from '@/types/paper-trading/orders';
 import { formatDateOrDash, formatNumberVN } from '@/utils/format';
-import { getPaperOrderStatus, resolvePaperOrderId } from '@/utils/paper-trading/order-book';
+import { getPaperStatusView, resolvePaperOrderId } from '@/utils/paper-trading/order-book';
 import { getOrderStatusColor } from '@/utils/trading/order-book';
 
 const renderOrderStatus = (order: PaperOrder) => {
-    const status = getPaperOrderStatus(order);
+    const status = getPaperStatusView(order.status, order.status_code);
     return (
         <span
             className={`inline-flex items-center justify-center whitespace-nowrap font-body-3 ${getOrderStatusColor(status.tone)}`}
@@ -54,8 +54,8 @@ export const getPaperOrderHistoryColumns = (): ColumnDef<PaperOrder, unknown>[] 
         cell: ({ getValue }) => (getValue<string>() === PAPER_ORDER_SIDE.BUY ? 'Mua' : 'Bán'),
     },
     {
-        id: 'type',
-        accessorKey: 'type',
+        id: 'order_type',
+        accessorKey: 'order_type',
         header: ({ column }) => (
             <SortableHeader label={'Loại lệnh'} column={column} align="right" />
         ),
@@ -90,8 +90,8 @@ export const getPaperOrderHistoryColumns = (): ColumnDef<PaperOrder, unknown>[] 
             formatNumberVN(getValue<number>() ?? 0, { trimTrailingZeros: true }),
     },
     {
-        id: 'order_status',
-        accessorKey: 'order_status',
+        id: 'status',
+        accessorKey: 'status',
         header: ({ column }) => (
             <SortableHeader label={'Trạng thái'} column={column} align="right" />
         ),

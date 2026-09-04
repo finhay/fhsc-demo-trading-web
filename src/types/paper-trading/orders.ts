@@ -53,25 +53,33 @@ export type PaperOrderBookResponse = PaperTradingResponse<PaperOrderBookItem[]>;
 
 export type PaperOrderBookItemResponse = PaperTradingResponse<PaperOrderBookItem>;
 
-/**
- * Shape cũ — còn dùng cho place/history khi BE chưa đổi hết.
- * Ưu tiên `id` / `order_id` / `cl_ord_id` khi resolve id.
- */
+/** Item lịch sử lệnh từ `GET /v1/accounts/{id}/orders/history`. */
 export type PaperOrder = {
-    id?: string;
-    order_id?: string;
-    cl_ord_id: string;
+    id: string;
     account_id: string;
     symbol: string;
     side: PaperOrderSide;
-    type: PaperOrderType;
+    order_type: PaperOrderType;
+    lot_type: string;
+    /** Mã trạng thái tiếng Anh: New | Filled | Expired | … */
     order_status: string;
+    status_code: string;
+    /** Nhãn trạng thái hiển thị từ BE */
+    status: string;
     quantity: number;
     price: number;
     fill_quantity: number;
     leave_quantity: number;
+    last_price: number | null;
+    average_price: number | null;
+    fill_value: number;
     fee_amount: number;
+    tax_amount: number;
+    board_code: string | null;
+    exec_type: string | null;
     created_date: string;
+    error: string | null;
+    text: string | null;
 };
 
 export type PaperOrderResponse = PaperTradingResponse<PaperOrder>;
@@ -85,10 +93,12 @@ export type PaperOrderHistoryParams = {
     page?: number;
 };
 
-/** Shape phân trang suy ra từ nghiệp vụ — BE chưa trả mẫu response trong Postman collection. */
 export type PaperOrderHistoryData = {
     data: PaperOrder[];
-    nextPage: number;
+    page: number;
+    size: number;
+    total: number;
+    totalPages: number;
 };
 
 export type PaperOrderHistoryResponse = PaperTradingResponse<PaperOrderHistoryData>;

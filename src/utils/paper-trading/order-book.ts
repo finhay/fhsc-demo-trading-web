@@ -1,12 +1,11 @@
 import {
     PAPER_ORDER_SIDE,
-    PAPER_ORDER_STATUS_LABEL,
+    PAPER_ORDER_STATUS_TONE,
     PAPER_ORDER_TYPE,
     PAPER_TERMINAL_STATUSES,
 } from '@/constants/paper-trading';
 import { ORDER_SIDE, ORDER_TYPE } from '@/constants/trading';
 import type {
-    OrderStatusTone,
     OrderStatusView,
     TradeMatchedHistoryTableRow,
     TradeOrderBookRow,
@@ -14,53 +13,28 @@ import type {
 import type { PaperOrder, PaperOrderBookItem } from '@/types/paper-trading/orders';
 import { formatBoardPrice, formatNumberVN } from '@/utils/format';
 
-const warnedStatuses = new Set<string>();
-
-export const resolvePaperOrderId = (order: PaperOrder): string =>
-    String(order.id || order.order_id || order.cl_ord_id || '').trim();
+export const resolvePaperOrderId = (order: PaperOrder): string => String(order.id ?? '').trim();
 
 export const resolvePaperOrderBookId = (order: PaperOrderBookItem): string =>
     String(order.odorderid ?? '').trim();
 
-export const normalizePaperStatus = (raw?: string | null): string =>
-    String(raw ?? '')
-        .trim()
-        .toUpperCase()
-        .replace(/[\s-]+/g, '_');
+const normalizeStatusCode = (raw?: string | null): string => String(raw ?? '').trim();
 
 const isYesFlag = (value?: string | null): boolean => String(value ?? '').trim().toUpperCase() === 'Y';
 
-/**
- * Lịch sử lệnh (shape cũ): tra bảng nhãn theo `order_status`.
- * Không khớp thì trả nguyên chuỗi server.
- */
-export const getPaperOrderStatus = (order: PaperOrder): OrderStatusView => {
-    const key = normalizePaperStatus(order.order_status);
-    const mapped = PAPER_ORDER_STATUS_LABEL[key];
-    if (mapped) return { text: mapped.text, tone: mapped.tone as OrderStatusTone };
-
-    if (process.env.NODE_ENV !== 'production' && key && !warnedStatuses.has(key)) {
-        warnedStatuses.add(key);
-        console.warn('[paper-trading] order_status chưa có trong bảng nhãn:', order.order_status);
-    }
-
-    return { text: String(order.order_status || '--'), tone: 'neutral' };
-};
-
-/** Sổ lệnh: text lấy `status`, tone suy từ `status_code`. */
-export const getPaperOrderBookStatus = (order: PaperOrderBookItem): OrderStatusView => {
-    const key = normalizePaperStatus(order.status_code);
-    const mapped = PAPER_ORDER_STATUS_LABEL[key];
-    return {
-        text: String(order.status || mapped?.text || '--'),
-        tone: (mapped?.tone as OrderStatusTone) || 'neutral',
-    };
-};
+/** Text từ `status`, màu từ `status_code`. */
+export const getPaperStatusView = (
+    status?: string | null,
+    statusCode?: string | null,
+): OrderStatusView => ({
+    text: String(status?.trim() || '--'),
+    tone: PAPER_ORDER_STATUS_TONE[normalizeStatusCode(statusCode)] ?? 'neutral',
+});
 
 export const isPaperOrderBookActive = (order: PaperOrderBookItem): boolean =>
     isYesFlag(order.allowcancel) ||
     isYesFlag(order.allowamend) ||
-    !PAPER_TERMINAL_STATUSES.has(normalizePaperStatus(order.status_code));
+    !PAPER_TERMINAL_STATUSES.has(normalizeStatusCode(order.status_code));
 
 export const mapPaperOrderToRow = (order: PaperOrderBookItem): TradeOrderBookRow => {
     const allowCancel = isYesFlag(order.allowcancel);

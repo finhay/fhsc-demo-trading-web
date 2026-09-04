@@ -5,7 +5,7 @@ import { Fragment } from 'react';
 import { Dialog } from '@/components/common/ui/Dialog';
 import type { PaperOrderBookItem } from '@/types/paper-trading/orders';
 import { formatNumberVN } from '@/utils/format';
-import { getPaperOrderBookStatus, resolvePaperOrderBookId } from '@/utils/paper-trading/order-book';
+import { getPaperStatusView, resolvePaperOrderBookId } from '@/utils/paper-trading/order-book';
 import { getOrderStatusColor } from '@/utils/trading/order-book';
 
 type Props = {
@@ -68,7 +68,7 @@ export const TradeDetailOrderModal = ({ items, onClose }: Props) => {
     ];
 
     const renderRow = (item: PaperOrderBookItem) => {
-        const status = getPaperOrderBookStatus(item);
+        const status = getPaperStatusView(item.status, item.status_code);
         const timeText =
             item.txdate && item.txtime
                 ? `${item.txdate} ${item.txtime.split('.')[0]}`

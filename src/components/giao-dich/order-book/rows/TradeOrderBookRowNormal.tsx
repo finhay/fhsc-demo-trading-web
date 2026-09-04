@@ -3,7 +3,7 @@
 import { TradeOrderBookRowActions } from '@/components/giao-dich/order-book/rows/TradeOrderBookRowActions';
 import { ORDER_TYPE } from '@/constants/trading';
 import type { TradeOrderBookRow } from '@/types/pages/trading';
-import { getPaperOrderBookStatus } from '@/utils/paper-trading/order-book';
+import { getPaperStatusView } from '@/utils/paper-trading/order-book';
 import { formatPlacedPriceCell, getOrderStatusColor } from '@/utils/trading/order-book';
 
 type Props = {
@@ -15,7 +15,7 @@ type Props = {
 
 export const TradeOrderBookRowNormal = ({ order, onOpenDetail, onEdit, onCancel }: Props) => {
     const status = order.paperOrder
-        ? getPaperOrderBookStatus(order.paperOrder)
+        ? getPaperStatusView(order.paperOrder.status, order.paperOrder.status_code)
         : { text: order.status, tone: 'neutral' as const };
     const canEdit = Boolean(order.allowAmend);
     const canCancel = Boolean(order.allowCancel);

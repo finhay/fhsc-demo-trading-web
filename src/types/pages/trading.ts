@@ -35,7 +35,7 @@ export type TradeMatchedHistoryTableRow = {
     volume: number;
 };
 
-export type OrderStatusTone = 'success' | 'error' | 'pending' | 'neutral';
+export type OrderStatusTone = 'success' | 'error' | 'neutral';
 
 export type OrderStatusView = { text: string; tone: OrderStatusTone };
 

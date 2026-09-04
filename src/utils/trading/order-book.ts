@@ -4,15 +4,7 @@ import type { OrderStatusTone, TradeOrderBookRow } from '@/types/pages/trading';
 export const getOrderStatusColor = (tone: OrderStatusTone): string => {
     if (tone === 'success') return 'text-green';
     if (tone === 'error') return 'text-red';
-    if (tone === 'pending') return 'text-yellow';
     return 'text-secondary';
-};
-
-export const getOrderStatusBorder = (tone: OrderStatusTone): string => {
-    if (tone === 'success') return 'border-green';
-    if (tone === 'error') return 'border-red';
-    if (tone === 'pending') return 'border-yellow';
-    return 'border-secondary';
 };
 
 export const formatPlacedPriceCell = (
