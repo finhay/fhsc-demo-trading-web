@@ -24,4 +24,9 @@ COPY . .
 RUN npm run build
 
 EXPOSE 3000
+
+# Container tự báo unhealthy nếu /api/health không trả 2xx (dùng cho docker / orchestrator)
+HEALTHCHECK --interval=30s --timeout=5s --start-period=30s --retries=3 \
+    CMD wget -qO /dev/null http://127.0.0.1:3000/api/health || exit 1
+
 CMD ["npm", "start"]

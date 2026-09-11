@@ -1,5 +1,7 @@
-import { NextResponse } from 'next/server';
+/**
+ * Legacy path — giữ tương thích cho cấu hình ALB/ECS đang trỏ `/api/healthCheck`.
+ * Endpoint chuẩn là `/api/health` (xem `@/app/api/health/route`).
+ */
+export { GET } from '@/app/api/health/route';
 
-export function GET() {
-    return NextResponse.json({ name: 'service up' });
-}
+export const dynamic = 'force-dynamic';
