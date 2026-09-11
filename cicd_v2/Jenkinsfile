@@ -72,9 +72,9 @@ pipeline {
             silentResponse: false,
             shouldNotFlatten: false,
 
-            // Chỉ trigger release published của repo fhsc-demo-trading, tag prod vX.Y.Z và KHÔNG chứa alpha
+            // Chỉ trigger release published của repo finhay/fhsc-demo-trading-web, tag prod vX.Y.Z và KHÔNG chứa alpha
             regexpFilterText: '$WEBHOOK_REPO_FULL_NAME:$WEBHOOK_RELEASE_ACTION:$WEBHOOK_RELEASE_TAG',
-            regexpFilterExpression: '^finhay-pro/fhsc-demo-trading:published:(?!.*[Aa]lpha)v[0-9]+\\.[0-9]+\\.[0-9]+.*$'
+            regexpFilterExpression: '^finhay/fhsc-demo-trading-web:published:(?!.*[Aa]lpha)v[0-9]+\\.[0-9]+\\.[0-9]+.*$'
         )
     }
 
@@ -92,7 +92,7 @@ pipeline {
         DEPLOY_REPO_PATH = 'fhsc-prod-cls2/products/products-demo-trading-web'
 
         // Format: <deployment-file>:<container-name>
-        // Jenkins build 1 image payments, sau đó update image vào nhiều deployment manifest.
+        // Jenkins build 1 image demo-trading-web, sau đó update image vào nhiều deployment manifest.
         DEPLOYMENT_TARGETS = 'deployment.yaml:products-demo-trading-web'
 
         ARGOCD_APP = 'products-demo-trading-web'
@@ -112,6 +112,9 @@ pipeline {
 
         sh '''
 set -eu
+
+# checkout scm co the khong keo tags (shallow clone / refspec hep) -> ep fetch de resolve refs/tags
+git fetch --tags --force --prune origin
 
 if [ -f "${NOTI_SCRIPT}" ]; then
   chmod +x "${NOTI_SCRIPT}" || true
@@ -136,10 +139,11 @@ set -eu
 # Chỉ nhận tag prod dạng vX.Y.Z, cấm alpha
 TAG_PATTERN='^v[0-9]+\\.[0-9]+\\.[0-9]+'
 
-if [ -n "${WEBHOOK_RELEASE_TAG:-}" ]; then
-  RESOLVED_TAG="${WEBHOOK_RELEASE_TAG}"
-elif [ -n "${RELEASE_TAG:-}" ]; then
+# Uu tien: param RELEASE_TAG (user nhap tay) > webhook > auto pick tag prod moi nhat
+if [ -n "${RELEASE_TAG:-}" ]; then
   RESOLVED_TAG="${RELEASE_TAG}"
+elif [ -n "${WEBHOOK_RELEASE_TAG:-}" ]; then
+  RESOLVED_TAG="${WEBHOOK_RELEASE_TAG}"
 else
   # Auto: lấy tag mới nhất NHƯNG chỉ trong nhóm prod vX.Y.Z, loại mọi tag alpha
   RESOLVED_TAG="$(git for-each-ref --sort=-creatordate --format='%(refname:short)' refs/tags \
@@ -269,6 +273,8 @@ set -eu
 
 TITLE=""
 
+# GITHUB_TOKEN chi ton tai neu job duoc cau hinh withCredentials / env injection.
+# Khong co token thi buoc nay bi bo qua, title se lay tu webhook hoac tag annotation o stage duoi.
 if [ -n "${OWNER_REPO:-}" ] && [ -n "${GITHUB_TOKEN:-}" ] && command -v curl >/dev/null 2>&1 && command -v python3 >/dev/null 2>&1; then
   API_JSON="$(curl -fsSL \
     -H "Authorization: Bearer ${GITHUB_TOKEN}" \
@@ -570,13 +576,13 @@ if [ -f "${NOTI_SCRIPT}" ]; then
   bash "${NOTI_SCRIPT}" \
     "SUCCESS" \
     "${BUILD_NUMBER}" \
-    "${FULL_IMAGE:-}" \
+    "${FULL_IMAGE:--}" \
     "${NOTI_ENVIRONMENT}" \
-    "${RESOLVED_RELEASE_TITLE:-}" \
+    "${RESOLVED_RELEASE_TITLE:--}" \
     "${PUBLIC_BUILD_URL}" \
-    "${SOURCE_AUTHOR:-}" \
-    "${BRANCH_NAME:-}" \
-    "${IMAGE_VERSION:-}" \
+    "${SOURCE_AUTHOR:--}" \
+    "${BRANCH_NAME:-${IMAGE_VERSION:--}}" \
+    "${IMAGE_VERSION:-unknown}" \
     "${ARGOCD_APP}" \
     "${DEPLOY_REPO_PATH}"
 else
@@ -618,9 +624,9 @@ if [ -f "${NOTI_SCRIPT}" ]; then
     "${NOTI_ENVIRONMENT}" \
     "${MESSAGE_SAFE}" \
     "${PUBLIC_BUILD_URL}" \
-    "${SOURCE_AUTHOR:-}" \
-    "${BRANCH_NAME:-}" \
-    "${IMAGE_VERSION:-}" \
+    "${SOURCE_AUTHOR:--}" \
+    "${BRANCH_NAME:-${IMAGE_VERSION:--}}" \
+    "${IMAGE_VERSION:-unknown}" \
     "${ARGOCD_APP}" \
     "${DEPLOY_REPO_PATH}"
 else
