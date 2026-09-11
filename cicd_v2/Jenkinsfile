@@ -230,6 +230,36 @@ fi
       }
         }
 
+        // Webhook chi loc ten repo + action + dinh dang tag, KHONG biet tag duoc
+        // cat tu nhanh nao. Khong co stage nay thi mot release tag v1.2.3 cat tu
+        // `develop` van build thang len prod.
+        stage('Verify release tag is on main') {
+      steps {
+        sh '''
+set -eu
+
+if ! git show-ref --verify --quiet refs/remotes/origin/main; then
+  echo "ERROR: origin/main not found in local checkout" >&2
+  echo "Job can fetch duoc origin/main bang git credential." >&2
+  git branch -r >&2 || true
+  exit 1
+fi
+
+TAG_COMMIT="$(git rev-list -n 1 "${IMAGE_VERSION}")"
+
+if git merge-base --is-ancestor "${TAG_COMMIT}" "origin/main"; then
+  echo "[INFO] Release tag ${IMAGE_VERSION} nam tren origin/main"
+else
+  echo "ERROR: Release tag ${IMAGE_VERSION} KHONG nam tren origin/main" >&2
+  echo "Tag commit: ${TAG_COMMIT}" >&2
+  echo "origin/main moi nhat:" >&2
+  git log -1 --oneline origin/main >&2 || true
+  exit 1
+fi
+                '''
+      }
+        }
+
         stage('Resolve release metadata') {
       steps {
         script {
