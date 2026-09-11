@@ -392,19 +392,23 @@ set -eu
 # Env o che do BUILD-TIME: 8/8 bien la NEXT_PUBLIC_* nen bi inline vao bundle luc
 # `npm run build`. Sua Secret roi restart pod la VO NGHIA -> phai build lai image.
 #
-# ENV_SRC = <workspace cua job env>/<ten thu muc trong repo vnsc-env>/.env
-#   - job   : update-env-for-service-vnsc -- job dang phuc vu cac app cls2 khac
-#             (vnsc-trading-web, vnsc-web-view, vnsc-homepage). Ops chi can them
-#             `fhsc-demo-trading-web` vao SERVICE choices roi bam Reload Parameters.
-#             Neu doi sang job rieng thi sua DUY NHAT dong nay.
-#   - folder: fhsc-demo-trading-web -- ten thu muc THAT trong repo vnsc-env
-#             (KHONG phai `demo-trading-web`).
-# ⚠️ Job env KHONG duoc bat cleanWs(): xoa workspace la build nay gay.
-ENV_SRC="/var/lib/jenkins/workspace/update-env-for-service-vnsc/fhsc-demo-trading-web/.env"
+# ENV_SRC = <workspace chua checkout repo vnsc-env>/<ten thu muc>/.env
+#   - workspace: /var/lib/jenkins/workspace/vnsc-env -- da doi chieu TREN MAY
+#                Jenkins that. Cac app cls2 cu tro vao
+#                ../update-env-for-service-vnsc/ (di san), duong dan do KHONG
+#                ton tai -> build 17:25 ngay 11/09 fail o day.
+#   - folder   : fhsc-demo-trading-web -- ten thu muc THAT trong repo vnsc-env
+#                (KHONG phai `demo-trading-web`).
+#
+# App nay dung env BUILD-TIME nen chi can FILE nam san trong workspace, khong
+# can job env tao k8s Secret -> khong phai them vao SERVICE choices.
+# ⚠️ Job checkout vnsc-env KHONG duoc bat cleanWs(): xoa workspace la build nay gay.
+ENV_SRC="/var/lib/jenkins/workspace/vnsc-env/fhsc-demo-trading-web/.env"
 
 if [ ! -f "${ENV_SRC}" ]; then
   echo "ERROR: Khong tim thay file .env: ${ENV_SRC}" >&2
-  echo "Chay job update-env-for-service-vnsc truoc, hoac kiem lai ten thu muc trong repo vnsc-env." >&2
+  echo "Kiem tra workspace /var/lib/jenkins/workspace/vnsc-env da checkout ban moi nhat chua," >&2
+  echo "va thu muc fhsc-demo-trading-web co ton tai trong repo vnsc-env khong." >&2
   exit 1
 fi
 
