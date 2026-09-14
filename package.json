@@ -31,7 +31,7 @@
         "eslint-config-next": "^16.3.1",
         "long": "^5.2.3",
         "mqtt": "^4.3.7",
-        "next": "^16.3.1",
+        "next": "^16.3.3",
         "protobufjs": "^7.6.5",
         "react": "^19.2.8",
         "react-dom": "^19.2.8",
