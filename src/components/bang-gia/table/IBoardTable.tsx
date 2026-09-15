@@ -118,7 +118,7 @@ export const IBoardTable = () => {
             id: key,
             accessorFn: (row) => row[key],
             sortingFn: key === 'symbol' ? alphanumericSortFn : numericSortFn,
-            header: () => <span className="font-tiny-highlight text-secondary">{label}</span>,
+            header: () => <span className="body-5-highlight text-secondary">{label}</span>,
             cell: ({ row }) => {
                 const display = row.original;
                 const rawStock = display._raw;
@@ -132,7 +132,7 @@ export const IBoardTable = () => {
                         <button
                             type="button"
                             onClick={() => router.push(`/giao-dich?symbol=${display.symbol}`)}
-                            className={`block w-full min-w-0 cursor-pointer truncate text-left font-tiny-highlight hover:underline ${colorClass}`}
+                            className={`block w-full min-w-0 cursor-pointer truncate text-left body-5-highlight hover:underline ${colorClass}`}
                         >
                             {renderIboardValue(key, value)}
                         </button>
@@ -141,7 +141,7 @@ export const IBoardTable = () => {
 
                 const valueSpan = (
                     <span
-                        className={`block w-full min-w-0 truncate text-right font-tiny tabular-nums ${colorClass}`}
+                        className={`block w-full min-w-0 truncate text-right body-5 tabular-nums ${colorClass}`}
                     >
                         {renderIboardValue(key, value)}
                     </span>
@@ -165,7 +165,7 @@ export const IBoardTable = () => {
                                         event.currentTarget.getBoundingClientRect(),
                                     )
                                 }
-                                className={`block w-full min-w-0 cursor-pointer truncate text-right font-tiny tabular-nums ${colorClass}`}
+                                className={`block w-full min-w-0 cursor-pointer truncate text-right body-5 tabular-nums ${colorClass}`}
                             >
                                 {renderIboardValue(key, value)}
                             </button>
@@ -341,14 +341,14 @@ export const IBoardTable = () => {
     return (
         <section
             aria-label={'Bảng giá cổ phiếu'}
-            className="flex h-full min-h-0 w-full min-w-0 flex-col overflow-hidden bg-secondary rounded-xl"
+            className="flex h-full min-h-0 w-full min-w-0 flex-col overflow-hidden base-secondary rounded-xl"
         >
             {isLoading || isOwnedLoading ? (
                 <div className="flex-1 min-h-0 flex items-center justify-center">
                     <Spinner isLoading={true} isOverlay={false} />
                 </div>
             ) : stocks.length === 0 ? (
-                <div className="flex min-h-0 flex-1 items-center justify-center font-tiny text-secondary">
+                <div className="flex min-h-0 flex-1 items-center justify-center body-5 text-secondary">
                     <EmptyState />
                 </div>
             ) : (

@@ -39,22 +39,22 @@ export const MarketIndexHeader = ({
                             onSelectStock={(stock) => onSelectStock(stock.symbol)}
                             variant="pill"
                             className="w-auto"
-                            inputClassName="font-body-3-highlight w-28"
+                            inputClassName="body-4-highlight w-28"
                             placeholder={selectedIndex}
                         />
                         <div
                             className={`flex items-center gap-1.5 whitespace-nowrap ${statsColorClass}`}
                         >
-                            <span className="font-body-1-highlight">
+                            <span className="body-2-highlight">
                                 {formatNumberVN(indexData?.indexValue ?? 0, { decimals: 2 })}
                             </span>
-                            <span className="font-body-3">
+                            <span className="body-4">
                                 {changePercent > 0 ? '+' : ''}
                                 {formatNumberVN(changePercent, { decimals: 2 })}%
                             </span>
                         </div>
                     </div>
-                    <p className="font-caption text-secondary">
+                    <p className="body-5 text-secondary">
                         {'Chỉ số'} {selectedIndex}
                     </p>
                 </div>

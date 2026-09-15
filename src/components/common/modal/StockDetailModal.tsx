@@ -26,12 +26,12 @@ export const StockDetailModal: FC<Props> = ({ onClose }) => {
             onClose={onClose}
             maxWidth="max-w-7xl"
             maxHeight="h-[90vh]"
-            panelClassName="bg-primary gap-1 p-1"
+            panelClassName="base-primary gap-1 p-1"
             bodyClassName="flex min-h-0 flex-1 overflow-hidden"
         >
             <div className="flex min-h-0 flex-1 gap-1 overflow-hidden">
                 <StockSection
-                    className="flex min-w-0 flex-1 flex-col overflow-hidden rounded-xl bg-secondary"
+                    className="flex min-w-0 flex-1 flex-col overflow-hidden rounded-xl base-secondary"
                     hideChartPanel
                     hideFullscreenToggle
                     enableIndexSearch

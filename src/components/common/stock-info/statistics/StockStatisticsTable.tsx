@@ -39,10 +39,10 @@ export const StockStatisticsTable = <T,>({ data, columns, getRowId }: Props<T>) 
             <EmptyState />
         </div>
     ) : (
-        <table className="w-max min-w-full border-separate border-spacing-0 bg-secondary">
-            <thead className="bg-secondary">
+        <table className="w-max min-w-full border-separate border-spacing-0 base-secondary">
+            <thead className="base-secondary">
                 {table.getHeaderGroups().map((headerGroup) => (
-                    <tr key={headerGroup.id} className="bg-secondary">
+                    <tr key={headerGroup.id} className="base-secondary">
                         {headerGroup.headers.map((header, index) => {
                             const isFirst = index === 0;
                             const isLast = index === headerGroup.headers.length - 1;
@@ -59,7 +59,7 @@ export const StockStatisticsTable = <T,>({ data, columns, getRowId }: Props<T>) 
                                     key={header.id}
                                     scope="col"
                                     aria-sort={header.column.getCanSort() ? ariaSort : undefined}
-                                    className={`sticky top-0 z-10 whitespace-nowrap bg-secondary py-3 text-left font-caption text-secondary ${
+                                    className={`sticky top-0 z-10 whitespace-nowrap base-secondary py-3 text-left body-5 text-secondary ${
                                         isFirst ? 'px-4' : isLast ? 'px-4' : 'px-2'
                                     }`}
                                 >
@@ -75,16 +75,16 @@ export const StockStatisticsTable = <T,>({ data, columns, getRowId }: Props<T>) 
                     </tr>
                 ))}
             </thead>
-            <tbody className="bg-secondary">
+            <tbody className="base-secondary">
                 {table.getRowModel().rows.map((row) => (
-                    <tr key={row.id} className="bg-secondary">
+                    <tr key={row.id} className="base-secondary">
                         {row.getVisibleCells().map((cell, index) => {
                             const isFirst = index === 0;
                             const isLast = index === row.getVisibleCells().length - 1;
                             return (
                                 <td
                                     key={cell.id}
-                                    className={`whitespace-nowrap py-2 text-left font-caption text-primary ${
+                                    className={`whitespace-nowrap py-2 text-left body-5 text-primary ${
                                         isFirst ? 'px-4' : isLast ? 'px-4' : 'px-2'
                                     }`}
                                 >

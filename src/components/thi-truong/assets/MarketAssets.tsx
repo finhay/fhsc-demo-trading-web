@@ -225,7 +225,7 @@ export const MarketAssets = () => {
         if (!goldSjc && !goldGlobal) {
             return (
                 <div className="flex h-full w-full items-center justify-center">
-                    <span className="font-caption text-tertiary">{'Không có dữ liệu'}</span>
+                    <span className="body-5 text-tertiary">{'Không có dữ liệu'}</span>
                 </div>
             );
         }
@@ -238,14 +238,14 @@ export const MarketAssets = () => {
                                 <AiFillGolden size={28} className="text-yellow" />
                             </div>
                             <div className="flex flex-col gap-0.5">
-                                <span className="font-body-3-highlight text-primary">
+                                <span className="body-4-highlight text-primary">
                                     {'Vàng miếng SJC'}
                                 </span>
-                                <span className="font-caption text-tertiary">{'Triệu/chỉ'}</span>
+                                <span className="body-5 text-tertiary">{'Triệu/chỉ'}</span>
                             </div>
                         </div>
                         <div className="flex flex-col items-end gap-0.5">
-                            <span className="font-body-3-highlight text-primary">
+                            <span className="body-4-highlight text-primary">
                                 {goldSjc.sell_value
                                     ? formatNumberVN(goldSjc.sell_value / 1000, {
                                           decimals: 2,
@@ -253,7 +253,7 @@ export const MarketAssets = () => {
                                     : '--'}
                             </span>
                             {goldSjc.sell_value_change_percent != null && (
-                                <span className={`font-caption ${sjcColorClass}`}>
+                                <span className={`body-5 ${sjcColorClass}`}>
                                     {sjcSign}
                                     {formatNumberVN(Math.abs(goldSjc.sell_value_change_percent), {
                                         decimals: 2,
@@ -274,14 +274,14 @@ export const MarketAssets = () => {
                                 <AiFillGolden size={28} className="text-yellow" />
                             </div>
                             <div className="flex flex-col gap-0.5">
-                                <span className="font-body-3-highlight text-primary">
+                                <span className="body-4-highlight text-primary">
                                     {'Vàng thế giới'}
                                 </span>
-                                <span className="font-caption text-tertiary">{'USD/oz'}</span>
+                                <span className="body-5 text-tertiary">{'USD/oz'}</span>
                             </div>
                         </div>
                         <div className="flex flex-col items-end gap-0.5">
-                            <span className="font-body-3-highlight text-primary">
+                            <span className="body-4-highlight text-primary">
                                 {goldGlobal.usd_value
                                     ? formatNumberVN(goldGlobal.usd_value, {
                                           decimals: 2,
@@ -289,7 +289,7 @@ export const MarketAssets = () => {
                                     : '--'}
                             </span>
                             {goldGlobal.change_percent != null && (
-                                <span className={`font-caption ${globalColorClass}`}>
+                                <span className={`body-5 ${globalColorClass}`}>
                                     {globalSign}
                                     {formatNumberVN(Math.abs(goldGlobal.change_percent), {
                                         decimals: 2,
@@ -311,7 +311,7 @@ export const MarketAssets = () => {
         if (oilItems.length === 0) {
             return (
                 <div className="flex h-full w-full items-center justify-center">
-                    <span className="font-caption text-tertiary">{'Không có dữ liệu'}</span>
+                    <span className="body-5 text-tertiary">{'Không có dữ liệu'}</span>
                 </div>
             );
         }
@@ -334,19 +334,19 @@ export const MarketAssets = () => {
                                     <GiOilDrum size={20} className="text-orange" />
                                 </div>
                                 <div className="flex flex-col gap-0.5">
-                                    <span className="font-body-3-highlight text-primary">
+                                    <span className="body-4-highlight text-primary">
                                         {item.name}
                                     </span>
-                                    <span className="font-caption text-tertiary">{'USD/Bbl'}</span>
+                                    <span className="body-5 text-tertiary">{'USD/Bbl'}</span>
                                 </div>
                             </div>
                             <div className="flex flex-col items-end gap-0.5">
-                                <span className="font-body-3-highlight text-primary">
+                                <span className="body-4-highlight text-primary">
                                     {formatNumberVN(item.usd_value, {
                                         decimals: 2,
                                     })}
                                 </span>
-                                <span className={`font-caption ${colorClass}`}>
+                                <span className={`body-5 ${colorClass}`}>
                                     {sign}
                                     {formatNumberVN(Math.abs(item.change_percent), {
                                         decimals: 2,
@@ -409,26 +409,26 @@ export const MarketAssets = () => {
                                             className="rounded-full"
                                         />
                                     ) : (
-                                        <div className="rounded-full bg-tertiary p-1.5" />
+                                        <div className="rounded-full base-tertiary p-1.5" />
                                     )}
                                     <div className="flex flex-col gap-1">
-                                        <span className="font-body-3-highlight text-primary">
+                                        <span className="body-4-highlight text-primary">
                                             {item.name}
                                         </span>
-                                        <span className="font-caption uppercase text-tertiary">
+                                        <span className="body-5 uppercase text-tertiary">
                                             USD/{item.symbol}
                                         </span>
                                     </div>
                                 </div>
                                 <div className="flex flex-col items-end gap-1">
                                     <span
-                                        className={`font-body-3-highlight text-primary rounded px-1 transition-colors duration-1000 ${getTrendBg(
+                                        className={`body-4-highlight text-primary rounded px-1 transition-colors duration-1000 ${getTrendBg(
                                             flashingCryptos.get(item.symbol),
                                         )}`}
                                     >
                                         {item.formatted_price}
                                     </span>
-                                    <span className={`font-caption ${colorClass}`}>
+                                    <span className={`body-5 ${colorClass}`}>
                                         {sign}
                                         {formatNumberVN(Math.abs(item.percent_change_24h), {
                                             decimals: 2,
@@ -495,20 +495,20 @@ export const MarketAssets = () => {
                                             className="rounded-full"
                                         />
                                     ) : (
-                                        <div className="rounded-full bg-tertiary p-1.5" />
+                                        <div className="rounded-full base-tertiary p-1.5" />
                                     )}
                                     <div className="flex flex-col gap-1">
-                                        <span className="font-body-3-highlight text-primary">
+                                        <span className="body-4-highlight text-primary">
                                             {item.name}
                                         </span>
-                                        <span className="font-caption uppercase text-tertiary">
+                                        <span className="body-5 uppercase text-tertiary">
                                             {item.fund_company_management_short_name}
                                         </span>
                                     </div>
                                 </div>
                                 <div className="flex flex-col items-end gap-1">
                                     {profit1y != null && (
-                                        <span className={`font-body-3-highlight ${colorClass1y}`}>
+                                        <span className={`body-4-highlight ${colorClass1y}`}>
                                             {profit1y >= 0 ? '+' : '-'}
                                             {formatNumberVN(Math.abs(profit1y), {
                                                 decimals: 2,
@@ -527,18 +527,18 @@ export const MarketAssets = () => {
 
     return (
         <>
-            <section className="bg-secondary flex min-h-0 flex-col gap-3 overflow-hidden rounded-xl md:flex-1 2xl:flex-none 2xl:overflow-visible">
+            <section className="base-secondary flex min-h-0 flex-col gap-3 overflow-hidden rounded-xl md:flex-1 2xl:flex-none 2xl:overflow-visible">
                 <div className="flex shrink-0 items-center justify-between gap-2">
-                    <h2 className="font-body-2-highlight text-primary flex items-center gap-2 px-1">
+                    <h2 className="body-3-highlight text-primary flex items-center gap-2 px-1">
                         <MarketDot alwaysActive />
                         {'Hàng hoá & tài sản khác'}
                     </h2>
                 </div>
                 <div className="flex min-h-0 flex-1 flex-col gap-3 overflow-hidden 2xl:flex-none 2xl:overflow-visible">
                     <div className="flex shrink-0 flex-col gap-3 md:flex-row md:items-stretch">
-                        <section className="bg-secondary flex min-h-0 min-w-0 flex-1 flex-col gap-4 rounded-xl border border-tertiary p-3">
+                        <section className="base-secondary flex min-h-0 min-w-0 flex-1 flex-col gap-4 rounded-xl border border-tertiary p-3">
                             <div className="flex shrink-0 items-center justify-between gap-2">
-                                <h3 className="font-body-3-highlight text-primary flex items-center gap-2">
+                                <h3 className="body-4-highlight text-primary flex items-center gap-2">
                                     {'Giá vàng'}
                                 </h3>
                                 <FaChevronRight
@@ -549,9 +549,9 @@ export const MarketAssets = () => {
                             </div>
                             <div className="h-32 w-full">{renderGoldBody()}</div>
                         </section>
-                        <section className="bg-secondary flex min-h-0 min-w-0 flex-1 flex-col gap-4 rounded-xl border border-tertiary p-3">
+                        <section className="base-secondary flex min-h-0 min-w-0 flex-1 flex-col gap-4 rounded-xl border border-tertiary p-3">
                             <div className="flex shrink-0 items-center justify-between gap-2">
-                                <h3 className="font-body-3-highlight text-primary flex items-center gap-2">
+                                <h3 className="body-4-highlight text-primary flex items-center gap-2">
                                     {'Giá dầu'}
                                 </h3>
                             </div>
@@ -559,9 +559,9 @@ export const MarketAssets = () => {
                         </section>
                     </div>
                     <div className="flex min-h-0 flex-1 flex-col gap-3 overflow-hidden md:flex-row md:items-stretch 2xl:flex-none 2xl:overflow-visible">
-                        <section className="bg-secondary flex min-h-0 min-w-0 flex-1 flex-col gap-4 overflow-hidden rounded-xl border border-tertiary p-3 2xl:overflow-visible">
+                        <section className="base-secondary flex min-h-0 min-w-0 flex-1 flex-col gap-4 overflow-hidden rounded-xl border border-tertiary p-3 2xl:overflow-visible">
                             <div className="flex shrink-0 items-center justify-between gap-2">
-                                <h3 className="font-body-3-highlight text-primary flex items-center gap-2">
+                                <h3 className="body-4-highlight text-primary flex items-center gap-2">
                                     {'Tài sản mã hoá'}
                                 </h3>
                             </div>
@@ -569,9 +569,9 @@ export const MarketAssets = () => {
                                 {renderCryptoBody()}
                             </div>
                         </section>
-                        <section className="bg-secondary flex min-h-0 min-w-0 flex-1 flex-col gap-4 overflow-hidden rounded-xl border border-tertiary p-3 2xl:overflow-visible">
+                        <section className="base-secondary flex min-h-0 min-w-0 flex-1 flex-col gap-4 overflow-hidden rounded-xl border border-tertiary p-3 2xl:overflow-visible">
                             <div className="flex shrink-0 items-center justify-between gap-2">
-                                <h3 className="font-body-3-highlight text-primary flex items-center gap-2">
+                                <h3 className="body-4-highlight text-primary flex items-center gap-2">
                                     {'Chứng chỉ quỹ mở'}
                                 </h3>
                                 <FaChevronRight

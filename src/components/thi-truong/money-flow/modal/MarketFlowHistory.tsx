@@ -58,11 +58,11 @@ export const MarketFlowHistory = ({ isLoading, sessions, period }: Props) => {
                         <FaCircle className="shrink-0 text-green" size={8} />
                         <FaCircle className="shrink-0 text-red" size={8} />
                     </span>
-                    <span className="font-body-3 text-secondary">{'Mua/bán ròng'}</span>
+                    <span className="body-4 text-secondary">{'Mua/bán ròng'}</span>
                 </div>
                 <div className="flex items-center gap-2">
                     <FaCircle className="shrink-0 text-orange" size={8} />
-                    <span className="font-body-3 text-secondary">
+                    <span className="body-4 text-secondary">
                         {'GTGD ròng luỹ kế (bên phải)'}
                     </span>
                 </div>

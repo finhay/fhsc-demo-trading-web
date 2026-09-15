@@ -84,7 +84,7 @@ export const ChangePasswordContent = () => {
                 className="flex w-1/2 flex-col items-center gap-4 rounded-xl"
             >
                 <FaCheck className="text-green" size={100} />
-                <h2 className="font-body-2 text-primary text-center">
+                <h2 className="body-3 text-primary text-center">
                     {'Cập nhật mật khẩu mới ngay để giữ an toàn cho tài khoản của bạn'}
                 </h2>
                 <section className="flex w-full flex-col gap-4">
@@ -187,9 +187,9 @@ export const ChangePasswordContent = () => {
                     <button
                         type="submit"
                         disabled={!canSubmit || isLoading}
-                        className={`w-2/3 font-body-3-highlight rounded-full px-4 py-2 transition-all ${
+                        className={`w-2/3 body-4-highlight rounded-full px-4 py-2 transition-all ${
                             canSubmit && !isLoading
-                                ? 'bg-highlight text-quaternary hover:opacity-90'
+                                ? 'base-highlight text-quaternary hover:opacity-90'
                                 : 'bg-disabled text-disabled cursor-not-allowed'
                         }`}
                     >

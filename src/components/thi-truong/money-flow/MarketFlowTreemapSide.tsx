@@ -34,7 +34,7 @@ export const MarketFlowTreemapSide = ({
             <Tooltip
                 content={totalLabel}
                 align="start"
-                className="bg-secondary flex min-w-0 items-center gap-2 rounded-tl-lg rounded-br-lg px-1.5 py-1"
+                className="base-secondary flex min-w-0 items-center gap-2 rounded-tl-lg rounded-br-lg px-1.5 py-1"
             >
                 <span
                     className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-full ${
@@ -43,14 +43,14 @@ export const MarketFlowTreemapSide = ({
                     aria-label={sideLabel}
                 >
                     <span
-                        className={`font-tiny-highlight leading-none ${
+                        className={`body-5-highlight leading-none ${
                             isBuy ? 'text-green' : 'text-red'
                         }`}
                     >
                         {sideLabel.charAt(0)}
                     </span>
                 </span>
-                <span className="font-caption text-tertiary min-w-0 flex-1 truncate whitespace-nowrap">
+                <span className="body-5 text-tertiary min-w-0 flex-1 truncate whitespace-nowrap">
                     {totalLabel}
                 </span>
             </Tooltip>

@@ -167,9 +167,9 @@ export const MarketHeatmap = () => {
     useMQTT(mqttTopics, handleMQTTMessage, mqttTopics.length > 0);
 
     return (
-        <section className="bg-secondary flex min-h-80 flex-1 flex-col gap-3 overflow-hidden rounded-xl p-4 xl:min-h-0">
+        <section className="base-secondary flex min-h-80 flex-1 flex-col gap-3 overflow-hidden rounded-xl p-4 xl:min-h-0">
             <div className="flex shrink-0 items-center justify-between gap-2">
-                <h2 className="font-body-2-highlight text-primary flex items-center gap-2">
+                <h2 className="body-3-highlight text-primary flex items-center gap-2">
                     <MarketDot />
                     {'Bản đồ nhiệt'}
                 </h2>

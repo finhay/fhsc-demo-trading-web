@@ -12,7 +12,7 @@ const renderOrderStatus = (order: PaperOrder) => {
     const status = getPaperStatusView(order.status, order.status_code);
     return (
         <span
-            className={`inline-flex items-center justify-center whitespace-nowrap font-body-3 ${getOrderStatusColor(status.tone)}`}
+            className={`inline-flex items-center justify-center whitespace-nowrap body-4 ${getOrderStatusColor(status.tone)}`}
         >
             {status.text}
         </span>
@@ -26,7 +26,7 @@ export const getPaperOrderHistoryColumns = (): ColumnDef<PaperOrder, unknown>[] 
         header: ({ column }) => <SortableHeader label={'Mã'} column={column} align="left" />,
         meta: { align: 'left' } satisfies SortableColMeta,
         cell: ({ getValue }) => (
-            <span className="font-body-3-highlight text-primary">{getValue<string>()}</span>
+            <span className="body-4-highlight text-primary">{getValue<string>()}</span>
         ),
     },
     {

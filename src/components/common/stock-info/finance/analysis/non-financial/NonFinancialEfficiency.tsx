@@ -38,32 +38,32 @@ export const NonFinancialEfficiency = ({
                 <div className="flex gap-3">
                     {liquidityItems.map((item) => (
                         <div key={item.labelKey} className="flex min-w-0 flex-1 flex-col gap-1">
-                            <p className="font-body-3 text-secondary">{fa[item.labelKey]}</p>
+                            <p className="body-4 text-secondary">{fa[item.labelKey]}</p>
                             <div className="flex items-center gap-2">
-                                <span className={`font-body-2-highlight ${item.valueColor}`}>
+                                <span className={`body-3-highlight ${item.valueColor}`}>
                                     {formatNumberVN(item.value)}
                                 </span>
-                                <span className="shrink-0 rounded-full border border-tertiary px-2 py-0.5 font-tiny-highlight text-primary">
+                                <span className="shrink-0 rounded-full border border-tertiary px-2 py-0.5 body-5-highlight text-primary">
                                     {item.badge}
                                 </span>
                             </div>
                         </div>
                     ))}
                 </div>
-                <div className="h-px w-full bg-tertiary" />
+                <div className="h-px w-full base-tertiary" />
                 <div className="flex flex-col gap-2">
-                    <p className="font-body-3-highlight text-secondary">{'Vòng quay'}</p>
+                    <p className="body-4-highlight text-secondary">{'Vòng quay'}</p>
                     <div className="flex w-full items-stretch">
                         {turnoverItems.map((item, idx) => (
                             <Fragment key={item.labelKey}>
                                 {idx > 0 && (
-                                    <span className="my-auto h-px w-3 shrink-0 bg-tertiary" />
+                                    <span className="my-auto h-px w-3 shrink-0 base-tertiary" />
                                 )}
                                 <div className="flex min-w-0 flex-1 flex-col gap-1 rounded-xl border border-tertiary p-3">
-                                    <p className="font-body-3 text-secondary">
+                                    <p className="body-4 text-secondary">
                                         {fa[item.labelKey]}
                                     </p>
-                                    <p className="font-body-2-highlight text-primary">
+                                    <p className="body-3-highlight text-primary">
                                         {formatNumberVN(item.value)}
                                     </p>
                                 </div>

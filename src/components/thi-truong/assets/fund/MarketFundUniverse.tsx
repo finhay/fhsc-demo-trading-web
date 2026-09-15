@@ -61,7 +61,7 @@ export const MarketFundUniverse = ({
     return (
         <section className="relative flex w-full flex-col gap-3 overflow-visible">
             <div className="flex flex-col gap-4">
-                <h3 className="font-heading-4 text-primary">{'Vũ trụ quỹ mở'}</h3>
+                <h3 className="body-1-highlight text-primary">{'Vũ trụ quỹ mở'}</h3>
                 <div className="scrollbar flex gap-3 overflow-x-auto pb-1">
                     {FUND_UNIVERSE_TABS.map((key) => {
                         const isActive = tab === key;
@@ -72,8 +72,8 @@ export const MarketFundUniverse = ({
                                 onClick={() => setTab(key)}
                                 className={`shrink-0 rounded-full border px-4 py-1.5 transition-colors ${
                                     isActive
-                                        ? 'border-purple bg-secondary font-body-3-highlight text-primary'
-                                        : 'border-quaternary bg-secondary font-body-3 text-secondary'
+                                        ? 'border-purple base-secondary body-4-highlight text-primary'
+                                        : 'border-quaternary base-secondary body-4 text-secondary'
                                 }`}
                             >
                                 {t[key]}
@@ -110,10 +110,10 @@ export const MarketFundUniverse = ({
                                             aria-hidden
                                         />
                                     )}
-                                    <span className="font-body-3 text-secondary">
+                                    <span className="body-4 text-secondary">
                                         {item.fundName}
                                     </span>
-                                    <span className={`font-body-3-highlight ${valueColor}`}>
+                                    <span className={`body-4-highlight ${valueColor}`}>
                                         {displayValue}
                                     </span>
                                 </div>
@@ -155,7 +155,7 @@ export const MarketFundUniverse = ({
                     );
                 })}
             </div>
-            <p className="font-caption text-tertiary">{'Nguồn từ FiinPro'}</p>
+            <p className="body-5 text-tertiary">{'Nguồn từ FiinPro'}</p>
         </section>
     );
 };

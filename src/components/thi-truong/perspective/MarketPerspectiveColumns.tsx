@@ -24,7 +24,7 @@ export const getMarketPerspectiveColumns = (
         header: ({ column }) => (
             <button
                 type="button"
-                className="inline-flex w-full items-center justify-start gap-1 font-caption text-secondary"
+                className="inline-flex w-full items-center justify-start gap-1 body-5 text-secondary"
                 onClick={column.getToggleSortingHandler()}
             >
                 {'Mã'}
@@ -46,7 +46,7 @@ export const getMarketPerspectiveColumns = (
                     onClick={() => onSelectSymbol(stock.symbol)}
                     className="flex items-center gap-2 cursor-pointer text-left"
                 >
-                    <span className="font-caption-highlight text-primary">{stock.symbol}</span>
+                    <span className="body-5-highlight text-primary">{stock.symbol}</span>
                 </button>
             );
         },
@@ -57,7 +57,7 @@ export const getMarketPerspectiveColumns = (
         header: ({ column }) => (
             <button
                 type="button"
-                className="inline-flex w-full items-center justify-end gap-1 font-caption text-secondary"
+                className="inline-flex w-full items-center justify-end gap-1 body-5 text-secondary"
                 onClick={column.getToggleSortingHandler()}
             >
                 {'Giá'}
@@ -80,7 +80,7 @@ export const getMarketPerspectiveColumns = (
                 stock.ceiling,
             );
             return (
-                <div className={`font-caption-highlight ${priceColor}`}>
+                <div className={`body-5-highlight ${priceColor}`}>
                     {formatNumberVN(stock.price / 1000)}
                 </div>
             );
@@ -93,7 +93,7 @@ export const getMarketPerspectiveColumns = (
         header: ({ column }) => (
             <button
                 type="button"
-                className="inline-flex w-full items-center justify-end gap-1 font-caption text-secondary"
+                className="inline-flex w-full items-center justify-end gap-1 body-5 text-secondary"
                 aria-label={'Sắp xếp theo thay đổi'}
                 onClick={column.getToggleSortingHandler()}
             >
@@ -121,7 +121,7 @@ export const getMarketPerspectiveColumns = (
 
             return (
                 <div
-                    className={`flex w-full justify-end font-caption items-center gap-1 px-1 ${changeColorClass}`}
+                    className={`flex w-full justify-end body-5 items-center gap-1 px-1 ${changeColorClass}`}
                 >
                     {changeArrow}
                     <span>{formatNumberVN(stock.change / 1000)}</span>

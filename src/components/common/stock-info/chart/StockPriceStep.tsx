@@ -191,9 +191,9 @@ export const StockPriceStep = () => {
     }, []);
 
     return (
-        <section className="flex w-full shrink-0 flex-col gap-3 rounded-xl bg-secondary p-3">
+        <section className="flex w-full shrink-0 flex-col gap-3 rounded-xl base-secondary p-3">
             <header className="flex h-7 w-full items-center gap-6">
-                <h3 className="shrink-0 font-body-3-highlight text-primary whitespace-nowrap">
+                <h3 className="shrink-0 body-4-highlight text-primary whitespace-nowrap">
                     {'Bước giá'}
                 </h3>
                 <nav
@@ -210,8 +210,8 @@ export const StockPriceStep = () => {
                             onClick={() => handleChangeTab(tabKey)}
                             className={`flex h-full items-center justify-center rounded-full px-3 py-1 transition-colors ${
                                 activeTab === tabKey
-                                    ? 'bg-tertiary font-caption text-primary'
-                                    : 'font-caption text-secondary'
+                                    ? 'base-tertiary body-5 text-primary'
+                                    : 'body-5 text-secondary'
                             }`}
                         >
                             {tabKey === LOT_TYPE.EVEN ? 'Lô chẵn' : 'Lô lẻ'}
@@ -227,7 +227,7 @@ export const StockPriceStep = () => {
                 className="flex w-full flex-col gap-1.5"
                 aria-label={'Bảng giá mua bán'}
             >
-                <div className="flex w-full items-start gap-0.5 whitespace-nowrap font-caption text-secondary">
+                <div className="flex w-full items-start gap-0.5 whitespace-nowrap body-5 text-secondary">
                     <div className="flex flex-1 items-start justify-between pr-1">
                         <span>{'KL mua'}</span>
                         <span>{'Giá mua'}</span>
@@ -245,22 +245,22 @@ export const StockPriceStep = () => {
                                 type="button"
                                 onClick={() => handleFillQuantity(rawRows[i].buyVol)}
                                 aria-label={`${'Điền khối lượng mua'} ${rawRows[i].buyVol}`}
-                                className="cursor-pointer whitespace-nowrap font-caption text-primary"
+                                className="cursor-pointer whitespace-nowrap body-5 text-primary"
                             >
                                 {row.bidQty}
                             </button>
                             <div
-                                className="flex min-w-5 items-center justify-end gap-1 bg-green/10 pr-1"
+                                className="flex min-w-5 items-center justify-end gap-1 base-green/10 pr-1"
                                 style={{ width: `${row.bidDepthPct}%` }}
                             >
                                 {priceMarkers.sellPrices.has(rawRows[i].buyPrice) && (
-                                    <span className="size-1.5 shrink-0 rounded-full bg-red" />
+                                    <span className="size-1.5 shrink-0 rounded-full base-red" />
                                 )}
                                 <button
                                     type="button"
                                     onClick={() => handleFillPrice(rawRows[i].buyPrice)}
                                     aria-label={`${'Điền giá mua'} ${rawRows[i].buyPrice}`}
-                                    className={`cursor-pointer whitespace-nowrap font-caption ${PRICE_COLOR_MAP[row.bidPriceVariant] ?? 'text-primary'}`}
+                                    className={`cursor-pointer whitespace-nowrap body-5 ${PRICE_COLOR_MAP[row.bidPriceVariant] ?? 'text-primary'}`}
                                 >
                                     {row.bidPrice}
                                 </button>
@@ -268,26 +268,26 @@ export const StockPriceStep = () => {
                         </div>
                         <div className="flex flex-1 items-center justify-between gap-1">
                             <div
-                                className="flex min-w-5 items-center gap-1 bg-red/10 pl-1"
+                                className="flex min-w-5 items-center gap-1 base-red/10 pl-1"
                                 style={{ width: `${row.askDepthPct}%` }}
                             >
                                 <button
                                     type="button"
                                     onClick={() => handleFillPrice(rawRows[i].sellPrice)}
                                     aria-label={`${'Điền giá bán'} ${rawRows[i].sellPrice}`}
-                                    className={`cursor-pointer whitespace-nowrap font-caption ${PRICE_COLOR_MAP[row.askPriceVariant] ?? 'text-primary'}`}
+                                    className={`cursor-pointer whitespace-nowrap body-5 ${PRICE_COLOR_MAP[row.askPriceVariant] ?? 'text-primary'}`}
                                 >
                                     {row.askPrice}
                                 </button>
                                 {priceMarkers.buyPrices.has(rawRows[i].sellPrice) && (
-                                    <span className="size-1.5 shrink-0 rounded-full bg-red" />
+                                    <span className="size-1.5 shrink-0 rounded-full base-red" />
                                 )}
                             </div>
                             <button
                                 type="button"
                                 onClick={() => handleFillQuantity(rawRows[i].sellVol)}
                                 aria-label={`${'Điền khối lượng bán'} ${rawRows[i].sellVol}`}
-                                className="cursor-pointer whitespace-nowrap text-right font-caption text-primary"
+                                className="cursor-pointer whitespace-nowrap text-right body-5 text-primary"
                             >
                                 {row.askQty}
                             </button>
@@ -297,25 +297,25 @@ export const StockPriceStep = () => {
 
                 <div className="flex w-full gap-0.5">
                     <div
-                        className="flex items-center bg-green px-2 py-0.5"
+                        className="flex items-center base-green px-2 py-0.5"
                         style={{ width: `${pressure.bidPct}%` }}
                     >
-                        <span className="whitespace-nowrap font-caption text-quaternary">
+                        <span className="whitespace-nowrap body-5 text-quaternary">
                             {pressure.bidPct}%
                         </span>
                     </div>
                     <div
-                        className="flex items-center bg-red px-2 py-0.5"
+                        className="flex items-center base-red px-2 py-0.5"
                         style={{ width: `${pressure.askPct}%` }}
                     >
-                        <span className="whitespace-nowrap font-caption text-quaternary">
+                        <span className="whitespace-nowrap body-5 text-quaternary">
                             {pressure.askPct}%
                         </span>
                     </div>
                 </div>
             </div>
 
-            <div className="flex w-full flex-col gap-1 whitespace-nowrap font-caption text-primary">
+            <div className="flex w-full flex-col gap-1 whitespace-nowrap body-5 text-primary">
                 <div className="flex items-start justify-between">
                     <span>
                         {'Tổng KL'}: {formatNumberVNWithUnit(stockPriceData.totalVolume ?? 0)}

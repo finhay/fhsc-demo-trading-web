@@ -40,21 +40,21 @@ export const MarketWatchlistStockList = ({ rows, activeSymbol, theme, onSelect }
                             onClick={() => onSelect(row.symbol)}
                             aria-pressed={isActive}
                             aria-label={`${row.symbol} ${formatNumberVN(row.price / 1000)}`}
-                            className={`flex w-full items-center justify-between rounded-xl border bg-secondary p-3 transition-colors duration-300 ${
+                            className={`flex w-full items-center justify-between rounded-xl border base-secondary p-3 transition-colors duration-300 ${
                                 isActive ? activeBorderClass : 'border-tertiary'
                             }`}
                         >
-                            <span className="font-caption-highlight text-primary">
+                            <span className="body-5-highlight text-primary">
                                 {row.symbol}
                             </span>
                             <span className="flex items-center gap-2">
-                                <span className={`font-caption ${changeColorClass}`}>
+                                <span className={`body-5 ${changeColorClass}`}>
                                     {isUp ? '+' : '-'}
                                     {formatNumberVN(Math.abs(row.change) / 1000)} (
                                     {isUp ? '+' : '-'}
                                     {formatNumberVN(Math.abs(row.changePercent))}%)
                                 </span>
-                                <span className="font-caption-highlight text-primary">
+                                <span className="body-5-highlight text-primary">
                                     {formatNumberVN(row.price / 1000)}
                                 </span>
                             </span>

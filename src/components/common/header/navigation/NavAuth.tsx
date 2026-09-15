@@ -32,7 +32,7 @@ export const NavAuth = () => {
             {profile ? (
                 <nav className="flex items-center gap-2" aria-label="User authentication">
                     {profile?.next_action === NextAction.EKYC && (
-                        <span className="text-primary font-caption-highlight">
+                        <span className="text-primary body-5-highlight">
                             {'Tài khoản chưa được định danh'}
                         </span>
                     )}
@@ -48,7 +48,7 @@ export const NavAuth = () => {
                             aria-expanded={isShowDropBox}
                             aria-controls="user-dropdown-menu"
                         >
-                            <div className="relative h-7 w-7 shrink-0 overflow-hidden rounded-full bg-tertiary">
+                            <div className="relative h-7 w-7 shrink-0 overflow-hidden rounded-full base-tertiary">
                                 <Image
                                     src={avatarUrl || DEFAULT_AVATAR_URL}
                                     alt="User avatar"
@@ -72,11 +72,11 @@ export const NavAuth = () => {
                         >
                             <menu
                                 id="user-dropdown-menu"
-                                className="flex flex-col gap-8 bg-tertiary rounded-xl text-primary p-4"
+                                className="flex flex-col gap-8 base-tertiary rounded-xl text-primary p-4"
                                 role="menu"
                             >
                                 <div className="flex gap-4 items-center">
-                                    <div className="relative h-10 w-10 shrink-0 overflow-hidden rounded-full bg-tertiary">
+                                    <div className="relative h-10 w-10 shrink-0 overflow-hidden rounded-full base-tertiary">
                                         <Image
                                             src={avatarUrl || DEFAULT_AVATAR_URL}
                                             alt={'Ảnh đại diện người dùng'}
@@ -86,16 +86,16 @@ export const NavAuth = () => {
                                         />
                                     </div>
                                     <div className="flex flex-col">
-                                        <span className="font-body-2-highlight text-primary">
+                                        <span className="body-3-highlight text-primary">
                                             {profile?.full_name}
                                         </span>
-                                        <span className="font-body-3 text-highlight">
+                                        <span className="body-4 text-highlight">
                                             {profile?.depository_number}
                                         </span>
                                     </div>
                                 </div>
                                 <button
-                                    className="cursor-pointer font-body-3 text-red bg-primary px-6 py-1.5 rounded-full w-fit"
+                                    className="cursor-pointer body-4 text-red base-primary px-6 py-1.5 rounded-full w-fit"
                                     onClick={logout}
                                     role="menuitem"
                                 >
@@ -111,10 +111,10 @@ export const NavAuth = () => {
                         <button
                             key={route.mode}
                             type="button"
-                            className={`flex items-center justify-center rounded-full font-caption-highlight py-1.5 w-28 ${
+                            className={`flex items-center justify-center rounded-full body-5-highlight py-1.5 w-28 ${
                                 route.isPrimary
-                                    ? 'bg-highlight text-quaternary'
-                                    : 'bg-tertiary text-highlight'
+                                    ? 'base-highlight text-quaternary'
+                                    : 'base-tertiary text-highlight'
                             }`}
                             onClick={() => openAuthDialog(route.mode)}
                         >

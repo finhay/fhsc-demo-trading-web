@@ -27,7 +27,7 @@ export const DownloadAppModal = ({ onClose }: Props) => {
                 </figure>
                 <h2
                     id="download-app-modal-title"
-                    className="m-0 text-center text-primary font-heading-4"
+                    className="m-0 text-center text-primary body-1-highlight"
                 >
                     {'Tải ứng dụng Finhay tại đây'}
                 </h2>

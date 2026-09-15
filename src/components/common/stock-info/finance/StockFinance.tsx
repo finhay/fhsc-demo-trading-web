@@ -98,8 +98,8 @@ export const StockFinance = () => {
                         onClick={() => setActiveTab(key)}
                         className={`flex items-center justify-center rounded-full px-3 py-1 transition-colors ${
                             activeTab === key
-                                ? 'bg-tertiary font-body-3-highlight text-primary'
-                                : 'font-body-3 text-secondary'
+                                ? 'base-tertiary body-4-highlight text-primary'
+                                : 'body-4 text-secondary'
                         }`}
                     >
                         {label}

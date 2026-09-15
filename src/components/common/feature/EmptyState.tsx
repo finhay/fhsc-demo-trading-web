@@ -24,13 +24,13 @@ export const EmptyState = ({ button, title, description }: Props) => {
                 priority
                 style={{ width: '100px', height: '100px' }}
             />
-            <figcaption className="font-body-2 text-secondary text-center">
+            <figcaption className="body-3 text-secondary text-center">
                 {description ||
                     (button ? 'Đăng nhập để xem thông tin chi tiết' : 'Không có dữ liệu')}
             </figcaption>
             {button && (
                 <button
-                    className="text-quaternary bg-highlight rounded-full w-28 py-1.5 font-body-3-highlight cursor-pointer"
+                    className="text-quaternary base-highlight rounded-full w-28 py-1.5 body-4-highlight cursor-pointer"
                     onClick={() => openAuthDialog(AUTH_MODE.LOGIN)}
                 >
                     {title || 'Đăng nhập'}

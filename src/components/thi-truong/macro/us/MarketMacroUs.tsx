@@ -33,13 +33,13 @@ export const MarketMacroUs = ({ data }: Props) => {
         {
             key: 'pce',
             label: 'PCE',
-            colorClass: 'bg-blue',
+            colorClass: 'base-blue',
             value: getLastMacroValue(data.pce),
         },
         {
             key: 'core_pce',
             label: 'PCE lõi',
-            colorClass: 'bg-orange',
+            colorClass: 'base-orange',
             value: getLastMacroValue(data.corePce),
         },
     ];
@@ -94,12 +94,12 @@ export const MarketMacroUs = ({ data }: Props) => {
     );
 
     return (
-        <section className="bg-secondary flex flex-col gap-4 rounded-2xl p-4">
-            <h3 className="font-body-2-highlight text-primary">{'Tiêu dùng & việc làm'}</h3>
+        <section className="base-secondary flex flex-col gap-4 rounded-2xl p-4">
+            <h3 className="body-3-highlight text-primary">{'Tiêu dùng & việc làm'}</h3>
             <div className="flex flex-col gap-4 lg:flex-row">
-                <div className="border-tertiary bg-secondary flex min-w-0 flex-1 flex-col gap-5 rounded-2xl border p-4">
+                <div className="border-tertiary base-secondary flex min-w-0 flex-1 flex-col gap-5 rounded-2xl border p-4">
                     <div className="flex flex-col gap-4">
-                        <p className="font-body-3 text-secondary">{'Lạm phát (YoY)'}</p>
+                        <p className="body-4 text-secondary">{'Lạm phát (YoY)'}</p>
                         <div className="flex flex-wrap items-center gap-4">
                             {consumptionLegends.map((legend) => (
                                 <div
@@ -111,11 +111,11 @@ export const MarketMacroUs = ({ data }: Props) => {
                                             className={`h-2 w-2 shrink-0 rounded-full ${legend.colorClass}`}
                                             aria-hidden
                                         />
-                                        <span className="font-body-3 text-secondary">
+                                        <span className="body-4 text-secondary">
                                             {legend.label}
                                         </span>
                                     </div>
-                                    <span className="font-body-3-highlight text-primary">
+                                    <span className="body-4-highlight text-primary">
                                         {formatMacroPercent(legend.value)}
                                     </span>
                                 </div>
@@ -127,17 +127,17 @@ export const MarketMacroUs = ({ data }: Props) => {
                     ) : (
                         <div
                             key="empty"
-                            className="text-secondary font-caption flex min-h-52 w-full flex-1 items-center justify-center"
+                            className="text-secondary body-5 flex min-h-52 w-full flex-1 items-center justify-center"
                         >
                             --
                         </div>
                     )}
                 </div>
-                <div className="border-tertiary bg-secondary flex min-w-0 flex-1 flex-col rounded-2xl border">
+                <div className="border-tertiary base-secondary flex min-w-0 flex-1 flex-col rounded-2xl border">
                     <div className="flex w-full flex-col gap-5 p-4">
                         <div className="flex flex-col gap-1">
-                            <p className="font-body-3 text-secondary">{'Việc làm (NFP)'}</p>
-                            <p className="font-body-2-highlight text-primary">
+                            <p className="body-4 text-secondary">{'Việc làm (NFP)'}</p>
+                            <p className="body-3-highlight text-primary">
                                 {nfpLast == null ? '--' : formatNfp(nfpLast)}
                             </p>
                         </div>
@@ -146,17 +146,17 @@ export const MarketMacroUs = ({ data }: Props) => {
                         ) : (
                             <div
                                 key="empty"
-                                className="text-secondary font-caption flex h-32 w-full items-center justify-center"
+                                className="text-secondary body-5 flex h-32 w-full items-center justify-center"
                             >
                                 --
                             </div>
                         )}
                     </div>
-                    <div className="bg-tertiary h-px w-full" />
+                    <div className="base-tertiary h-px w-full" />
                     <div className="flex w-full flex-col gap-5 p-4">
                         <div className="flex flex-col gap-1">
-                            <p className="font-body-3 text-secondary">{'Tỷ lệ thất nghiệp'}</p>
-                            <p className="font-body-2-highlight text-primary">
+                            <p className="body-4 text-secondary">{'Tỷ lệ thất nghiệp'}</p>
+                            <p className="body-3-highlight text-primary">
                                 {formatMacroPercent(getLastMacroValue(data.unemployment))}
                             </p>
                         </div>
@@ -165,7 +165,7 @@ export const MarketMacroUs = ({ data }: Props) => {
                         ) : (
                             <div
                                 key="empty"
-                                className="text-secondary font-caption flex h-32 w-full items-center justify-center"
+                                className="text-secondary body-5 flex h-32 w-full items-center justify-center"
                             >
                                 --
                             </div>

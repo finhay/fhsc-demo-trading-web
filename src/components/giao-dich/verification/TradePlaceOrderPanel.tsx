@@ -89,11 +89,11 @@ export const TradePlaceOrderPanel = ({ symbol, pendingOrder, onClose, onSuccess 
     };
 
     return (
-        <section className="bg-secondary flex w-full flex-1 flex-col gap-4 rounded-xl min-h-0">
+        <section className="base-secondary flex w-full flex-1 flex-col gap-4 rounded-xl min-h-0">
             <div className="flex min-h-0 w-full flex-1 flex-col gap-4 overflow-y-auto">
-                <h3 className="font-body-2-highlight w-full shrink-0 text-primary">{title}</h3>
+                <h3 className="body-3-highlight w-full shrink-0 text-primary">{title}</h3>
                 {isLargeOrder && (
-                    <p className="font-body-3 shrink-0 text-secondary">
+                    <p className="body-4 shrink-0 text-secondary">
                         {isBuy
                             ? 'Do khối lượng mua lớn, hệ thống tự động chia thành các lệnh như sau:'
                             : 'Do khối lượng bán lớn, hệ thống tự động chia thành các lệnh như sau:'}
@@ -104,25 +104,25 @@ export const TradePlaceOrderPanel = ({ symbol, pendingOrder, onClose, onSuccess 
                         <Fragment key={`${order.kind}-${order.qty}-${index}`}>
                             {index > 0 && <div className="border-t border-quaternary" />}
                             <dl className="flex flex-col gap-1">
-                                <p className="font-body-3 text-primary">{getBlockTitle(order)}</p>
+                                <p className="body-4 text-primary">{getBlockTitle(order)}</p>
                                 <div className="flex w-full items-start justify-between gap-2">
-                                    <dt className="font-body-3 shrink-0 text-secondary">
+                                    <dt className="body-4 shrink-0 text-secondary">
                                         {'Số lượng'}
                                     </dt>
-                                    <dd className="font-body-3 text-primary">
+                                    <dd className="body-4 text-primary">
                                         {formatNumberVN(order.qty, { decimals: 0 })} {'cp'}
                                     </dd>
                                 </div>
                                 <div className="flex w-full items-start justify-between gap-2">
-                                    <dt className="font-body-3 shrink-0 text-secondary">{'Giá'}</dt>
-                                    <dd className="font-body-3 text-primary">{priceDisplay}</dd>
+                                    <dt className="body-4 shrink-0 text-secondary">{'Giá'}</dt>
+                                    <dd className="body-4 text-primary">{priceDisplay}</dd>
                                 </div>
                                 <div className="flex w-full items-start justify-between gap-2">
                                     <dl className="flex w-full items-start justify-between gap-2">
-                                        <dt className="font-body-3 shrink-0 text-secondary">
+                                        <dt className="body-4 shrink-0 text-secondary">
                                             {isBuy ? 'Tổng tiền mua' : 'Tổng tiền bán'}
                                         </dt>
-                                        <dd className="font-body-3 text-primary">
+                                        <dd className="body-4 text-primary">
                                             {formatNumberVN(order.qty * price, {
                                                 trimTrailingZeros: true,
                                             })}
@@ -140,12 +140,12 @@ export const TradePlaceOrderPanel = ({ symbol, pendingOrder, onClose, onSuccess 
                     type="button"
                     onClick={handleConfirm}
                     disabled={isLoading}
-                    className={`font-body-3-highlight flex w-full items-center justify-center rounded-full px-4 py-2 transition-opacity ${
+                    className={`body-4-highlight flex w-full items-center justify-center rounded-full px-4 py-2 transition-opacity ${
                         isLoading
                             ? 'bg-disabled text-disabled cursor-not-allowed'
                             : isBuy
-                              ? 'bg-highlight text-quaternary'
-                              : 'bg-red text-primary'
+                              ? 'base-highlight text-quaternary'
+                              : 'base-red text-primary'
                     }`}
                 >
                     {'Xác nhận'}
@@ -154,7 +154,7 @@ export const TradePlaceOrderPanel = ({ symbol, pendingOrder, onClose, onSuccess 
                     type="button"
                     onClick={onClose}
                     disabled={isLoading}
-                    className="font-body-3-highlight flex w-full items-center justify-center rounded-full bg-error px-4 py-2 text-red transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
+                    className="body-4-highlight flex w-full items-center justify-center rounded-full bg-error px-4 py-2 text-red transition-opacity hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
                 >
                     {'Huỷ'}
                 </button>

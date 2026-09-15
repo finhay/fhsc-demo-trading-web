@@ -138,8 +138,8 @@ export const AssetStocks = () => {
     }, [isPortfolioLoading, portfolioSymbolsKey]);
 
     return (
-        <section className="flex h-full flex-col gap-3 overflow-hidden rounded-xl bg-secondary p-3">
-            <h2 className="shrink-0 font-body-2-highlight text-primary">{'Tổng giá trị'}</h2>
+        <section className="flex h-full flex-col gap-3 overflow-hidden rounded-xl base-secondary p-3">
+            <h2 className="shrink-0 body-3-highlight text-primary">{'Tổng giá trị'}</h2>
             {isLoading ? (
                 <div className="h-80 w-full">
                     <Skeleton />
@@ -151,13 +151,13 @@ export const AssetStocks = () => {
             ) : (
                 <>
                     <div className="flex shrink-0 flex-col gap-1">
-                        <p className="font-heading-4 text-primary">
+                        <p className="body-1-highlight text-primary">
                             {formatNumberVN(totalMarketValue, {
                                 trimTrailingZeros: true,
                             })}
                             đ
                         </p>
-                        <div className="flex items-start gap-3 whitespace-nowrap font-body-3">
+                        <div className="flex items-start gap-3 whitespace-nowrap body-4">
                             <span className="text-secondary">{isPnlUp ? 'Lãi' : 'Lỗ'}</span>
                             <span className={isPnlUp ? 'text-green' : 'text-red'}>
                                 {isPnlUp ? '+' : '-'}{' '}
@@ -169,16 +169,16 @@ export const AssetStocks = () => {
                             </span>
                         </div>
                     </div>
-                    <div className="h-px w-full shrink-0 bg-tertiary" />
-                    <h3 className="shrink-0 font-body-3 text-primary">{'Bạn có biết?'}</h3>
+                    <div className="h-px w-full shrink-0 base-tertiary" />
+                    <h3 className="shrink-0 body-4 text-primary">{'Bạn có biết?'}</h3>
                     <div className="flex shrink-0 flex-wrap items-start gap-3">
-                        <span className="font-body-3 text-secondary">
+                        <span className="body-4 text-secondary">
                             {isPortfolioUp
                                 ? 'Trong phiên, danh mục sở hữu của bạn đã tăng'
                                 : 'Trong phiên, danh mục sở hữu của bạn đã giảm'}
                         </span>
                         <span
-                            className={`inline-flex items-center gap-0.5 font-body-3-highlight ${
+                            className={`inline-flex items-center gap-0.5 body-4-highlight ${
                                 isPortfolioUp ? 'text-green' : 'text-red'
                             }`}
                         >

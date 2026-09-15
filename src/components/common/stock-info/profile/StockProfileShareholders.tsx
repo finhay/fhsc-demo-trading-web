@@ -72,7 +72,7 @@ const SortableHeader = ({
 }) => (
     <button
         type="button"
-        className="inline-flex items-center gap-1 whitespace-nowrap font-caption text-secondary"
+        className="inline-flex items-center gap-1 whitespace-nowrap body-5 text-secondary"
         onClick={column.getToggleSortingHandler()}
     >
         <span>{label}</span>
@@ -103,9 +103,9 @@ const getColumns = (): ColumnDef<StockMajorShareholder>[] => {
                             align="start"
                             className="block min-w-0 max-w-full"
                         >
-                            <p className="truncate font-body-3-highlight text-primary">{name}</p>
+                            <p className="truncate body-4-highlight text-primary">{name}</p>
                         </Tooltip>
-                        <p className="font-caption text-secondary">
+                        <p className="body-5 text-secondary">
                             {getShareholderTypeLabel(row.original.type)}
                         </p>
                     </div>
@@ -117,7 +117,7 @@ const getColumns = (): ColumnDef<StockMajorShareholder>[] => {
             accessorKey: 'volume',
             header: ({ column }) => <SortableHeader label={'Số CP'} column={column} />,
             cell: ({ row }) => (
-                <span className="font-body-3-highlight text-primary">
+                <span className="body-4-highlight text-primary">
                     {formatNumberVN(row.original.volume, { decimals: 0 })}
                 </span>
             ),
@@ -127,7 +127,7 @@ const getColumns = (): ColumnDef<StockMajorShareholder>[] => {
             accessorKey: 'pct',
             header: ({ column }) => <SortableHeader label={'Tỷ lệ'} column={column} />,
             cell: ({ row }) => (
-                <span className="font-body-3-highlight text-primary">
+                <span className="body-4-highlight text-primary">
                     {formatPercentVN(row.original.pct)}
                 </span>
             ),
@@ -137,7 +137,7 @@ const getColumns = (): ColumnDef<StockMajorShareholder>[] => {
             accessorKey: 'updated_at',
             header: ({ column }) => <SortableHeader label={'Cập nhật'} column={column} />,
             cell: ({ row }) => (
-                <span className="font-body-3-highlight text-primary">
+                <span className="body-4-highlight text-primary">
                     {formatDateOrDash(row.original.updated_at)}
                 </span>
             ),
@@ -176,7 +176,7 @@ export const StockProfileShareholders = ({ isLoading, shareholders }: Props) => 
                 </div>
             ) : (
                 <div className="flex min-h-0 flex-1 flex-col gap-3 overflow-hidden p-4">
-                    <h3 className="shrink-0 font-body-2-highlight text-primary">{'Cổ đông lớn'}</h3>
+                    <h3 className="shrink-0 body-3-highlight text-primary">{'Cổ đông lớn'}</h3>
                     {shareholders.length === 0 ? (
                         <EmptyState />
                     ) : (
@@ -188,7 +188,7 @@ export const StockProfileShareholders = ({ isLoading, shareholders }: Props) => 
                                     <col className="w-16" />
                                     <col className="w-[94px]" />
                                 </colgroup>
-                                <thead className="sticky top-0 z-10 bg-secondary">
+                                <thead className="sticky top-0 z-10 base-secondary">
                                     {table.getHeaderGroups().map((headerGroup) => (
                                         <tr key={headerGroup.id}>
                                             {headerGroup.headers.map((header, index) => {
@@ -208,7 +208,7 @@ export const StockProfileShareholders = ({ isLoading, shareholders }: Props) => 
                                                                 ? ariaSort
                                                                 : undefined
                                                         }
-                                                        className={`bg-secondary pb-3 text-left font-caption text-secondary ${
+                                                        className={`base-secondary pb-3 text-left body-5 text-secondary ${
                                                             index === 0 ? 'pr-3' : 'pl-3'
                                                         }`}
                                                     >

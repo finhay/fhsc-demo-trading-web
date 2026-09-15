@@ -20,22 +20,22 @@ const CONFIG: Record<
     success: {
         bg: 'bg-success',
         border: 'border-highlight',
-        iconBg: 'bg-highlight',
-        progressBar: 'bg-highlight',
+        iconBg: 'base-highlight',
+        progressBar: 'base-highlight',
         Icon: FaCheck,
     },
     error: {
         bg: 'bg-error',
         border: 'border-red',
-        iconBg: 'bg-red',
-        progressBar: 'bg-red',
+        iconBg: 'base-red',
+        progressBar: 'base-red',
         Icon: FaXmark,
     },
     warning: {
         bg: 'bg-warning',
         border: 'border-yellow',
-        iconBg: 'bg-yellow',
-        progressBar: 'bg-yellow',
+        iconBg: 'base-yellow',
+        progressBar: 'base-yellow',
         Icon: FaCircleExclamation,
     },
 };
@@ -120,9 +120,9 @@ export function ToastItem({ toast }: { toast: ToastItemType }) {
                 </span>
 
                 <div className="flex flex-col">
-                    <p className="font-body-2-highlight text-primary">{toast.message}</p>
+                    <p className="body-3-highlight text-primary">{toast.message}</p>
                     {toast.description && (
-                        <p className="font-body-3 text-primary">{toast.description}</p>
+                        <p className="body-4 text-primary">{toast.description}</p>
                     )}
                 </div>
             </div>

@@ -42,7 +42,7 @@ export const BankLiquidity = ({ dataAnnual }: { dataAnnual: any }) => {
                 padding: 8,
                 formatter: (params: any) => {
                     const p = Array.isArray(params) ? params[0] : params;
-                    return `<div class="flex flex-col gap-0.5"><span class="font-caption text-secondary">${p?.axisValue ?? ''}</span><span class="font-caption-highlight text-primary">${formatNumberVN(Number(p?.value ?? 0))}%</span></div>`;
+                    return `<div class="flex flex-col gap-0.5"><span class="body-5 text-secondary">${p?.axisValue ?? ''}</span><span class="body-5-highlight text-primary">${formatNumberVN(Number(p?.value ?? 0))}%</span></div>`;
                 },
             },
             xAxis: {
@@ -95,7 +95,7 @@ export const BankLiquidity = ({ dataAnnual }: { dataAnnual: any }) => {
         <AnalysisSection
             title={'Thanh khoản & vốn có an toàn?'}
             right={
-                <span className="shrink-0 rounded-full border border-tertiary px-2 py-1 font-body-3 text-primary">
+                <span className="shrink-0 rounded-full border border-tertiary px-2 py-1 body-4 text-primary">
                     {'QoQ'}
                 </span>
             }
@@ -103,8 +103,8 @@ export const BankLiquidity = ({ dataAnnual }: { dataAnnual: any }) => {
             <div className={ANALYSIS_CONTENT_CARD}>
                 <div className="flex min-h-0 flex-1 flex-col gap-1">
                     <div className="flex shrink-0 flex-col">
-                        <p className="font-body-3 text-secondary">{'CASA'}</p>
-                        <p className={`font-body-2-highlight ${getValueClass(casaValue, true)}`}>
+                        <p className="body-4 text-secondary">{'CASA'}</p>
+                        <p className={`body-3-highlight ${getValueClass(casaValue, true)}`}>
                             {formatNumberVN(casaValue)}%
                         </p>
                     </div>
@@ -112,14 +112,14 @@ export const BankLiquidity = ({ dataAnnual }: { dataAnnual: any }) => {
                         <div ref={chartRef} className={ANALYSIS_CHART_CANVAS} aria-hidden />
                     </div>
                 </div>
-                <div className="h-px w-full shrink-0 bg-tertiary" />
+                <div className="h-px w-full shrink-0 base-tertiary" />
                 <div className="flex shrink-0 gap-4">
                     {BANK_LIQUIDITY_METRICS.map(({ labelKey, field }) => {
                         const v = Number(latest?.[field] ?? 0) * 100;
                         return (
                             <div key={labelKey} className="flex min-w-0 flex-1 flex-col gap-1">
-                                <p className="font-body-3 text-secondary">{fa[labelKey]}</p>
-                                <p className={`font-body-2-highlight ${getValueClass(v, true)}`}>
+                                <p className="body-4 text-secondary">{fa[labelKey]}</p>
+                                <p className={`body-3-highlight ${getValueClass(v, true)}`}>
                                     {formatNumberVN(v, { trimTrailingZeros: true })}%
                                 </p>
                             </div>

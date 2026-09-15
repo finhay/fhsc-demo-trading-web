@@ -152,12 +152,12 @@ export const RegisterAccount = () => {
                     />
                 )}
             </form.Field>
-            <p className="font-body-3 text-secondary">
+            <p className="body-4 text-secondary">
                 {'Bằng việc “Tiếp tục”, bạn đồng ý với'}{' '}
                 <button
                     type="button"
                     onClick={handleOpenTerms}
-                    className="cursor-pointer text-primary hover:underline bg-transparent border-0 p-0 font-body-3"
+                    className="cursor-pointer text-primary hover:underline bg-transparent border-0 p-0 body-4"
                 >
                     {'Điều khoản và điều kiện sử dụng sản phẩm FHSC'}
                 </button>
@@ -166,19 +166,19 @@ export const RegisterAccount = () => {
                 <button
                     type="submit"
                     disabled={!canSubmit}
-                    className={`w-2/3 font-body-3-highlight rounded-full px-4 py-2 transition-all ${
+                    className={`w-2/3 body-4-highlight rounded-full px-4 py-2 transition-all ${
                         canSubmit
-                            ? 'bg-highlight text-quaternary hover:opacity-90'
+                            ? 'base-highlight text-quaternary hover:opacity-90'
                             : 'bg-disabled text-disabled cursor-not-allowed'
                     }`}
                 >
                     {'Tiếp tục'}
                 </button>
-                <p className="font-body-3 text-primary">{'Hoặc'}</p>
+                <p className="body-4 text-primary">{'Hoặc'}</p>
                 <button
                     type="button"
                     onClick={() => openAuthDialog(AUTH_MODE.LOGIN)}
-                    className="w-2/3 px-4 py-2 rounded-full font-body-3-highlight text-highlight bg-success cursor-pointer"
+                    className="w-2/3 px-4 py-2 rounded-full body-4-highlight text-highlight bg-success cursor-pointer"
                 >
                     {'Bạn đã có tài khoản?'}
                 </button>
@@ -195,10 +195,10 @@ export const RegisterAccount = () => {
                                 type="button"
                                 disabled={isLoading}
                                 onClick={() => handleViewTerm(item.id, item.title)}
-                                className="bg-tertiary flex items-center gap-2 p-3 rounded-xl cursor-pointer text-left disabled:opacity-50"
+                                className="base-tertiary flex items-center gap-2 p-3 rounded-xl cursor-pointer text-left disabled:opacity-50"
                             >
                                 <FaFileLines size={20} className="text-green shrink-0" />
-                                <span className="font-body-3-highlight text-green">
+                                <span className="body-4-highlight text-green">
                                     {item.title}
                                 </span>
                             </button>

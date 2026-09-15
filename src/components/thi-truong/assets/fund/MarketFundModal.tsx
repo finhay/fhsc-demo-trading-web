@@ -47,7 +47,7 @@ export const MarketFundModal = ({ certificates }: Props) => {
             title={selectedFundName ? 'Thông tin quỹ' : 'Chứng chỉ quỹ mở'}
             maxWidth="max-w-7xl"
             maxHeight="h-[90vh]"
-            panelClassName="bg-primary"
+            panelClassName="base-primary"
             headerClassName="p-4"
             bodyClassName="flex min-h-0 flex-1 flex-col overflow-hidden"
         >
@@ -74,7 +74,7 @@ export const MarketFundModal = ({ certificates }: Props) => {
                             />
                             <div
                                 aria-hidden
-                                className="absolute -left-16 top-0 size-72 rounded-full bg-yellow opacity-20 blur-2xl"
+                                className="absolute -left-16 top-0 size-72 rounded-full base-yellow opacity-20 blur-2xl"
                             />
                         </div>
                         <div className="relative z-10 overflow-visible px-4">

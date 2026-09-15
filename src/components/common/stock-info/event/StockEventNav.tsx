@@ -44,8 +44,8 @@ export const StockEventNav = ({
                                 onClick={() => onSelectEventType(tab.eventType)}
                                 className={`cursor-pointer rounded-full px-3 py-1 whitespace-nowrap transition-colors ${
                                     isSelected
-                                        ? 'bg-tertiary font-body-3-highlight text-primary'
-                                        : 'font-body-3 text-secondary'
+                                        ? 'base-tertiary body-4-highlight text-primary'
+                                        : 'body-4 text-secondary'
                                 }`}
                             >
                                 {tab.eventTypeName}

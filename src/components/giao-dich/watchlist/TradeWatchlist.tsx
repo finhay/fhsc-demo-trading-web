@@ -223,13 +223,13 @@ export const TradeWatchlist = () => {
         <section
             aria-label={'Danh mục sở hữu'}
             aria-live="polite"
-            className="bg-secondary flex h-full min-h-0 w-full min-w-0 flex-1 flex-col gap-3 overflow-hidden rounded-xl p-3"
+            className="base-secondary flex h-full min-h-0 w-full min-w-0 flex-1 flex-col gap-3 overflow-hidden rounded-xl p-3"
         >
             <div className="flex items-center">
                 <DropdownWatchlist
                     align="left"
                     buttonWidthClass="w-40"
-                    buttonClass="bg-tertiary"
+                    buttonClass="base-tertiary"
                     showCreateButton={false}
                     showOwnedOption={canShowOwned}
                     isOwnedActive={isOwned}
@@ -265,7 +265,7 @@ export const TradeWatchlist = () => {
                                                 key={header.id}
                                                 scope="col"
                                                 style={colSize ? { width: colSize } : undefined}
-                                                className={`bg-secondary pb-3 align-top font-body-3 text-secondary ${textAlignClass}`}
+                                                className={`base-secondary pb-3 align-top body-4 text-secondary ${textAlignClass}`}
                                             >
                                                 {header.isPlaceholder
                                                     ? null

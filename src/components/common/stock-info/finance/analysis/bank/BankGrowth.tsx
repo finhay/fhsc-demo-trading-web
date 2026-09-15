@@ -80,8 +80,8 @@ export const BankGrowth = ({
             className={`flex flex-col gap-2 rounded-2xl border border-tertiary p-3 ${className ?? ''}`}
         >
             <div className="flex flex-col gap-0.5">
-                <p className="font-body-3 text-secondary">{fa[row.labelKey]}</p>
-                <p className={`font-body-3-highlight ${row.textClass}`}>
+                <p className="body-4 text-secondary">{fa[row.labelKey]}</p>
+                <p className={`body-4-highlight ${row.textClass}`}>
                     {row.value >= 0 ? '+' : ''}
                     {formatNumberVN(row.value)}%
                 </p>
@@ -94,7 +94,7 @@ export const BankGrowth = ({
         <AnalysisSection
             title={'Có tăng trưởng không?'}
             right={
-                <span className="shrink-0 rounded-full border border-tertiary px-2 py-1 font-body-3 text-primary">
+                <span className="shrink-0 rounded-full border border-tertiary px-2 py-1 body-4 text-primary">
                     {'YoY'}
                 </span>
             }

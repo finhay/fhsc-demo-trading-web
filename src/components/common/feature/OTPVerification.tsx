@@ -65,7 +65,7 @@ export const OTPVerification = ({
     return (
         <section className={`flex flex-col gap-4 ${width}`}>
             {captchaToken && (
-                <p className="font-body-3 text-secondary w-full">
+                <p className="body-4 text-secondary w-full">
                     {isIndividual
                         ? 'Mã OTP đã được gửi qua số điện thoại của bạn.'
                         : 'Mã OTP đã được gửi qua email của bạn.'}
@@ -89,7 +89,7 @@ export const OTPVerification = ({
                                 renderInput={(props) => (
                                     <input
                                         {...props}
-                                        className="bg-quaternary flex-1 h-14 rounded-xl text-center font-body-1-highlight text-primary outline-none transition-all focus:ring-2 focus:ring-highlight [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                                        className="base-quaternary flex-1 h-14 rounded-xl text-center body-2-highlight text-primary outline-none transition-all focus:ring-2 focus:ring-highlight [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
                                         inputMode="numeric"
                                         pattern="[0-9]*"
                                         type="text"
@@ -98,14 +98,14 @@ export const OTPVerification = ({
                                 )}
                             />
                         </div>
-                        <div className="font-body-3 flex w-full flex-col gap-2">
+                        <div className="body-4 flex w-full flex-col gap-2">
                             <div className="flex items-start gap-1">
                                 <span className="text-secondary">{'Không nhận được OTP?'}</span>
                                 <button
                                     type="button"
                                     onClick={handleResendOTP}
                                     disabled={remainSecond > 0}
-                                    className={`font-body-3-highlight transition-colors ${
+                                    className={`body-4-highlight transition-colors ${
                                         remainSecond > 0
                                             ? 'text-tertiary cursor-not-allowed'
                                             : 'text-highlight'
@@ -122,7 +122,7 @@ export const OTPVerification = ({
                                 </span>
                                 <a
                                     href="tel:024777789096"
-                                    className="font-body-3-highlight text-highlight hover:underline"
+                                    className="body-4-highlight text-highlight hover:underline"
                                 >
                                     024 777 789 96
                                 </a>
@@ -132,9 +132,9 @@ export const OTPVerification = ({
                             type="button"
                             onClick={handleVerify}
                             disabled={!isValidOTP || isLoading}
-                            className={`font-body-3-highlight w-full rounded-full px-4 py-2 transition-all ${
+                            className={`body-4-highlight w-full rounded-full px-4 py-2 transition-all ${
                                 isValidOTP && !isLoading
-                                    ? 'bg-highlight text-quaternary hover:opacity-90'
+                                    ? 'base-highlight text-quaternary hover:opacity-90'
                                     : 'bg-disabled text-disabled'
                             }`}
                         >

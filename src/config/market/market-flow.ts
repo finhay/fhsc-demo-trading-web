@@ -165,10 +165,10 @@ export const createChartTradingFlow = (sessions: TradingFlowSession[]): echarts.
                 const valueClass = value === 0 ? 'text-orange' : getNetColor(value);
                 const label = point?.name ?? point?.axisValue ?? '';
                 return `
-                    <div class="flex flex-col gap-1 rounded-xl bg-tertiary p-2">
-                        <span class="font-caption text-secondary">${label}</span>
-                        <p class="font-caption text-secondary">${'Mua bán ròng'}</p>
-                        <p class="font-caption-highlight ${valueClass}">${absVal} tỷ</p>
+                    <div class="flex flex-col gap-1 rounded-xl base-tertiary p-2">
+                        <span class="body-5 text-secondary">${label}</span>
+                        <p class="body-5 text-secondary">${'Mua bán ròng'}</p>
+                        <p class="body-5-highlight ${valueClass}">${absVal} tỷ</p>
                     </div>
                 `;
             },
@@ -293,13 +293,13 @@ export const createChartTradingFlowHistory = (
                         const absVal = formatNumberVN(Math.abs(value), { decimals: 2 });
                         const colorClass = getNetColor(value);
                         return `
-                            <p class="font-caption text-secondary">${point.seriesName}: <span class="font-caption-highlight ${colorClass}">${absVal} tỷ</span></p>
+                            <p class="body-5 text-secondary">${point.seriesName}: <span class="body-5-highlight ${colorClass}">${absVal} tỷ</span></p>
                         `;
                     })
                     .join('');
                 return `
-                    <div class="flex flex-col gap-1 rounded-xl bg-tertiary p-2">
-                        <span class="font-caption text-secondary">${dateLabel}</span>
+                    <div class="flex flex-col gap-1 rounded-xl base-tertiary p-2">
+                        <span class="body-5 text-secondary">${dateLabel}</span>
                         ${rows}
                     </div>
                 `;
@@ -393,14 +393,14 @@ const formatFlowTreemapTooltip = (
 
     const netTextClass = getNetColor(data.netValue ?? 0);
     const companyLine = data.companyName
-        ? `<span class="font-caption text-secondary">${data.companyName}</span>`
+        ? `<span class="body-5 text-secondary">${data.companyName}</span>`
         : '';
     const netLabel = side === 'buy' ? 'Mua ròng' : 'Bán ròng';
 
-    return `<div class="flex min-w-32 flex-col gap-1 rounded-lg bg-tertiary p-2">
-        <span class="font-caption-highlight text-primary">${data.name}</span>
+    return `<div class="flex min-w-32 flex-col gap-1 rounded-lg base-tertiary p-2">
+        <span class="body-5-highlight text-primary">${data.name}</span>
         ${companyLine}
-        <span class="font-caption ${netTextClass}">${netLabel}: ${formatNumberVNWithUnit(
+        <span class="body-5 ${netTextClass}">${netLabel}: ${formatNumberVNWithUnit(
             Math.abs(data.netValue ?? 0),
         )}</span>
     </div>`;

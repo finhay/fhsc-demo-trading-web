@@ -19,7 +19,7 @@ export const MarketCurrencyModal = ({ onClose, raw }: Props) => {
             onClose={onClose}
             maxWidth="max-w-7xl"
             maxHeight="h-[90vh]"
-            panelClassName="bg-primary gap-4 p-4"
+            panelClassName="base-primary gap-4 p-4"
         >
             <div className="scrollbar flex min-h-0 flex-1 flex-col gap-3 overflow-x-hidden overflow-y-auto">
                 <MarketExchangeRate initialChart={raw.exchangeChart} />

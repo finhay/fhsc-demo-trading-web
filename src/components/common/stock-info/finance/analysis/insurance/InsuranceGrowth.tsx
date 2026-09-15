@@ -107,7 +107,7 @@ export const InsuranceGrowth = ({
         <AnalysisSection
             title={fa.growth_question}
             right={
-                <span className="shrink-0 rounded-full border border-tertiary px-2 py-1 font-body-3 text-primary">
+                <span className="shrink-0 rounded-full border border-tertiary px-2 py-1 body-4 text-primary">
                     {fa.yoy}
                 </span>
             }
@@ -121,11 +121,11 @@ export const InsuranceGrowth = ({
                                     className={`h-1.5 w-1.5 shrink-0 rounded-full ${item.dotColor}`}
                                     aria-hidden
                                 />
-                                <span className="font-body-3 text-secondary">
+                                <span className="body-4 text-secondary">
                                     {fa[item.labelKey]}
                                 </span>
                             </div>
-                            <span className={`font-body-3-highlight ${item.valueColor}`}>
+                            <span className={`body-4-highlight ${item.valueColor}`}>
                                 {formatNumberVN(item.value)}%
                             </span>
                         </div>

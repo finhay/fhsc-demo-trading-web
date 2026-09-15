@@ -108,7 +108,7 @@ export const MarketInvestmentPerformance = () => {
         <div className="flex shrink-0 flex-col gap-4">
             <div className="flex flex-col gap-3">
                 <div className="flex items-center justify-between gap-2">
-                    <h2 className="font-body-2-highlight text-primary">{'Hiệu suất đầu tư'}</h2>
+                    <h2 className="body-3-highlight text-primary">{'Hiệu suất đầu tư'}</h2>
                     <Dropdown
                         options={viewOptions}
                         value={view}
@@ -123,8 +123,8 @@ export const MarketInvestmentPerformance = () => {
                             onClick={() => setPeriod(value)}
                             className={`rounded-full px-3 py-1 transition-colors ${
                                 period === value
-                                    ? 'bg-tertiary font-caption-highlight text-primary'
-                                    : 'font-caption text-secondary'
+                                    ? 'base-tertiary body-5-highlight text-primary'
+                                    : 'body-5 text-secondary'
                             }`}
                         >
                             {INVESTMENT_PERFORMANCE_PERIOD[value]}

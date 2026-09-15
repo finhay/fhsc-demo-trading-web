@@ -29,7 +29,7 @@ export const buildPaperAssetsSummary = (asset: PaperAccountAsset | null): Assets
         money: {
             total: asset?.money?.total ?? 0,
             ci_balance: asset?.money?.ci_balance ?? 0,
-            ca_receiving: 0,
+            ca_receiving: asset?.products?.receivable?.cash ?? 0,
             emk_amt: 0,
             receiving_amt: asset?.money?.reserved ?? 0,
             baldefovd: asset?.money?.baldefovd ?? 0,

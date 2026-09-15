@@ -30,10 +30,10 @@ export const MarketOmo = ({ items }: Props) => {
     });
 
     return (
-        <section className="bg-secondary flex flex-col gap-3 rounded-xl p-4">
+        <section className="base-secondary flex flex-col gap-3 rounded-xl p-4">
             <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:gap-5">
                 <div className="flex flex-1 flex-col gap-3">
-                    <p className="font-body-3 text-secondary">{'Hoạt động thị trường mở'}</p>
+                    <p className="body-4 text-secondary">{'Hoạt động thị trường mở'}</p>
                     <div className="flex items-center gap-5">
                         {tabs.map(({ key, label }) => {
                             const isActive = tab === key;
@@ -44,8 +44,8 @@ export const MarketOmo = ({ items }: Props) => {
                                     onClick={() => setTab(key)}
                                     className={
                                         isActive
-                                            ? 'font-body-2-highlight text-primary'
-                                            : 'font-body-2-highlight text-secondary'
+                                            ? 'body-3-highlight text-primary'
+                                            : 'body-3-highlight text-secondary'
                                     }
                                 >
                                     {label}
@@ -56,17 +56,17 @@ export const MarketOmo = ({ items }: Props) => {
                 </div>
                 <div className="border-tertiary flex items-center gap-5 rounded-2xl border px-4 py-3">
                     <div className="flex w-40 shrink-0 flex-col gap-2">
-                        <p className="font-body-3 text-secondary">{'OMO lưu hành'}</p>
-                        <p className="font-body-2-highlight text-primary">
+                        <p className="body-4 text-secondary">{'OMO lưu hành'}</p>
+                        <p className="body-3-highlight text-primary">
                             {last
                                 ? `${formatNumberVN(last.outstanding_volume, { trimTrailingZeros: true })} ${'tỷ'}`
                                 : '--'}
                         </p>
                     </div>
-                    <div className="bg-tertiary self-stretch w-px" />
+                    <div className="base-tertiary self-stretch w-px" />
                     <div className="flex w-40 shrink-0 flex-col gap-2">
-                        <p className="font-body-3 text-secondary">{'Lãi suất OMO'}</p>
-                        <p className="font-body-2-highlight text-primary">
+                        <p className="body-4 text-secondary">{'Lãi suất OMO'}</p>
+                        <p className="body-3-highlight text-primary">
                             {last
                                 ? `${formatNumberVN(last.rate, { trimTrailingZeros: true })}%`
                                 : '--'}
@@ -79,12 +79,12 @@ export const MarketOmo = ({ items }: Props) => {
             ) : (
                 <div
                     key="empty"
-                    className="text-secondary font-caption flex h-60 items-center justify-center"
+                    className="text-secondary body-5 flex h-60 items-center justify-center"
                 >
                     --
                 </div>
             )}
-            <p className="font-caption text-tertiary text-right">{'Đơn vị: nghìn tỷ đồng'}</p>
+            <p className="body-5 text-tertiary text-right">{'Đơn vị: nghìn tỷ đồng'}</p>
         </section>
     );
 };

@@ -193,7 +193,7 @@ export const InputSearch = ({
             <form onSubmit={(event) => event.preventDefault()}>
                 <div
                     className={`relative flex items-center gap-2 px-3 py-1.5 border border-quaternary ${
-                        isPill ? 'rounded-full bg-transparent' : 'rounded-xl bg-secondary'
+                        isPill ? 'rounded-full bg-transparent' : 'rounded-xl base-secondary'
                     }`}
                 >
                     <FiSearch size={16} className="flex-shrink-0 text-primary" aria-hidden="true" />
@@ -219,7 +219,7 @@ export const InputSearch = ({
                         onBlur={() => setIsInputFocused(false)}
                         placeholder={resolvedPlaceholder}
                         className={`min-w-0 flex-1 bg-transparent text-primary outline-none placeholder:text-secondary ${
-                            inputClassName ?? 'font-body-3'
+                            inputClassName ?? 'body-4'
                         }`}
                     />
                 </div>
@@ -229,7 +229,7 @@ export const InputSearch = ({
                         id={`${inputId}-listbox`}
                         role="listbox"
                         aria-label={'Kết quả tìm kiếm'}
-                        className="scrollbar absolute top-full left-0 right-0 bg-secondary border border-tertiary rounded-xl overflow-hidden z-50 shadow-lg max-h-60 overflow-y-auto"
+                        className="scrollbar absolute top-full left-0 right-0 base-secondary border border-tertiary rounded-xl overflow-hidden z-50 shadow-lg max-h-60 overflow-y-auto"
                     >
                         {searchResults.map((item, index) => (
                             <li
@@ -242,14 +242,14 @@ export const InputSearch = ({
                                 <button
                                     type="button"
                                     onClick={(event) => selectItem(item, event)}
-                                    className={`flex w-full items-center justify-between px-4 py-2.5 text-left transition-colors hover:bg-tertiary ${
-                                        focusedIndex === index ? 'bg-tertiary' : ''
+                                    className={`flex w-full items-center justify-between px-4 py-2.5 text-left transition-colors hover:bg-(--base-tertiary) ${
+                                        focusedIndex === index ? 'base-tertiary' : ''
                                     }`}
                                 >
-                                    <span className="font-caption-highlight text-primary">
+                                    <span className="body-5-highlight text-primary">
                                         {renderHighlightedText(item.symbol)}
                                     </span>
-                                    <span className="font-caption text-secondary">
+                                    <span className="body-5 text-secondary">
                                         {item.kind === 'index' ? 'Chỉ số' : item.stock.exchange}
                                     </span>
                                 </button>

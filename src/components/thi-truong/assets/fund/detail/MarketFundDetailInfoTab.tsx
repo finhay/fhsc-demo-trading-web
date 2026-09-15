@@ -53,7 +53,7 @@ export const MarketFundDetailInfoTab = ({ listing }: Props) => {
     return (
         <div className="flex flex-col gap-4">
             {sections.length > 0 && (
-                <div className="flex flex-col divide-y divide-tertiary rounded-2xl bg-secondary px-4">
+                <div className="flex flex-col divide-y divide-tertiary rounded-2xl base-secondary px-4">
                     {sections.map((section) => {
                         const isOpen = openKey === section.key;
                         return (
@@ -63,7 +63,7 @@ export const MarketFundDetailInfoTab = ({ listing }: Props) => {
                                     onClick={() => setOpenKey(isOpen ? null : section.key)}
                                     className="flex items-center justify-between gap-2 text-left"
                                 >
-                                    <span className="font-body-2-highlight text-primary">
+                                    <span className="body-3-highlight text-primary">
                                         {section.title}
                                     </span>
                                     <FaChevronDown
@@ -79,7 +79,7 @@ export const MarketFundDetailInfoTab = ({ listing }: Props) => {
                                     }`}
                                 >
                                     <div className="min-h-0 overflow-hidden">
-                                        <p className="mt-3 font-body-3 text-secondary">
+                                        <p className="mt-3 body-4 text-secondary">
                                             {section.content}
                                         </p>
                                     </div>
@@ -90,7 +90,7 @@ export const MarketFundDetailInfoTab = ({ listing }: Props) => {
                 </div>
             )}
             {(documents.length > 0 || hasOtherDocument) && (
-                <div className="flex flex-col divide-y divide-tertiary rounded-2xl bg-secondary px-4">
+                <div className="flex flex-col divide-y divide-tertiary rounded-2xl base-secondary px-4">
                     {documents.map((doc) => (
                         <a
                             key={doc.document_url}
@@ -99,7 +99,7 @@ export const MarketFundDetailInfoTab = ({ listing }: Props) => {
                             rel="noopener noreferrer"
                             className="flex items-center justify-between gap-2 py-4"
                         >
-                            <span className="flex items-center gap-2 font-body-2-highlight text-primary">
+                            <span className="flex items-center gap-2 body-3-highlight text-primary">
                                 <FaFile size={20} className="shrink-0 text-secondary" />
                                 {doc.last_updated_at
                                     ? `${doc.name} - ${formatDate(doc.last_updated_at)}`
@@ -115,7 +115,7 @@ export const MarketFundDetailInfoTab = ({ listing }: Props) => {
                             rel="noopener noreferrer"
                             className="flex items-center justify-between gap-2 py-4"
                         >
-                            <span className="flex items-center gap-2 font-body-2-highlight text-primary">
+                            <span className="flex items-center gap-2 body-3-highlight text-primary">
                                 <FaFile size={20} className="shrink-0 text-secondary" />
                                 {'Xem thêm tài liệu khác'}
                             </span>

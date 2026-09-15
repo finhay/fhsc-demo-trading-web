@@ -102,7 +102,7 @@ export const MarketIndexInvestment = () => {
     return (
         <div className="flex shrink-0 flex-col gap-4">
             <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
-                <h2 className="font-body-2-highlight text-primary">{'So sánh hiệu suất đầu tư'}</h2>
+                <h2 className="body-3-highlight text-primary">{'So sánh hiệu suất đầu tư'}</h2>
                 <div className="flex flex-wrap gap-1">
                     {INVESTMENT_CHANNEL_PERIODS.map((value) => (
                         <button
@@ -111,8 +111,8 @@ export const MarketIndexInvestment = () => {
                             onClick={() => setPeriod(value)}
                             className={`rounded-full px-3 py-1 transition-colors ${
                                 period === value
-                                    ? 'bg-tertiary font-caption-highlight text-primary'
-                                    : 'font-caption text-secondary'
+                                    ? 'base-tertiary body-5-highlight text-primary'
+                                    : 'body-5 text-secondary'
                             }`}
                         >
                             {INVESTMENT_PERFORMANCE_PERIOD[value]}

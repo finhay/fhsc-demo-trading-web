@@ -10,7 +10,7 @@ import { ToastContainer } from '@/components/common/ui/Toast';
 import { inter } from '@/config/fonts';
 import { DefaultLayout } from '@/layouts/DefaultLayout';
 import { Providers } from '@/provider/provider';
-import '@/styles/globals.scss';
+import '@/styles/globals.css';
 
 export const metadata: Metadata = {
     title: {

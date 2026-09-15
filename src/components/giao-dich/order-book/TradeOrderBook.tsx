@@ -52,13 +52,13 @@ export const TradeOrderBook = () => {
     return (
         <>
             <section
-                className="bg-secondary flex w-full flex-col gap-2 p-3 rounded-xl h-64"
+                className="base-secondary flex w-full flex-col gap-2 p-3 rounded-xl h-64"
                 aria-labelledby="orderbook-heading"
             >
                 <header className="flex gap-2 items-center shrink-0">
                     <h2
                         id="orderbook-heading"
-                        className="font-body-3-highlight text-primary whitespace-nowrap"
+                        className="body-4-highlight text-primary whitespace-nowrap"
                     >
                         {'Sổ lệnh'}
                     </h2>
@@ -71,7 +71,7 @@ export const TradeOrderBook = () => {
                         <Skeleton />
                     ) : orders.length === 0 ? (
                         <div className="flex items-center justify-center h-full">
-                            <p className="text-secondary font-caption">{'Chưa có lệnh nào'}</p>
+                            <p className="text-secondary body-5">{'Chưa có lệnh nào'}</p>
                         </div>
                     ) : (
                         <div className="w-full">
@@ -81,24 +81,24 @@ export const TradeOrderBook = () => {
                                         <col key={index} className="w-1/6" />
                                     ))}
                                 </colgroup>
-                                <thead className="sticky top-0 bg-secondary z-5">
+                                <thead className="sticky top-0 base-secondary z-5">
                                     <tr>
-                                        <th className="w-1/6 pb-2 font-caption text-secondary whitespace-nowrap px-1 text-left">
+                                        <th className="w-1/6 pb-2 body-5 text-secondary whitespace-nowrap px-1 text-left">
                                             {'Mã CP'}
                                         </th>
-                                        <th className="w-1/6 pb-2 font-caption text-secondary whitespace-nowrap px-1 text-right">
+                                        <th className="w-1/6 pb-2 body-5 text-secondary whitespace-nowrap px-1 text-right">
                                             {'KL khớp/KL đặt'}
                                         </th>
-                                        <th className="w-1/6 pb-2 font-caption text-secondary whitespace-nowrap px-1 text-right">
+                                        <th className="w-1/6 pb-2 body-5 text-secondary whitespace-nowrap px-1 text-right">
                                             {'Giá khớp/Giá đặt'}
                                         </th>
-                                        <th className="w-1/6 pb-2 font-caption text-secondary whitespace-nowrap px-1 text-right">
+                                        <th className="w-1/6 pb-2 body-5 text-secondary whitespace-nowrap px-1 text-right">
                                             {'Loại lệnh'}
                                         </th>
-                                        <th className="w-1/6 pb-2 font-caption text-secondary whitespace-nowrap px-1 text-right">
+                                        <th className="w-1/6 pb-2 body-5 text-secondary whitespace-nowrap px-1 text-right">
                                             {'Trạng thái'}
                                         </th>
-                                        <th className="w-1/6 pb-2 font-caption text-secondary whitespace-nowrap px-1 text-right">
+                                        <th className="w-1/6 pb-2 body-5 text-secondary whitespace-nowrap px-1 text-right">
                                             {'Sửa / Huỷ lệnh'}
                                         </th>
                                     </tr>

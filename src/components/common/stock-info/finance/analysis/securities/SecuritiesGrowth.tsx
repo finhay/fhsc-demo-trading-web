@@ -82,16 +82,16 @@ export const SecuritiesGrowth = ({
             className="flex min-w-0 flex-1 flex-col gap-4 rounded-2xl border border-tertiary p-4"
         >
             <div className="flex flex-col gap-1">
-                <p className="truncate font-body-3 text-secondary">
+                <p className="truncate body-4 text-secondary">
                     {fa[isYoY ? row.labelKeyYoY : row.labelKeySo]}
                 </p>
                 {isYoY ? (
-                    <p className={`font-body-3-highlight ${row.textClass}`}>
+                    <p className={`body-4-highlight ${row.textClass}`}>
                         {row.yoyValue >= 0 ? '+' : ''}
                         {formatNumberVN(row.yoyValue)}%
                     </p>
                 ) : (
-                    <p className="font-body-3-highlight text-primary">
+                    <p className="body-4-highlight text-primary">
                         {row.soUnit
                             ? `${formatNumberVN(row.soValue)} ${row.soUnit}`
                             : formatNumberVNWithUnit(row.soValue)}
@@ -114,8 +114,8 @@ export const SecuritiesGrowth = ({
                             onClick={() => setTab(t)}
                             className={
                                 tab === t
-                                    ? 'rounded-full bg-tertiary px-3 py-1 font-body-3-highlight text-primary'
-                                    : 'rounded-full px-3 py-1 font-body-3 text-secondary'
+                                    ? 'rounded-full base-tertiary px-3 py-1 body-4-highlight text-primary'
+                                    : 'rounded-full px-3 py-1 body-4 text-secondary'
                             }
                         >
                             {fa[SECURITIES_GROWTH.tabLabelKeys[t]]}
@@ -125,9 +125,9 @@ export const SecuritiesGrowth = ({
             }
         >
             <div ref={containerRef} className="flex flex-col gap-3">
-                <p className="font-body-3 text-primary">{'Tổng quan'}</p>
+                <p className="body-4 text-primary">{'Tổng quan'}</p>
                 <div className="flex items-stretch gap-3">{tongQuanRows.map(renderCard)}</div>
-                <p className="font-body-3 text-primary">{'Cơ cấu kinh doanh'}</p>
+                <p className="body-4 text-primary">{'Cơ cấu kinh doanh'}</p>
                 <div className="flex items-stretch gap-3">{cocauRows.map(renderCard)}</div>
             </div>
             <div className="rounded-xl border border-quaternary p-3">

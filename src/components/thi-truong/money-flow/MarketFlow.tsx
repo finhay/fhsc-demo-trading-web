@@ -78,7 +78,7 @@ export const MarketFlow = () => {
     useMQTT(mqttTopicForeign, handleMQTTForeignTrading, !isLoading && !!stats && isForeign);
 
     return (
-        <section className="bg-secondary flex shrink-0 flex-col gap-3 rounded-xl p-4">
+        <section className="base-secondary flex shrink-0 flex-col gap-3 rounded-xl p-4">
             <div className="flex flex-col gap-3">
                 <div className="flex items-center justify-between gap-2">
                     <div className="flex items-center gap-4">
@@ -87,7 +87,7 @@ export const MarketFlow = () => {
                                 key={tab}
                                 type="button"
                                 onClick={() => setActiveTab(tab)}
-                                className={`font-body-2-highlight transition-colors ${
+                                className={`body-3-highlight transition-colors ${
                                     activeTab === tab ? 'text-primary' : 'text-secondary'
                                 }`}
                             >
@@ -100,7 +100,7 @@ export const MarketFlow = () => {
                         onClick={handleOpenModal}
                         className="text-highlight flex shrink-0 items-center gap-2 transition-colors hover:text-highlight/80"
                     >
-                        <span className="font-caption-highlight">{'Xem thêm'}</span>
+                        <span className="body-5-highlight">{'Xem thêm'}</span>
                         <FaArrowRight size={16} aria-hidden />
                     </button>
                 </div>
@@ -115,8 +115,8 @@ export const MarketFlow = () => {
                                     onClick={() => setActiveExchange(exchange.value)}
                                     className={`rounded-full px-3 py-1 transition-colors ${
                                         isActive
-                                            ? 'bg-tertiary font-caption-highlight text-primary'
-                                            : 'font-caption text-secondary'
+                                            ? 'base-tertiary body-5-highlight text-primary'
+                                            : 'body-5 text-secondary'
                                     }`}
                                 >
                                     {exchange.label}
@@ -126,7 +126,7 @@ export const MarketFlow = () => {
                     </div>
                     {!isForeign && (
                         <div className="border-tertiary flex shrink-0 items-center justify-center rounded-full border px-3 py-1">
-                            <p className="font-caption text-secondary whitespace-nowrap">
+                            <p className="body-5 text-secondary whitespace-nowrap">
                                 {'Dữ liệu ngày'}{' '}
                                 <span className="text-primary">
                                     {stats?.trading_date ? formatDate(stats.trading_date) : '--'}

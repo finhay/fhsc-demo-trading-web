@@ -51,7 +51,7 @@ export const MarketDetailModal = ({ onClose }: Props) => {
             onClose={onClose}
             maxWidth="max-w-7xl"
             maxHeight="h-[90vh]"
-            panelClassName="bg-secondary gap-6 p-3"
+            panelClassName="base-secondary gap-6 p-3"
             bodyClassName="flex min-h-0 flex-1 flex-col gap-5 overflow-hidden"
         >
             <div className="flex shrink-0 flex-col gap-5">
@@ -69,8 +69,8 @@ export const MarketDetailModal = ({ onClose }: Props) => {
                                 role="presentation"
                                 className={`transition-colors cursor-pointer ${
                                     activeTab === key
-                                        ? 'font-caption-highlight text-primary'
-                                        : 'font-caption text-secondary'
+                                        ? 'body-5-highlight text-primary'
+                                        : 'body-5 text-secondary'
                                 }`}
                                 onClick={() => setActiveTab(key)}
                             >

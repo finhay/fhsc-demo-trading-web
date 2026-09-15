@@ -77,14 +77,14 @@ export const MarketMacroModal = ({ onClose, raw }: Props) => {
             onClose={onClose}
             maxWidth="max-w-7xl"
             maxHeight="h-[90vh]"
-            panelClassName="bg-primary gap-4 p-4"
+            panelClassName="base-primary gap-4 p-4"
             bodyClassName="flex min-h-0 flex-1 flex-col gap-4"
         >
             <div className="relative flex shrink-0 items-center gap-3">
                 {indicator && (
                     <span
                         aria-hidden
-                        className="bg-secondary absolute top-0 h-full rounded-full transition-all duration-300 ease-out"
+                        className="base-secondary absolute top-0 h-full rounded-full transition-all duration-300 ease-out"
                         style={{ left: indicator.left, width: indicator.width }}
                     />
                 )}
@@ -98,7 +98,7 @@ export const MarketMacroModal = ({ onClose, raw }: Props) => {
                             }}
                             type="button"
                             onClick={() => handleTabChange(value)}
-                            className={`font-body-1-highlight relative z-10 flex items-center gap-2 rounded-full px-6 py-2 transition-colors ${
+                            className={`body-2-highlight relative z-10 flex items-center gap-2 rounded-full px-6 py-2 transition-colors ${
                                 isActive ? 'text-primary' : 'text-secondary opacity-80'
                             }`}
                         >
