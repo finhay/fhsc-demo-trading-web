@@ -27,15 +27,15 @@ export const MarketFundDetailFeeTab = ({ detail }: Props) => {
         <div className="flex flex-wrap divide-x divide-tertiary">
             {items.map((item) => (
                 <div key={item.key} className="flex min-w-40 flex-1 flex-col gap-1 px-4 first:pl-0">
-                    <span className="font-body-3 text-secondary">{item.label}</span>
-                    <span className="font-body-2-highlight text-primary">{item.value}</span>
+                    <span className="body-4 text-secondary">{item.label}</span>
+                    <span className="body-3-highlight text-primary">{item.value}</span>
                 </div>
             ))}
         </div>
     );
 
     return (
-        <div className="flex flex-col divide-y divide-tertiary rounded-2xl bg-secondary p-4">
+        <div className="flex flex-col divide-y divide-tertiary rounded-2xl base-secondary p-4">
             <div className="pb-4">
                 {hasBuyFee ? (
                     renderFeeRow(
@@ -47,14 +47,14 @@ export const MarketFundDetailFeeTab = ({ detail }: Props) => {
                     )
                 ) : (
                     <div className="flex flex-col gap-1">
-                        <span className="font-body-3 text-secondary">{'Phí mua'}</span>
-                        <span className="font-body-2-highlight text-primary">{'Miễn phí'}</span>
+                        <span className="body-4 text-secondary">{'Phí mua'}</span>
+                        <span className="body-3-highlight text-primary">{'Miễn phí'}</span>
                     </div>
                 )}
             </div>
 
             <div className="flex flex-col gap-3 py-4">
-                <span className="font-body-3 text-secondary">
+                <span className="body-4 text-secondary">
                     {'Phí bán theo thời gian nắm giữ'}
                 </span>
                 {sellFees.length > 0 ? (
@@ -66,7 +66,7 @@ export const MarketFundDetailFeeTab = ({ detail }: Props) => {
                         })),
                     )
                 ) : (
-                    <span className="font-body-2-highlight text-primary">
+                    <span className="body-3-highlight text-primary">
                         {'Không giới hạn / Miễn phí'}
                     </span>
                 )}
@@ -74,7 +74,7 @@ export const MarketFundDetailFeeTab = ({ detail }: Props) => {
 
             {transferFeeData.length > 0 && (
                 <div className="flex flex-col gap-3 py-4">
-                    <span className="font-body-3 text-secondary">
+                    <span className="body-4 text-secondary">
                         {detail.transfer_fee_detail?.title || 'Phí chuyển khoản theo số tiền bán'}
                     </span>
                     {renderFeeRow(
@@ -89,8 +89,8 @@ export const MarketFundDetailFeeTab = ({ detail }: Props) => {
 
             {detail.tax != null && (
                 <div className="flex flex-col gap-1 pt-4">
-                    <span className="font-body-3 text-secondary">{'Thuế thu nhập cá nhân'}</span>
-                    <span className="font-body-2-highlight text-primary">{detail.tax}%</span>
+                    <span className="body-4 text-secondary">{'Thuế thu nhập cá nhân'}</span>
+                    <span className="body-3-highlight text-primary">{detail.tax}%</span>
                 </div>
             )}
         </div>

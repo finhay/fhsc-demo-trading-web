@@ -23,7 +23,7 @@ type Props = {
 export const DropdownWatchlist = ({
     align = 'left',
     buttonWidthClass = 'w-40',
-    buttonClass = 'bg-secondary',
+    buttonClass = 'base-secondary',
     showCreateButton = true,
     showOwnedOption = false,
     isOwnedActive = false,
@@ -108,7 +108,7 @@ export const DropdownWatchlist = ({
                     className={`${buttonClass} flex ${buttonWidthClass} min-w-0 shrink-0 items-center gap-2 rounded-full px-4 py-1.5`}
                 >
                     <span
-                        className={`min-w-0 flex-1 truncate font-body-3-highlight ${
+                        className={`min-w-0 flex-1 truncate body-4-highlight ${
                             isAnyOptionSelected ? 'text-highlight' : 'text-secondary'
                         }`}
                     >
@@ -143,7 +143,7 @@ export const DropdownWatchlist = ({
                         <ul
                             role="listbox"
                             aria-label={'Chọn danh mục theo dõi'}
-                            className="w-full list-none overflow-hidden rounded-xl bg-tertiary p-0 m-0 shadow-lg"
+                            className="w-full list-none overflow-hidden rounded-xl base-tertiary p-0 m-0 shadow-lg"
                         >
                             {showOwnedOption && (
                                 <li
@@ -153,7 +153,7 @@ export const DropdownWatchlist = ({
                                         onSelectOwned?.();
                                         setIsDropdownOpen(false);
                                     }}
-                                    className={`w-full flex gap-6 items-center justify-between p-2 font-body-3 cursor-pointer transition-colors ${
+                                    className={`w-full flex gap-6 items-center justify-between p-2 body-4 cursor-pointer transition-colors ${
                                         isOwnedActive
                                             ? 'text-highlight'
                                             : 'text-secondary hover:text-primary'
@@ -171,7 +171,7 @@ export const DropdownWatchlist = ({
                                         setCurrentWatchList(watchlist);
                                         setIsDropdownOpen(false);
                                     }}
-                                    className={`w-full flex gap-6 items-center justify-between p-2 font-body-3 cursor-pointer transition-colors ${
+                                    className={`w-full flex gap-6 items-center justify-between p-2 body-4 cursor-pointer transition-colors ${
                                         watchlist.id === selectedWatchlist?.id
                                             ? 'text-highlight'
                                             : 'text-secondary hover:text-primary'

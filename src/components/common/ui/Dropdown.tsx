@@ -25,7 +25,7 @@ export const Dropdown = ({ options, value, onChange }: Props) => {
         >
             <button
                 type="button"
-                className="flex items-center gap-2 font-body-3 text-primary"
+                className="flex items-center gap-2 body-4 text-primary"
                 aria-expanded={isOpen}
                 aria-haspopup="listbox"
             >
@@ -40,7 +40,7 @@ export const Dropdown = ({ options, value, onChange }: Props) => {
                 <div className="absolute top-full right-0 z-10 pt-2">
                     <ul
                         role="listbox"
-                        className="flex w-max min-w-full flex-col gap-4 rounded-xl bg-quaternary p-4"
+                        className="flex w-max min-w-full flex-col gap-4 rounded-xl base-quaternary p-4"
                     >
                         {options.map((option) => {
                             const isSelected = value === option.value;
@@ -62,8 +62,8 @@ export const Dropdown = ({ options, value, onChange }: Props) => {
                                         <span
                                             className={
                                                 isSelected
-                                                    ? 'font-body-3-highlight text-primary'
-                                                    : 'font-body-3 text-primary'
+                                                    ? 'body-4-highlight text-primary'
+                                                    : 'body-4 text-primary'
                                             }
                                         >
                                             {option.label}
@@ -77,7 +77,7 @@ export const Dropdown = ({ options, value, onChange }: Props) => {
                                                 aria-hidden="true"
                                                 className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full border-2 border-highlight"
                                             >
-                                                <span className="h-3 w-3 rounded-full bg-highlight" />
+                                                <span className="h-3 w-3 rounded-full base-highlight" />
                                             </span>
                                         </span>
                                     </button>

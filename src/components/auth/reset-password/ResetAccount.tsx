@@ -100,8 +100,8 @@ export const ResetAccount = () => {
                                 onClick={() => handleAccountTypeChange(key)}
                                 className={`rounded-full px-3 py-1 transition-colors ${
                                     isActive
-                                        ? 'bg-tertiary text-primary font-caption-highlight'
-                                        : 'text-secondary font-caption'
+                                        ? 'base-tertiary text-primary body-5-highlight'
+                                        : 'text-secondary body-5'
                                 }`}
                             >
                                 {label}
@@ -142,19 +142,19 @@ export const ResetAccount = () => {
                 <button
                     type="submit"
                     disabled={!canSubmit}
-                    className={`w-2/3 font-body-3-highlight rounded-full px-4 py-2 transition-all ${
+                    className={`w-2/3 body-4-highlight rounded-full px-4 py-2 transition-all ${
                         canSubmit
-                            ? 'bg-highlight text-quaternary hover:opacity-90'
+                            ? 'base-highlight text-quaternary hover:opacity-90'
                             : 'bg-disabled text-disabled cursor-not-allowed'
                     }`}
                 >
                     {'Tiếp tục'}
                 </button>
-                <p className="font-body-3 text-primary">{'Hoặc'}</p>
+                <p className="body-4 text-primary">{'Hoặc'}</p>
                 <button
                     type="button"
                     onClick={() => openAuthDialog(AUTH_MODE.LOGIN)}
-                    className="font-body-3-highlight text-highlight hover:underline bg-transparent border-none cursor-pointer"
+                    className="body-4-highlight text-highlight hover:underline bg-transparent border-none cursor-pointer"
                 >
                     {'Quay lại đăng nhập'}
                 </button>

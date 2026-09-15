@@ -12,7 +12,7 @@ export const DefaultLayout = ({ children }: Props) => {
                 <MarketIndexTicker />
                 <NavBar />
             </header>
-            <main className="min-h-0 flex-1 overflow-auto bg-primary px-2 pb-2">{children}</main>
+            <main className="min-h-0 flex-1 overflow-auto base-primary px-2 pb-2">{children}</main>
         </div>
     );
 };

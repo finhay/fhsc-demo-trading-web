@@ -126,13 +126,13 @@ export const MarketFundDetailCompare = ({ original }: Props) => {
                 alt={item.name}
                 width={20}
                 height={20}
-                className="bg-quinary size-5 shrink-0 rounded-full object-cover"
+                className="base-quinary size-5 shrink-0 rounded-full object-cover"
             />
         ) : (
-            <div className="bg-tertiary size-5 shrink-0 rounded-full" />
+            <div className="base-tertiary size-5 shrink-0 rounded-full" />
         );
         const name = (
-            <span className="font-body-2-highlight truncate text-primary">{item.name}</span>
+            <span className="body-3-highlight truncate text-primary">{item.name}</span>
         );
 
         return (
@@ -155,9 +155,9 @@ export const MarketFundDetailCompare = ({ original }: Props) => {
     };
 
     const renderValue = (value: string, colorClass: string, suffix?: string) => (
-        <span className={`font-body-2-highlight ${colorClass}`}>
+        <span className={`body-3-highlight ${colorClass}`}>
             {value}
-            {suffix && <span className="font-body-3 text-tertiary">{suffix}</span>}
+            {suffix && <span className="body-4 text-tertiary">{suffix}</span>}
         </span>
     );
 
@@ -165,7 +165,7 @@ export const MarketFundDetailCompare = ({ original }: Props) => {
 
     return (
         <section className="flex flex-col gap-4">
-            <h3 className="font-body-2-highlight text-primary">{'Thường được so sánh với'}</h3>
+            <h3 className="body-3-highlight text-primary">{'Thường được so sánh với'}</h3>
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                 {suggestions.map((suggested) => {
                     const rows = buildRows(suggested);
@@ -173,7 +173,7 @@ export const MarketFundDetailCompare = ({ original }: Props) => {
                     return (
                         <div
                             key={suggested.name}
-                            className="flex flex-col gap-4 rounded-2xl bg-secondary p-3"
+                            className="flex flex-col gap-4 rounded-2xl base-secondary p-3"
                         >
                             <div className="flex items-center justify-center gap-6">
                                 {renderBadge(original, true)}
@@ -188,7 +188,7 @@ export const MarketFundDetailCompare = ({ original }: Props) => {
                                 {rows.map((row, index) => (
                                     <Fragment key={row.key}>
                                         <div className="flex w-full flex-col items-center gap-2">
-                                            <span className="flex items-center gap-1 font-body-3 text-primary">
+                                            <span className="flex items-center gap-1 body-4 text-primary">
                                                 {row.showTrendIcon && (
                                                     <FaArrowTrendUp
                                                         size={12}
@@ -227,7 +227,7 @@ export const MarketFundDetailCompare = ({ original }: Props) => {
                                             </div>
                                         </div>
                                         {index < rows.length - 1 && (
-                                            <div className="h-px w-40 bg-tertiary" />
+                                            <div className="h-px w-40 base-tertiary" />
                                         )}
                                     </Fragment>
                                 ))}

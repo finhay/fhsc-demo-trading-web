@@ -41,14 +41,14 @@ export const TradeOrderHistory = () => {
 
     return (
         <section
-            className="bg-secondary flex min-w-0 w-full flex-col gap-2 p-3 rounded-xl h-64 overflow-hidden"
+            className="base-secondary flex min-w-0 w-full flex-col gap-2 p-3 rounded-xl h-64 overflow-hidden"
             aria-labelledby="matched-history-heading"
         >
             <header className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                     <h2
                         id="matched-history-heading"
-                        className="font-body-3-highlight text-primary whitespace-nowrap"
+                        className="body-4-highlight text-primary whitespace-nowrap"
                     >
                         {'Lịch sử lệnh đã khớp'}
                     </h2>
@@ -59,8 +59,8 @@ export const TradeOrderHistory = () => {
                                 role="tab"
                                 aria-selected={side === key}
                                 onClick={() => setSide(key)}
-                                className={`px-3 py-1 w-24 rounded-full font-caption transition-colors ${
-                                    side === key ? 'bg-tertiary text-white' : 'text-secondary'
+                                className={`px-3 py-1 w-24 rounded-full body-5 transition-colors ${
+                                    side === key ? 'base-tertiary text-white' : 'text-secondary'
                                 }`}
                             >
                                 {label}
@@ -78,7 +78,7 @@ export const TradeOrderHistory = () => {
                     <Skeleton />
                 ) : flatRows.length === 0 ? (
                     <div className="flex items-center justify-center h-full">
-                        <p className="text-secondary font-caption">{'Chưa có lệnh đã khớp'}</p>
+                        <p className="text-secondary body-5">{'Chưa có lệnh đã khớp'}</p>
                     </div>
                 ) : (
                     <table className="w-full table-auto border-separate border-spacing-x-2 border-spacing-y-0">
@@ -86,25 +86,25 @@ export const TradeOrderHistory = () => {
                             <tr>
                                 <th
                                     scope="col"
-                                    className="sticky top-0 z-10 bg-secondary pb-2 font-caption text-secondary whitespace-nowrap text-left"
+                                    className="sticky top-0 z-10 base-secondary pb-2 body-5 text-secondary whitespace-nowrap text-left"
                                 >
                                     {'Mã'}
                                 </th>
                                 <th
                                     scope="col"
-                                    className="sticky top-0 z-10 bg-secondary pb-2 font-caption text-secondary whitespace-nowrap text-right"
+                                    className="sticky top-0 z-10 base-secondary pb-2 body-5 text-secondary whitespace-nowrap text-right"
                                 >
                                     {'Khối lượng'}
                                 </th>
                                 <th
                                     scope="col"
-                                    className="sticky top-0 z-10 bg-secondary pb-2 font-caption text-secondary whitespace-nowrap text-right"
+                                    className="sticky top-0 z-10 base-secondary pb-2 body-5 text-secondary whitespace-nowrap text-right"
                                 >
                                     {'Giá'}
                                 </th>
                                 <th
                                     scope="col"
-                                    className="sticky top-0 z-10 bg-secondary pb-2 font-caption text-secondary whitespace-nowrap text-right"
+                                    className="sticky top-0 z-10 base-secondary pb-2 body-5 text-secondary whitespace-nowrap text-right"
                                 >
                                     {'Giá trị (vnđ)'}
                                 </th>
@@ -123,36 +123,36 @@ export const TradeOrderHistory = () => {
                                         {row.isTotal && (
                                             <tr aria-hidden="true">
                                                 <td colSpan={4} className="py-0">
-                                                    <div className="h-px w-full bg-tertiary" />
+                                                    <div className="h-px w-full base-tertiary" />
                                                 </td>
                                             </tr>
                                         )}
                                         <tr>
                                             <td className="whitespace-nowrap text-left">
                                                 {row.isTotal ? (
-                                                    <span className="font-caption-highlight text-primary">
+                                                    <span className="body-5-highlight text-primary">
                                                         {'Tổng'}
                                                     </span>
                                                 ) : (
                                                     <span
-                                                        className={`font-caption-highlight text-primary ${rowIndex === 0 ? '' : 'invisible'}`}
+                                                        className={`body-5-highlight text-primary ${rowIndex === 0 ? '' : 'invisible'}`}
                                                     >
                                                         {symbol}
                                                     </span>
                                                 )}
                                             </td>
                                             <td
-                                                className={`whitespace-nowrap text-right ${row.isTotal ? 'font-caption-highlight' : 'font-caption'} text-primary`}
+                                                className={`whitespace-nowrap text-right ${row.isTotal ? 'body-5-highlight' : 'body-5'} text-primary`}
                                             >
                                                 {formatNumberVN(row.quantity, { decimals: 0 })}
                                             </td>
                                             <td
-                                                className={`whitespace-nowrap text-right ${row.isTotal ? 'font-caption-highlight' : 'font-caption'} text-primary`}
+                                                className={`whitespace-nowrap text-right ${row.isTotal ? 'body-5-highlight' : 'body-5'} text-primary`}
                                             >
                                                 {formatNumberVN(row.price / 1000, { decimals: 2 })}
                                             </td>
                                             <td
-                                                className={`whitespace-nowrap text-right ${row.isTotal ? 'font-caption-highlight' : 'font-caption'} text-primary`}
+                                                className={`whitespace-nowrap text-right ${row.isTotal ? 'body-5-highlight' : 'body-5'} text-primary`}
                                             >
                                                 {formatNumberVN(row.volume, { decimals: 0 })}
                                             </td>

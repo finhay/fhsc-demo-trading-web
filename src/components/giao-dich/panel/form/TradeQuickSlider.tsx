@@ -147,9 +147,9 @@ export const TradeQuickSlider = ({ value, onChange, active }: Props) => {
                 ref={rangerRef}
                 onClick={handleTrackClick}
             >
-                <div className="absolute inset-x-0 h-1 rounded-full bg-tertiary" />
+                <div className="absolute inset-x-0 h-1 rounded-full base-tertiary" />
                 <div
-                    className={`absolute h-1 rounded-full ${active !== undefined ? activeColor : 'bg-tertiary'}`}
+                    className={`absolute h-1 rounded-full ${active !== undefined ? activeColor : 'base-tertiary'}`}
                     style={{ left: '0%', width: `${localValue}%` }}
                 />
 
@@ -162,7 +162,7 @@ export const TradeQuickSlider = ({ value, onChange, active }: Props) => {
                             tabIndex={0}
                             onClick={(e) => handleTickClick(e, tick)}
                             onKeyDown={(e) => e.key === 'Enter' && handleTickClick(e, tick)}
-                            className={`absolute w-2 h-2 rounded-full cursor-pointer z-10 ${isFilled && active !== undefined ? `${activeColor}` : 'bg-quaternary border border-tertiary'}`}
+                            className={`absolute w-2 h-2 rounded-full cursor-pointer z-10 ${isFilled && active !== undefined ? `${activeColor}` : 'base-quaternary border border-tertiary'}`}
                             style={{
                                 left: `${tick}%`,
                                 transform: 'translate(-50%, -50%) rotate(45deg)',
@@ -187,11 +187,11 @@ export const TradeQuickSlider = ({ value, onChange, active }: Props) => {
                     style={{ left: `${localValue}%` }}
                 >
                     <span
-                        className={`block bg-quinary rounded-full w-3 h-3 border border-quaternary`}
+                        className={`block base-quinary rounded-full w-3 h-3 border border-quaternary`}
                     />
                 </button>
             </div>
-            <div className="relative font-tiny-highlight h-5">
+            <div className="relative body-5-highlight h-5">
                 {TRADING_SLIDER_TICKS.map((tick) => {
                     const isSelected = localValue === tick;
                     const translate =

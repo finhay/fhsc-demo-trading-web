@@ -12,7 +12,7 @@ export const MarketOutOfSession = () => {
                     loading="eager"
                     className="w-30 h-30 object-contain"
                 />
-                <figcaption className="font-body-3 text-secondary text-center">
+                <figcaption className="body-4 text-secondary text-center">
                     {'Dữ liệu sẽ được cập nhật khi vào phiên giao dịch'}
                 </figcaption>
             </div>

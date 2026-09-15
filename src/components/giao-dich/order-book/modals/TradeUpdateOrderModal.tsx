@@ -268,11 +268,11 @@ export const TradeUpdateOrderModal = ({
                     >
                         {(field) => (
                             <div className="flex flex-col gap-2">
-                                <label htmlFor="order-qty" className="font-body-3 text-secondary">
+                                <label htmlFor="order-qty" className="body-4 text-secondary">
                                     {'Khối lượng'}
                                 </label>
                                 <div
-                                    className={`bg-tertiary rounded-xl border flex items-center px-4 py-3 gap-3 transition-colors ${
+                                    className={`base-tertiary rounded-xl border flex items-center px-4 py-3 gap-3 transition-colors ${
                                         priceChanged
                                             ? 'border-quaternary opacity-50 cursor-not-allowed'
                                             : field.state.meta.errors.length > 0
@@ -284,10 +284,10 @@ export const TradeUpdateOrderModal = ({
                                         type="button"
                                         disabled={priceChanged}
                                         onClick={() => adjustQty(-1)}
-                                        className={`w-8 h-8 flex items-center justify-center rounded-full font-body-2-highlight transition-colors shrink-0 ${
+                                        className={`w-8 h-8 flex items-center justify-center rounded-full body-3-highlight transition-colors shrink-0 ${
                                             priceChanged
-                                                ? 'bg-quaternary text-secondary cursor-not-allowed'
-                                                : 'bg-quaternary text-primary hover:bg-highlight hover:text-quaternary'
+                                                ? 'base-quaternary text-secondary cursor-not-allowed'
+                                                : 'base-quaternary text-primary hover:bg-(--text-highlight) hover:text-quaternary'
                                         }`}
                                     >
                                         −
@@ -313,7 +313,7 @@ export const TradeUpdateOrderModal = ({
                                             validateFieldsDebouncer.maybeExecute();
                                             field.handleBlur();
                                         }}
-                                        className={`flex-1 bg-transparent font-body-2 text-center focus:outline-none ${
+                                        className={`flex-1 bg-transparent body-3 text-center focus:outline-none ${
                                             priceChanged
                                                 ? 'text-secondary cursor-not-allowed'
                                                 : 'text-primary'
@@ -323,17 +323,17 @@ export const TradeUpdateOrderModal = ({
                                         type="button"
                                         disabled={priceChanged}
                                         onClick={() => adjustQty(1)}
-                                        className={`w-8 h-8 flex items-center justify-center rounded-full font-body-2-highlight transition-colors shrink-0 ${
+                                        className={`w-8 h-8 flex items-center justify-center rounded-full body-3-highlight transition-colors shrink-0 ${
                                             priceChanged
-                                                ? 'bg-quaternary text-secondary cursor-not-allowed'
-                                                : 'bg-quaternary text-primary hover:bg-highlight hover:text-quaternary'
+                                                ? 'base-quaternary text-secondary cursor-not-allowed'
+                                                : 'base-quaternary text-primary hover:bg-(--text-highlight) hover:text-quaternary'
                                         }`}
                                     >
                                         +
                                     </button>
                                 </div>
                                 {field.state.meta.errors.length > 0 && (
-                                    <span className="font-caption text-red">
+                                    <span className="body-5 text-red">
                                         {field.state.meta.errors[0]}
                                     </span>
                                 )}
@@ -348,11 +348,11 @@ export const TradeUpdateOrderModal = ({
                     >
                         {(field) => (
                             <div className="flex flex-col gap-2">
-                                <label htmlFor="order-price" className="font-body-3 text-secondary">
+                                <label htmlFor="order-price" className="body-4 text-secondary">
                                     {'Giá (nghìn đồng)'}
                                 </label>
                                 <div
-                                    className={`bg-tertiary rounded-xl border flex items-center px-4 py-3 gap-3 transition-colors ${
+                                    className={`base-tertiary rounded-xl border flex items-center px-4 py-3 gap-3 transition-colors ${
                                         qtyChanged
                                             ? 'border-quaternary opacity-50 cursor-not-allowed'
                                             : field.state.meta.errors.length > 0
@@ -364,10 +364,10 @@ export const TradeUpdateOrderModal = ({
                                         type="button"
                                         disabled={qtyChanged}
                                         onClick={() => adjustPrice(-1)}
-                                        className={`w-8 h-8 flex items-center justify-center rounded-full font-body-2-highlight transition-colors shrink-0 ${
+                                        className={`w-8 h-8 flex items-center justify-center rounded-full body-3-highlight transition-colors shrink-0 ${
                                             qtyChanged
-                                                ? 'bg-quaternary text-secondary cursor-not-allowed'
-                                                : 'bg-quaternary text-primary hover:bg-highlight hover:text-quaternary'
+                                                ? 'base-quaternary text-secondary cursor-not-allowed'
+                                                : 'base-quaternary text-primary hover:bg-(--text-highlight) hover:text-quaternary'
                                         }`}
                                     >
                                         −
@@ -400,7 +400,7 @@ export const TradeUpdateOrderModal = ({
                                             validateFieldsDebouncer.maybeExecute();
                                             field.handleBlur();
                                         }}
-                                        className={`flex-1 bg-transparent font-body-2 text-center focus:outline-none ${
+                                        className={`flex-1 bg-transparent body-3 text-center focus:outline-none ${
                                             qtyChanged
                                                 ? 'text-secondary cursor-not-allowed'
                                                 : 'text-primary'
@@ -410,17 +410,17 @@ export const TradeUpdateOrderModal = ({
                                         type="button"
                                         disabled={qtyChanged}
                                         onClick={() => adjustPrice(1)}
-                                        className={`w-8 h-8 flex items-center justify-center rounded-full font-body-2-highlight transition-colors shrink-0 ${
+                                        className={`w-8 h-8 flex items-center justify-center rounded-full body-3-highlight transition-colors shrink-0 ${
                                             qtyChanged
-                                                ? 'bg-quaternary text-secondary cursor-not-allowed'
-                                                : 'bg-quaternary text-primary hover:bg-highlight hover:text-quaternary'
+                                                ? 'base-quaternary text-secondary cursor-not-allowed'
+                                                : 'base-quaternary text-primary hover:bg-(--text-highlight) hover:text-quaternary'
                                         }`}
                                     >
                                         +
                                     </button>
                                 </div>
                                 {field.state.meta.errors.length > 0 ? (
-                                    <span className="font-caption text-red">
+                                    <span className="body-5 text-red">
                                         {field.state.meta.errors[0]}
                                     </span>
                                 ) : (
@@ -428,10 +428,10 @@ export const TradeUpdateOrderModal = ({
                                     stockInfo.floor > 0 &&
                                     stockInfo.ceiling > 0 && (
                                         <div className="flex items-center justify-between">
-                                            <span className="font-caption text-secondary">
+                                            <span className="body-5 text-secondary">
                                                 {'Sàn:'} {formatBoardPrice(stockInfo.floor)}
                                             </span>
-                                            <span className="font-caption text-secondary">
+                                            <span className="body-5 text-secondary">
                                                 {'Trần:'} {formatBoardPrice(stockInfo.ceiling)}
                                             </span>
                                         </div>
@@ -440,19 +440,19 @@ export const TradeUpdateOrderModal = ({
                             </div>
                         )}
                     </form.Field>
-                    <div className="bg-tertiary rounded-xl px-4 py-3 flex items-start gap-2">
-                        <span className="text-yellow font-caption shrink-0 mt-0.5">⚠</span>
-                        <p className="font-caption text-secondary">
+                    <div className="base-tertiary rounded-xl px-4 py-3 flex items-start gap-2">
+                        <span className="text-yellow body-5 shrink-0 mt-0.5">⚠</span>
+                        <p className="body-5 text-secondary">
                             {'Yêu cầu sửa lệnh có thể không được thực thi nếu lệnh đã khớp'}
                         </p>
                     </div>
                     <button
                         type="submit"
                         disabled={!canSubmit || isLoading}
-                        className={`w-full py-2 rounded-xl font-body-3-highlight transition-colors ${
+                        className={`w-full py-2 rounded-xl body-4-highlight transition-colors ${
                             !canSubmit || isLoading
                                 ? 'bg-disabled text-disabled cursor-not-allowed'
-                                : 'bg-highlight text-quaternary hover:opacity-90'
+                                : 'base-highlight text-quaternary hover:opacity-90'
                         }`}
                     >
                         {'Xác nhận'}

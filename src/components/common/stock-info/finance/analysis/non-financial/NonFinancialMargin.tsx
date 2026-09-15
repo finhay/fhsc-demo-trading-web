@@ -59,7 +59,7 @@ export const NonFinancialMargin = ({
                 padding: 8,
                 formatter: (params: any) => {
                     const p = Array.isArray(params) ? params[0] : params;
-                    return `<div class="flex flex-col gap-0.5"><span class="font-caption text-secondary">${p?.axisValue ?? ''}</span><span class="font-caption-highlight text-primary">${formatNumberVN(Number(p?.value ?? 0))}</span></div>`;
+                    return `<div class="flex flex-col gap-0.5"><span class="body-5 text-secondary">${p?.axisValue ?? ''}</span><span class="body-5-highlight text-primary">${formatNumberVN(Number(p?.value ?? 0))}</span></div>`;
                 },
             },
             xAxis: {
@@ -115,15 +115,15 @@ export const NonFinancialMargin = ({
         <AnalysisSection
             title={'Biên lợi nhuận thế nào?'}
             right={
-                <span className="shrink-0 rounded-full border border-tertiary px-2 py-1 font-body-3 text-primary">
+                <span className="shrink-0 rounded-full border border-tertiary px-2 py-1 body-4 text-primary">
                     {'QoQ'}
                 </span>
             }
         >
             <div className={ANALYSIS_CONTENT_CARD}>
                 <div className="flex shrink-0 items-center gap-3">
-                    <p className="font-body-3 text-secondary">{'Doanh thu thuần'}</p>
-                    <p className="font-body-2-highlight text-primary">
+                    <p className="body-4 text-secondary">{'Doanh thu thuần'}</p>
+                    <p className="body-3-highlight text-primary">
                         {formatNumberVN(netRevenue, {
                             trimTrailingZeros: true,
                         })}{' '}
@@ -137,8 +137,8 @@ export const NonFinancialMargin = ({
             <div className="flex shrink-0 flex-row items-end gap-3 rounded-xl border border-quaternary p-3">
                 {marginItems.map((item) => (
                     <div key={item.labelKey} className="flex min-w-0 flex-1 flex-col gap-1">
-                        <p className="font-body-3 text-secondary">{fa[item.labelKey]}</p>
-                        <p className="font-body-2-highlight text-primary">
+                        <p className="body-4 text-secondary">{fa[item.labelKey]}</p>
+                        <p className="body-3-highlight text-primary">
                             {formatNumberVN(item.value)}%
                         </p>
                     </div>

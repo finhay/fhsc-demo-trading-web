@@ -16,6 +16,11 @@ export type PaperAccountAsset = {
         cost_value: number;
         total: number;
         stock: number;
+        /** CP/tiền chờ về từ quyền — contract luôn có; optional để an toàn khi BE chưa ship */
+        receivable?: {
+            stock: number;
+            cash: number;
+        };
     };
     money: {
         ci_balance: number;

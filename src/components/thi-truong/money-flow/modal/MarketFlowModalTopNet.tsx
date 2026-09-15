@@ -94,7 +94,7 @@ export const MarketFlowModalTopNet = ({ isForeign, activeExchange, period }: Pro
             <div className="flex shrink-0 items-center gap-2">
                 <h3
                     className={`text-primary ${
-                        isForeign ? 'font-body-3-highlight' : 'font-body-2-highlight'
+                        isForeign ? 'body-4-highlight' : 'body-3-highlight'
                     }`}
                 >
                     {'Bản đồ nhiệt theo mã'}

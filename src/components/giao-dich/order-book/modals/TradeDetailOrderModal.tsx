@@ -13,7 +13,7 @@ type Props = {
     onClose: () => void;
 };
 
-const CELL_CLASS = 'py-0 font-caption text-secondary whitespace-nowrap';
+const CELL_CLASS = 'py-0 body-5 text-secondary whitespace-nowrap';
 
 export const TradeDetailOrderModal = ({ items, onClose }: Props) => {
     const columns = [
@@ -92,7 +92,7 @@ export const TradeDetailOrderModal = ({ items, onClose }: Props) => {
                 <td className={`${CELL_CLASS} w-1/12`}>
                     {formatNumberVN(item.remainqtty, { decimals: 0 })}
                 </td>
-                <td className="w-2/12 py-0 font-caption whitespace-nowrap text-right">
+                <td className="w-2/12 py-0 body-5 whitespace-nowrap text-right">
                     <span className={getOrderStatusColor(status.tone)}>{status.text}</span>
                 </td>
             </>
@@ -113,7 +113,7 @@ export const TradeDetailOrderModal = ({ items, onClose }: Props) => {
                             {columns.map(({ key, label, align, width }) => (
                                 <th
                                     key={key}
-                                    className={`pb-0 font-caption text-primary whitespace-nowrap ${width} ${
+                                    className={`pb-0 body-5 text-primary whitespace-nowrap ${width} ${
                                         align === 'right' ? 'text-right' : 'text-left'
                                     }`}
                                 >
@@ -128,7 +128,7 @@ export const TradeDetailOrderModal = ({ items, onClose }: Props) => {
                                 {index > 0 && (
                                     <tr aria-hidden>
                                         <td colSpan={columns.length} className="p-0">
-                                            <div className="h-px w-full bg-tertiary" />
+                                            <div className="h-px w-full base-tertiary" />
                                         </td>
                                     </tr>
                                 )}

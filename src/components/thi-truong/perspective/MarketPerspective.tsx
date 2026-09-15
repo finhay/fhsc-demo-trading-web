@@ -120,9 +120,9 @@ export const MarketPerspective = () => {
     useMQTT(topic, handleMQTTMessage, !isLoading);
 
     return (
-        <section className="bg-secondary flex w-full flex-col gap-2 rounded-xl p-4">
+        <section className="base-secondary flex w-full flex-col gap-2 rounded-xl p-4">
             <div className="flex items-center justify-between gap-2">
-                <h2 className="font-body-2-highlight text-primary flex items-center gap-2">
+                <h2 className="body-3-highlight text-primary flex items-center gap-2">
                     <MarketDot />
                     {'Góc nhìn cổ phiếu'}
                 </h2>
@@ -137,7 +137,7 @@ export const MarketPerspective = () => {
                         aria-pressed={trend === 'increase'}
                         onClick={() => handleTrendChange('increase')}
                         className={`flex items-center justify-center rounded-xl p-0.5 transition-colors ${
-                            trend === 'increase' ? 'bg-tertiary' : ''
+                            trend === 'increase' ? 'base-tertiary' : ''
                         }`}
                     >
                         <MdOutlineArrowDropUp size={20} className="text-green" aria-hidden />
@@ -148,7 +148,7 @@ export const MarketPerspective = () => {
                         aria-pressed={trend === 'decrease'}
                         onClick={() => handleTrendChange('decrease')}
                         className={`flex items-center justify-center rounded-xl p-0.5 transition-colors ${
-                            trend === 'decrease' ? 'bg-tertiary' : ''
+                            trend === 'decrease' ? 'base-tertiary' : ''
                         }`}
                     >
                         <MdOutlineArrowDropDown size={20} className="text-red" aria-hidden />
@@ -164,8 +164,8 @@ export const MarketPerspective = () => {
                                 onClick={() => handlePeriodChange(value)}
                                 className={`px-3 py-1 rounded-full transition-all ${
                                     period === value
-                                        ? 'bg-tertiary font-caption-highlight text-primary'
-                                        : 'font-caption text-secondary'
+                                        ? 'base-tertiary body-5-highlight text-primary'
+                                        : 'body-5 text-secondary'
                                 }`}
                             >
                                 {PERSPECTIVE_PERIOD[value]}
@@ -199,7 +199,7 @@ export const MarketPerspective = () => {
                                 <col />
                                 <col className="w-1/7" />
                             </colgroup>
-                            <thead className="sticky top-0 z-10 bg-secondary">
+                            <thead className="sticky top-0 z-10 base-secondary">
                                 {table.getHeaderGroups().map((headerGroup) => (
                                     <tr key={headerGroup.id}>
                                         {headerGroup.headers.map((header) => {
@@ -227,7 +227,7 @@ export const MarketPerspective = () => {
                                                             ? ariaSort
                                                             : undefined
                                                     }
-                                                    className={`bg-secondary font-caption text-secondary ${alignClass} ${thClass}`.trim()}
+                                                    className={`base-secondary body-5 text-secondary ${alignClass} ${thClass}`.trim()}
                                                 >
                                                     {header.isPlaceholder
                                                         ? null

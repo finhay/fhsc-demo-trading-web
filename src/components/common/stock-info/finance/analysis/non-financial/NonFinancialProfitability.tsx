@@ -103,11 +103,11 @@ export const NonFinancialProfitability = ({ dataAnnual }: { dataAnnual: any }) =
                                     className={`h-1.5 w-1.5 shrink-0 rounded-full ${item.dotColor}`}
                                     aria-hidden
                                 />
-                                <span className="font-caption text-secondary">
+                                <span className="body-5 text-secondary">
                                     {fa[item.labelKey]}
                                 </span>
                             </div>
-                            <span className={`font-body-3-highlight ${item.valueColor}`}>
+                            <span className={`body-4-highlight ${item.valueColor}`}>
                                 {formatNumberVN(item.value)}%
                             </span>
                         </div>

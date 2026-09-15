@@ -150,9 +150,9 @@ export const MarketMacro = () => {
     };
 
     return (
-        <section className="bg-secondary flex h-fit w-full min-h-0 flex-col gap-3 rounded-xl p-4">
+        <section className="base-secondary flex h-fit w-full min-h-0 flex-col gap-3 rounded-xl p-4">
             <div className="flex items-center justify-between gap-2">
-                <h2 className="font-body-2-highlight text-primary flex items-center gap-2">
+                <h2 className="body-3-highlight text-primary flex items-center gap-2">
                     {'Vĩ mô'}
                 </h2>
                 <button
@@ -175,13 +175,13 @@ export const MarketMacro = () => {
                             <tr>
                                 <th
                                     scope="col"
-                                    className="bg-secondary sticky left-0 z-20 w-32 min-w-32 max-w-32 pb-2 text-left after:absolute after:inset-y-0 after:right-0 after:w-0.5 after:bg-secondary"
+                                    className="base-secondary sticky left-0 z-20 w-32 min-w-32 max-w-32 pb-2 text-left after:absolute after:inset-y-0 after:right-0 after:w-0.5 after:bg-(--base-secondary)"
                                 />
                                 {data.months.map((month, index) => (
                                     <th
                                         key={month}
                                         scope="col"
-                                        className={`font-caption whitespace-nowrap p-px text-right ${index === 0 ? 'text-primary' : 'text-secondary'}`}
+                                        className={`body-5 whitespace-nowrap p-px text-right ${index === 0 ? 'text-primary' : 'text-secondary'}`}
                                     >
                                         <div className="flex h-[50px] min-w-20 items-center justify-end px-2">
                                             {formatQuarterlyMonthHeader(month)}
@@ -200,12 +200,12 @@ export const MarketMacro = () => {
                                     <tr key={row.key}>
                                         <th
                                             scope="row"
-                                            className="bg-secondary sticky left-0 z-20 w-32 min-w-32 max-w-32 py-3 px-2 text-left font-normal after:absolute after:inset-y-0 after:right-0 after:w-0.5 after:bg-secondary"
+                                            className="base-secondary sticky left-0 z-20 w-32 min-w-32 max-w-32 py-3 px-2 text-left font-normal after:absolute after:inset-y-0 after:right-0 after:w-0.5 after:bg-(--base-secondary)"
                                         >
-                                            <p className="font-caption-highlight text-primary">
+                                            <p className="body-5-highlight text-primary">
                                                 {MACRO_ROWS[row.key].label}
                                             </p>
-                                            <p className="font-caption text-tertiary">
+                                            <p className="body-5 text-tertiary">
                                                 {MACRO_ROWS[row.key].subLabel}
                                             </p>
                                         </th>
@@ -222,7 +222,7 @@ export const MarketMacro = () => {
                                                             backgroundColor: colorMap[month],
                                                         }}
                                                     >
-                                                        <span className="font-body-3 text-primary">
+                                                        <span className="body-4 text-primary">
                                                             {value === null
                                                                 ? '--'
                                                                 : `${formatNumberVN(value, { trimTrailingZeros: true })}${row.isPercent ? '%' : ''}`}

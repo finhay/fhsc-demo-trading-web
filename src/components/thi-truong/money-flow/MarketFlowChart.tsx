@@ -46,8 +46,8 @@ export const MarketFlowChart = ({ sessions, isLoading = false }: Props) => {
     return (
         <div className="flex min-w-0 flex-1 flex-col gap-4 rounded-xl border border-tertiary p-4">
             <div className="flex items-center gap-2">
-                <h3 className="font-body-3-highlight text-primary">{'Lịch sử 10 phiên'}</h3>
-                <span className="font-caption text-tertiary">({'tỷ đồng'})</span>
+                <h3 className="body-4-highlight text-primary">{'Lịch sử 10 phiên'}</h3>
+                <span className="body-5 text-tertiary">({'tỷ đồng'})</span>
             </div>
             {isLoading ? (
                 <div className="min-h-40 w-full flex-1">

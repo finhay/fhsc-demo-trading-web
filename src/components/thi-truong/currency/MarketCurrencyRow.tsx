@@ -13,18 +13,18 @@ export const MarketCurrencyRow = ({ row }: { row: MacroLiquidityStatRow }) => (
             </span>
         )}
         <div className="flex min-w-0 flex-1 flex-col">
-            <span className="font-body-3-highlight text-primary truncate">{row.title}</span>
-            <span className="font-caption text-tertiary">{row.subtitle}</span>
+            <span className="body-4-highlight text-primary truncate">{row.title}</span>
+            <span className="body-5 text-tertiary">{row.subtitle}</span>
         </div>
         <div className="flex shrink-0 flex-col items-end">
-            <span className="font-body-3-highlight text-primary">{row.value}</span>
+            <span className="body-4-highlight text-primary">{row.value}</span>
             {row.change ? (
-                <span className={`font-caption ${MACRO_LIQUIDITY_TREND_COLOR[row.change.trend]}`}>
+                <span className={`body-5 ${MACRO_LIQUIDITY_TREND_COLOR[row.change.trend]}`}>
                     {row.change.trend === 'up' ? '+' : row.change.trend === 'down' ? '-' : ''}
                     {row.change.text}
                 </span>
             ) : row.valueSuffix ? (
-                <span className="font-caption text-tertiary">{row.valueSuffix}</span>
+                <span className="body-5 text-tertiary">{row.valueSuffix}</span>
             ) : null}
         </div>
     </>

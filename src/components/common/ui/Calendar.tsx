@@ -169,7 +169,7 @@ export default function Calendar({
 
     return (
         <div
-            className={`w-64 rounded-xl bg-secondary border border-tertiary p-3 flex flex-col gap-2.5 ${className}`}
+            className={`w-64 rounded-xl base-secondary border border-tertiary p-3 flex flex-col gap-2.5 ${className}`}
         >
             {!timeOnly && (
                 <>
@@ -177,7 +177,7 @@ export default function Calendar({
                         <button
                             type="button"
                             onClick={() => shiftMonth(-1)}
-                            className="w-7 h-7 flex items-center justify-center bg-tertiary hover:bg-quaternary rounded-lg text-primary text-base leading-none transition-colors"
+                            className="w-7 h-7 flex items-center justify-center base-tertiary hover:bg-(--base-quaternary) rounded-lg text-primary text-base leading-none transition-colors"
                         >
                             ‹
                         </button>
@@ -187,40 +187,40 @@ export default function Calendar({
                                 setPickerYear(y);
                                 setMonthOpen((o) => !o);
                             }}
-                            className="flex items-center gap-1 px-2 py-0.5 rounded-lg hover:bg-tertiary transition-colors"
+                            className="flex items-center gap-1 px-2 py-0.5 rounded-lg hover:bg-(--base-tertiary) transition-colors"
                         >
                             <span className="flex flex-col items-center">
-                                <span className="font-body-3-highlight text-primary">
+                                <span className="body-4-highlight text-primary">
                                     {MONTHS[m]}
                                 </span>
-                                <span className="font-tiny text-tertiary">{y}</span>
+                                <span className="body-5 text-tertiary">{y}</span>
                             </span>
                             <span className="text-tertiary text-[10px]">▾</span>
                         </button>
                         <button
                             type="button"
                             onClick={() => shiftMonth(1)}
-                            className="w-7 h-7 flex items-center justify-center bg-tertiary hover:bg-quaternary rounded-lg text-primary text-base leading-none transition-colors"
+                            className="w-7 h-7 flex items-center justify-center base-tertiary hover:bg-(--base-quaternary) rounded-lg text-primary text-base leading-none transition-colors"
                         >
                             ›
                         </button>
                         {monthOpen && (
-                            <div className="absolute top-full mt-1.5 left-0 right-0 z-30 bg-quaternary border border-tertiary rounded-xl p-2 shadow-2xl flex flex-col gap-2">
+                            <div className="absolute top-full mt-1.5 left-0 right-0 z-30 base-quaternary border border-tertiary rounded-xl p-2 shadow-2xl flex flex-col gap-2">
                                 <div className="flex items-center justify-between">
                                     <button
                                         type="button"
                                         onClick={() => setPickerYear((yr) => yr - 1)}
-                                        className="w-6 h-6 flex items-center justify-center bg-tertiary rounded-md text-primary text-xs"
+                                        className="w-6 h-6 flex items-center justify-center base-tertiary rounded-md text-primary text-xs"
                                     >
                                         ‹
                                     </button>
-                                    <span className="font-body-3-highlight text-primary tabular-nums">
+                                    <span className="body-4-highlight text-primary tabular-nums">
                                         {pickerYear}
                                     </span>
                                     <button
                                         type="button"
                                         onClick={() => setPickerYear((yr) => yr + 1)}
-                                        className="w-6 h-6 flex items-center justify-center bg-tertiary rounded-md text-primary text-xs"
+                                        className="w-6 h-6 flex items-center justify-center base-tertiary rounded-md text-primary text-xs"
                                     >
                                         ›
                                     </button>
@@ -236,7 +236,7 @@ export default function Calendar({
                                                     setView(new Date(pickerYear, idx, 1));
                                                     setMonthOpen(false);
                                                 }}
-                                                className={`h-7 flex items-center justify-center rounded-md font-caption transition-colors ${active ? 'bg-highlight text-quaternary font-caption-highlight' : 'text-primary hover:bg-tertiary'}`}
+                                                className={`h-7 flex items-center justify-center rounded-md body-5 transition-colors ${active ? 'base-highlight text-quaternary body-5-highlight' : 'text-primary hover:bg-(--base-tertiary)'}`}
                                             >
                                                 {label.replace('Tháng ', 'Th')}
                                             </button>
@@ -250,7 +250,7 @@ export default function Calendar({
                         {WEEKDAYS.map((wd) => (
                             <span
                                 key={wd}
-                                className="text-center font-tiny-highlight text-tertiary py-0.5"
+                                className="text-center body-5-highlight text-tertiary py-0.5"
                             >
                                 {wd}
                             </span>
@@ -267,11 +267,11 @@ export default function Calendar({
                             const isToday = today.getTime() === day.getTime();
                             const disabled = isDisabled(day);
                             const base =
-                                'h-7 flex items-center justify-center rounded-md font-caption transition-colors';
-                            let cls = 'text-primary hover:bg-tertiary';
+                                'h-7 flex items-center justify-center rounded-md body-5 transition-colors';
+                            let cls = 'text-primary hover:bg-(--base-tertiary)';
                             if (disabled) cls = 'text-disabled cursor-not-allowed';
                             else if (isSel)
-                                cls = 'bg-highlight text-quaternary font-caption-highlight';
+                                cls = 'base-highlight text-quaternary body-5-highlight';
                             else if (isToday) cls = 'border border-highlight text-highlight';
                             return (
                                 <button
@@ -290,34 +290,34 @@ export default function Calendar({
             )}
             {(showTime || timeOnly) && (
                 <>
-                    {!timeOnly && <div className="h-px bg-tertiary" />}
+                    {!timeOnly && <div className="h-px base-tertiary" />}
                     <div ref={timeRef} className="flex items-center justify-between gap-2">
-                        <span className="font-caption text-secondary">Giờ</span>
+                        <span className="body-5 text-secondary">Giờ</span>
                         <div className="flex items-center gap-1.5">
                             <div className="relative">
                                 <button
                                     type="button"
                                     onClick={(e) => toggleTimeDropdown('hour', e)}
-                                    className={`w-16 h-7 flex items-center justify-between px-2 bg-tertiary rounded-lg text-primary font-caption-highlight tabular-nums border ${open === 'hour' ? 'border-highlight' : 'border-quaternary'}`}
+                                    className={`w-16 h-7 flex items-center justify-between px-2 base-tertiary rounded-lg text-primary body-5-highlight tabular-nums border ${open === 'hour' ? 'border-highlight' : 'border-quaternary'}`}
                                 >
                                     {pad(selected.getHours())}
                                     <span className="text-tertiary text-[10px]">▾</span>
                                 </button>
                                 {open === 'hour' && (
                                     <div
-                                        className={`absolute left-0 z-20 w-16 max-h-40 overflow-y-auto bg-quaternary border border-tertiary rounded-lg p-1 shadow-2xl flex flex-col gap-0.5 ${timeDropUp ? 'bottom-full mb-1' : 'top-full mt-1'}`}
+                                        className={`absolute left-0 z-20 w-16 max-h-40 overflow-y-auto base-quaternary border border-tertiary rounded-lg p-1 shadow-2xl flex flex-col gap-0.5 ${timeDropUp ? 'bottom-full mb-1' : 'top-full mt-1'}`}
                                     >
                                         {hourOptions.map((h) => {
                                             const active = h === selected.getHours();
                                             const cls = active
-                                                ? 'bg-highlight text-quaternary font-caption-highlight'
-                                                : 'text-primary hover:bg-tertiary';
+                                                ? 'base-highlight text-quaternary body-5-highlight'
+                                                : 'text-primary hover:bg-(--base-tertiary)';
                                             return (
                                                 <button
                                                     key={h}
                                                     type="button"
                                                     onClick={() => pickHour(h)}
-                                                    className={`h-6 flex items-center justify-center rounded-md font-caption tabular-nums transition-colors ${cls}`}
+                                                    className={`h-6 flex items-center justify-center rounded-md body-5 tabular-nums transition-colors ${cls}`}
                                                 >
                                                     {pad(h)}
                                                 </button>
@@ -326,31 +326,31 @@ export default function Calendar({
                                     </div>
                                 )}
                             </div>
-                            <span className="font-caption-highlight text-tertiary">:</span>
+                            <span className="body-5-highlight text-tertiary">:</span>
                             <div className="relative">
                                 <button
                                     type="button"
                                     onClick={(e) => toggleTimeDropdown('minute', e)}
-                                    className={`w-16 h-7 flex items-center justify-between px-2 bg-tertiary rounded-lg text-primary font-caption-highlight tabular-nums border ${open === 'minute' ? 'border-highlight' : 'border-quaternary'}`}
+                                    className={`w-16 h-7 flex items-center justify-between px-2 base-tertiary rounded-lg text-primary body-5-highlight tabular-nums border ${open === 'minute' ? 'border-highlight' : 'border-quaternary'}`}
                                 >
                                     {pad(selected.getMinutes())}
                                     <span className="text-tertiary text-[10px]">▾</span>
                                 </button>
                                 {open === 'minute' && (
                                     <div
-                                        className={`absolute left-0 z-20 w-16 max-h-40 overflow-y-auto bg-quaternary border border-tertiary rounded-lg p-1 shadow-2xl flex flex-col gap-0.5 ${timeDropUp ? 'bottom-full mb-1' : 'top-full mt-1'}`}
+                                        className={`absolute left-0 z-20 w-16 max-h-40 overflow-y-auto base-quaternary border border-tertiary rounded-lg p-1 shadow-2xl flex flex-col gap-0.5 ${timeDropUp ? 'bottom-full mb-1' : 'top-full mt-1'}`}
                                     >
                                         {minuteOptions.map((mi) => {
                                             const active = mi === selected.getMinutes();
                                             const cls = active
-                                                ? 'bg-highlight text-quaternary font-caption-highlight'
-                                                : 'text-primary hover:bg-tertiary';
+                                                ? 'base-highlight text-quaternary body-5-highlight'
+                                                : 'text-primary hover:bg-(--base-tertiary)';
                                             return (
                                                 <button
                                                     key={mi}
                                                     type="button"
                                                     onClick={() => pickMinute(mi)}
-                                                    className={`h-6 flex items-center justify-center rounded-md font-caption tabular-nums transition-colors ${cls}`}
+                                                    className={`h-6 flex items-center justify-center rounded-md body-5 tabular-nums transition-colors ${cls}`}
                                                 >
                                                     {pad(mi)}
                                                 </button>
@@ -368,7 +368,7 @@ export default function Calendar({
                     <button
                         type="button"
                         onClick={goToday}
-                        className="flex-1 h-8 bg-tertiary hover:bg-quaternary rounded-lg text-primary font-caption-highlight transition-colors"
+                        className="flex-1 h-8 base-tertiary hover:bg-(--base-quaternary) rounded-lg text-primary body-5-highlight transition-colors"
                     >
                         Hôm nay
                     </button>
@@ -376,7 +376,7 @@ export default function Calendar({
                 <button
                     type="button"
                     onClick={() => onConfirm?.(selected)}
-                    className="flex-1 h-8 bg-highlight rounded-lg text-quaternary font-caption-highlight"
+                    className="flex-1 h-8 base-highlight rounded-lg text-quaternary body-5-highlight"
                 >
                     Chọn
                 </button>

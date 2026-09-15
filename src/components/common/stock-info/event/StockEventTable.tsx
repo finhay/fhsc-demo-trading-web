@@ -17,7 +17,7 @@ export const StockEventTable = ({ events }: Props) => {
 
     return (
         <div className="flex flex-col gap-3 rounded-2xl border border-tertiary p-3">
-            <div className="flex items-start gap-8 overflow-hidden font-body-3 text-secondary">
+            <div className="flex items-start gap-8 overflow-hidden body-4 text-secondary">
                 <span className="min-w-0 flex-1">{'Sự kiện'}</span>
                 <span className="w-40 shrink-0">{'Loại sự kiện'}</span>
                 <span className="w-32 shrink-0">{'Ngày chốt'}</span>
@@ -30,14 +30,14 @@ export const StockEventTable = ({ events }: Props) => {
                         key={event.id ?? `${event.title}-${index}`}
                         className="flex items-start gap-8 overflow-hidden"
                     >
-                        <p className="min-w-0 flex-1 font-body-3 text-primary">{event.title}</p>
-                        <p className="w-40 shrink-0 font-body-3 text-primary">
+                        <p className="min-w-0 flex-1 body-4 text-primary">{event.title}</p>
+                        <p className="w-40 shrink-0 body-4 text-primary">
                             {event.eventTypeName}
                         </p>
-                        <p className="w-32 shrink-0 font-body-3 text-primary">
+                        <p className="w-32 shrink-0 body-4 text-primary">
                             <time dateTime={event.actionDate}>{formatDate(event.actionDate)}</time>
                         </p>
-                        <p className="w-32 shrink-0 font-body-3 text-primary">
+                        <p className="w-32 shrink-0 body-4 text-primary">
                             <time dateTime={event.gdkhqDate}>{formatDate(event.gdkhqDate)}</time>
                         </p>
                         <button
@@ -59,7 +59,7 @@ export const StockEventTable = ({ events }: Props) => {
                     onClose={() => setSelectedEvent(null)}
                 >
                     <div
-                        className="font-body-3 leading-relaxed text-primary [&_.item-info]:inline [&_.item-info-main]:font-body-3-highlight [&_.row]:mb-2"
+                        className="body-4 leading-relaxed text-primary [&_.item-info]:inline [&_.item-info-main]:body-4-highlight [&_.row]:mb-2"
                         dangerouslySetInnerHTML={{ __html: selectedEvent.body ?? '' }}
                     />
                 </Dialog>

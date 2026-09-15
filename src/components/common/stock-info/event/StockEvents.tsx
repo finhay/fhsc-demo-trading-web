@@ -89,7 +89,7 @@ export const StockEvents = () => {
                     <Spinner isLoading isOverlay={false} />
                 </div>
             ) : filteredEvents.length === 0 ? (
-                <p className="font-body-3 text-secondary">{'Không có sự kiện nào'}</p>
+                <p className="body-4 text-secondary">{'Không có sự kiện nào'}</p>
             ) : (
                 <StockEventTable events={filteredEvents} />
             )}

@@ -20,8 +20,8 @@ export const MarketIndexTab = ({ selectedIndex, onSelect }: Props) => {
                         onClick={() => onSelect(tab)}
                         className={`flex items-center justify-center rounded-full px-3 py-1 whitespace-nowrap ${
                             isActive
-                                ? 'bg-tertiary border border-quaternary font-body-3-highlight text-primary'
-                                : 'font-body-3 text-secondary'
+                                ? 'base-tertiary border border-quaternary body-4-highlight text-primary'
+                                : 'body-4 text-secondary'
                         }`}
                     >
                         {tab}

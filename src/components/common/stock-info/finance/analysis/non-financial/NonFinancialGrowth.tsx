@@ -121,8 +121,8 @@ export const NonFinancialGrowth = ({
                             onClick={() => setTab(t)}
                             className={
                                 tab === t
-                                    ? 'rounded-full bg-tertiary px-3 py-1 font-body-3-highlight text-primary'
-                                    : 'rounded-full px-3 py-1 font-body-3 text-secondary'
+                                    ? 'rounded-full base-tertiary px-3 py-1 body-4-highlight text-primary'
+                                    : 'rounded-full px-3 py-1 body-4 text-secondary'
                             }
                         >
                             {fa[NON_FINANCIAL_GROWTH.tabLabelKeys[t]]}
@@ -140,11 +140,11 @@ export const NonFinancialGrowth = ({
                                     className={`h-1.5 w-1.5 shrink-0 rounded-full ${item.dotColor}`}
                                     aria-hidden
                                 />
-                                <span className="font-body-3 text-secondary">
+                                <span className="body-4 text-secondary">
                                     {fa[item.labelKey]}
                                 </span>
                             </div>
-                            <span className={`font-body-3-highlight ${item.valueColor}`}>
+                            <span className={`body-4-highlight ${item.valueColor}`}>
                                 {formatNumberVN(item.value)}%
                             </span>
                         </div>

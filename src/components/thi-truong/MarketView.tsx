@@ -32,7 +32,7 @@ export const MarketView = () => {
 
     return (
         <>
-            <article className="w-full flex flex-col gap-5 bg-primary">
+            <article className="w-full flex flex-col gap-5 base-primary">
                 <div className="flex w-full flex-col gap-2 xl:flex-row xl:items-stretch">
                     <div className="flex w-full flex-col xl:w-80 xl:shrink-0 xl:min-w-0 2xl:w-96 2xl:flex-none">
                         <MarketIndex />
@@ -74,15 +74,15 @@ export const MarketView = () => {
                 </div>
                 <div className="flex flex-col gap-4">
                     <div className="flex items-center gap-4">
-                        <div className="h-px w-6 shrink-0 bg-tertiary" aria-hidden="true" />
-                        <h2 className="shrink-0 font-body-2-highlight text-primary">
+                        <div className="h-px w-6 shrink-0 base-tertiary" aria-hidden="true" />
+                        <h2 className="shrink-0 body-3-highlight text-primary">
                             {'Toàn cảnh thị trường'}
                         </h2>
-                        <div className="h-px min-w-0 flex-1 bg-tertiary" aria-hidden="true" />
+                        <div className="h-px min-w-0 flex-1 base-tertiary" aria-hidden="true" />
                     </div>
                     <div className="flex flex-col gap-2 xl:grid xl:grid-cols-[minmax(0,3fr)_minmax(0,2fr)] xl:items-stretch 2xl:grid 2xl:grid-cols-[minmax(0,2.5fr)_minmax(0,2fr)_minmax(0,1.5fr)] 2xl:items-stretch 2xl:gap-2">
                         <div className="relative min-h-0 min-w-0 overflow-hidden 2xl:overflow-visible">
-                            <div className="flex h-full min-h-0 flex-col gap-2 overflow-hidden rounded-xl bg-secondary p-4 xl:absolute xl:inset-0 2xl:static 2xl:gap-3 2xl:overflow-visible">
+                            <div className="flex h-full min-h-0 flex-col gap-2 overflow-hidden rounded-xl base-secondary p-4 xl:absolute xl:inset-0 2xl:static 2xl:gap-3 2xl:overflow-visible">
                                 <div className="shrink-0">
                                     <MarketGlobalIndex />
                                 </div>
@@ -100,17 +100,17 @@ export const MarketView = () => {
                     </div>
                 </div>
                 <div className="flex flex-col gap-1">
-                    <p className="font-body-3 text-tertiary">
+                    <p className="body-4 text-tertiary">
                         {
                             '* Hiệu suất được tính dựa trên dữ liệu quá khứ, không phản ánh hiệu suất tương lai'
                         }
                     </p>
-                    <p className="font-body-3 text-tertiary">
+                    <p className="body-4 text-tertiary">
                         {
                             '* Các nội dung trên chỉ cung cấp thông tin, không nhằm mục đích kinh doanh hoặc tư vấn tài chính, đầu tư, thuế, pháp lý, kế toán hay tư vấn khác.'
                         }
                     </p>
-                    <p className="font-body-3 text-tertiary">
+                    <p className="body-4 text-tertiary">
                         {'* Nguồn dữ liệu từ FiinPro và các đơn vị cung cấp thông tin khác.'}
                     </p>
                 </div>

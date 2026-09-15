@@ -112,10 +112,10 @@ export const AssetDebt = () => {
         !isSummaryLoading && !isLoading && sections.every((section) => section.rows.length === 0);
 
     return (
-        <section className="flex flex-col bg-secondary rounded-xl p-3 gap-8 w-full shrink-0">
+        <section className="flex flex-col base-secondary rounded-xl p-3 gap-8 w-full shrink-0">
             {isAllEmpty ? (
                 <div className="h-96 w-full">
-                    <h2 className="font-body-2-highlight text-primary">{'Nợ'}</h2>
+                    <h2 className="body-3-highlight text-primary">{'Nợ'}</h2>
                     <EmptyState description={'Bạn đang không có khoản nợ nào!'} />
                 </div>
             ) : (
@@ -124,7 +124,7 @@ export const AssetDebt = () => {
                     if (section.key === 'summary' && isEmptySection) return null;
                     return (
                         <div key={section.key} className="flex flex-col gap-3 w-full">
-                            <h3 className="font-body-2 text-primary">
+                            <h3 className="body-3 text-primary">
                                 {isEmptySection ? `${section.title} (0)` : section.title}
                             </h3>
                             {section.isLoading ? (
@@ -138,10 +138,10 @@ export const AssetDebt = () => {
                                             key={`${section.key}-${item.label}`}
                                             className="flex items-center justify-between w-full gap-4"
                                         >
-                                            <dt className="font-body-3 text-secondary">
+                                            <dt className="body-4 text-secondary">
                                                 {item.label}
                                             </dt>
-                                            <dd className="font-body-3 text-primary m-0">
+                                            <dd className="body-4 text-primary m-0">
                                                 {item.value}
                                             </dd>
                                         </div>

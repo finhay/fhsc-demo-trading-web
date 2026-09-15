@@ -45,9 +45,9 @@ export const unwrap = <TData>(
 };
 
 export const getTrendBg = (direction: string | undefined): string => {
-    if (direction === 'up') return 'bg-green';
-    if (direction === 'down') return 'bg-red';
-    if (direction === 'flat') return 'bg-orange';
+    if (direction === 'up') return 'base-green';
+    if (direction === 'down') return 'base-red';
+    if (direction === 'flat') return 'base-orange';
     return '';
 };
 
@@ -58,8 +58,8 @@ export const trendFromDelta = (delta: number): MacroTrend => {
 };
 
 export const getMarketPillClass = (isActive: boolean): string =>
-    `font-body-3 rounded-full px-3 py-1 ${
-        isActive ? 'bg-tertiary font-body-3-highlight text-primary' : 'text-secondary'
+    `body-4 rounded-full px-3 py-1 ${
+        isActive ? 'base-tertiary body-4-highlight text-primary' : 'text-secondary'
     }`;
 
 export const buildCategoryTickIndices = (

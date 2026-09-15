@@ -1,4 +1,5 @@
 import type { OrderStatusLabelKey } from '@/types/pages/assets';
+import type { PaperRightEventType } from '@/types/paper-trading/rights';
 
 export const GROWTH_TIME_PERIODS = [
     { id: 'd7', value: 7 },
@@ -7,6 +8,22 @@ export const GROWTH_TIME_PERIODS = [
     { id: 'd180', value: 180 },
     { id: 'd365', value: 365 },
 ] as const;
+
+export const RIGHT_EVENT_TYPE_LABELS: Record<PaperRightEventType, string> = {
+    CASH_DIVIDEND: 'Cổ tức bằng tiền',
+    STOCK_DIVIDEND: 'Cổ tức bằng cổ phiếu',
+    BONUS_SHARE: 'Cổ phiếu thưởng',
+    RIGHTS_OFFERING: 'Quyền mua',
+};
+
+/** Màu status theo nhãn BE (contract §4 / Figma). */
+export const RIGHT_STATUS_COLOR_BY_LABEL: Record<string, string> = {
+    'Chờ về': 'text-orange',
+    'Đã đăng ký': 'text-orange',
+    'Đã nhận': 'text-highlight',
+    'Không đủ tiền đăng ký': 'text-red',
+    'Được hưởng quyền': 'text-secondary',
+};
 
 export const ALLOCATION_COLORS = {
     stock: '#b354e3',
@@ -55,9 +72,9 @@ export const ASSET_ACTION_KEYS = {
 } as const;
 
 export const ASSET_ACTION_STYLES = {
-    [ASSET_ACTION_KEYS.DEPOSIT]: 'bg-highlight text-quaternary',
-    [ASSET_ACTION_KEYS.TRANSFER]: 'bg-tertiary text-highlight',
-    [ASSET_ACTION_KEYS.WITHDRAW]: 'bg-tertiary text-highlight',
+    [ASSET_ACTION_KEYS.DEPOSIT]: 'base-highlight text-quaternary',
+    [ASSET_ACTION_KEYS.TRANSFER]: 'base-tertiary text-highlight',
+    [ASSET_ACTION_KEYS.WITHDRAW]: 'base-tertiary text-highlight',
 } as const;
 
 export const TRADE_HISTORY_TAB_KEYS = {

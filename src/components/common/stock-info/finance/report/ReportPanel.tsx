@@ -466,11 +466,11 @@ export const ReportPanel = ({ isLoading, financialData }: Props) => {
         );
     };
 
-    const cellBgClass = (highlighted: boolean) => (highlighted ? 'bg-tertiary' : 'bg-secondary');
+    const cellBgClass = (highlighted: boolean) => (highlighted ? 'base-tertiary' : 'base-secondary');
 
     return (
         <section
-            className="flex h-full min-h-0 flex-col gap-2 p-3 overflow-hidden bg-secondary rounded-2xl border border-tertiary"
+            className="flex h-full min-h-0 flex-col gap-2 p-3 overflow-hidden base-secondary rounded-2xl border border-tertiary"
             aria-label={'Báo cáo tài chính'}
         >
             <nav
@@ -487,7 +487,7 @@ export const ReportPanel = ({ isLoading, financialData }: Props) => {
                         aria-selected={activeTab === key}
                         aria-controls="trade-report-panel"
                         onClick={() => setActiveTab(key)}
-                        className={`font-body-3-highlight whitespace-nowrap transition-colors ${
+                        className={`body-4-highlight whitespace-nowrap transition-colors ${
                             activeTab === key ? 'text-primary' : 'text-secondary'
                         }`}
                     >
@@ -505,21 +505,21 @@ export const ReportPanel = ({ isLoading, financialData }: Props) => {
                         id="trade-report-panel"
                         role="tabpanel"
                         aria-labelledby={`trade-report-${activeTab}-tab`}
-                        className="scrollbar min-h-0 flex-1 overflow-auto bg-secondary"
+                        className="scrollbar min-h-0 flex-1 overflow-auto base-secondary"
                     >
                         <table
-                            className="w-full min-w-full border-separate border-spacing-0 bg-secondary"
+                            className="w-full min-w-full border-separate border-spacing-0 base-secondary"
                             onMouseLeave={() => setHoveredCell(null)}
                         >
-                            <thead className="bg-secondary">
-                                <tr className="bg-secondary">
-                                    <th className="bg-secondary text-primary sticky top-0 left-0 z-20 w-48 whitespace-normal break-words py-2 text-left font-caption-highlight">
+                            <thead className="base-secondary">
+                                <tr className="base-secondary">
+                                    <th className="base-secondary text-primary sticky top-0 left-0 z-20 w-48 whitespace-normal break-words py-2 text-left body-5-highlight">
                                         QoQ
                                     </th>
                                     {activeRows.map((row, colIndex) => (
                                         <th
                                             key={`${row.year}-${row.quarter}`}
-                                            className={`${cellBgClass(isCellHighlighted(null, colIndex))} sticky top-0 z-10 p-2 text-right font-caption-highlight ${
+                                            className={`${cellBgClass(isCellHighlighted(null, colIndex))} sticky top-0 z-10 p-2 text-right body-5-highlight ${
                                                 colIndex === 0 ? 'text-primary' : 'text-secondary'
                                             }`}
                                         >
@@ -528,7 +528,7 @@ export const ReportPanel = ({ isLoading, financialData }: Props) => {
                                     ))}
                                 </tr>
                             </thead>
-                            <tbody className="bg-secondary">
+                            <tbody className="base-secondary">
                                 {reportSchema.map((schemaRow, rowIndex) => {
                                     if (schemaRow.kind === 'divider') {
                                         return (
@@ -549,10 +549,10 @@ export const ReportPanel = ({ isLoading, financialData }: Props) => {
                                         return (
                                             <tr
                                                 key={`section-${schemaRow.label}-${rowIndex}`}
-                                                className="bg-secondary"
+                                                className="base-secondary"
                                             >
                                                 <td
-                                                    className={`bg-secondary sticky left-0 z-10 w-48 whitespace-normal break-words p-2 ${TRADE_REPORT_METRIC_STYLE_CLASS_MAP.sectionTitle}`}
+                                                    className={`base-secondary sticky left-0 z-10 w-48 whitespace-normal break-words p-2 ${TRADE_REPORT_METRIC_STYLE_CLASS_MAP.sectionTitle}`}
                                                 >
                                                     {schemaRow.label}
                                                 </td>
@@ -569,7 +569,7 @@ export const ReportPanel = ({ isLoading, financialData }: Props) => {
                                     const isRowHighlighted = isCellHighlighted(rowIndex, null);
 
                                     return (
-                                        <tr key={schemaRow.metricKey} className="bg-secondary">
+                                        <tr key={schemaRow.metricKey} className="base-secondary">
                                             <td
                                                 className={`${cellBgClass(isRowHighlighted)} sticky left-0 z-10 w-48 whitespace-normal break-words p-2 ${TRADE_REPORT_METRIC_STYLE_CLASS_MAP[schemaRow.style]}`}
                                             >
@@ -597,7 +597,7 @@ export const ReportPanel = ({ isLoading, financialData }: Props) => {
                                                 return (
                                                     <td
                                                         key={`${schemaRow.metricKey}-${row.year}-${row.quarter}`}
-                                                        className={`${cellBgClass(isCellHighlighted(rowIndex, colIndex))} p-2 text-right font-caption ${
+                                                        className={`${cellBgClass(isCellHighlighted(rowIndex, colIndex))} p-2 text-right body-5 ${
                                                             normalizedValue < 0
                                                                 ? 'text-red'
                                                                 : 'text-primary'
@@ -616,7 +616,7 @@ export const ReportPanel = ({ isLoading, financialData }: Props) => {
                             </tbody>
                         </table>
                     </div>
-                    <div className="ml-auto font-caption text-secondary">Đơn vị: tỷ đồng</div>
+                    <div className="ml-auto body-5 text-secondary">Đơn vị: tỷ đồng</div>
                 </>
             ) : (
                 <EmptyState />

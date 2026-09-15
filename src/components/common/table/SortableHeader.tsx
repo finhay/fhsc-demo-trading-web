@@ -13,7 +13,7 @@ export const SortableHeader = <T,>({ label, column, align = 'left' }: Props<T>) 
     return (
         <button
             type="button"
-            className={`inline-flex w-full select-none items-center gap-1 font-body-3 text-secondary ${align === 'right' ? 'justify-end' : 'justify-start'}`}
+            className={`inline-flex w-full select-none items-center gap-1 body-4 text-secondary ${align === 'right' ? 'justify-end' : 'justify-start'}`}
             onClick={column.getToggleSortingHandler()}
         >
             <span>{label}</span>

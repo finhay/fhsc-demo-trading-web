@@ -69,14 +69,14 @@ export const BankEfficiency = ({ dataAnnual }: { dataAnnual: any }) => {
         <AnalysisSection title={'Hiệu quả hoạt động thế nào?'}>
             <div className="flex shrink-0 flex-row gap-3 rounded-xl border border-quaternary p-3">
                 <div className="flex min-w-0 flex-1 items-center gap-3">
-                    <span className="font-body-3 text-secondary">{'COF'}</span>
-                    <span className="font-body-2-highlight text-primary">
+                    <span className="body-4 text-secondary">{'COF'}</span>
+                    <span className="body-3-highlight text-primary">
                         {formatNumberVN(latest?.cof * 100)}%
                     </span>
                 </div>
                 <div className="flex min-w-0 flex-1 items-center gap-3">
-                    <span className="font-body-3 text-secondary">{'YEA'}</span>
-                    <span className="font-body-2-highlight text-primary">
+                    <span className="body-4 text-secondary">{'YEA'}</span>
+                    <span className="body-3-highlight text-primary">
                         {formatNumberVN(latest?.yea * 100)}%
                     </span>
                 </div>
@@ -85,8 +85,8 @@ export const BankEfficiency = ({ dataAnnual }: { dataAnnual: any }) => {
                 {panels.map(({ id, labelKey, value, textClass }) => (
                     <div key={id} className={`${ANALYSIS_CONTENT_CARD} min-h-0`}>
                         <div className="flex shrink-0 flex-col gap-0.5">
-                            <span className="font-body-3 text-secondary">{fa[labelKey]}</span>
-                            <span className={`font-body-2-highlight ${textClass}`}>
+                            <span className="body-4 text-secondary">{fa[labelKey]}</span>
+                            <span className={`body-3-highlight ${textClass}`}>
                                 {formatNumberVN(value)}%
                             </span>
                         </div>

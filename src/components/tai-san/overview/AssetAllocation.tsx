@@ -93,9 +93,9 @@ export const AssetAllocation = ({ data, isLoading }: Props) => {
     }, [allocationItems, chartInstanceRef]);
 
     return (
-        <section className="flex flex-col w-full bg-secondary rounded-xl p-3 gap-4 shrink-0">
+        <section className="flex flex-col w-full base-secondary rounded-xl p-3 gap-4 shrink-0">
             <header className="flex items-center justify-between gap-2">
-                <h2 className="font-body-2-highlight text-primary">{'Phân bổ tài sản'}</h2>
+                <h2 className="body-3-highlight text-primary">{'Phân bổ tài sản'}</h2>
             </header>
             <div className="flex flex-row gap-6 w-full items-center">
                 <div className="w-1/3 shrink-0 flex items-center justify-center">
@@ -114,10 +114,10 @@ export const AssetAllocation = ({ data, isLoading }: Props) => {
                                     />
                                     <div className="flex-1 min-w-0 flex flex-col gap-0.5">
                                         <div className="flex items-center gap-1.5">
-                                            <span className="font-body-3 text-primary">
+                                            <span className="body-4 text-primary">
                                                 {asset.label}
                                             </span>
-                                            <span className="font-body-3 text-secondary">
+                                            <span className="body-4 text-secondary">
                                                 ({formatPercentVN(asset.percentage)})
                                             </span>
                                         </div>
@@ -126,7 +126,7 @@ export const AssetAllocation = ({ data, isLoading }: Props) => {
                                                 <Skeleton />
                                             </div>
                                         ) : (
-                                            <span className="font-body-3-highlight text-primary">
+                                            <span className="body-4-highlight text-primary">
                                                 {asset.value}
                                             </span>
                                         )}
@@ -143,13 +143,13 @@ export const AssetAllocation = ({ data, isLoading }: Props) => {
                                                         />
                                                     )}
                                                     <span
-                                                        className={`font-caption ${changeColorClass}`}
+                                                        className={`body-5 ${changeColorClass}`}
                                                     >
                                                         {asset.pnlChange.amount}
                                                     </span>
                                                 </div>
                                                 <span
-                                                    className={`font-caption ${changeColorClass}`}
+                                                    className={`body-5 ${changeColorClass}`}
                                                 >
                                                     {asset.pnlChange.pct}
                                                 </span>
@@ -162,7 +162,7 @@ export const AssetAllocation = ({ data, isLoading }: Props) => {
                                         onClick={() => setIsDownloadAppModalOpen(true)}
                                     />
                                 </article>
-                                {!isLastItem && <hr className="w-full border-0 h-px bg-tertiary" />}
+                                {!isLastItem && <hr className="w-full border-0 h-px base-tertiary" />}
                             </li>
                         );
                     })}

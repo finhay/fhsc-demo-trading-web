@@ -201,9 +201,9 @@ export const RegisterPassword = () => {
                 <button
                     type="submit"
                     disabled={!canSubmit}
-                    className={`w-2/3 font-body-3-highlight rounded-full px-4 py-2 transition-all ${
+                    className={`w-2/3 body-4-highlight rounded-full px-4 py-2 transition-all ${
                         canSubmit
-                            ? 'bg-highlight text-quaternary hover:opacity-90'
+                            ? 'base-highlight text-quaternary hover:opacity-90'
                             : 'bg-disabled text-disabled cursor-not-allowed'
                     }`}
                 >

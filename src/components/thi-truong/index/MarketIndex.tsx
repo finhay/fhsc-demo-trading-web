@@ -14,16 +14,16 @@ export const MarketIndex = () => {
     const { openIndexDetail } = useStockInfoStore();
 
     return (
-        <section className="bg-secondary flex h-full min-h-0 flex-col gap-4 rounded-2xl p-4">
+        <section className="base-secondary flex h-full min-h-0 flex-col gap-4 rounded-2xl p-4">
             <MarketIndexTab selectedIndex={selectedIndex} onSelect={setSelectedIndex} />
             <MarketIndexChart
                 selectedIndex={selectedIndex}
                 onClick={() => openIndexDetail(selectedIndex)}
             />
             <MarketIndexBubble selectedIndex={selectedIndex} />
-            <div className="h-px w-full bg-tertiary" aria-hidden="true" />
+            <div className="h-px w-full base-tertiary" aria-hidden="true" />
             <MarketIndexBreadth selectedIndex={selectedIndex} />
-            <div className="h-px w-full bg-tertiary" aria-hidden="true" />
+            <div className="h-px w-full base-tertiary" aria-hidden="true" />
             <MarketInvestmentPerformance />
         </section>
     );

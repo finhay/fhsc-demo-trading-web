@@ -55,9 +55,9 @@ export const createStockInfoSparkline = (
                           value?: number | string;
                       };
                       const label = p?.axisValue
-                          ? `<span class="font-caption text-secondary">${p.axisValue}</span>`
+                          ? `<span class="body-5 text-secondary">${p.axisValue}</span>`
                           : '';
-                      return `<div class="flex flex-col gap-0.5">${label}<span class="font-caption-highlight text-primary">${formatNumberVN(
+                      return `<div class="flex flex-col gap-0.5">${label}<span class="body-5-highlight text-primary">${formatNumberVN(
                           Number(p?.value ?? 0),
                       )}${tooltipSuffix}</span></div>`;
                   },
@@ -90,7 +90,7 @@ export const createStockInfoAxisLine = (categories: string[], data: number[], co
         padding: 8,
         formatter: (params: any) => {
             const p = Array.isArray(params) ? params[0] : params;
-            return `<div class="flex flex-col gap-0.5"><span class="font-caption text-secondary">${p?.axisValue ?? ''}</span><span class="font-caption-highlight text-primary">${formatNumberVN(Number(p?.value ?? 0))}%</span></div>`;
+            return `<div class="flex flex-col gap-0.5"><span class="body-5 text-secondary">${p?.axisValue ?? ''}</span><span class="body-5-highlight text-primary">${formatNumberVN(Number(p?.value ?? 0))}%</span></div>`;
         },
     },
     xAxis: {

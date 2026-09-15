@@ -14,17 +14,17 @@ export const getTradingFieldBg = (
     side?: 'buy' | 'sell',
     disabled?: boolean,
 ): string => {
-    if (disabled) return 'bg-tertiary opacity-50';
-    if (!hasValue) return 'bg-tertiary';
-    if (side === 'buy') return 'bg-green/20';
-    if (side === 'sell') return 'bg-red/20';
-    return 'bg-tertiary';
+    if (disabled) return 'base-tertiary opacity-50';
+    if (!hasValue) return 'base-tertiary';
+    if (side === 'buy') return 'base-green/20';
+    if (side === 'sell') return 'base-red/20';
+    return 'base-tertiary';
 };
 
 export const getActiveColor = (active: boolean | undefined) => {
-    if (active === true) return 'bg-green';
-    if (active === false) return 'bg-red';
-    return 'bg-highlight';
+    if (active === true) return 'base-green';
+    if (active === false) return 'base-red';
+    return 'base-highlight';
 };
 
 export const parsePrice = (raw: string): number => {

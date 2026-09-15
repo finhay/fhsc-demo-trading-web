@@ -99,10 +99,10 @@ export const StockTransaction = () => {
 
     return (
         <section
-            className="flex min-h-0 flex-1 flex-col gap-3 overflow-hidden rounded-xl bg-secondary p-3"
+            className="flex min-h-0 flex-1 flex-col gap-3 overflow-hidden rounded-xl base-secondary p-3"
             aria-label={'Giao dịch toàn thị trường'}
         >
-            <h3 className="shrink-0 font-body-3-highlight text-primary">
+            <h3 className="shrink-0 body-4-highlight text-primary">
                 {'Giao dịch toàn thị trường'}
             </h3>
 
@@ -116,7 +116,7 @@ export const StockTransaction = () => {
                 </div>
             ) : (
                 <div className="flex min-h-0 flex-1 flex-col gap-3">
-                    <div className="flex w-full shrink-0 font-caption text-secondary">
+                    <div className="flex w-full shrink-0 body-5 text-secondary">
                         <span className="w-20 shrink-0">{'Thời gian'}</span>
                         <span className="min-w-0 flex-1">{'M/B'}</span>
                         <span className="w-20 shrink-0 text-right">{'KL'}</span>
@@ -126,7 +126,7 @@ export const StockTransaction = () => {
                         {data.map((transaction, index) => (
                             <div
                                 key={`${transaction.sequence}-${index}`}
-                                className="flex w-full shrink-0 font-caption"
+                                className="flex w-full shrink-0 body-5"
                             >
                                 <span className="w-20 shrink-0 text-secondary">
                                     {transaction.time}

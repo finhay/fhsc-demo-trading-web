@@ -49,7 +49,7 @@ export const NonFinancialDebt = ({ dataAnnual }: { dataAnnual: any }) => {
                                 }}
                             >
                                 <span
-                                    className="truncate px-2 font-tiny-highlight"
+                                    className="truncate px-2 body-5-highlight"
                                     style={bar.textStyle}
                                 >
                                     {fa[bar.labelKey]}: {bar.display}
@@ -62,21 +62,21 @@ export const NonFinancialDebt = ({ dataAnnual }: { dataAnnual: any }) => {
                     {stats.map((s) => (
                         <div
                             key={s.labelKey}
-                            className="flex items-center justify-between gap-2 font-body-3"
+                            className="flex items-center justify-between gap-2 body-4"
                         >
                             <span className="min-w-0 flex-1 text-secondary">{fa[s.labelKey]}</span>
-                            <span className={`shrink-0 font-body-3-highlight ${s.textColor}`}>
+                            <span className={`shrink-0 body-4-highlight ${s.textColor}`}>
                                 {s.value}
                             </span>
                         </div>
                     ))}
                 </div>
-                <div className="h-px w-full bg-tertiary" />
+                <div className="h-px w-full base-tertiary" />
                 <div className="flex gap-4">
                     {rates.map((r) => (
                         <div key={r.labelKey} className="flex min-w-0 flex-1 flex-col gap-1">
-                            <span className="font-body-3 text-secondary">{fa[r.labelKey]}</span>
-                            <span className="font-body-2-highlight text-primary">{r.value}</span>
+                            <span className="body-4 text-secondary">{fa[r.labelKey]}</span>
+                            <span className="body-3-highlight text-primary">{r.value}</span>
                         </div>
                     ))}
                 </div>

@@ -42,7 +42,7 @@ export const NavBar = () => {
     };
 
     return (
-        <section className="bg-primary flex items-center px-2 py-1 gap-4">
+        <section className="base-primary flex items-center px-2 py-1 gap-4">
             <div className="flex flex-1 items-center gap-16">
                 <div className="flex items-center gap-4">
                     <Link href="/" aria-label="Go to homepage">
@@ -72,7 +72,7 @@ export const NavBar = () => {
                                 />
                             </svg>
                         </span>
-                        <span className="font-body-3-highlight text-quaternary whitespace-nowrap">
+                        <span className="body-4-highlight text-quaternary whitespace-nowrap">
                             Demo Trading
                         </span>
                     </span>
@@ -88,8 +88,8 @@ export const NavBar = () => {
                                         href={item.path}
                                         className={`flex items-center gap-2 py-2 ${
                                             active
-                                                ? 'text-primary font-body-3-highlight'
-                                                : 'text-secondary font-body-3'
+                                                ? 'text-primary body-4-highlight'
+                                                : 'text-secondary body-4'
                                         }`}
                                     >
                                         {NAV_BAR[item.translationKey as keyof typeof NAV_BAR]}
@@ -100,7 +100,7 @@ export const NavBar = () => {
                     </ul>
                 </nav>
             </div>
-            <span className="font-body-3 text-primary tabular-nums">{time}</span>
+            <span className="body-4 text-primary tabular-nums">{time}</span>
             <StatusBadge />
             <NavAuth />
         </section>

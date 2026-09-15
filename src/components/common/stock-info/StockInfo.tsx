@@ -55,32 +55,32 @@ export const StockInfo = ({ enableIndexSearch = false }: Props) => {
             {
                 label: 'Sàn',
                 value: realtimeData.floor,
-                ddClassName: 'font-caption text-blue',
+                ddClassName: 'body-5 text-blue',
             },
             {
                 label: 'TC',
                 value: realtimeData.reference,
-                ddClassName: 'font-caption text-orange',
+                ddClassName: 'body-5 text-orange',
             },
             {
                 label: 'Trần',
                 value: realtimeData.ceiling,
-                ddClassName: 'font-caption text-purple',
+                ddClassName: 'body-5 text-purple',
             },
             {
                 label: 'Thấp',
                 value: realtimeData.low,
-                ddClassName: `font-caption ${getSymbolInfoPriceColor(realtimeData.low, realtimeData)}`,
+                ddClassName: `body-5 ${getSymbolInfoPriceColor(realtimeData.low, realtimeData)}`,
             },
             {
                 label: 'TB',
                 value: realtimeData.average,
-                ddClassName: `font-caption ${getSymbolInfoPriceColor(realtimeData.average, realtimeData)}`,
+                ddClassName: `body-5 ${getSymbolInfoPriceColor(realtimeData.average, realtimeData)}`,
             },
             {
                 label: 'Cao',
                 value: realtimeData.high,
-                ddClassName: `font-caption ${getSymbolInfoPriceColor(realtimeData.high, realtimeData)}`,
+                ddClassName: `body-5 ${getSymbolInfoPriceColor(realtimeData.high, realtimeData)}`,
             },
         ],
         [realtimeData],
@@ -145,26 +145,26 @@ export const StockInfo = ({ enableIndexSearch = false }: Props) => {
                         }}
                         variant="pill"
                         className="w-auto"
-                        inputClassName="font-body-3-highlight w-28"
+                        inputClassName="body-4-highlight w-28"
                     />
                     <div className={`flex items-center gap-1.5 whitespace-nowrap ${priceColor}`}>
-                        <span className="font-body-1-highlight">
+                        <span className="body-2-highlight">
                             {formatNumberVN(realtimeData.price / 1000)}
                         </span>
-                        <span className="font-body-3">
+                        <span className="body-4">
                             {realtimeData.changePercent > 0 ? '+' : ''}
                             {formatNumberVN(realtimeData.changePercent)}%
                         </span>
                     </div>
                 </div>
                 <Tooltip content={companyName} placement="bottom" className="block w-0 min-w-full">
-                    <p className="truncate font-caption text-secondary">{companyName}</p>
+                    <p className="truncate body-5 text-secondary">{companyName}</p>
                 </Tooltip>
             </div>
             <div className="grid grid-cols-3 gap-x-3.5 gap-y-2">
                 {stats.map((item) => (
                     <div key={item.label} className="flex w-20 gap-1">
-                        <span className="font-caption text-secondary">{item.label}</span>
+                        <span className="body-5 text-secondary">{item.label}</span>
                         <span className={item.ddClassName}>
                             {formatNumberVN(item.value / 1000)}
                         </span>

@@ -88,7 +88,7 @@ export const TradeView = () => {
                         <TradeWatchlist />
                     </aside>
                     <StockSection
-                        className="flex flex-1 flex-col overflow-hidden bg-secondary rounded-xl min-w-0"
+                        className="flex flex-1 flex-col overflow-hidden base-secondary rounded-xl min-w-0"
                         hideChartPanel
                     />
                     {!isChartFullscreen && (

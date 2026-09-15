@@ -94,13 +94,13 @@ export const MarketFundDetailChart = ({ fundName, latestNav, initialChartData }:
     }, [hasData, chartInstanceRef]);
 
     return (
-        <section className="flex flex-col gap-4 rounded-2xl bg-secondary p-4">
+        <section className="flex flex-col gap-4 rounded-2xl base-secondary p-4">
             <div className="flex flex-wrap items-start justify-between gap-3">
                 <div className="flex flex-col gap-1">
-                    <span className="font-body-3 text-secondary">
+                    <span className="body-4 text-secondary">
                         {'Giá gần nhất'} {formattedDate ? `(${formattedDate})` : null}
                     </span>
-                    <span className="font-heading-4 text-primary">
+                    <span className="body-1-highlight text-primary">
                         {displayNavpf == null
                             ? '--'
                             : `${formatNumberVN(displayNavpf, { decimals: 2 })}đ`}
@@ -116,8 +116,8 @@ export const MarketFundDetailChart = ({ fundName, latestNav, initialChartData }:
                                 onClick={() => handleChangePeriod(item)}
                                 className={`rounded-full px-3 py-1 transition-colors ${
                                     isActive
-                                        ? 'bg-tertiary font-body-3-highlight text-primary'
-                                        : 'font-body-3 text-secondary'
+                                        ? 'base-tertiary body-4-highlight text-primary'
+                                        : 'body-4 text-secondary'
                                 }`}
                             >
                                 {d[item]}

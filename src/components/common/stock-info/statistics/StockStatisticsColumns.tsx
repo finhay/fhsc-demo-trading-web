@@ -19,7 +19,7 @@ const renderSortIcon = (sorted: false | 'asc' | 'desc') => {
 const SortableHeader = <T,>({ label, column }: { label: string; column: Column<T, unknown> }) => (
     <button
         type="button"
-        className="inline-flex items-center gap-1 whitespace-nowrap font-caption text-secondary"
+        className="inline-flex items-center gap-1 whitespace-nowrap body-5 text-secondary"
         onClick={column.getToggleSortingHandler()}
     >
         <span>{label}</span>
@@ -52,7 +52,7 @@ export const getStockStatisticsPriceColumns = (): ColumnDef<StockStatisticsPrice
         accessorKey: 'change',
         header: ({ column }) => <SortableHeader label={'Thay đổi'} column={column} />,
         cell: ({ row }) => (
-            <span className={`font-caption-highlight ${changeColor(row.original.change)}`}>
+            <span className={`body-5-highlight ${changeColor(row.original.change)}`}>
                 {formatNumberVN(row.original.change)}
             </span>
         ),
@@ -62,7 +62,7 @@ export const getStockStatisticsPriceColumns = (): ColumnDef<StockStatisticsPrice
         accessorKey: 'changePercent',
         header: ({ column }) => <SortableHeader label={'%'} column={column} />,
         cell: ({ row }) => (
-            <span className={`font-caption-highlight ${changeColor(row.original.change)}`}>
+            <span className={`body-5-highlight ${changeColor(row.original.change)}`}>
                 {`${formatNumberVN(row.original.changePercent)}%`}
             </span>
         ),
@@ -73,7 +73,7 @@ export const getStockStatisticsPriceColumns = (): ColumnDef<StockStatisticsPrice
         header: ({ column }) => <SortableHeader label={'Đóng ĐC'} column={column} />,
         cell: ({ row }) => (
             <span
-                className={`font-caption-highlight ${priceColor(row.original.close, row.original.open)}`}
+                className={`body-5-highlight ${priceColor(row.original.close, row.original.open)}`}
             >
                 {formatNumberVN(row.original.close)}
             </span>
@@ -85,7 +85,7 @@ export const getStockStatisticsPriceColumns = (): ColumnDef<StockStatisticsPrice
         header: ({ column }) => <SortableHeader label={'Mở'} column={column} />,
         cell: ({ row }) => (
             <span
-                className={`font-caption-highlight ${priceColor(row.original.open, row.original.prevClose)}`}
+                className={`body-5-highlight ${priceColor(row.original.open, row.original.prevClose)}`}
             >
                 {formatNumberVN(row.original.open)}
             </span>
@@ -97,7 +97,7 @@ export const getStockStatisticsPriceColumns = (): ColumnDef<StockStatisticsPrice
         header: ({ column }) => <SortableHeader label={'Cao'} column={column} />,
         cell: ({ row }) => (
             <span
-                className={`font-caption-highlight ${priceColor(row.original.high, row.original.open)}`}
+                className={`body-5-highlight ${priceColor(row.original.high, row.original.open)}`}
             >
                 {formatNumberVN(row.original.high)}
             </span>
@@ -109,7 +109,7 @@ export const getStockStatisticsPriceColumns = (): ColumnDef<StockStatisticsPrice
         header: ({ column }) => <SortableHeader label={'Thấp'} column={column} />,
         cell: ({ row }) => (
             <span
-                className={`font-caption-highlight ${priceColor(row.original.low, row.original.open)}`}
+                className={`body-5-highlight ${priceColor(row.original.low, row.original.open)}`}
             >
                 {formatNumberVN(row.original.low)}
             </span>
@@ -139,7 +139,7 @@ export const getStockStatisticsTradingColumns = (): ColumnDef<TradingHistoryItem
         cell: ({ row }) => {
             const value = row.original.net.total.volume;
             return (
-                <span className={`font-caption-highlight ${getNetColor(value)}`}>
+                <span className={`body-5-highlight ${getNetColor(value)}`}>
                     {formatNumberVN(value, { decimals: 0 })}
                 </span>
             );
@@ -152,7 +152,7 @@ export const getStockStatisticsTradingColumns = (): ColumnDef<TradingHistoryItem
         cell: ({ row }) => {
             const value = row.original.net.total.value;
             return (
-                <span className={`font-caption-highlight ${getNetColor(value)}`}>
+                <span className={`body-5-highlight ${getNetColor(value)}`}>
                     {formatNumberVN(value, { decimals: 0 })}
                 </span>
             );

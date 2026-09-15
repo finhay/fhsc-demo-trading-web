@@ -48,8 +48,8 @@ export const StockNavigation: FC<Props> = ({ hideFullscreenToggle = false }) => 
                             role="presentation"
                             className={`cursor-pointer transition-colors ${
                                 selectedTabInfor === key
-                                    ? 'font-body-3-highlight text-primary'
-                                    : 'font-body-3 text-secondary'
+                                    ? 'body-4-highlight text-primary'
+                                    : 'body-4 text-secondary'
                             }`}
                             onClick={() => {
                                 setSelectedTabInfor(key);
@@ -57,7 +57,7 @@ export const StockNavigation: FC<Props> = ({ hideFullscreenToggle = false }) => 
                         >
                             {getTabInformationLabel(key)}
                             <span
-                                className={`mt-1.5 block h-0.5 w-full bg-quinary ${
+                                className={`mt-1.5 block h-0.5 w-full base-quinary ${
                                     selectedTabInfor === key ? '' : 'opacity-0'
                                 }`}
                             />

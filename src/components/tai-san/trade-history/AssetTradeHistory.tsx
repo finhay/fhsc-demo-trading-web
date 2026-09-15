@@ -62,8 +62,8 @@ export const AssetTradeHistory = () => {
     }, [accountId, fromDate, toDate]);
 
     return (
-        <section className="flex h-96 w-full shrink-0 flex-col gap-3 overflow-hidden rounded-xl bg-secondary p-3">
-            <h2 className="shrink-0 font-body-2-highlight text-primary">{'Lịch sử giao dịch'}</h2>
+        <section className="flex h-96 w-full shrink-0 flex-col gap-3 overflow-hidden rounded-xl base-secondary p-3">
+            <h2 className="shrink-0 body-3-highlight text-primary">{'Lịch sử giao dịch'}</h2>
             <div className="min-h-0 w-full flex-1">
                 {isLoading ? (
                     <div className="h-full w-full">
@@ -76,7 +76,7 @@ export const AssetTradeHistory = () => {
                 ) : (
                     <div className="scrollbar h-full overflow-auto">
                         <table className="w-full min-w-max border-collapse">
-                            <thead className="sticky top-0 z-10 bg-secondary">
+                            <thead className="sticky top-0 z-10 base-secondary">
                                 {table.getHeaderGroups().map((headerGroup) => (
                                     <tr key={headerGroup.id}>
                                         {headerGroup.headers.map((header) => {
@@ -98,7 +98,7 @@ export const AssetTradeHistory = () => {
                                                                   ? 'descending'
                                                                   : 'none',
                                                     })}
-                                                    className={`whitespace-nowrap px-2 py-2.5 font-body-3 text-secondary ${isLeft ? 'text-left' : 'text-right'}`}
+                                                    className={`whitespace-nowrap px-2 py-2.5 body-4 text-secondary ${isLeft ? 'text-left' : 'text-right'}`}
                                                 >
                                                     {header.isPlaceholder
                                                         ? null
@@ -126,7 +126,7 @@ export const AssetTradeHistory = () => {
                                             return (
                                                 <td
                                                     key={cell.id}
-                                                    className={`whitespace-nowrap px-2 py-2.5 font-body-3 text-primary ${isLeft ? 'text-left' : 'text-right'}`}
+                                                    className={`whitespace-nowrap px-2 py-2.5 body-4 text-primary ${isLeft ? 'text-left' : 'text-right'}`}
                                                 >
                                                     {flexRender(
                                                         cell.column.columnDef.cell,
