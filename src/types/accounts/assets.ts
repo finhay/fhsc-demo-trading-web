@@ -11,6 +11,11 @@ export type AssetsSummary = {
         hay0_interest: number;
         hay0_depositing: number;
         hay0_withdrawing: number;
+        /** CP/tiền chờ về từ quyền — optional để an toàn khi BE chưa ship */
+        receivable?: {
+            stock: number;
+            cash: number;
+        };
     };
     money: {
         total: number;
