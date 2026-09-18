@@ -50,13 +50,13 @@ export const PDFViewerContent = ({ isOpen, pdfUrl, title, error, onClose }: PDFV
             <div>
                 {displayError ? (
                     <div className="flex flex-col justify-center items-center h-full gap-4">
-                        <p className="text-red font-body-2">
+                        <p className="text-red body-3">
                             {'Không thể tải PDF: '}
                             {displayError}
                         </p>
                         <button
                             onClick={handleClose}
-                            className="bg-highlight px-6 py-2 rounded-full"
+                            className="base-highlight px-6 py-2 rounded-full"
                             type="button"
                         >
                             {'Quay lại'}

@@ -12,6 +12,7 @@ import { AssetAllocation } from '@/components/tai-san/overview/AssetAllocation';
 import { AssetOverview } from '@/components/tai-san/overview/AssetOverview';
 import { AssetPortfolio } from '@/components/tai-san/portfolio/AssetPortfolio';
 // import { AssetStructure } from '@/components/tai-san/portfolio/AssetStructure';
+import { AssetRights } from '@/components/tai-san/rights/AssetRights';
 import { AssetTradeHistory } from '@/components/tai-san/trade-history/AssetTradeHistory';
 import { MarketDetailModal } from '@/components/thi-truong/index/modal/MarketDetailModal';
 import { useAssetStore } from '@/stores/assets/useAssetStore';
@@ -36,6 +37,7 @@ export const AssetView = () => {
                 <section className="flex h-full min-h-0 w-1/3 min-w-96 shrink-0 flex-col gap-2 overflow-y-auto">
                     <AssetOverview data={assetsSummary} isLoading={isSummaryLoading} />
                     <AssetAllocation data={assetsSummary} isLoading={isSummaryLoading} />
+                    <AssetRights />
                     {/* Demo Figma không có khối Nợ */}
                     {/* <AssetDebt /> */}
                     {/* Demo không có Lịch sử tiền */}
@@ -43,7 +45,7 @@ export const AssetView = () => {
                 </section>
                 <section className="flex flex-1 min-w-0 flex-col gap-2 h-full min-h-0 overflow-y-auto">
                     <header className="flex shrink-0 items-center gap-4">
-                        <h1 className="font-heading-4 text-primary whitespace-nowrap">
+                        <h1 className="body-1-highlight text-primary whitespace-nowrap">
                             {'Danh mục Chứng Khoán'}
                         </h1>
                         {/* Demo Figma không có chọn tiểu khoản */}

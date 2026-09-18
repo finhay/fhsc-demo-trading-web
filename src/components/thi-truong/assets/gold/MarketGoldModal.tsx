@@ -57,7 +57,7 @@ export const MarketGoldModal = ({
             title={'Giá vàng bạc'}
             maxWidth="max-w-7xl"
             maxHeight="max-h-[90vh]"
-            panelClassName="bg-primary gap-3 p-4"
+            panelClassName="base-primary gap-3 p-4"
         >
             <div className="grid grid-cols-1 items-start gap-3 lg:grid-cols-2">
                 <div className="flex min-w-0 flex-col gap-3">

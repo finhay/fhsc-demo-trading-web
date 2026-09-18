@@ -43,7 +43,7 @@ export const createWatchlistColumns = ({
                 <button
                     type="button"
                     onClick={() => onSelectSymbol(row.original.symbol)}
-                    className="cursor-pointer text-left font-body-3-highlight text-primary hover:underline"
+                    className="cursor-pointer text-left body-4-highlight text-primary hover:underline"
                 >
                     {row.original.symbol}
                 </button>
@@ -73,14 +73,14 @@ export const createWatchlistColumns = ({
                 : getPriceColor(price, reference, floor, ceiling);
             return (
                 <div
-                    className={`flex flex-col w-fit p-1 font-body-3 rounded transition-colors duration-1000 ${
+                    className={`flex flex-col w-fit p-1 body-4 rounded transition-colors duration-1000 ${
                         isSymbolRecentlyUpdated && highlightColor ? highlightColor : ''
                     }`}
                 >
-                    <data value={price || 0} className={`font-body-3 ${priceColorClass}`}>
+                    <data value={price || 0} className={`body-4 ${priceColorClass}`}>
                         {formatNumberVN(Number(price) / 1000)}
                     </data>
-                    <data value={reference || 0} className="font-body-3 text-primary">
+                    <data value={reference || 0} className="body-4 text-primary">
                         {formatNumberVN(Number(reference) / 1000)}
                     </data>
                 </div>
@@ -106,7 +106,7 @@ export const createWatchlistColumns = ({
             return (
                 <div className="flex items-center justify-end">
                     <div
-                        className={`flex items-center gap-2 p-1 font-body-3 rounded transition-colors duration-1000 ${isSymbolRecentlyUpdated && highlightColor ? highlightColor : changeColorClass}`}
+                        className={`flex items-center gap-2 p-1 body-4 rounded transition-colors duration-1000 ${isSymbolRecentlyUpdated && highlightColor ? highlightColor : changeColorClass}`}
                     >
                         {price_change > 0 ? (
                             <FaArrowUp size={14} />

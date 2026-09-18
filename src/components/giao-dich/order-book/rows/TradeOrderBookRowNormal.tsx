@@ -22,7 +22,7 @@ export const TradeOrderBookRowNormal = ({ order, onOpenDetail, onEdit, onCancel 
 
     return (
         <tr className="border-b border-tertiary">
-            <td className="w-1/6 py-1 font-caption whitespace-nowrap px-1 text-left">
+            <td className="w-1/6 py-1 body-5 whitespace-nowrap px-1 text-left">
                 <button
                     type="button"
                     onClick={() => onOpenDetail(order.orderId)}
@@ -32,11 +32,11 @@ export const TradeOrderBookRowNormal = ({ order, onOpenDetail, onEdit, onCancel 
                     {order.symbol}
                 </button>
             </td>
-            <td className="w-1/6 py-1 font-caption whitespace-nowrap px-1 text-right">
+            <td className="w-1/6 py-1 body-5 whitespace-nowrap px-1 text-right">
                 <span className="text-primary">{order.filledQty} / </span>
                 <span className="text-secondary">{order.totalQty}</span>
             </td>
-            <td className="w-1/6 py-1 font-caption whitespace-nowrap px-1 text-right">
+            <td className="w-1/6 py-1 body-5 whitespace-nowrap px-1 text-right">
                 <span className="text-primary">
                     {order.filledPrice ? `${order.filledPrice} / ` : ''}
                 </span>
@@ -44,15 +44,15 @@ export const TradeOrderBookRowNormal = ({ order, onOpenDetail, onEdit, onCancel 
                     {formatPlacedPriceCell(order.placedPrice, order.priceType)}
                 </span>
             </td>
-            <td className="w-1/6 py-1 font-caption whitespace-nowrap px-1 text-right">
+            <td className="w-1/6 py-1 body-5 whitespace-nowrap px-1 text-right">
                 <div className={order.type === ORDER_TYPE.BUY ? 'text-green' : 'text-red'}>
                     {order.type}
                 </div>
             </td>
-            <td className="w-1/6 py-1 font-caption whitespace-nowrap px-1 text-right">
+            <td className="w-1/6 py-1 body-5 whitespace-nowrap px-1 text-right">
                 <div className={getOrderStatusColor(status.tone)}>{status.text}</div>
             </td>
-            <td className="w-1/6 py-1 font-caption text-primary whitespace-nowrap px-1 text-right">
+            <td className="w-1/6 py-1 body-5 text-primary whitespace-nowrap px-1 text-right">
                 <TradeOrderBookRowActions
                     order={order}
                     canEdit={canEdit}

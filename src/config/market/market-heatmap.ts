@@ -4,8 +4,8 @@ import { getStockChangeColor } from '@/utils/market/market-heatmap';
 
 const formatSectorTooltip = (
     data: any,
-): string => `<div class="max-w-64 rounded-md border border-quaternary bg-tertiary px-2 py-1">
-        <span class="block whitespace-normal break-words font-caption text-primary">${data.name ?? ''}</span>
+): string => `<div class="max-w-64 rounded-md border border-quaternary base-tertiary px-2 py-1">
+        <span class="block whitespace-normal break-words body-5 text-primary">${data.name ?? ''}</span>
     </div>`;
 
 const formatHeatmapTooltip = (params: any): string => {
@@ -26,29 +26,29 @@ const formatHeatmapTooltip = (params: any): string => {
     });
     const statusLabel =
         price >= ceiling
-            ? `<span class="font-caption text-purple">${'Tăng trần'}</span>`
+            ? `<span class="body-5 text-purple">${'Tăng trần'}</span>`
             : price <= floor
-              ? `<span class="font-caption text-blue">${'Giảm sàn'}</span>`
+              ? `<span class="body-5 text-blue">${'Giảm sàn'}</span>`
               : '';
 
-    return `<div class="flex w-52 flex-col gap-2 rounded-lg bg-tertiary p-2">
+    return `<div class="flex w-52 flex-col gap-2 rounded-lg base-tertiary p-2">
         <div class="flex min-w-0 flex-col gap-0.5">
-            <span class="font-caption-highlight text-primary">${symbol}</span>
-            <span class="block break-words font-caption text-secondary whitespace-normal">${stockName ?? ''}</span>
+            <span class="body-5-highlight text-primary">${symbol}</span>
+            <span class="block break-words body-5 text-secondary whitespace-normal">${stockName ?? ''}</span>
         </div>
         <div class="flex items-center justify-between gap-4">
-            <span class="font-body-3-highlight text-primary">${displayPrice}</span>
-            <span class="font-body-3-highlight ${pctTextClass}">${sign}${pctStr}%</span>
+            <span class="body-4-highlight text-primary">${displayPrice}</span>
+            <span class="body-4-highlight ${pctTextClass}">${sign}${pctStr}%</span>
         </div>
         ${statusLabel}
         <div class="flex flex-col gap-1.5 border-t border-quaternary pt-2">
             <div class="flex items-center justify-between gap-4">
-                <span class="font-caption text-secondary">${'GTGD'}</span>
-                <span class="font-caption-highlight text-primary">${formatNumberVNWithUnit(totalValue)}</span>
+                <span class="body-5 text-secondary">${'GTGD'}</span>
+                <span class="body-5-highlight text-primary">${formatNumberVNWithUnit(totalValue)}</span>
             </div>
             <div class="flex items-center justify-between gap-4">
-                <span class="font-caption text-secondary">${'KLGD'}</span>
-                <span class="font-caption-highlight text-primary">${formatNumberVN(totalVolume, { decimals: 0 })}</span>
+                <span class="body-5 text-secondary">${'KLGD'}</span>
+                <span class="body-5-highlight text-primary">${formatNumberVN(totalVolume, { decimals: 0 })}</span>
             </div>
         </div>
     </div>`;

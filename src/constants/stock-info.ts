@@ -92,8 +92,8 @@ export const PROFITABILITY = {
 } as const;
 
 export const PROFITABILITY_SERIES_COLORS: { dotColor: string; lineColor: string }[] = [
-    { dotColor: 'bg-blue', lineColor: CHART_LINE_COLORS.blue },
-    { dotColor: 'bg-orange', lineColor: CHART_LINE_COLORS.orange },
+    { dotColor: 'base-blue', lineColor: CHART_LINE_COLORS.blue },
+    { dotColor: 'base-orange', lineColor: CHART_LINE_COLORS.orange },
     { dotColor: 'bg-gray', lineColor: CHART_LINE_COLORS.gray },
 ];
 
@@ -167,13 +167,13 @@ export const INSURANCE_GROWTH_ITEMS: {
     {
         labelKey: 'net_insurance_revenue',
         key: 'tt_doanhthuphibaohiemthuan_yoy',
-        dotColor: 'bg-blue',
+        dotColor: 'base-blue',
         lineColor: CHART_LINE_COLORS.blue,
     },
     {
         labelKey: 'primary_insurance_premium',
         key: 'tt_phibaohiemgoc_yoy',
-        dotColor: 'bg-orange',
+        dotColor: 'base-orange',
         lineColor: CHART_LINE_COLORS.orange,
     },
     {
@@ -194,13 +194,13 @@ export const INSURANCE_HEALTH_ITEMS: {
         labelKey: 'short_term',
         key: 'tile_cackhoandaututaichinhnganhan',
         textColor: 'text-blue',
-        bgColor: 'bg-blue',
+        bgColor: 'base-blue',
     },
     {
         labelKey: 'long_term',
         key: 'tile_cackhoandaututaichinhdaihan',
         textColor: 'text-orange',
-        bgColor: 'bg-orange',
+        bgColor: 'base-orange',
     },
 ];
 
@@ -257,13 +257,13 @@ export const NON_FINANCIAL_DEBT = {
         {
             labelKey: 'equity_short',
             field: 'vonchusohuu_tong',
-            bgClass: 'bg-blue',
+            bgClass: 'base-blue',
             textStyle: { color: '#0b2a48' },
         },
         {
             labelKey: 'short_term_debt',
             field: 'nonganhan',
-            bgClass: 'bg-orange',
+            bgClass: 'base-orange',
             textStyle: { color: '#432805' },
         },
         {
@@ -348,8 +348,8 @@ export const NON_FINANCIAL_GROWTH = {
         }
     >,
     itemsBase: [
-        { labelKey: 'net_revenue_short', dotColor: 'bg-blue', lineColor: CHART_LINE_COLORS.blue },
-        { labelKey: 'ebit', dotColor: 'bg-orange', lineColor: CHART_LINE_COLORS.orange },
+        { labelKey: 'net_revenue_short', dotColor: 'base-blue', lineColor: CHART_LINE_COLORS.blue },
+        { labelKey: 'ebit', dotColor: 'base-orange', lineColor: CHART_LINE_COLORS.orange },
         { labelKey: 'lnst', dotColor: 'bg-gray', lineColor: CHART_LINE_COLORS.gray },
     ] as { labelKey: string; dotColor: string; lineColor: string }[],
 } as const;
@@ -365,10 +365,10 @@ export const NON_FINANCIAL_MARGIN_ITEMS: {
     {
         labelKey: 'gross_margin_short',
         field: 'bienlaigop',
-        color: 'bg-orange',
+        color: 'base-orange',
         textColor: 'text-orange',
     },
-    { labelKey: 'ebit_margin', field: 'bienlaiebit', color: 'bg-orange', textColor: 'text-orange' },
+    { labelKey: 'ebit_margin', field: 'bienlaiebit', color: 'base-orange', textColor: 'text-orange' },
     {
         labelKey: 'net_margin',
         field: 'bienlaisauthue',
@@ -498,17 +498,17 @@ export const ANALYSIS_CHART_FILL = 'relative h-44 w-full min-h-44 flex-1';
 export const ANALYSIS_CHART_CANVAS = 'absolute inset-0 min-w-0';
 
 export const TRADE_REPORT_DIVIDER_CLASS_MAP: Record<TradeReportDividerVariant, string> = {
-    base: 'bg-tertiary h-px p-0',
-    textTertiary: 'bg-tertiary h-px p-0 opacity-50',
-    green: 'bg-green h-px p-0',
+    base: 'base-tertiary h-px p-0',
+    textTertiary: 'base-tertiary h-px p-0 opacity-50',
+    green: 'base-green h-px p-0',
 };
 
 export const TRADE_REPORT_METRIC_STYLE_CLASS_MAP: Record<TradeReportMetricStyle, string> = {
-    sectionTitle: 'font-body-3-highlight text-secondary',
-    header: 'font-caption-highlight text-primary',
-    sub: 'pl-4 font-caption text-secondary',
-    negativeDesc1: 'pl-4 font-caption text-secondary',
-    negativeDesc2: 'pl-8 font-caption text-secondary',
+    sectionTitle: 'body-4-highlight text-secondary',
+    header: 'body-5-highlight text-primary',
+    sub: 'pl-4 body-5 text-secondary',
+    negativeDesc1: 'pl-4 body-5 text-secondary',
+    negativeDesc2: 'pl-8 body-5 text-secondary',
 };
 const section = (label: string): TradeReportSchemaRow => ({ kind: 'section', label });
 const dividerSoft = (): TradeReportSchemaRow => ({ kind: 'divider', variant: 'textTertiary' });

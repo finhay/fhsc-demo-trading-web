@@ -28,7 +28,7 @@ export const getAssetPortfolioColumns = ({
                 <button
                     type="button"
                     onClick={() => onSymbolClick(row.original.symbol)}
-                    className="cursor-pointer font-body-3-highlight text-primary hover:underline"
+                    className="cursor-pointer body-4-highlight text-primary hover:underline"
                 >
                     {row.original.symbol}
                 </button>
@@ -36,7 +36,7 @@ export const getAssetPortfolioColumns = ({
         },
         {
             id: 'total',
-            accessorKey: 'total',
+            accessorFn: (row) => row.total + row.receiving_right,
             header: ({ column }) => <SortableHeader label={'Tổng'} column={column} align="right" />,
             meta: { align: 'right' } satisfies SortableColMeta,
             cell: ({ getValue }) => formatNumberVN(getValue<number>(), { decimals: 0 }),
@@ -102,8 +102,8 @@ export const getAssetPortfolioColumns = ({
                     <span
                         className={`inline-flex items-center justify-end gap-1 whitespace-nowrap ${colorClass}`}
                     >
-                        {value > 0 && <FaArrowUp className="font-tiny shrink-0" />}
-                        {value < 0 && <FaArrowDown className="font-tiny shrink-0" />}
+                        {value > 0 && <FaArrowUp className="body-5 shrink-0" />}
+                        {value < 0 && <FaArrowDown className="body-5 shrink-0" />}
                         <span>
                             {formatNumberVN(Math.abs(value), { trimTrailingZeros: true })}
                             {' / '}
@@ -130,7 +130,7 @@ export const getAssetPortfolioColumns = ({
                                 event.currentTarget.getBoundingClientRect(),
                             )
                         }
-                        className="flex h-8 w-20 shrink-0 items-center justify-center rounded-full bg-success px-4 font-body-3 text-green"
+                        className="flex h-8 w-20 shrink-0 items-center justify-center rounded-full bg-success px-4 body-4 text-green"
                     >
                         {'Mua'}
                     </button>
@@ -143,7 +143,7 @@ export const getAssetPortfolioColumns = ({
                                 event.currentTarget.getBoundingClientRect(),
                             )
                         }
-                        className="flex h-8 w-20 shrink-0 items-center justify-center rounded-full bg-error px-4 font-body-3 text-red"
+                        className="flex h-8 w-20 shrink-0 items-center justify-center rounded-full bg-error px-4 body-4 text-red"
                     >
                         {'Bán'}
                     </button>

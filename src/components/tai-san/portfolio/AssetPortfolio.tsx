@@ -65,8 +65,8 @@ export const AssetPortfolio = () => {
     });
 
     return (
-        <section className="flex w-full flex-col gap-3 rounded-xl bg-secondary p-3">
-            <h2 className="shrink-0 font-body-2-highlight text-primary">{'Danh sách'}</h2>
+        <section className="flex w-full flex-col gap-3 rounded-xl base-secondary p-3">
+            <h2 className="shrink-0 body-3-highlight text-primary">{'Danh sách'}</h2>
             {isPortfolioLoading ? (
                 <div className="h-64 w-full">
                     <Skeleton />
@@ -100,7 +100,7 @@ export const AssetPortfolio = () => {
                                                               ? 'descending'
                                                               : 'none',
                                                 })}
-                                                className={`whitespace-nowrap px-2 py-2.5 font-body-3 text-secondary ${isLeft ? 'text-left' : 'text-right'}`}
+                                                className={`whitespace-nowrap px-2 py-2.5 body-4 text-secondary ${isLeft ? 'text-left' : 'text-right'}`}
                                             >
                                                 {header.isPlaceholder
                                                     ? null
@@ -128,7 +128,7 @@ export const AssetPortfolio = () => {
                                         return (
                                             <td
                                                 key={cell.id}
-                                                className={`whitespace-nowrap px-2 py-2.5 font-body-3 text-primary ${isLeft ? 'text-left' : 'text-right'}`}
+                                                className={`whitespace-nowrap px-2 py-2.5 body-4 text-primary ${isLeft ? 'text-left' : 'text-right'}`}
                                             >
                                                 {flexRender(
                                                     cell.column.columnDef.cell,

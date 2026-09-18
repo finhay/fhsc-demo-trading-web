@@ -70,8 +70,8 @@ export const BankQuality = ({ dataQuarterly }: { dataQuarterly: any }) => {
                     {rows.map(({ id, labelKey, value, color }) => (
                         <div key={id} className="flex items-center justify-between gap-4">
                             <div className="flex flex-col gap-0.5">
-                                <span className="font-body-3 text-secondary">{fa[labelKey]}</span>
-                                <span className={`font-body-2-highlight ${toneClass(color)}`}>
+                                <span className="body-4 text-secondary">{fa[labelKey]}</span>
+                                <span className={`body-3-highlight ${toneClass(color)}`}>
                                     {formatNumberVN(value)}%
                                 </span>
                             </div>
@@ -79,17 +79,17 @@ export const BankQuality = ({ dataQuarterly }: { dataQuarterly: any }) => {
                         </div>
                     ))}
                 </div>
-                <div className="h-px w-full shrink-0 bg-tertiary" />
+                <div className="h-px w-full shrink-0 base-tertiary" />
                 <div className="flex shrink-0 gap-4">
                     <div className="flex min-w-0 flex-1 flex-col">
-                        <span className="font-body-3 text-secondary">{'Nợ xấu (giá trị)'}</span>
-                        <span className="font-body-2-highlight text-primary">
+                        <span className="body-4 text-secondary">{'Nợ xấu (giá trị)'}</span>
+                        <span className="body-3-highlight text-primary">
                             {formatNumberVNWithUnit(latest?.noxau)}
                         </span>
                     </div>
                     <div className="flex min-w-0 flex-1 flex-col">
-                        <span className="font-body-3 text-secondary">{'Dự phòng/Cho vay KH'}</span>
-                        <span className="font-body-2-highlight text-primary">
+                        <span className="body-4 text-secondary">{'Dự phòng/Cho vay KH'}</span>
+                        <span className="body-3-highlight text-primary">
                             {formatNumberVN(latest?.duphongchovaykh_chovaykh * 100)}%
                         </span>
                     </div>

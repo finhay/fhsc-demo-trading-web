@@ -46,7 +46,7 @@ export const IBoardTableHeader = ({ table, totalMetric, onToggleTotalMetric }: P
             <button
                 type="button"
                 onClick={() => onToggleSort(key)}
-                className="inline-flex w-full items-center justify-end gap-1 font-tiny-highlight text-primary"
+                className="inline-flex w-full items-center justify-end gap-1 body-5-highlight text-primary"
             >
                 <span>{label}</span>
                 <span className="inline-flex items-center">{renderSortIcon(sorted)}</span>
@@ -55,11 +55,11 @@ export const IBoardTableHeader = ({ table, totalMetric, onToggleTotalMetric }: P
     };
 
     return (
-        <thead className="sticky top-0 z-30 bg-secondary">
+        <thead className="sticky top-0 z-30 base-secondary">
             <tr>
                 <th
                     rowSpan={2}
-                    className="pl-1 whitespace-nowrap border-r border-b border-t border-l border-quaternary bg-secondary text-left"
+                    className="pl-1 whitespace-nowrap border-r border-b border-t border-l border-quaternary base-secondary text-left"
                 >
                     {(() => {
                         const sorted = getSortState('symbol');
@@ -67,7 +67,7 @@ export const IBoardTableHeader = ({ table, totalMetric, onToggleTotalMetric }: P
                             <button
                                 type="button"
                                 onClick={() => onToggleSort('symbol')}
-                                className="inline-flex w-full items-center justify-start gap-1 font-tiny-highlight text-primary"
+                                className="inline-flex w-full items-center justify-start gap-1 body-5-highlight text-primary"
                             >
                                 <span>{'Mã'}</span>
                                 <span className="inline-flex items-center">
@@ -79,25 +79,25 @@ export const IBoardTableHeader = ({ table, totalMetric, onToggleTotalMetric }: P
                 </th>
                 <th
                     rowSpan={2}
-                    className="pr-1 whitespace-nowrap border-r border-b border-t border-l border-quaternary bg-secondary text-right"
+                    className="pr-1 whitespace-nowrap border-r border-b border-t border-l border-quaternary base-secondary text-right"
                 >
                     {renderSortableLeafHeader('reference', 'TC')}
                 </th>
                 <th
                     rowSpan={2}
-                    className="pr-1 whitespace-nowrap border-r border-b border-t border-l border-quaternary bg-secondary text-right"
+                    className="pr-1 whitespace-nowrap border-r border-b border-t border-l border-quaternary base-secondary text-right"
                 >
                     {renderSortableLeafHeader('ceiling', 'Trần')}
                 </th>
                 <th
                     rowSpan={2}
-                    className="pr-1 whitespace-nowrap border-r border-b border-t border-l border-quaternary bg-secondary text-right"
+                    className="pr-1 whitespace-nowrap border-r border-b border-t border-l border-quaternary base-secondary text-right"
                 >
                     {renderSortableLeafHeader('floor', 'Sàn')}
                 </th>
                 <th
                     rowSpan={2}
-                    className="pr-1 whitespace-nowrap border-r border-b border-t border-l border-quaternary bg-secondary text-right"
+                    className="pr-1 whitespace-nowrap border-r border-b border-t border-l border-quaternary base-secondary text-right"
                 >
                     {(() => {
                         const activeKey: ColumnKey =
@@ -109,7 +109,7 @@ export const IBoardTableHeader = ({ table, totalMetric, onToggleTotalMetric }: P
                                 <button
                                     type="button"
                                     onClick={onToggleTotalMetric}
-                                    className="inline-flex shrink-0 items-center justify-center rounded-xl p-0.5 text-primary hover:bg-tertiary/50"
+                                    className="inline-flex shrink-0 items-center justify-center rounded-xl p-0.5 text-primary hover:bg-(--base-tertiary)/50"
                                     aria-label="Chuyển giữa Tổng KL và Tổng GT"
                                 >
                                     <IoMdArrowDropleft size={16} />
@@ -117,7 +117,7 @@ export const IBoardTableHeader = ({ table, totalMetric, onToggleTotalMetric }: P
                                 <button
                                     type="button"
                                     onClick={() => onToggleSort(activeKey)}
-                                    className="inline-flex min-w-0 flex-1 items-center justify-end gap-1 font-tiny-highlight text-primary"
+                                    className="inline-flex min-w-0 flex-1 items-center justify-end gap-1 body-5-highlight text-primary"
                                 >
                                     <span className="truncate">{label}</span>
                                     <span className="inline-flex shrink-0 items-center">
@@ -127,7 +127,7 @@ export const IBoardTableHeader = ({ table, totalMetric, onToggleTotalMetric }: P
                                 <button
                                     type="button"
                                     onClick={onToggleTotalMetric}
-                                    className="inline-flex shrink-0 items-center justify-center rounded-xl p-0.5 text-primary hover:bg-tertiary/50"
+                                    className="inline-flex shrink-0 items-center justify-center rounded-xl p-0.5 text-primary hover:bg-(--base-tertiary)/50"
                                     aria-label="Chuyển giữa Tổng KL và Tổng GT"
                                 >
                                     <IoMdArrowDropright size={16} />
@@ -138,33 +138,33 @@ export const IBoardTableHeader = ({ table, totalMetric, onToggleTotalMetric }: P
                 </th>
                 <th
                     colSpan={6}
-                    className="pr-1 whitespace-nowrap border-r border-b border-t border-l border-quaternary bg-secondary text-center"
+                    className="pr-1 whitespace-nowrap border-r border-b border-t border-l border-quaternary base-secondary text-center"
                 >
-                    <span className="font-tiny-highlight text-primary">{'Bên mua'}</span>
+                    <span className="body-5-highlight text-primary">{'Bên mua'}</span>
                 </th>
                 <th
                     colSpan={4}
-                    className="pr-1 whitespace-nowrap border-r border-b border-t border-l border-quaternary bg-secondary text-center"
+                    className="pr-1 whitespace-nowrap border-r border-b border-t border-l border-quaternary base-secondary text-center"
                 >
-                    <span className="font-tiny-highlight text-primary">{'Khớp lệnh'}</span>
+                    <span className="body-5-highlight text-primary">{'Khớp lệnh'}</span>
                 </th>
                 <th
                     colSpan={6}
-                    className="pr-1 whitespace-nowrap border-r border-b border-t border-l border-quaternary bg-secondary text-center"
+                    className="pr-1 whitespace-nowrap border-r border-b border-t border-l border-quaternary base-secondary text-center"
                 >
-                    <span className="font-tiny-highlight text-primary">{'Bên bán'}</span>
+                    <span className="body-5-highlight text-primary">{'Bên bán'}</span>
                 </th>
                 <th
                     colSpan={3}
-                    className="pr-1 whitespace-nowrap border-r border-b border-t border-l border-quaternary bg-secondary text-center"
+                    className="pr-1 whitespace-nowrap border-r border-b border-t border-l border-quaternary base-secondary text-center"
                 >
-                    <span className="font-tiny-highlight text-primary">{'Giá'}</span>
+                    <span className="body-5-highlight text-primary">{'Giá'}</span>
                 </th>
                 <th
                     colSpan={3}
-                    className="pr-1 whitespace-nowrap border-r border-b border-t border-l border-quaternary bg-secondary text-center"
+                    className="pr-1 whitespace-nowrap border-r border-b border-t border-l border-quaternary base-secondary text-center"
                 >
-                    <span className="font-tiny-highlight text-primary">{'ĐTNN'}</span>
+                    <span className="body-5-highlight text-primary">{'ĐTNN'}</span>
                 </th>
             </tr>
             <tr>
@@ -177,7 +177,7 @@ export const IBoardTableHeader = ({ table, totalMetric, onToggleTotalMetric }: P
                             <th
                                 key={`sub-${column.key}`}
                                 scope="col"
-                                className="pr-1 whitespace-nowrap border-r border-b border-l border-quaternary bg-secondary text-right"
+                                className="pr-1 whitespace-nowrap border-r border-b border-l border-quaternary base-secondary text-right"
                             >
                                 {renderSortableLeafHeader(column.key, label)}
                             </th>

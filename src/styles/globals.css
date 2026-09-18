@@ -1,0 +1,213 @@
+@import 'tailwindcss';
+@import '@finhay-pro/leaf-design-system/tokens.css';
+@import '@finhay-pro/leaf-design-system/typography.css';
+@import '@finhay-pro/leaf-design-system/color.css';
+
+/*
+ * App-only tokens (Leaf không có) + bridge text/system để Tailwind variant
+ * (hover:text-*, before:border-highlight…) vẫn resolve.
+ * Surface background dùng class Leaf `base-*` — không khai --color cho base.
+ */
+@theme {
+    --color-overlay: #252525e5;
+    --color-success: #18311f;
+    --color-error: #381c1c;
+    --color-warning: #38371c;
+    --color-disabled: #2c2c2e;
+    --color-gray: #999999;
+
+    --color-highlight: var(--text-highlight);
+    --color-red: var(--system-red);
+    --color-green: var(--system-green);
+    --color-yellow: var(--system-yellow);
+    --color-orange: var(--system-orange);
+    --color-blue: var(--system-blue);
+    --color-purple: var(--system-purple);
+
+    --color-primary: var(--text-primary);
+    --color-secondary: var(--text-secondary);
+    --color-tertiary: var(--text-tertiary);
+    --color-quaternary: var(--text-quaternary);
+
+    --animate-marquee: marquee 25s linear infinite;
+    --animate-fadeIn: fadeIn 0.3s ease-in;
+    --animate-fadeOut: fadeOut 0.5s ease-in;
+    --animate-slideInLeft: slideInLeft 0.5s ease;
+    --animate-slideOutLeft: slideOutLeft 0.5s ease;
+    --animate-shimmer: shimmer 2s infinite ease-in-out;
+    --animate-prixClipFix: prixClipFix 2s linear infinite;
+    --animate-bubbleIn: bubbleIn 1s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes marquee {
+    0% {
+        transform: translateX(0%);
+    }
+    100% {
+        transform: translateX(-100%);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+    }
+}
+
+@keyframes slideInLeft {
+    from {
+        transform: translateX(-100%);
+    }
+    to {
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideOutLeft {
+    from {
+        transform: translateX(0);
+    }
+    to {
+        transform: translateX(-100%);
+    }
+}
+
+@keyframes shimmer {
+    0% {
+        transform: translateX(-100%);
+    }
+    100% {
+        transform: translateX(100%);
+    }
+}
+
+@keyframes prixClipFix {
+    0% {
+        clip-path: polygon(50% 50%, 0 0, 0 0, 0 0, 0 0, 0 0);
+    }
+    25% {
+        clip-path: polygon(50% 50%, 0 0, 100% 0, 100% 0, 100% 0, 100% 0);
+    }
+    50% {
+        clip-path: polygon(50% 50%, 0 0, 100% 0, 100% 100%, 100% 100%, 100% 100%);
+    }
+    75% {
+        clip-path: polygon(50% 50%, 0 0, 100% 0, 100% 100%, 0 100%, 0 100%);
+    }
+    100% {
+        clip-path: polygon(50% 50%, 0 0, 100% 0, 100% 100%, 0 100%, 0 0);
+    }
+}
+
+@keyframes bubbleIn {
+    0% {
+        opacity: 0;
+        filter: blur(6px);
+        transform: translateY(16px) scale(0.9);
+    }
+    100% {
+        opacity: 1;
+        filter: blur(0px);
+        transform: translateY(0) scale(1);
+    }
+}
+
+@layer base {
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        scrollbar-width: none;
+        outline: none;
+
+        &::-webkit-scrollbar {
+            display: none;
+        }
+    }
+
+    body {
+        text-rendering: optimizespeed;
+        color: #050505;
+        background: #131419;
+    }
+
+    /* Interactive controls — utility Tailwind (cursor-not-allowed / grab) vẫn thắng lớp base */
+    button:not(:disabled),
+    a[href],
+    [role='button']:not([aria-disabled='true']) {
+        cursor: pointer;
+    }
+
+    button:disabled,
+    [aria-disabled='true'] {
+        cursor: not-allowed;
+    }
+
+    input,
+    textarea {
+        &::-webkit-search-cancel-button,
+        &::-webkit-search-decoration,
+        &::-webkit-search-results-button,
+        &::-webkit-search-results-decoration,
+        &::-webkit-inner-spin-button,
+        &::-webkit-outer-spin-button,
+        &::-webkit-calendar-picker-indicator,
+        &::-webkit-contacts-auto-fill-button,
+        &::-webkit-credentials-auto-fill-button {
+            -webkit-appearance: none;
+            appearance: none;
+            display: none;
+        }
+    }
+
+    input[type='search'] {
+        -webkit-appearance: none;
+        appearance: none;
+    }
+
+    input[type='number'] {
+        -moz-appearance: textfield;
+        appearance: textfield;
+    }
+}
+
+.scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: #313235 #171719;
+
+    &::-webkit-scrollbar {
+        display: block;
+        width: 8px;
+        height: 8px;
+    }
+
+    &::-webkit-scrollbar-track {
+        background: #171719;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background: #313235;
+        border-radius: 9999px;
+        border: 2px solid #171719;
+    }
+
+    &:hover {
+        scrollbar-color: #666666 #171719;
+    }
+
+    &:hover::-webkit-scrollbar-thumb {
+        background: #666666;
+    }
+}

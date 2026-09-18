@@ -62,7 +62,7 @@ export const TradeQuickPanel = ({ anchorRect, side, price, onClose }: Props) => 
                     left: position.left,
                     maxHeight: position.maxHeight,
                 }}
-                className="flex w-80 min-h-0 overflow-visible rounded-xl border border-quaternary bg-primary p-1 shadow-lg"
+                className="flex w-80 min-h-0 overflow-visible rounded-xl border border-quaternary base-primary p-1 shadow-lg"
                 onClick={(event) => event.stopPropagation()}
             >
                 <TradePanel initialSide={side} initialPrice={price} />

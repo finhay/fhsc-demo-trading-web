@@ -26,7 +26,7 @@ export const StatusBadge = () => {
             aria-label={NETWORK[status]}
         >
             <WifiIcon />
-            <span className="font-body-3">{NETWORK[status]}</span>
+            <span className="body-4">{NETWORK[status]}</span>
         </div>
     );
 };

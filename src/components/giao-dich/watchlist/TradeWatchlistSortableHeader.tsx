@@ -18,11 +18,11 @@ export const TradeWatchlistSortableHeader = ({ label, align, column }: Props) =>
     return (
         <button
             type="button"
-            className={`inline-flex w-full items-center gap-1 ${alignClass} font-body-3 text-secondary`}
+            className={`inline-flex w-full items-center gap-1 ${alignClass} body-4 text-secondary`}
             onClick={column.getToggleSortingHandler()}
         >
             <span>{label}</span>
-            <span className="inline-flex items-center text-caption leading-none">
+            <span className="inline-flex items-center body-5 leading-none">
                 {sorted === 'asc' ? (
                     <FaArrowUp size={10} />
                 ) : sorted === 'desc' ? (

@@ -27,10 +27,10 @@ export const DepositGuideModal = ({ onClose }: Props) => {
                     >
                         <div className="w-full shrink-0">
                             <div className="flex flex-col gap-4">
-                                <h3 className="font-body-2-highlight text-primary">
+                                <h3 className="body-3-highlight text-primary">
                                     {'Bước 1: Mở app ngân hàng mà bạn đang sử dụng'}
                                 </h3>
-                                <div className="flex justify-center bg-secondary rounded-xl p-6">
+                                <div className="flex justify-center base-secondary rounded-xl p-6">
                                     <Image
                                         src="https://cdn1.finhay.com.vn/wp-content/uploads/2023/01/12105653/sli1.png"
                                         width={340}
@@ -43,10 +43,10 @@ export const DepositGuideModal = ({ onClose }: Props) => {
                         </div>
                         <div className="w-full shrink-0">
                             <div className="flex flex-col gap-4">
-                                <h3 className="font-body-2-highlight text-primary">
+                                <h3 className="body-3-highlight text-primary">
                                     {'Bước 2: Tạo lệnh chuyển tiền theo thông tin được cung cấp'}
                                 </h3>
-                                <div className="flex justify-center bg-secondary rounded-xl p-6">
+                                <div className="flex justify-center base-secondary rounded-xl p-6">
                                     <Image
                                         src="https://cdn1.finhay.com.vn/wp-content/uploads/2023/01/12105655/sli2.png"
                                         width={340}
@@ -59,10 +59,10 @@ export const DepositGuideModal = ({ onClose }: Props) => {
                         </div>
                         <div className="w-full shrink-0">
                             <div className="flex flex-col gap-4">
-                                <h3 className="font-body-2-highlight text-primary">
+                                <h3 className="body-3-highlight text-primary">
                                     {'Bước 3: Xác nhận chuyển tiền từ app ngân hàng của bạn'}
                                 </h3>
-                                <div className="flex justify-center bg-secondary rounded-xl p-6">
+                                <div className="flex justify-center base-secondary rounded-xl p-6">
                                     <Image
                                         src="https://cdn1.finhay.com.vn/wp-content/uploads/2023/01/12105652/sli3.png"
                                         width={340}
@@ -79,7 +79,7 @@ export const DepositGuideModal = ({ onClose }: Props) => {
                     {activeSlide > 0 && (
                         <button
                             onClick={() => setActiveSlide((prev) => prev - 1)}
-                            className="px-6 py-2.5 bg-tertiary hover:bg-quaternary text-primary font-body-3-highlight rounded-xl transition-colors flex items-center gap-2"
+                            className="px-6 py-2.5 base-tertiary hover:bg-(--base-quaternary) text-primary body-4-highlight rounded-xl transition-colors flex items-center gap-2"
                             type="button"
                         >
                             <FaChevronLeft size={14} />
@@ -90,7 +90,7 @@ export const DepositGuideModal = ({ onClose }: Props) => {
                     {activeSlide < TOTAL_SLIDES - 1 ? (
                         <button
                             onClick={() => setActiveSlide((prev) => prev + 1)}
-                            className="px-6 py-2.5 bg-highlight hover:opacity-90 text-quaternary font-body-3-highlight rounded-xl transition-opacity flex items-center gap-2"
+                            className="px-6 py-2.5 base-highlight hover:opacity-90 text-quaternary body-4-highlight rounded-xl transition-opacity flex items-center gap-2"
                             type="button"
                         >
                             <span>{'Tiếp tục'}</span>
@@ -99,7 +99,7 @@ export const DepositGuideModal = ({ onClose }: Props) => {
                     ) : (
                         <button
                             onClick={onClose}
-                            className="px-6 py-2.5 bg-highlight hover:opacity-90 text-quaternary font-body-3-highlight rounded-xl transition-opacity"
+                            className="px-6 py-2.5 base-highlight hover:opacity-90 text-quaternary body-4-highlight rounded-xl transition-opacity"
                             type="button"
                         >
                             {'Tôi đã hiểu'}

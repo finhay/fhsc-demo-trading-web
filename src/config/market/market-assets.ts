@@ -156,7 +156,7 @@ const buildMetalHistoryOption = (
                         };
                         if (point.value == null) return '';
                         return `
-                            <p class="flex items-center gap-2 font-caption text-secondary">
+                            <p class="flex items-center gap-2 body-5 text-secondary">
                                 <span
                                     class="h-2 w-2 shrink-0 rounded-full"
                                     style="background-color:${point.color ?? '#999999'}"
@@ -164,7 +164,7 @@ const buildMetalHistoryOption = (
                                 ></span>
                                 <span class="min-w-0 flex-1">
                                     <span>${point.seriesName ?? ''}</span>:
-                                    <span class="font-caption-highlight text-primary">${formatNumberVN(
+                                    <span class="body-5-highlight text-primary">${formatNumberVN(
                                         Number(point.value),
                                         { decimals: 2 },
                                     )}</span>
@@ -176,8 +176,8 @@ const buildMetalHistoryOption = (
                     .join('');
 
                 return `
-                    <div class="flex flex-col gap-1 rounded-xl bg-tertiary p-2">
-                        <span class="font-caption text-secondary">${title}</span>
+                    <div class="flex flex-col gap-1 rounded-xl base-tertiary p-2">
+                        <span class="body-5 text-secondary">${title}</span>
                         ${rows}
                     </div>
                 `;

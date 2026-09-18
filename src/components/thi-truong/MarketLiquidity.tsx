@@ -46,9 +46,9 @@ export const MarketLiquidity = () => {
     }, [isLoading, todayData, avgData]);
 
     return (
-        <section className="bg-secondary flex min-h-0 flex-col gap-3 rounded-xl p-4">
+        <section className="base-secondary flex min-h-0 flex-col gap-3 rounded-xl p-4">
             <div className="flex items-center justify-between gap-2">
-                <h2 className="font-body-2-highlight text-primary flex items-center gap-2">
+                <h2 className="body-3-highlight text-primary flex items-center gap-2">
                     <MarketDot />
                     {'Thanh khoản thị trường'}
                 </h2>
@@ -61,11 +61,11 @@ export const MarketLiquidity = () => {
             <div className="flex items-center gap-4">
                 <div className="flex items-center gap-2">
                     <FaCircle className="text-blue shrink-0" size={8} />
-                    <span className="font-caption text-secondary">{'GTGD từ đầu phiên'}</span>
+                    <span className="body-5 text-secondary">{'GTGD từ đầu phiên'}</span>
                 </div>
                 <div className="flex items-center gap-2">
                     <FaCircle className="text-orange shrink-0" size={8} />
-                    <span className="font-caption text-secondary">{'GTGD TB 5 phiên'}</span>
+                    <span className="body-5 text-secondary">{'GTGD TB 5 phiên'}</span>
                 </div>
             </div>
             {isLoading ? (

@@ -73,13 +73,13 @@ export const MarketExchangeRate = ({ initialChart }: Props) => {
                 {
                     key: 'VCB',
                     label: 'NH thương mại',
-                    colorClass: 'bg-blue',
+                    colorClass: 'base-blue',
                     value: lastItem?.VCB,
                 },
                 {
                     key: 'SBV',
                     label: 'NHNN',
-                    colorClass: 'bg-orange',
+                    colorClass: 'base-orange',
                     value: lastItem?.SBV,
                 },
                 {
@@ -150,7 +150,7 @@ export const MarketExchangeRate = ({ initialChart }: Props) => {
     );
 
     return (
-        <section className="bg-secondary flex flex-col gap-5 rounded-2xl p-4">
+        <section className="base-secondary flex flex-col gap-5 rounded-2xl p-4">
             <div className="flex flex-col gap-3">
                 <div className="flex items-center justify-between gap-2">
                     <div className="flex items-center gap-5">
@@ -163,8 +163,8 @@ export const MarketExchangeRate = ({ initialChart }: Props) => {
                                     onClick={() => handleChangeCurrency(item)}
                                     className={
                                         isActive
-                                            ? 'font-body-3-highlight text-primary'
-                                            : 'font-body-3 text-secondary'
+                                            ? 'body-4-highlight text-primary'
+                                            : 'body-4 text-secondary'
                                     }
                                 >
                                     {`${item}/VND`}
@@ -178,9 +178,9 @@ export const MarketExchangeRate = ({ initialChart }: Props) => {
                                 key={type}
                                 type="button"
                                 onClick={() => handleChangeValueType(type)}
-                                className={`font-caption-highlight flex h-7 min-w-7 items-center justify-center rounded-full px-3 ${
+                                className={`body-5-highlight flex h-7 min-w-7 items-center justify-center rounded-full px-3 ${
                                     valueType === type
-                                        ? 'bg-quaternary text-primary'
+                                        ? 'base-quaternary text-primary'
                                         : 'text-secondary'
                                 }`}
                             >
@@ -212,9 +212,9 @@ export const MarketExchangeRate = ({ initialChart }: Props) => {
                                     className={`h-2 w-2 shrink-0 rounded-full ${legend.colorClass}`}
                                     aria-hidden
                                 />
-                                <span className="font-body-3 text-secondary">{legend.label}</span>
+                                <span className="body-4 text-secondary">{legend.label}</span>
                             </div>
-                            <span className="font-body-3-highlight text-primary">
+                            <span className="body-4-highlight text-primary">
                                 {formatExchangeLegendValue(legend.value, valueType)}
                             </span>
                         </div>

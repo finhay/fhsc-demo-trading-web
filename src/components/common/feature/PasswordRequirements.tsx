@@ -19,7 +19,7 @@ export const PasswordRequirements = ({
 
     return (
         <fieldset id="password-requirements" className="flex w-full flex-col gap-2 rounded-xl py-2">
-            <legend className="font-body-3 text-tertiary">{legendText}</legend>
+            <legend className="body-4 text-tertiary">{legendText}</legend>
             <div className={focusedField === 'password' ? 'grid w-full grid-cols-2 gap-2' : ''}>
                 {PASSWORD_REQUIREMENTS.filter((req) => req.focusField === focusedField).map(
                     ({ key, translateKey }) => (

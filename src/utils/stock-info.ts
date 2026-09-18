@@ -53,8 +53,8 @@ const formatPercentTooltip = (params: unknown, items: StockInfoPercentTooltipIte
             return `
                 <div class="flex items-center gap-2">
                     <span class="h-1.5 w-1.5 shrink-0 rounded-full ${item?.dotColor ?? ''}"></span>
-                    <span class="font-caption text-secondary">${p.seriesName ?? ''}:</span>
-                    <span class="font-caption-highlight text-primary">${formatNumberVN(value)}%</span>
+                    <span class="body-5 text-secondary">${p.seriesName ?? ''}:</span>
+                    <span class="body-5-highlight text-primary">${formatNumberVN(value)}%</span>
                 </div>`;
         })
         .join('');
@@ -92,10 +92,10 @@ export const formatTradeBarTooltip = (params: unknown): string => {
     const date = point.fullDateLabel || String(p.name ?? '');
 
     return `
-        <div class="flex flex-col gap-1 rounded-xl bg-tertiary px-2.5 py-2">
-            <p class="font-caption-highlight text-secondary">${date}</p>
-            <p class="font-caption text-secondary">Mua bán ròng</p>
-            <p class="font-caption-highlight ${valueClass}">${formatNumberVN(Math.abs(y), { trimTrailingZeros: true })} tỷ đồng</p>
+        <div class="flex flex-col gap-1 rounded-xl base-tertiary px-2.5 py-2">
+            <p class="body-5-highlight text-secondary">${date}</p>
+            <p class="body-5 text-secondary">Mua bán ròng</p>
+            <p class="body-5-highlight ${valueClass}">${formatNumberVN(Math.abs(y), { trimTrailingZeros: true })} tỷ đồng</p>
         </div>
     `;
 };
@@ -109,7 +109,7 @@ export const formatBusinessTrendTooltip = (params: unknown): string => {
     for (const p of pts) {
         const y = Number(p.value ?? 0);
         const color = String(p.color ?? '#f8f8f8');
-        html += `<span class="block font-tiny-highlight" style="color:${color}">${formatNumberVN(
+        html += `<span class="block body-5-highlight" style="color:${color}">${formatNumberVN(
             y,
             {
                 decimals: 2,
@@ -155,8 +155,8 @@ export const pickPlanItems = (
         const color = isZero
             ? { textColor: 'text-gray', bgColor: 'bg-gray' }
             : value >= PLAN.threshold
-              ? { textColor: 'text-green', bgColor: 'bg-green' }
-              : { textColor: 'text-orange', bgColor: 'bg-orange' };
+              ? { textColor: 'text-green', bgColor: 'base-green' }
+              : { textColor: 'text-orange', bgColor: 'base-orange' };
         return { ...item, value, isZero, ...color };
     });
 

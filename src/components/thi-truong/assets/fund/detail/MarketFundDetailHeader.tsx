@@ -39,20 +39,20 @@ export const MarketFundDetailHeader = ({ detail }: Props) => {
                         alt={detail.name}
                         width={64}
                         height={64}
-                        className="bg-quinary size-16 shrink-0 rounded-full object-cover"
+                        className="base-quinary size-16 shrink-0 rounded-full object-cover"
                     />
                 ) : (
-                    <div className="bg-tertiary size-16 shrink-0 rounded-full" />
+                    <div className="base-tertiary size-16 shrink-0 rounded-full" />
                 )}
                 <div className="flex flex-col gap-1">
                     <div className="flex items-center gap-3">
-                        <span className="font-body-1-highlight text-primary">{detail.name}</span>
-                        <span className="font-caption rounded-full border border-green px-3 py-1 text-primary">
+                        <span className="body-2-highlight text-primary">{detail.name}</span>
+                        <span className="body-5 rounded-full border border-green px-3 py-1 text-primary">
                             {t[detail.type as keyof typeof t] ?? detail.type}
                         </span>
                     </div>
                     {briefDescription && (
-                        <span className="font-body-3 text-secondary">{briefDescription}</span>
+                        <span className="body-4 text-secondary">{briefDescription}</span>
                     )}
                 </div>
             </div>
@@ -63,15 +63,15 @@ export const MarketFundDetailHeader = ({ detail }: Props) => {
                     const valueColor = getFundValueColor(value);
                     return (
                         <div key={period.key} className="flex items-stretch gap-5">
-                            {index > 0 && <div className="w-px shrink-0 bg-tertiary" aria-hidden />}
+                            {index > 0 && <div className="w-px shrink-0 base-tertiary" aria-hidden />}
                             <div className="flex w-[120px] flex-col gap-1">
-                                <span className="font-body-3-highlight text-primary">
+                                <span className="body-4-highlight text-primary">
                                     {period.label}
                                 </span>
-                                <span className={`font-body-2-highlight ${valueColor}`}>
+                                <span className={`body-3-highlight ${valueColor}`}>
                                     {formatFundPercent(value)}
                                     {hasValue && (
-                                        <span className="font-body-3 text-tertiary">{'/năm*'}</span>
+                                        <span className="body-4 text-tertiary">{'/năm*'}</span>
                                     )}
                                 </span>
                             </div>

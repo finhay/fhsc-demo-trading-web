@@ -141,11 +141,11 @@ const buildTooltip = (options?: {
                     ? options.valueFormatter(value)
                     : `${formatNumberVN(value, { trimTrailingZeros: true })}${suffix}`;
                 return `
-                    <p class="flex items-center gap-2 font-caption text-secondary">
+                    <p class="flex items-center gap-2 body-5 text-secondary">
                         <span class="shrink-0 rounded-full h-2 w-2" style="background:${item.color}" aria-hidden="true"></span>
                         <span class="min-w-0 flex-1">
                             <span>${item.seriesName ?? ''}</span>:
-                            <span class="font-caption-highlight text-primary">${formatted}</span>
+                            <span class="body-5-highlight text-primary">${formatted}</span>
                         </span>
                     </p>
                 `;
@@ -153,8 +153,8 @@ const buildTooltip = (options?: {
             .join('');
 
         return `
-            <div class="flex flex-col gap-1 rounded-xl bg-tertiary p-2">
-                <span class="font-caption text-secondary">${first.axisValue ?? ''}</span>
+            <div class="flex flex-col gap-1 rounded-xl base-tertiary p-2">
+                <span class="body-5 text-secondary">${first.axisValue ?? ''}</span>
                 ${rows}
             </div>
         `;

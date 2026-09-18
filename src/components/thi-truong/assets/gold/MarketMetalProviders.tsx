@@ -28,12 +28,12 @@ const PriceCell = ({
 
     return (
         <div className="flex w-28 shrink-0 items-center gap-2">
-            <span className="font-body-3-highlight text-primary whitespace-nowrap">
+            <span className="body-4-highlight text-primary whitespace-nowrap">
                 {formatMetalPrice(price)}
             </span>
             {changeLabel && (
                 <span
-                    className={`font-body-3 whitespace-nowrap ${getChangeColor(
+                    className={`body-4 whitespace-nowrap ${getChangeColor(
                         changePercent ?? 0,
                     )}`}
                 >
@@ -48,15 +48,15 @@ export const MarketMetalProviders = ({ items }: Props) => {
     const groups = useMemo(() => groupMetalProviders(items), [items]);
 
     return items.length === 0 ? (
-        <div className="flex min-h-32 items-center justify-center rounded-2xl bg-secondary p-4">
+        <div className="flex min-h-32 items-center justify-center rounded-2xl base-secondary p-4">
             <EmptyState />
         </div>
     ) : (
-        <div className="bg-secondary flex flex-col overflow-hidden rounded-2xl">
-            <div className="flex w-full shrink-0 items-center justify-between bg-secondary px-4 py-3">
-                <span className="font-body-3 text-secondary min-w-0 flex-1">{'Loại vàng'}</span>
-                <span className="font-body-3 text-secondary w-28 shrink-0">{'Giá mua'}</span>
-                <span className="font-body-3 text-secondary w-28 shrink-0">{'Giá bán'}</span>
+        <div className="base-secondary flex flex-col overflow-hidden rounded-2xl">
+            <div className="flex w-full shrink-0 items-center justify-between base-secondary px-4 py-3">
+                <span className="body-4 text-secondary min-w-0 flex-1">{'Loại vàng'}</span>
+                <span className="body-4 text-secondary w-28 shrink-0">{'Giá mua'}</span>
+                <span className="body-4 text-secondary w-28 shrink-0">{'Giá bán'}</span>
             </div>
 
             <div className="flex flex-col gap-4 px-4 pb-4">
@@ -73,9 +73,9 @@ export const MarketMetalProviders = ({ items }: Props) => {
                                     unoptimized
                                 />
                             ) : (
-                                <div className="size-3 shrink-0 rounded-full bg-tertiary" />
+                                <div className="size-3 shrink-0 rounded-full base-tertiary" />
                             )}
-                            <span className="font-body-3-highlight text-secondary whitespace-nowrap">
+                            <span className="body-4-highlight text-secondary whitespace-nowrap">
                                 {group.provider}
                             </span>
                         </div>
@@ -85,7 +85,7 @@ export const MarketMetalProviders = ({ items }: Props) => {
                                 key={item.index}
                                 className="flex w-full items-start justify-between gap-2"
                             >
-                                <span className="font-body-3-highlight text-primary min-w-0 flex-1 truncate">
+                                <span className="body-4-highlight text-primary min-w-0 flex-1 truncate">
                                     {item.name}
                                 </span>
                                 <PriceCell

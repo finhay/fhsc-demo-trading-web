@@ -72,16 +72,16 @@ export const InsuranceProfit = ({ dataQuarterly }: { dataQuarterly: any }) => {
                     >
                         <div className="flex flex-col gap-1">
                             <div className="flex min-w-0 items-center gap-2">
-                                <p className="truncate font-body-3 text-secondary">
+                                <p className="truncate body-4 text-secondary">
                                     {fa[labelKey]}
                                 </p>
                                 {kind === 'yoy' && (
-                                    <span className="shrink-0 rounded-full border border-tertiary px-2 py-1 font-tiny-highlight text-primary">
+                                    <span className="shrink-0 rounded-full border border-tertiary px-2 py-1 body-5-highlight text-primary">
                                         {'YoY'}
                                     </span>
                                 )}
                             </div>
-                            <p className={`font-body-3-highlight ${textClass}`}>
+                            <p className={`body-4-highlight ${textClass}`}>
                                 {value >= 0 ? '+' : ''}
                                 {formatNumberVN(value)}%
                             </p>

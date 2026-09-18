@@ -70,9 +70,9 @@ export const StockOverviewValuation = ({ overview, companyType }: StockOverviewV
 
     return (
         <article className="flex flex-col gap-3">
-            <h2 className="font-body-3-highlight text-primary">{t.valuation_title}</h2>
+            <h2 className="body-4-highlight text-primary">{t.valuation_title}</h2>
             {!overview ? (
-                <p className="font-caption text-tertiary">{'Chưa có dữ liệu'}</p>
+                <p className="body-5 text-tertiary">{'Chưa có dữ liệu'}</p>
             ) : (
                 <div className="flex w-full gap-3">
                     {metrics.map((metric) => (
@@ -81,14 +81,14 @@ export const StockOverviewValuation = ({ overview, companyType }: StockOverviewV
                             className="flex flex-1 items-start justify-between gap-4 rounded-xl border border-quaternary p-3"
                         >
                             <div className="flex min-w-0 flex-col gap-1">
-                                <span className="font-body-3 text-secondary">
+                                <span className="body-4 text-secondary">
                                     {t[metric.labelKey]}
                                 </span>
                                 <div className="flex flex-col gap-2">
-                                    <span className="font-body-3-highlight text-primary">
+                                    <span className="body-4-highlight text-primary">
                                         {formatNumberVN(metric.value, { decimals: 2 })}
                                     </span>
-                                    <span className="font-caption text-tertiary">
+                                    <span className="body-5 text-tertiary">
                                         {t.industry_avg}:{' '}
                                         <span className="text-orange">
                                             {formatNumberVN(metric.industry, { decimals: 2 })}
@@ -97,11 +97,11 @@ export const StockOverviewValuation = ({ overview, companyType }: StockOverviewV
                                 </div>
                             </div>
                             {metric.badgeLabel && metric.badgeValue != null && (
-                                <span className="flex shrink-0 items-center gap-1 rounded-full bg-tertiary px-2 py-1">
-                                    <span className="font-caption text-secondary">
+                                <span className="flex shrink-0 items-center gap-1 rounded-full base-tertiary px-2 py-1">
+                                    <span className="body-5 text-secondary">
                                         {metric.badgeLabel}:
                                     </span>
-                                    <span className="font-caption-highlight text-primary">
+                                    <span className="body-5-highlight text-primary">
                                         {formatNumberVN(metric.badgeValue, { decimals: 0 })}
                                     </span>
                                 </span>

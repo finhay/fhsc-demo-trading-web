@@ -8,8 +8,8 @@ import { EmptyState } from '@/components/common/feature/EmptyState';
  */
 export const AssetTransactions = () => {
     return (
-        <section className="flex w-full shrink-0 flex-col gap-3 rounded-xl bg-secondary p-3">
-            <h2 className="shrink-0 font-body-2-highlight text-primary">{'Lịch sử tiền'}</h2>
+        <section className="flex w-full shrink-0 flex-col gap-3 rounded-xl base-secondary p-3">
+            <h2 className="shrink-0 body-3-highlight text-primary">{'Lịch sử tiền'}</h2>
             <div className="h-96 overflow-y-auto">
                 <div className="flex h-full w-full items-center justify-center">
                     <EmptyState />

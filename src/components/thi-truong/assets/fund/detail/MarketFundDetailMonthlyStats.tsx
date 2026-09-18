@@ -36,7 +36,7 @@ export const MarketFundDetailMonthlyStats = ({ detail }: Props) => {
 
     return (
         <section className="flex flex-col gap-4">
-            <h3 className="font-body-2-highlight text-primary">
+            <h3 className="body-3-highlight text-primary">
                 {`Trong tháng ${
                     stats.year === new Date().getFullYear()
                         ? `${stats.month}`
@@ -55,12 +55,12 @@ export const MarketFundDetailMonthlyStats = ({ detail }: Props) => {
                             <div className="flex shrink-0 items-center gap-2">
                                 <Icon size={20} className="text-primary shrink-0" aria-hidden />
                                 <span
-                                    className={`font-body-1-highlight whitespace-nowrap ${colorClass}`}
+                                    className={`body-2-highlight whitespace-nowrap ${colorClass}`}
                                 >
                                     {formatFundPercent(card.value)}
                                 </span>
                             </div>
-                            <span className="font-body-2 text-primary whitespace-nowrap">
+                            <span className="body-3 text-primary whitespace-nowrap">
                                 {card.label}
                             </span>
                         </div>
@@ -70,12 +70,12 @@ export const MarketFundDetailMonthlyStats = ({ detail }: Props) => {
                     <div className="flex shrink-0 items-center gap-2">
                         <RiHandCoinFill size={20} className="text-primary shrink-0" aria-hidden />
                         <span
-                            className={`font-body-1-highlight whitespace-nowrap ${getChangeColor(stats.net_inflow ?? 0)}`}
+                            className={`body-2-highlight whitespace-nowrap ${getChangeColor(stats.net_inflow ?? 0)}`}
                         >
                             {formatFundNetFlowBillion(stats.net_inflow)}
                         </span>
                     </div>
-                    <span className="font-body-2 text-primary whitespace-nowrap">
+                    <span className="body-3 text-primary whitespace-nowrap">
                         {'tiền vào ròng'}
                     </span>
                 </div>

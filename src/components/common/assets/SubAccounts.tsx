@@ -55,13 +55,13 @@ export const SubAccounts = ({
                 className={`flex justify-between items-center gap-2 w-full rounded-xl px-3 cursor-pointer select-none ${
                     variant === 'embedded'
                         ? `border ${borderClass} bg-transparent py-2`
-                        : 'bg-secondary py-2.5'
+                        : 'base-secondary py-2.5'
                 }`}
                 onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                 aria-expanded={isDropdownOpen}
                 aria-haspopup="listbox"
             >
-                <span className="font-body-3-highlight text-primary">
+                <span className="body-4-highlight text-primary">
                     {activeSubAccount ? formatSubAccountLabel(activeSubAccount) : 'Chọn tài khoản'}
                 </span>
                 <FaChevronDown
@@ -71,7 +71,7 @@ export const SubAccounts = ({
             </button>
             {isDropdownOpen && visibleSubAccounts.length > 0 && (
                 <ul
-                    className="absolute z-20 mt-1 w-full overflow-hidden rounded-xl border border-tertiary bg-secondary"
+                    className="absolute z-20 mt-1 w-full overflow-hidden rounded-xl border border-tertiary base-secondary"
                     role="listbox"
                     aria-label={'Chọn tài khoản'}
                 >
@@ -85,10 +85,10 @@ export const SubAccounts = ({
                                     role="option"
                                     aria-selected={isSelected}
                                     onClick={() => handleSelectAccount(account)}
-                                    className={`flex w-full items-center px-3 py-2 text-left font-body-3-highlight transition-colors ${
+                                    className={`flex w-full items-center px-3 py-2 text-left body-4-highlight transition-colors ${
                                         isSelected
-                                            ? 'bg-tertiary text-primary'
-                                            : 'text-secondary hover:bg-tertiary hover:text-primary'
+                                            ? 'base-tertiary text-primary'
+                                            : 'text-secondary hover:bg-(--base-tertiary) hover:text-primary'
                                     }`}
                                 >
                                     {formatSubAccountLabel(account)}

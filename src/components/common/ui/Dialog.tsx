@@ -72,7 +72,7 @@ export const Dialog = ({
         >
             <section
                 className={`w-full ${maxWidth || 'max-w-lg'} ${maxHeight} flex flex-col overflow-hidden rounded-xl ${
-                    panelClassName ?? 'bg-secondary gap-4 p-4'
+                    panelClassName ?? 'base-secondary gap-4 p-4'
                 }`}
             >
                 {(title || headerContent) && (
@@ -93,7 +93,7 @@ export const Dialog = ({
                             {headerContent ?? (
                                 <h2
                                     id="dialog-title"
-                                    className="font-body-1-highlight text-primary truncate"
+                                    className="body-2-highlight text-primary truncate"
                                 >
                                     {title}
                                 </h2>
@@ -101,7 +101,7 @@ export const Dialog = ({
                         </div>
                         <button
                             onClick={onClose}
-                            className="text-primary hover:text-highlight transition-colors flex-shrink-0"
+                            className="cursor-pointer text-primary hover:text-highlight transition-colors flex-shrink-0"
                             aria-label={'Đóng'}
                             type="button"
                         >

@@ -84,7 +84,7 @@ export const IBoardExchangeTab = ({ tabs, exchange, onSelectExchange }: Props) =
                                             '{name}',
                                             tab.defaultLabel,
                                         )}
-                                        className="w-32 list-none overflow-hidden rounded-xl bg-tertiary p-0 m-0 shadow-lg"
+                                        className="w-32 list-none overflow-hidden rounded-xl base-tertiary p-0 m-0 shadow-lg"
                                     >
                                         {tab.options.map((option) => (
                                             <li
@@ -98,7 +98,7 @@ export const IBoardExchangeTab = ({ tabs, exchange, onSelectExchange }: Props) =
                                                         onSelectExchange(option.value);
                                                         setOpenDropdownKey(null);
                                                     }}
-                                                    className={`w-full p-2 text-left font-body-3 transition-colors ${
+                                                    className={`w-full p-2 text-left body-4 transition-colors ${
                                                         exchange === option.value
                                                             ? 'text-highlight'
                                                             : 'text-secondary hover:text-primary'

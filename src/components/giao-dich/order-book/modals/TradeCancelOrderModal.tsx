@@ -45,7 +45,7 @@ export const TradeCancelOrderModal = ({
                     label: 'Loại lệnh',
                     value: (
                         <dd
-                            className={`font-body-3-highlight ${isBuy ? 'text-green' : 'text-red'}`}
+                            className={`body-4-highlight ${isBuy ? 'text-green' : 'text-red'}`}
                         >
                             {side}
                         </dd>
@@ -53,18 +53,18 @@ export const TradeCancelOrderModal = ({
                 },
                 {
                     label: 'Mã CK',
-                    value: <dd className="font-body-3-highlight text-primary">{symbol}</dd>,
+                    value: <dd className="body-4-highlight text-primary">{symbol}</dd>,
                 },
                 {
                     label: 'Giá đặt',
                     value: (
-                        <dd className="font-body-3 text-primary">{formatNumberVN(displayPrice)}</dd>
+                        <dd className="body-4 text-primary">{formatNumberVN(displayPrice)}</dd>
                     ),
                 },
                 {
                     label: 'Số lượng',
                     value: (
-                        <dd className="font-body-3 text-primary">
+                        <dd className="body-4 text-primary">
                             {formatNumberVN(rawQty, { decimals: 0 })} {'cp'}
                         </dd>
                     ),
@@ -105,10 +105,10 @@ export const TradeCancelOrderModal = ({
     return (
         <Dialog title={title} maxWidth="max-w-md" onClose={onClose}>
             <div className="flex flex-col gap-4">
-                <dl className="bg-tertiary rounded-xl px-4 py-3 flex flex-col gap-3">
+                <dl className="base-tertiary rounded-xl px-4 py-3 flex flex-col gap-3">
                     {summaryRows.map(({ label, value }) => (
                         <div key={label} className="flex items-center justify-between">
-                            <dt className="font-body-3 text-secondary">{label}</dt>
+                            <dt className="body-4 text-secondary">{label}</dt>
                             {value}
                         </div>
                     ))}
@@ -117,7 +117,7 @@ export const TradeCancelOrderModal = ({
                     <button
                         type="button"
                         onClick={onClose}
-                        className="flex-1 py-2 rounded-xl font-body-3-highlight bg-tertiary text-primary hover:bg-quaternary transition-colors"
+                        className="flex-1 py-2 rounded-xl body-4-highlight base-tertiary text-primary hover:bg-(--base-quaternary) transition-colors"
                     >
                         {'Đóng'}
                     </button>
@@ -125,10 +125,10 @@ export const TradeCancelOrderModal = ({
                         type="button"
                         onClick={handleConfirm}
                         disabled={isLoading}
-                        className={`flex-1 py-2 rounded-xl font-body-3-highlight transition-colors ${
+                        className={`flex-1 py-2 rounded-xl body-4-highlight transition-colors ${
                             isLoading
                                 ? 'bg-disabled text-disabled cursor-not-allowed'
-                                : 'bg-red text-primary hover:opacity-90'
+                                : 'base-red text-primary hover:opacity-90'
                         }`}
                     >
                         {'Xác nhận huỷ'}

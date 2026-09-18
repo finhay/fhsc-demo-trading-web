@@ -44,7 +44,7 @@ const createProfitColumn = ({
     header: ({ column }) => (
         <button
             type="button"
-            className="inline-flex w-full items-center justify-end gap-1 font-body-3 text-secondary"
+            className="inline-flex w-full items-center justify-end gap-1 body-4 text-secondary"
             onClick={column.getToggleSortingHandler()}
         >
             <MarketFundTableTwoLineHeader line1={line1} line2={line2} />
@@ -55,7 +55,7 @@ const createProfitColumn = ({
     cell: ({ row }) => {
         const value = getProfitByPeriod(row.original, period);
         return (
-            <span className={`font-body-2 ${getFundValueColor(value)}`}>
+            <span className={`body-3 ${getFundValueColor(value)}`}>
                 {formatFundPercent(value)}
             </span>
         );
@@ -85,14 +85,14 @@ export const getMarketFundTableColumns = (): ColumnDef<FundCertificateItem>[] =>
                                 alt={item.name}
                                 width={40}
                                 height={40}
-                                className="bg-quinary size-10 shrink-0 rounded-full object-cover"
+                                className="base-quinary size-10 shrink-0 rounded-full object-cover"
                             />
                         ) : (
-                            <div className="bg-tertiary size-10 shrink-0 rounded-full" />
+                            <div className="base-tertiary size-10 shrink-0 rounded-full" />
                         )}
                         <div className="flex flex-col gap-1">
-                            <span className="font-body-2-highlight text-primary">{item.name}</span>
-                            <span className="font-body-3 text-secondary">
+                            <span className="body-3-highlight text-primary">{item.name}</span>
+                            <span className="body-4 text-secondary">
                                 {item.fund_company_management_short_name}
                             </span>
                         </div>
@@ -110,7 +110,7 @@ export const getMarketFundTableColumns = (): ColumnDef<FundCertificateItem>[] =>
                 const { navpf, date } = getLatestNav(row.original);
                 return (
                     <div className="flex flex-col items-end gap-1">
-                        <span className="font-body-2 text-primary">
+                        <span className="body-3 text-primary">
                             {navpf == null ? '--' : formatNumberVN(navpf, { decimals: 2 })}
                         </span>
                     </div>

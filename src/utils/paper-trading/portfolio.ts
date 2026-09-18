@@ -5,7 +5,8 @@ import type { PortfolioItem } from '@/types/trade/portfolio';
  * Map item từ `GET /v1/accounts/{id}/portfolio` sang `PortfolioItem` để bảng/chart dùng lại.
  *
  * `trade` = `available` vì cột "Có thể GD" đọc `trade`.
- * `calcPortfolioHoldingQuantity` cộng trade + blocked + receiving_* — khớp `total` của API.
+ * `total` giữ nguyên API (không gồm CP quyền chờ về).
+ * `receiving_right` = `receivable_qty` — cột Tổng / `calcPortfolioHoldingQuantity` cộng thêm phần này.
  */
 export const mapPaperPortfolioItem = (item: PaperPortfolioItem): PortfolioItem => {
     const available = item.available ?? 0;
@@ -22,7 +23,7 @@ export const mapPaperPortfolioItem = (item: PaperPortfolioItem): PortfolioItem =
         mortgage: 0,
         vsd_mortgage: 0,
         restrict: 0,
-        receiving_right: 0,
+        receiving_right: item.receivable_qty ?? 0,
         receiving_t0: item.receiving_t0 ?? 0,
         receiving_t1: item.receiving_t1 ?? 0,
         receiving_t2: item.receiving_t2 ?? 0,

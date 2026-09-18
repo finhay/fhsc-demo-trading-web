@@ -25,11 +25,15 @@ export const buildPaperAssetsSummary = (asset: PaperAccountAsset | null): Assets
             hay0_interest: 0,
             hay0_depositing: 0,
             hay0_withdrawing: 0,
+            receivable: {
+                stock: asset?.products?.receivable?.stock ?? 0,
+                cash: asset?.products?.receivable?.cash ?? 0,
+            },
         },
         money: {
             total: asset?.money?.total ?? 0,
             ci_balance: asset?.money?.ci_balance ?? 0,
-            ca_receiving: 0,
+            ca_receiving: asset?.products?.receivable?.cash ?? 0,
             emk_amt: 0,
             receiving_amt: asset?.money?.reserved ?? 0,
             baldefovd: asset?.money?.baldefovd ?? 0,

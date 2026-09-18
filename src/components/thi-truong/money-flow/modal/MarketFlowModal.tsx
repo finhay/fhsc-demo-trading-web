@@ -99,14 +99,14 @@ export const MarketFlowModal = ({
             onClose={onClose}
             maxWidth="max-w-7xl"
             maxHeight="h-[90vh] max-h-[90vh]"
-            panelClassName="bg-primary gap-4 p-6"
+            panelClassName="base-primary gap-4 p-6"
             bodyClassName="flex min-h-0 flex-1 flex-col overflow-hidden"
             headerContent={<MarketFlowHeader activeTab={activeTab} stats={stats} />}
         >
-            <div className="bg-secondary flex min-h-0 w-full flex-1 flex-col gap-4 rounded-2xl p-4">
+            <div className="base-secondary flex min-h-0 w-full flex-1 flex-col gap-4 rounded-2xl p-4">
                 <div className="flex min-h-0 flex-1 basis-0 flex-col gap-5">
                     <div className="flex shrink-0 items-center justify-between gap-4">
-                        <h3 className="font-body-2-highlight text-primary">
+                        <h3 className="body-3-highlight text-primary">
                             {'Lịch sử giao dịch'}
                         </h3>
                         <div className="flex items-center gap-6">
@@ -120,8 +120,8 @@ export const MarketFlowModal = ({
                                             onClick={() => handleChangePeriod(item.value)}
                                             className={`rounded-full px-3 py-1 transition-colors ${
                                                 isActive
-                                                    ? 'bg-tertiary font-body-3-highlight text-primary'
-                                                    : 'font-body-3 text-secondary'
+                                                    ? 'base-tertiary body-4-highlight text-primary'
+                                                    : 'body-4 text-secondary'
                                             }`}
                                         >
                                             {FLOW_MODAL[item.labelKey]}
@@ -142,7 +142,7 @@ export const MarketFlowModal = ({
                         period={modalPeriod}
                     />
                 </div>
-                <div className="bg-tertiary h-px w-full" aria-hidden />
+                <div className="base-tertiary h-px w-full" aria-hidden />
 
                 <div className="flex min-h-0 flex-1 basis-0 flex-col">
                     <MarketFlowModalTopNet

@@ -47,8 +47,8 @@ export const MarketFundDetailTradingInfo = ({ detail }: Props) => {
 
     return (
         <section className="flex flex-col gap-4">
-            <h3 className="font-body-2-highlight text-primary">{'Thông tin giao dịch'}</h3>
-            <div className="flex flex-col divide-y divide-tertiary rounded-2xl bg-secondary">
+            <h3 className="body-3-highlight text-primary">{'Thông tin giao dịch'}</h3>
+            <div className="flex flex-col divide-y divide-tertiary rounded-2xl base-secondary">
                 {rows.map((row, rowIndex) => (
                     <div
                         key={rowIndex}
@@ -56,8 +56,8 @@ export const MarketFundDetailTradingInfo = ({ detail }: Props) => {
                     >
                         {row.map((cell) => (
                             <div key={cell.label} className="flex flex-1 flex-col gap-1 p-4">
-                                <span className="font-body-3 text-secondary">{cell.label}</span>
-                                <span className="font-body-2-highlight text-primary">
+                                <span className="body-4 text-secondary">{cell.label}</span>
+                                <span className="body-3-highlight text-primary">
                                     {cell.value}
                                 </span>
                             </div>

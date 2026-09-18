@@ -116,29 +116,29 @@ export const MarketIndexChart = ({ selectedIndex, onClick }: Props) => {
             <div className="flex items-start justify-between">
                 <div className="flex flex-col gap-1">
                     <span
-                        className={`font-body-2-highlight text-primary w-fit rounded px-1.5 py-0.5 transition-colors duration-1000 ${indexValueBgClass}`}
+                        className={`body-3-highlight text-primary w-fit rounded px-1.5 py-0.5 transition-colors duration-1000 ${indexValueBgClass}`}
                     >
                         {formatNumberVN(indexValue, { decimals: 2 })}
                     </span>
                     <div className={`flex items-center gap-1 ${statsColorClass}`}>
                         {changeArrow}
-                        <span className="font-body-2">
+                        <span className="body-3">
                             {formatNumberVN(change, { decimals: 2 })}
                         </span>
-                        <span className="font-body-2">
+                        <span className="body-3">
                             ({changePercent > 0 ? '+' : ''}
                             {formatNumberVN(changePercent, { decimals: 2 })}%)
                         </span>
                     </div>
                 </div>
-                <span className="font-caption text-primary bg-disabled flex items-center justify-center rounded-full px-3 py-1">
+                <span className="body-5 text-primary bg-disabled flex items-center justify-center rounded-full px-3 py-1">
                     {getSessionText(indexData?.sessionInExchange || '')}
                 </span>
             </div>
             <div className="flex h-48 w-full items-center justify-center">
                 <div ref={containerRef} className="h-full w-full" />
             </div>
-            <div className="font-caption flex items-center justify-between text-secondary">
+            <div className="body-5 flex items-center justify-between text-secondary">
                 <div>
                     <span>{'KLGD:'} </span>
                     <span className="text-primary">

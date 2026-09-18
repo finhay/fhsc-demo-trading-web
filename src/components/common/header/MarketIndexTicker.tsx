@@ -55,7 +55,7 @@ export const MarketIndexTicker = () => {
     useMQTT(INDEX_REALTIME_TOPICS, handleMQTTMessage);
 
     return (
-        <section className="flex items-center justify-between py-3 px-2 bg-tertiary">
+        <section className="flex items-center justify-between py-3 px-2 base-tertiary">
             <nav
                 className="relative flex gap-12 overflow-x-hidden"
                 aria-label="Market indices ticker"
@@ -65,7 +65,7 @@ export const MarketIndexTicker = () => {
                         {normalizedData.map((item, i) => (
                             <li
                                 key={i}
-                                className="flex gap-1 font-caption items-center justify-center"
+                                className="flex gap-1 body-5 items-center justify-center"
                             >
                                 <strong className="text-primary uppercase">{item.index}</strong>
                                 <div
