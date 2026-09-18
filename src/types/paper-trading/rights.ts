@@ -16,9 +16,11 @@ export type PaperRightItem = {
     record_date: string | null;
     deliver_at: string;
     received_at: string | null;
-    ratio: string;
+    ratio: string | null;
     owned_quantity: number;
     entitled_quantity: number;
+    /** Đơn giá mua 1 CP của quyền mua (VND); loại khác 0; null ở quyền chốt trước khi có field */
+    exercise_price: number | null;
     exercise_amount: number;
     dividend_amount: number;
 };

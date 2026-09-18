@@ -36,7 +36,7 @@ export const getAssetPortfolioColumns = ({
         },
         {
             id: 'total',
-            accessorKey: 'total',
+            accessorFn: (row) => row.total + row.receiving_right,
             header: ({ column }) => <SortableHeader label={'Tổng'} column={column} align="right" />,
             meta: { align: 'right' } satisfies SortableColMeta,
             cell: ({ getValue }) => formatNumberVN(getValue<number>(), { decimals: 0 }),

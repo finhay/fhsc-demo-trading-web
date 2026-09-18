@@ -44,6 +44,8 @@ export type PaperPortfolioItem = {
     receiving_t0: number;
     receiving_t1: number;
     receiving_t2: number;
+    /** SL CP quyền đã chốt, chưa giao — không nằm trong `total` */
+    receivable_qty: number;
     cost_price: number;
     cost_price_amount: number;
     basic_price: number;
