@@ -27,7 +27,8 @@ export const AssetRightsDetail = ({ right }: Props) => {
     const eventTypeLabel = RIGHT_EVENT_TYPE_LABELS[right.event_type] ?? right.event_type;
     const statusColor = RIGHT_STATUS_COLOR_BY_LABEL[right.status] ?? 'text-secondary';
     const isRightsOffering = right.event_type === 'RIGHTS_OFFERING';
-    const entitledLabel = isRightsOffering ? 'Số lượng được mua' : 'Số lượng được nhận';
+    const isCashDividend = right.event_type === 'CASH_DIVIDEND';
+    const showExercisePrice = isRightsOffering || isCashDividend;
 
     return (
         <section className="flex h-full flex-1 flex-col gap-4 overflow-y-auto">
@@ -42,7 +43,7 @@ export const AssetRightsDetail = ({ right }: Props) => {
                     value={formatDateOrDash(right.record_date)}
                 />
                 <AssetRightsRow label={'Tỷ lệ'} value={right.ratio || '--'} />
-                {isRightsOffering && (
+                {showExercisePrice && (
                     <AssetRightsRow
                         label={'Giá mua'}
                         value={formatExercisePrice(right.exercise_price)}
@@ -54,10 +55,17 @@ export const AssetRightsDetail = ({ right }: Props) => {
                     label={'Số lượng cổ phiếu sở hữu'}
                     value={`${formatNumberVN(right.owned_quantity, { decimals: 0 })} CP`}
                 />
-                <AssetRightsRow
-                    label={entitledLabel}
-                    value={`${formatNumberVN(right.entitled_quantity, { decimals: 0 })} CP`}
-                />
+                {isCashDividend ? (
+                    <AssetRightsRow
+                        label={'Cổ tức bằng tiền (sau thuế)'}
+                        value={`${formatNumberVN(right.dividend_amount, { trimTrailingZeros: true })}đ`}
+                    />
+                ) : (
+                    <AssetRightsRow
+                        label={isRightsOffering ? 'Số lượng được mua' : 'Số lượng được nhận'}
+                        value={`${formatNumberVN(right.entitled_quantity, { decimals: 0 })} CP`}
+                    />
+                )}
                 <AssetRightsRow
                     label={'Ngày nhận dự kiến'}
                     value={formatDateOrDash(right.deliver_at)}
