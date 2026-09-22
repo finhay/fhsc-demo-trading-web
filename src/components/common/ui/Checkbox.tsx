@@ -35,7 +35,7 @@ export const Checkbox = ({
                         <FaRegSquare size={18} className="text-secondary" aria-hidden="true" />
                     )}
                 </span>
-                <span className="font-caption text-primary">{label}</span>
+                <span className="body-5 text-primary">{label}</span>
             </div>
         );
     }
@@ -56,7 +56,7 @@ export const Checkbox = ({
                     <FaRegSquare size={18} className="text-secondary" aria-hidden="true" />
                 )}
             </span>
-            <span className="font-caption text-primary">{label}</span>
+            <span className="body-5 text-primary">{label}</span>
         </label>
     );
 };

@@ -32,7 +32,7 @@ export const createChartMarketLiquidityV2 = (
     const nameAvg5 = 'GTGD TB 5 phiên';
 
     const getSeriesDotClass = (seriesName: string) =>
-        seriesName === nameOpen ? 'bg-blue' : 'bg-orange';
+        seriesName === nameOpen ? 'base-blue' : 'base-orange';
 
     return {
         animationDuration: 450,
@@ -94,19 +94,19 @@ export const createChartMarketLiquidityV2 = (
                 const rows = list
                     .map(
                         (point: any) => `
-                                <p class="flex items-center gap-2 font-caption text-secondary">
+                                <p class="flex items-center gap-2 body-5 text-secondary">
                                     <span class="shrink-0 rounded-full ${getSeriesDotClass(String(point.seriesName))} h-2 w-2" aria-hidden="true"></span>
                                     <span class="min-w-0 flex-1">
                                         <span>${point.seriesName}</span>:
-                                        <span class="font-caption-highlight text-primary">${formatNumberVN(point.value?.[1] ?? 0, { trimTrailingZeros: true })} tỷ</span>
+                                        <span class="body-5-highlight text-primary">${formatNumberVN(point.value?.[1] ?? 0, { trimTrailingZeros: true })} tỷ</span>
                                     </span>
                                 </p>
                             `,
                     )
                     .join('');
                 return `
-                    <div class="flex flex-col gap-1 rounded-xl bg-tertiary p-2">
-                        <span class="font-caption text-secondary">${timeStr}</span>
+                    <div class="flex flex-col gap-1 rounded-xl base-tertiary p-2">
+                        <span class="body-5 text-secondary">${timeStr}</span>
                         ${rows}
                     </div>
                 `;

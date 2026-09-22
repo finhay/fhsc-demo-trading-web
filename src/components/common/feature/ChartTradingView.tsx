@@ -88,20 +88,20 @@ export const ChartTradingView = ({ symbol }: Props) => {
             )}
 
             {status === 'loading' && (
-                <div className="absolute inset-0 flex items-center justify-center bg-secondary">
+                <div className="absolute inset-0 flex items-center justify-center base-secondary">
                     <Spinner isLoading isOverlay={false} />
                 </div>
             )}
 
             {status === 'error' && (
-                <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 bg-secondary px-4 text-center">
-                    <p className="text-secondary font-body-2">
+                <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 base-secondary px-4 text-center">
+                    <p className="text-secondary body-3">
                         {'Không thể tải biểu đồ. Vui lòng thử lại.'}
                     </p>
                     <button
                         type="button"
                         onClick={handleRetry}
-                        className="bg-highlight px-6 py-2 rounded-full font-body-2"
+                        className="base-highlight px-6 py-2 rounded-full body-3"
                     >
                         {'Tải lại'}
                     </button>

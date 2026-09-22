@@ -138,8 +138,8 @@ export const AssetStructure = () => {
     }, [cells, hasData, chartInstanceRef, hideTooltip, openStockDetail]);
 
     return (
-        <section className="flex h-full flex-col gap-3 overflow-hidden rounded-xl bg-secondary p-3">
-            <h2 className="shrink-0 font-body-2-highlight text-primary">{'Cấu trúc danh mục'}</h2>
+        <section className="flex h-full flex-col gap-3 overflow-hidden rounded-xl base-secondary p-3">
+            <h2 className="shrink-0 body-3-highlight text-primary">{'Cấu trúc danh mục'}</h2>
             <div className={`relative w-full ${hasData ? 'min-h-0 flex-1' : 'h-80'}`}>
                 <div ref={chartRef} className={`h-full w-full ${hasData ? '' : 'invisible'}`} />
                 {isPortfolioLoading ? (

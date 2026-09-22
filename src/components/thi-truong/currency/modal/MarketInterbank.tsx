@@ -24,10 +24,10 @@ export const MarketInterbank = ({ points }: Props) => {
     });
 
     return (
-        <section className="bg-secondary flex flex-col gap-4 rounded-2xl p-4">
+        <section className="base-secondary flex flex-col gap-4 rounded-2xl p-4">
             <div className="flex flex-col gap-1">
-                <p className="font-body-3 text-secondary">{'Lãi suất liên NH qua đêm'}</p>
-                <p className="font-body-1-highlight text-primary">
+                <p className="body-4 text-secondary">{'Lãi suất liên NH qua đêm'}</p>
+                <p className="body-2-highlight text-primary">
                     {lastValue == null
                         ? '--'
                         : `${formatNumberVN(lastValue, { trimTrailingZeros: true })}%`}
@@ -38,7 +38,7 @@ export const MarketInterbank = ({ points }: Props) => {
             ) : (
                 <div
                     key="empty"
-                    className="text-secondary font-caption flex h-48 items-center justify-center"
+                    className="text-secondary body-5 flex h-48 items-center justify-center"
                 >
                     --
                 </div>

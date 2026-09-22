@@ -174,7 +174,7 @@ export const MarketFlowTopNet = ({ isForeign, activeExchange, showDot = true }: 
                     {showDot && <MarketDot />}
                     <h3
                         className={`text-primary ${
-                            showDot ? 'font-body-3-highlight' : 'font-body-2-highlight'
+                            showDot ? 'body-4-highlight' : 'body-3-highlight'
                         }`}
                     >
                         {'Bản đồ nhiệt theo mã'}
@@ -190,8 +190,8 @@ export const MarketFlowTopNet = ({ isForeign, activeExchange, showDot = true }: 
                                 onClick={() => setActiveTopNetTab(tab)}
                                 className={`rounded-full px-2 py-1 transition-colors ${
                                     isActive
-                                        ? 'bg-tertiary font-caption-highlight text-primary'
-                                        : 'font-caption text-secondary'
+                                        ? 'base-tertiary body-5-highlight text-primary'
+                                        : 'body-5 text-secondary'
                                 }`}
                             >
                                 {tabLabels[tab]}

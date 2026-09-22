@@ -37,7 +37,7 @@ export const MarketSilverChart = ({ globalItem, initialChartData }: Props) => {
         {
             key: 'bar',
             label: modal.legend_silver_bar,
-            colorClass: 'bg-blue',
+            colorClass: 'base-blue',
             value: lastItem?.silver_bar,
         },
         {
@@ -95,22 +95,22 @@ export const MarketSilverChart = ({ globalItem, initialChartData }: Props) => {
     }, [chartInstanceRef]);
 
     return (
-        <div className="bg-secondary flex flex-col gap-4 rounded-2xl p-4">
+        <div className="base-secondary flex flex-col gap-4 rounded-2xl p-4">
             <div className="flex flex-col gap-2">
                 <div className="flex flex-wrap items-center gap-2">
-                    <h4 className="font-body-2-highlight text-primary">
+                    <h4 className="body-3-highlight text-primary">
                         {modal.silver_global_label}
                     </h4>
-                    <span className="font-body-3 text-secondary">({modal.unit_usd_ounce})</span>
+                    <span className="body-4 text-secondary">({modal.unit_usd_ounce})</span>
                 </div>
                 <div className="flex items-center gap-2">
-                    <span className="font-body-1-highlight text-primary">
+                    <span className="body-2-highlight text-primary">
                         {globalItem?.usd_value
                             ? formatNumberVN(globalItem.usd_value, { decimals: 2 })
                             : '--'}
                     </span>
                     {changeLabel && (
-                        <span className={`font-body-3 ${getChangeColor(changePercent ?? 0)}`}>
+                        <span className={`body-4 ${getChangeColor(changePercent ?? 0)}`}>
                             {changeLabel}
                         </span>
                     )}
@@ -129,8 +129,8 @@ export const MarketSilverChart = ({ globalItem, initialChartData }: Props) => {
                             onClick={() => handleChangeDays(period.value)}
                             className={`rounded-full px-3 py-1 transition-colors ${
                                 isActive
-                                    ? 'bg-tertiary font-body-3-highlight text-primary'
-                                    : 'font-body-3 text-secondary'
+                                    ? 'base-tertiary body-4-highlight text-primary'
+                                    : 'body-4 text-secondary'
                             }`}
                         >
                             {modal[period.labelKey]}
@@ -150,9 +150,9 @@ export const MarketSilverChart = ({ globalItem, initialChartData }: Props) => {
                                 className={`h-2 w-2 shrink-0 rounded-full ${legend.colorClass}`}
                                 aria-hidden
                             />
-                            <span className="font-body-3 text-secondary">{legend.label}</span>
+                            <span className="body-4 text-secondary">{legend.label}</span>
                         </div>
-                        <span className="font-body-3-highlight text-primary">
+                        <span className="body-4-highlight text-primary">
                             {formatLegendValue(legend.value)}
                         </span>
                     </div>

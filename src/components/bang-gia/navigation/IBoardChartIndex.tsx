@@ -242,22 +242,22 @@ export const IBoardChartIndex = () => {
                                 }}
                                 key={indexId}
                             >
-                                <article className="flex flex-col h-full gap-1 bg-secondary rounded-xl p-2">
+                                <article className="flex flex-col h-full gap-1 base-secondary rounded-xl p-2">
                                     <div className="flex flex-col gap-1">
                                         <div className="flex items-center justify-between text-primary">
-                                            <div className="font-caption-highlight">{indexId}</div>
-                                            <div className="font-caption bg-disabled rounded-full flex items-center justify-center px-2 py-0.5">
+                                            <div className="body-5-highlight">{indexId}</div>
+                                            <div className="body-5 bg-disabled rounded-full flex items-center justify-center px-2 py-0.5">
                                                 {getSessionText(sessionInExchange || 'CLOSE')}
                                             </div>
                                         </div>
-                                        <div className="flex items-center justify-between text-primary font-caption">
+                                        <div className="flex items-center justify-between text-primary body-5">
                                             <div className="whitespace-nowrap">
                                                 {'KLGD:'}{' '}
                                                 {formatNumberVN(allQuantity || 0, { decimals: 0 })}{' '}
                                                 {'CP'}
                                             </div>
                                             <div
-                                                className={`flex items-center font-caption-highlight gap-1 ${change >= 0 ? 'text-green' : 'text-red'}`}
+                                                className={`flex items-center body-5-highlight gap-1 ${change >= 0 ? 'text-green' : 'text-red'}`}
                                             >
                                                 {change >= 0 ? (
                                                     <FaArrowUp size={12} />
@@ -268,7 +268,7 @@ export const IBoardChartIndex = () => {
                                                 {` (${formatNumberVN(Math.abs(change || 0))}/${formatNumberVN(Math.abs(changePercent || 0))}%)`}
                                             </div>
                                         </div>
-                                        <div className="flex items-center justify-between text-primary font-caption">
+                                        <div className="flex items-center justify-between text-primary body-5">
                                             <div className="whitespace-nowrap">
                                                 {'GTGD:'}{' '}
                                                 {formatNumberVN(allValue / 1_000_000_000, {

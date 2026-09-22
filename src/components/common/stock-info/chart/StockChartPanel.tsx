@@ -39,7 +39,7 @@ export const StockChartPanel: FC<Props> = ({ onClose }) => {
                         <button
                             type="button"
                             onClick={handleTradeNow}
-                            className="flex flex-1 items-center justify-center rounded-full bg-highlight px-4 py-2 font-body-2-highlight text-quaternary"
+                            className="flex flex-1 items-center justify-center rounded-full base-highlight px-4 py-2 body-3-highlight text-quaternary"
                         >
                             {'Giao dịch {symbol}'.replace('{symbol}', selectedStock?.symbol ?? '')}
                         </button>
@@ -48,7 +48,7 @@ export const StockChartPanel: FC<Props> = ({ onClose }) => {
                         <button
                             type="button"
                             onClick={onClose}
-                            className="flex w-24 shrink-0 items-center justify-center rounded-full bg-tertiary px-4 py-2 font-body-2-highlight text-highlight"
+                            className="flex w-24 shrink-0 items-center justify-center rounded-full base-tertiary px-4 py-2 body-3-highlight text-highlight"
                         >
                             {'Đóng'}
                         </button>

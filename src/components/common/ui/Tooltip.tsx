@@ -44,8 +44,8 @@ const TRANSFORM_BY_PLACEMENT: Record<TooltipPlacement, Record<TooltipAlign, stri
 };
 
 const STYLE_BY_VARIANT: Record<TooltipVariant, string> = {
-    dark: 'border border-quaternary bg-tertiary text-primary',
-    light: 'bg-quinary text-quaternary',
+    dark: 'border border-quaternary base-tertiary text-primary',
+    light: 'base-quinary text-quaternary',
 };
 
 export const Tooltip = ({
@@ -125,7 +125,7 @@ export const Tooltip = ({
                         ref={tooltipRef}
                         role="tooltip"
                         style={{ top: coords.top, left: coords.left }}
-                        className={`pointer-events-none fixed z-[1000] whitespace-nowrap rounded-md px-2 py-1 font-caption shadow-lg ${STYLE_BY_VARIANT[variant]} ${TRANSFORM_BY_PLACEMENT[placement][align]}`}
+                        className={`pointer-events-none fixed z-[1000] whitespace-nowrap rounded-md px-2 py-1 body-5 shadow-lg ${STYLE_BY_VARIANT[variant]} ${TRANSFORM_BY_PLACEMENT[placement][align]}`}
                     >
                         {content}
                     </span>,

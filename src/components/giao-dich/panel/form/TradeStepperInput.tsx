@@ -58,7 +58,7 @@ export const TradeStepperInput = ({
                     className="flex flex-1 flex-col items-center justify-center cursor-text"
                 >
                     {label && hasValue && (
-                        <span className="font-caption text-tertiary">{label}</span>
+                        <span className="body-5 text-tertiary">{label}</span>
                     )}
                     <span className="flex items-center justify-center min-w-0">
                         <input
@@ -72,10 +72,10 @@ export const TradeStepperInput = ({
                             onFocus={(e) => e.target.select()}
                             onBlur={onBlur}
                             size={Math.max(value.length || label?.length || 1, 1)}
-                            className={`${hasValue ? 'font-body-3-highlight' : 'font-caption'} text-center bg-transparent focus:outline-none placeholder:text-tertiary min-w-0 ${textClass}`}
+                            className={`${hasValue ? 'body-4-highlight' : 'body-5'} text-center bg-transparent focus:outline-none placeholder:text-tertiary min-w-0 ${textClass}`}
                         />
                         {hasValue && unit && (
-                            <span className="font-body-3-highlight text-primary">{unit}</span>
+                            <span className="body-4-highlight text-primary">{unit}</span>
                         )}
                     </span>
                 </label>
@@ -88,7 +88,7 @@ export const TradeStepperInput = ({
                     <FaPlus size={14} className="text-primary" />
                 </button>
             </div>
-            <span className="font-tiny text-red px-1">{error || ''}</span>
+            <span className="body-5 text-red px-1">{error || ''}</span>
         </div>
     );
 };

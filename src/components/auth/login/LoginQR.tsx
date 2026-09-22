@@ -79,13 +79,13 @@ export const LoginQR = () => {
 
     return (
         <aside className="hidden sm:flex w-1/2 flex-col items-center justify-center gap-4 text-center text-primary bg-[#54545433] p-4 rounded-xl">
-            <p className="font-body-3">{'Đăng nhập bằng mã QR'}</p>
+            <p className="body-4">{'Đăng nhập bằng mã QR'}</p>
             <QRCode
                 className="h-auto w-60 border-8 border-quinary rounded-xl"
                 value={qrCodeId}
                 viewBox="0 0 256 256"
             />
-            <p className="font-body-3 whitespace-pre-line">
+            <p className="body-4 whitespace-pre-line">
                 {'Mở ứng dụng Finhay trên thiết bị của bạn\nvà quét mã QR để đăng nhập Finhay.'}
             </p>
         </aside>

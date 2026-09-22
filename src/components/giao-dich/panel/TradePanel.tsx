@@ -369,7 +369,7 @@ export const TradePanel = ({ initialSide, initialPrice }: TradePanelProps = {}) 
                       totalLabel: 'Tổng tiền mua',
                       ctaLabel: 'Mua',
                       ctaEnabledClass:
-                          'bg-highlight text-quaternary hover:opacity-90 active:opacity-80',
+                          'base-highlight text-quaternary hover:opacity-90 active:opacity-80',
                   }
                 : {
                       key: TRADE_LITERAL.SELL,
@@ -388,7 +388,7 @@ export const TradePanel = ({ initialSide, initialPrice }: TradePanelProps = {}) 
                       maxQty: maxSell,
                       totalLabel: 'Tổng tiền bán',
                       ctaLabel: 'Bán',
-                      ctaEnabledClass: 'bg-red text-primary hover:opacity-90 active:opacity-80',
+                      ctaEnabledClass: 'base-red text-primary hover:opacity-90 active:opacity-80',
                   },
         [
             activeSide,
@@ -575,7 +575,7 @@ export const TradePanel = ({ initialSide, initialPrice }: TradePanelProps = {}) 
                     requestAvailableTrade(side, priceForSide(side), { immediate: true });
                 }}
             />
-            <div className="flex min-h-0 w-full flex-1 flex-col items-center gap-2 rounded-xl bg-secondary p-3">
+            <div className="flex min-h-0 w-full flex-1 flex-col items-center gap-2 rounded-xl base-secondary p-3">
                 {isPanelPlaceOrderVisible ? (
                     <TradePanelOverlays
                         isPlaceOrderVisible={isPanelPlaceOrderVisible}

@@ -88,9 +88,9 @@ export const MarketCurrency = () => {
     };
 
     return (
-        <section className="bg-secondary flex min-h-0 flex-1 flex-col gap-3 rounded-xl p-4">
+        <section className="base-secondary flex min-h-0 flex-1 flex-col gap-3 rounded-xl p-4">
             <div className="flex items-center justify-between gap-2">
-                <h2 className="font-body-2-highlight text-primary flex items-center gap-2">
+                <h2 className="body-3-highlight text-primary flex items-center gap-2">
                     {'Tiền tệ'}
                 </h2>
                 <button
@@ -134,7 +134,7 @@ export const MarketCurrency = () => {
                             ))}
                         </ul>
                     )}
-                    <p className="font-caption text-tertiary">
+                    <p className="body-5 text-tertiary">
                         {
                             'Lưu ý: Thông tin lãi suất chỉ mang tính chất tham khảo, và có thể thay đổi dựa trên chính sách ngân hàng. Vui lòng liên hệ trực tiếp ngân hàng để được tư vấn về lãi suất và các gói vay.'
                         }

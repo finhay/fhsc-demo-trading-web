@@ -32,13 +32,13 @@ export function InputField({
     return (
         <div className="flex w-full flex-col gap-2">
             <div
-                className={`bg-tertiary group relative flex w-full flex-col gap-2 rounded-xl border px-3 py-2 transition-colors ${
+                className={`base-tertiary group relative flex w-full flex-col gap-2 rounded-xl border px-3 py-2 transition-colors ${
                     error ? 'border-red' : 'border-transparent focus-within:border-highlight'
                 }`}
             >
                 <label
                     htmlFor={id}
-                    className={`font-caption-highlight transition-colors ${
+                    className={`body-5-highlight transition-colors ${
                         error ? 'text-red' : 'text-primary group-focus-within:text-highlight'
                     }`}
                 >
@@ -48,7 +48,7 @@ export function InputField({
                     id={id}
                     type={inputType}
                     placeholder={placeholder}
-                    className={`font-caption text-primary w-full bg-transparent outline-none placeholder:text-tertiary ${
+                    className={`body-5 text-primary w-full bg-transparent outline-none placeholder:text-tertiary ${
                         isPassword ? 'pr-10' : ''
                     }`}
                     aria-invalid={!!error}
@@ -71,7 +71,7 @@ export function InputField({
                 )}
             </div>
             {showError && error && (
-                <span id={`${id}-error`} role="alert" className="font-caption text-red">
+                <span id={`${id}-error`} role="alert" className="body-5 text-red">
                     {error}
                 </span>
             )}

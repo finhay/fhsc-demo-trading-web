@@ -94,12 +94,12 @@ export const PortfolioLeadPanel = ({
             )}
             <div className="relative z-10 flex w-full flex-1 flex-col items-center justify-between pt-3">
                 <div className="flex flex-col items-center gap-1">
-                    <span className="font-body-3 text-secondary">{heading}</span>
+                    <span className="body-4 text-secondary">{heading}</span>
                     <div className="flex items-center justify-center gap-2">
                         <div className="flex items-center gap-1">
-                            <span className="font-body-3 text-secondary">{'Tác động:'}</span>
+                            <span className="body-4 text-secondary">{'Tác động:'}</span>
                             <span
-                                className={`inline-flex items-center gap-0.5 font-body-3 ${
+                                className={`inline-flex items-center gap-0.5 body-4 ${
                                     isUp ? 'text-green' : 'text-red'
                                 }`}
                             >
@@ -111,7 +111,7 @@ export const PortfolioLeadPanel = ({
                                 {formatPercentVN(Math.abs(impactPercent))}
                             </span>
                         </div>
-                        <span className="font-body-3 text-secondary">
+                        <span className="body-4 text-secondary">
                             {'Tỷ trọng:'}{' '}
                             <span className="text-primary">{formatPercentVN(weightPercent)}</span>
                         </span>

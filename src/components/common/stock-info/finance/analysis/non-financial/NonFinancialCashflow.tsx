@@ -55,8 +55,8 @@ export const NonFinancialCashflow = ({
                                         : CHART_GRADIENTS.negative,
                             }}
                         >
-                            <p className="font-caption text-secondary">{fa[item.labelKey]}</p>
-                            <p className={`font-body-3-highlight ${item.textColor}`}>
+                            <p className="body-5 text-secondary">{fa[item.labelKey]}</p>
+                            <p className={`body-4-highlight ${item.textColor}`}>
                                 {formatNumberVNWithUnit(item.value)}
                             </p>
                         </div>

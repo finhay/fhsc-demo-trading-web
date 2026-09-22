@@ -334,8 +334,8 @@ export const createChartMarketIndexMini = (
                 const area = list.find((p: any) => p.seriesIndex === 1) ?? list[list.length - 1];
                 const value = Number(area?.value?.[1] ?? 0);
                 return `
-                    <div class="rounded-xl bg-tertiary p-2">
-                        <span class="font-caption-highlight text-primary">${formatNumberVN(value)}</span>
+                    <div class="rounded-xl base-tertiary p-2">
+                        <span class="body-5-highlight text-primary">${formatNumberVN(value)}</span>
                     </div>
                 `;
             },
@@ -432,9 +432,9 @@ export const createChartMarketIndexCompareSparkline = (
                 const hours = String(date.getUTCHours()).padStart(2, '0');
                 const minutes = String(date.getUTCMinutes()).padStart(2, '0');
                 return `
-                    <div class="flex flex-col gap-1 rounded-xl bg-tertiary p-2">
-                        <span class="font-caption text-secondary">${hours}:${minutes}</span>
-                        <span class="font-caption-highlight text-primary">${formatNumberVN(value, { decimals: 2 })}</span>
+                    <div class="flex flex-col gap-1 rounded-xl base-tertiary p-2">
+                        <span class="body-5 text-secondary">${hours}:${minutes}</span>
+                        <span class="body-5-highlight text-primary">${formatNumberVN(value, { decimals: 2 })}</span>
                     </div>
                 `;
             },
@@ -539,11 +539,11 @@ export const createChartMarketBreadth = (
                         if (!seriesConfig) return '';
                         const label = INDEX_BREADTH_SERIES[seriesConfig.key];
                         const val = Number(p?.value?.[1] ?? 0);
-                        return `<span class="font-caption" style="color:${seriesConfig.color}">${label}: ${formatNumberVN(val, { decimals: 1 })}%</span>`;
+                        return `<span class="body-5" style="color:${seriesConfig.color}">${label}: ${formatNumberVN(val, { decimals: 1 })}%</span>`;
                     })
                     .filter(Boolean)
                     .join('');
-                return `<div class="flex flex-col gap-1 rounded-xl bg-tertiary p-2">${rows}</div>`;
+                return `<div class="flex flex-col gap-1 rounded-xl base-tertiary p-2">${rows}</div>`;
             },
         },
         series: MARKET_BREADTH_SERIES.map((series) => ({
@@ -664,9 +664,9 @@ export const createChartInvestmentPerformance = (
                     value > 0 ? 'text-green' : value < 0 ? 'text-red' : 'text-orange';
                 const label = point?.name ?? point?.axisValue ?? '';
                 return `
-                    <div class="flex flex-col gap-1 rounded-xl bg-tertiary p-2">
-                        <span class="font-caption text-secondary">${label}</span>
-                        <span class="font-caption-highlight ${colorClass}">${formatNumberVN(value, { decimals: 2 })}%</span>
+                    <div class="flex flex-col gap-1 rounded-xl base-tertiary p-2">
+                        <span class="body-5 text-secondary">${label}</span>
+                        <span class="body-5-highlight ${colorClass}">${formatNumberVN(value, { decimals: 2 })}%</span>
                     </div>
                 `;
             },

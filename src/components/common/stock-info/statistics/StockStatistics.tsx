@@ -148,8 +148,8 @@ export const StockStatistics = () => {
                             onClick={() => setActiveTab(key)}
                             className={`flex items-center justify-center rounded-full px-3 py-1 transition-colors ${
                                 isActive
-                                    ? 'bg-tertiary font-body-3-highlight text-primary'
-                                    : 'font-body-3 text-secondary'
+                                    ? 'base-tertiary body-4-highlight text-primary'
+                                    : 'body-4 text-secondary'
                             }`}
                         >
                             {STOCK_INFO_STATISTICS[labelKey]}
@@ -157,7 +157,7 @@ export const StockStatistics = () => {
                     );
                 })}
             </nav>
-            <div className="min-h-0 flex-1 overflow-hidden rounded-2xl border border-tertiary bg-secondary">
+            <div className="min-h-0 flex-1 overflow-hidden rounded-2xl border border-tertiary base-secondary">
                 {isLoading ? (
                     <div className="h-full min-h-0 p-3" role="status">
                         <Skeleton />

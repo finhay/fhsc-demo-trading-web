@@ -64,16 +64,16 @@ export const MarketIndexCompare = ({ index }: Props) => {
     }, [chartInstanceRef]);
 
     return (
-        <article className="flex min-w-0 flex-1 flex-col rounded-2xl border border-tertiary bg-secondary p-4">
+        <article className="flex min-w-0 flex-1 flex-col rounded-2xl border border-tertiary base-secondary p-4">
             <div className="flex items-center gap-4">
                 <div className="flex shrink-0 flex-col gap-2">
-                    <h3 className="font-caption text-secondary">{index}</h3>
-                    <span className="font-body-2-highlight text-primary">
+                    <h3 className="body-5 text-secondary">{index}</h3>
+                    <span className="body-3-highlight text-primary">
                         {formatNumberVN(indexData?.indexValue ?? 0, { decimals: 2 })}
                     </span>
                     <div className={`flex items-center gap-1 ${changeColorClass}`}>
                         {changeArrow}
-                        <span className="font-caption-highlight">
+                        <span className="body-5-highlight">
                             {formatNumberVN(change, { decimals: 2 })} (
                             {changePercent > 0 ? '+' : ''}
                             {formatNumberVN(changePercent, { decimals: 2 })}%)

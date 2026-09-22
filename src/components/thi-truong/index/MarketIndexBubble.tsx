@@ -181,7 +181,7 @@ export const MarketIndexBubble = ({ selectedIndex }: Props) => {
 
     return (
         <div className="flex shrink-0 flex-col gap-4">
-            <h2 className="font-body-2-highlight text-primary flex items-center gap-2">
+            <h2 className="body-3-highlight text-primary flex items-center gap-2">
                 <MarketDot />
                 {'Top mã tác động'} {selectedIndex}
             </h2>

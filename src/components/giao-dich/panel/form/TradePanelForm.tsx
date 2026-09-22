@@ -210,7 +210,7 @@ export const TradePanelSubmit = ({
                                 if (!canTrade || !canSubmit) return;
                                 onOpenConfirm(activeConfig.orderSide);
                             }}
-                            className={`flex w-full items-center justify-center rounded-full px-4 py-2 font-body-3-highlight transition-opacity ${
+                            className={`flex w-full items-center justify-center rounded-full px-4 py-2 body-4-highlight transition-opacity ${
                                 isDisabled
                                     ? 'cursor-not-allowed bg-disabled text-disabled'
                                     : activeConfig.ctaEnabledClass

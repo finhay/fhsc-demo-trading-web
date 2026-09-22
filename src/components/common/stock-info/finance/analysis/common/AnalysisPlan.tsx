@@ -15,13 +15,13 @@ export const AnalysisPlan = ({ items, title }: Props) => {
 
     return (
         <div className="flex flex-col gap-1">
-            <p className="font-caption-highlight text-secondary">{resolvedTitle}</p>
+            <p className="body-5-highlight text-secondary">{resolvedTitle}</p>
             <div className="flex gap-8">
                 {items.map((item) => (
                     <div key={item.labelKey} className="flex flex-1 flex-col gap-2">
                         <div className="flex items-start justify-between gap-2">
-                            <span className="font-body-3 text-secondary">{fa[item.labelKey]}</span>
-                            <span className={`shrink-0 font-body-3-highlight ${item.textColor}`}>
+                            <span className="body-4 text-secondary">{fa[item.labelKey]}</span>
+                            <span className={`shrink-0 body-4-highlight ${item.textColor}`}>
                                 {item.isZero ? '--' : `${formatNumberVN(item.value)}%`}
                             </span>
                         </div>

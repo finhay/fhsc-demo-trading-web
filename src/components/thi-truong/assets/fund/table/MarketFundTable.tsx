@@ -43,9 +43,9 @@ export const MarketFundTable = ({ certificates, onSelectFund }: Props) => {
     });
 
     return (
-        <section className="bg-secondary relative z-10 flex flex-col gap-4 rounded-2xl p-3">
+        <section className="base-secondary relative z-10 flex flex-col gap-4 rounded-2xl p-3">
             <div className="flex shrink-0 flex-col gap-3 md:flex-row md:items-center md:justify-between">
-                <h3 className="font-body-2-highlight text-primary">{'Tất cả Chứng chỉ quỹ'}</h3>
+                <h3 className="body-3-highlight text-primary">{'Tất cả Chứng chỉ quỹ'}</h3>
                 <div className="flex flex-wrap items-center gap-3">
                     {FUND_LIST_TABS.map((key) => {
                         const isActive = tab === key;
@@ -59,8 +59,8 @@ export const MarketFundTable = ({ certificates, onSelectFund }: Props) => {
                                 }}
                                 className={`rounded-full px-3 py-1 transition-colors ${
                                     isActive
-                                        ? 'bg-tertiary font-body-3-highlight text-primary'
-                                        : 'font-body-3 text-secondary'
+                                        ? 'base-tertiary body-4-highlight text-primary'
+                                        : 'body-4 text-secondary'
                                 }`}
                             >
                                 {t[key]}
@@ -88,7 +88,7 @@ export const MarketFundTable = ({ certificates, onSelectFund }: Props) => {
                                         <th
                                             key={header.id}
                                             scope="col"
-                                            className={`font-body-3 text-secondary ${alignCls} ${meta?.widthClass ?? ''} ${meta?.thClass ?? ''}`.trim()}
+                                            className={`body-4 text-secondary ${alignCls} ${meta?.widthClass ?? ''} ${meta?.thClass ?? ''}`.trim()}
                                         >
                                             {flexRender(
                                                 header.column.columnDef.header,

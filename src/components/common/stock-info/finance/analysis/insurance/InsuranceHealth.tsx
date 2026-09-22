@@ -44,22 +44,22 @@ export const InsuranceHealth = ({ dataQuarterly }: { dataQuarterly: any }) => {
         <AnalysisSection
             title={'Tài chính có khoẻ không?'}
             right={
-                <span className="shrink-0 rounded-full border border-tertiary px-2 py-1 font-body-3 text-primary">
+                <span className="shrink-0 rounded-full border border-tertiary px-2 py-1 body-4 text-primary">
                     {'YoY'}
                 </span>
             }
         >
             <div className={ANALYSIS_CONTENT_CARD}>
                 <div className="flex flex-col gap-3">
-                    <p className="font-body-3 text-primary">{'Tỷ trọng đầu tư'}</p>
+                    <p className="body-4 text-primary">{'Tỷ trọng đầu tư'}</p>
                     <div className="flex gap-3">
                         {investmentItems.map((item) => (
                             <div key={item.labelKey} className="flex min-w-0 flex-1 flex-col gap-2">
                                 <div className="flex items-center gap-3">
-                                    <span className="font-body-3 text-secondary">
+                                    <span className="body-4 text-secondary">
                                         {fa[item.labelKey]}
                                     </span>
-                                    <span className={`font-body-2-highlight ${item.textColor}`}>
+                                    <span className={`body-3-highlight ${item.textColor}`}>
                                         {formatNumberVN(item.value)}%
                                     </span>
                                 </div>
@@ -83,21 +83,21 @@ export const InsuranceHealth = ({ dataQuarterly }: { dataQuarterly: any }) => {
                     </div>
                 </div>
 
-                <div className="h-px w-full shrink-0 bg-tertiary" />
+                <div className="h-px w-full shrink-0 base-tertiary" />
                 <div className="flex shrink-0 gap-3">
                     {stats.map((s) => (
                         <div key={s.labelKey} className="flex min-w-0 flex-1 flex-col gap-1">
                             <div className="flex min-w-0 items-center gap-2">
-                                <span className="truncate font-body-3 text-secondary">
+                                <span className="truncate body-4 text-secondary">
                                     {fa[s.labelKey]}
                                 </span>
                                 {s.withYoY && (
-                                    <span className="shrink-0 rounded-full border border-tertiary px-2 py-0.5 font-tiny-highlight text-primary">
+                                    <span className="shrink-0 rounded-full border border-tertiary px-2 py-0.5 body-5-highlight text-primary">
                                         {'YoY'}
                                     </span>
                                 )}
                             </div>
-                            <span className="font-body-2-highlight text-primary">{s.value}</span>
+                            <span className="body-3-highlight text-primary">{s.value}</span>
                         </div>
                     ))}
                 </div>

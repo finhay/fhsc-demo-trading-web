@@ -56,10 +56,10 @@ export const IBoardTableBody = ({ table, rowVirtualizer, realtimeCellBgMap }: Pr
                                     row.original._raw,
                                     realtimeCellBgMap,
                                 );
-                                const baseBg = tertiaryBg ? 'bg-tertiary' : 'bg-secondary';
+                                const baseBg = tertiaryBg ? 'base-tertiary' : 'base-secondary';
                                 const cellBgClasses = realtimeBgClass
                                     ? `${realtimeBgClass} [&_*]:!text-primary`
-                                    : `${baseBg} group-hover:bg-tertiary`;
+                                    : `${baseBg} group-hover:bg-(--base-tertiary)`;
                                 return (
                                     <td
                                         key={cell.id}

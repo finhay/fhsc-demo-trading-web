@@ -10,7 +10,7 @@ export const IBoardView = () => {
     const [isIndexSliderVisible, setIsIndexSliderVisible] = useState(true);
 
     return (
-        <article className="bg-primary flex h-full min-h-0 w-full flex-col gap-2 overflow-hidden">
+        <article className="base-primary flex h-full min-h-0 w-full flex-col gap-2 overflow-hidden">
             <section
                 className={`shrink-0 grid transition-[grid-template-rows,opacity,margin] duration-300 ease-in-out ${
                     isIndexSliderVisible

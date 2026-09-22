@@ -117,9 +117,9 @@ export const createChartFundNavHistory = (
                 const point = list[0] as { axisValue?: string; value?: number | null };
                 if (point.value == null) return '';
                 return `
-                    <div class="flex flex-col gap-1 rounded-xl bg-tertiary p-2">
-                        <span class="font-caption text-secondary">${point.axisValue ?? ''}</span>
-                        <span class="font-caption-highlight text-primary">${formatNumberVN(
+                    <div class="flex flex-col gap-1 rounded-xl base-tertiary p-2">
+                        <span class="body-5 text-secondary">${point.axisValue ?? ''}</span>
+                        <span class="body-5-highlight text-primary">${formatNumberVN(
                             Number(point.value),
                             { decimals: 2 },
                         )}</span>

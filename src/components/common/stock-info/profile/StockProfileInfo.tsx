@@ -23,12 +23,12 @@ type InfoItem = {
 
 const InfoRow = ({ label, value }: InfoItem) => (
     <div className="flex w-full items-start justify-between gap-4 overflow-hidden">
-        <p className="shrink-0 font-body-3 text-secondary">{label}</p>
-        <p className="text-right font-body-3-highlight text-primary">{value || '—'}</p>
+        <p className="shrink-0 body-4 text-secondary">{label}</p>
+        <p className="text-right body-4-highlight text-primary">{value || '—'}</p>
     </div>
 );
 
-const Divider = () => <div className="h-px w-full shrink-0 bg-tertiary" />;
+const Divider = () => <div className="h-px w-full shrink-0 base-tertiary" />;
 
 export const StockProfileInfo = ({ isLoading, profile, listing }: Props) => {
     const [hasLogoError, setHasLogoError] = useState(false);
@@ -127,7 +127,7 @@ export const StockProfileInfo = ({ isLoading, profile, listing }: Props) => {
                             onError={() => setHasLogoError(true)}
                         />
                     ) : null}
-                    <p className="font-caption text-primary">
+                    <p className="body-5 text-primary">
                         {profile?.about || 'Không có thông tin về mã cổ phiếu'}
                     </p>
                     <Divider />

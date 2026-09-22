@@ -34,7 +34,7 @@ export const NonFinancialDividend = ({ dataAnnual }: { dataAnnual: any }) => {
                 padding: 8,
                 formatter: (params: any) => {
                     const p = Array.isArray(params) ? params[0] : params;
-                    return `<div class="flex flex-col gap-0.5"><span class="font-caption text-secondary">${p?.axisValue ?? ''}</span><span class="font-caption-highlight text-primary">${formatNumberVN(Number(p?.value ?? 0))}%</span></div>`;
+                    return `<div class="flex flex-col gap-0.5"><span class="body-5 text-secondary">${p?.axisValue ?? ''}</span><span class="body-5-highlight text-primary">${formatNumberVN(Number(p?.value ?? 0))}%</span></div>`;
                 },
             },
             xAxis: {
@@ -85,12 +85,12 @@ export const NonFinancialDividend = ({ dataAnnual }: { dataAnnual: any }) => {
         <AnalysisSection title={'Cổ tức trả thế nào?'}>
             <div className={ANALYSIS_CONTENT_CARD}>
                 <div className="flex w-full shrink-0 items-center justify-between gap-2 whitespace-nowrap">
-                    <span className="font-body-2-highlight text-green">
+                    <span className="body-3-highlight text-green">
                         {data.tysuatcotuc ? `${formatNumberVN(data.tysuatcotuc * 100)}%` : '--'}
                     </span>
-                    <p className="font-body-3 text-tertiary">
+                    <p className="body-4 text-tertiary">
                         {'TB 3 năm:'}{' '}
-                        <span className="font-body-3-highlight text-primary">
+                        <span className="body-4-highlight text-primary">
                             {data.bq_tysuatcotuc ? `${formatNumberVN(data.bq_tysuatcotuc)}%` : '--'}
                         </span>
                     </p>

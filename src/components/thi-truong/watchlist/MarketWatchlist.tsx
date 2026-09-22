@@ -292,20 +292,20 @@ export const MarketWatchlist = () => {
                             <button
                                 type="button"
                                 onClick={() => onSelectSymbol(stock.symbol)}
-                                className="flex-1 min-w-0 cursor-pointer truncate text-left font-body-3-highlight text-primary"
+                                className="flex-1 min-w-0 cursor-pointer truncate text-left body-4-highlight text-primary"
                             >
                                 {stock.symbol}
                             </button>
                             <div className={`flex items-center gap-1 shrink-0 ${changeColorClass}`}>
                                 {changeArrow}
-                                <span className="font-caption">
+                                <span className="body-5">
                                     {formatNumberVN(stock.change / 1000)} (
                                     {stock.changePercent > 0 ? '+' : ''}
                                     {formatNumberVN(stock.changePercent)}%)
                                 </span>
                             </div>
                             <span
-                                className={`font-body-3-highlight shrink-0 rounded px-1 transition-colors duration-1000 ${
+                                className={`body-4-highlight shrink-0 rounded px-1 transition-colors duration-1000 ${
                                     isUpdated && flashBg ? flashBg : priceColor
                                 }`}
                             >
@@ -327,16 +327,16 @@ export const MarketWatchlist = () => {
     );
 
     return (
-        <section className="bg-secondary flex h-full min-h-0 w-full flex-1 flex-col gap-2 overflow-hidden rounded-xl p-4">
+        <section className="base-secondary flex h-full min-h-0 w-full flex-1 flex-col gap-2 overflow-hidden rounded-xl p-4">
             <div className="flex shrink-0 items-center justify-between gap-1">
-                <h2 className="font-body-2-highlight text-primary flex shrink-0 items-center gap-2 whitespace-nowrap">
+                <h2 className="body-3-highlight text-primary flex shrink-0 items-center gap-2 whitespace-nowrap">
                     {'Mã đang theo dõi'}
                 </h2>
                 <div className="flex min-w-0 items-center gap-2">
                     <DropdownWatchlist
                         align="right"
                         buttonWidthClass="w-40"
-                        buttonClass="bg-tertiary"
+                        buttonClass="base-tertiary"
                         showOwnedOption={canShowOwned}
                         isOwnedActive={isOwned}
                         onSelectOwned={handleSelectOwned}

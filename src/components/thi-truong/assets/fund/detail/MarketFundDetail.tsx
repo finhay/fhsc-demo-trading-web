@@ -51,8 +51,8 @@ export const MarketFundDetail = () => {
                                 onClick={() => setTab(key)}
                                 className={`px-3 py-1 transition-colors ${
                                     isActive
-                                        ? 'font-body-3-highlight text-primary'
-                                        : 'font-body-3 text-secondary'
+                                        ? 'body-4-highlight text-primary'
+                                        : 'body-4 text-secondary'
                                 }`}
                             >
                                 {d[key]}

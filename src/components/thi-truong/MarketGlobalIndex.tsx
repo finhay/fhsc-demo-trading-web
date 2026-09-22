@@ -119,7 +119,7 @@ export const MarketGlobalIndex = () => {
                     <button
                         key={tab.key}
                         onClick={() => setSelectedTab(tab.key)}
-                        className={`font-body-2-highlight transition-colors ${
+                        className={`body-3-highlight transition-colors ${
                             selectedTab === tab.key ? 'text-primary' : 'text-secondary'
                         }`}
                     >
@@ -154,20 +154,20 @@ export const MarketGlobalIndex = () => {
                                 >
                                     <div className="flex min-h-0 flex-1 flex-col">
                                         <div className="shrink-0 p-3">
-                                            <h3 className="font-caption-highlight text-secondary">
+                                            <h3 className="body-5-highlight text-secondary">
                                                 {item.name}
                                             </h3>
                                         </div>
                                         <div className="border-t border-tertiary" />
                                         <div className="flex shrink-0 flex-col p-2">
-                                            <span className="font-body-2-highlight text-primary">
+                                            <span className="body-3-highlight text-primary">
                                                 {formatNumberVN(item.indexValue)}
                                             </span>
                                             <div
                                                 className={`flex items-center gap-0.5 ${changeColorClass}`}
                                             >
                                                 {changeArrow}
-                                                <span className="font-caption">
+                                                <span className="body-5">
                                                     {formatNumberVN(item.change)} (
                                                     {item.changePercent > 0 ? '+' : ''}
                                                     {formatNumberVN(item.changePercent)}%)
