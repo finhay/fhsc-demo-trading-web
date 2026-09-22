@@ -28,7 +28,6 @@ export const AssetRightsDetail = ({ right }: Props) => {
     const statusColor = RIGHT_STATUS_COLOR_BY_LABEL[right.status] ?? 'text-secondary';
     const isRightsOffering = right.event_type === 'RIGHTS_OFFERING';
     const isCashDividend = right.event_type === 'CASH_DIVIDEND';
-    const showExercisePrice = isRightsOffering || isCashDividend;
 
     return (
         <section className="flex h-full flex-1 flex-col gap-4 overflow-y-auto">
@@ -43,7 +42,7 @@ export const AssetRightsDetail = ({ right }: Props) => {
                     value={formatDateOrDash(right.record_date)}
                 />
                 <AssetRightsRow label={'Tỷ lệ'} value={right.ratio || '--'} />
-                {showExercisePrice && (
+                {isRightsOffering && (
                     <AssetRightsRow
                         label={'Giá mua'}
                         value={formatExercisePrice(right.exercise_price)}
