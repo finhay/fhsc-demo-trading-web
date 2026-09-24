@@ -61,6 +61,9 @@ Variant hover nền (Leaf class không có `hover:`) → arbitrary var:
 <button className="base-tertiary hover:bg-(--base-quaternary)" />
 ```
 
+**Opacity / tint:** Leaf `base-*` chỉ solid — không có `base-green/20`. Dùng Tailwind
+`bg-green/20`, `bg-red/10`, `bg-orange/70`… (bridge `--color-*` trong `globals.css`).
+
 ### App-only (`@theme` trong `globals.css`) — vẫn dùng `bg-*`
 
 | Class | Hex |
@@ -111,6 +114,13 @@ Leaf `border-*` (viền lấy thang base / system):
 <div className="border border-tertiary" />
 <input className="border border-quaternary focus:border-highlight" />
 ```
+
+## Radius
+
+Bo góc do **app** sở hữu qua utility Tailwind (`rounded-xl`…). Scale `--radius-*`
+được pin mặc định Tailwind trong `@theme` của [`globals.css`](../../src/styles/globals.css)
+(`--radius-xl: 0.75rem` = 12px) — tránh Leaf token `--radius-xl` (từng map
+`spacing-xl` = 24px) đè `rounded-xl`. Không phụ thuộc Leaf cho border-radius.
 
 ---
 

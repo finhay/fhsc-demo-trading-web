@@ -250,7 +250,7 @@ export const StockPriceStep = () => {
                                 {row.bidQty}
                             </button>
                             <div
-                                className="flex min-w-5 items-center justify-end gap-1 base-green/10 pr-1"
+                                className="flex min-w-5 items-center justify-end gap-1 bg-green/10 pr-1"
                                 style={{ width: `${row.bidDepthPct}%` }}
                             >
                                 {priceMarkers.sellPrices.has(rawRows[i].buyPrice) && (
@@ -268,7 +268,7 @@ export const StockPriceStep = () => {
                         </div>
                         <div className="flex flex-1 items-center justify-between gap-1">
                             <div
-                                className="flex min-w-5 items-center gap-1 base-red/10 pl-1"
+                                className="flex min-w-5 items-center gap-1 bg-red/10 pl-1"
                                 style={{ width: `${row.askDepthPct}%` }}
                             >
                                 <button

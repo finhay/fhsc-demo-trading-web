@@ -18,7 +18,7 @@ export const TradePanelSideTabs = ({ activeSide, onChange }: Props) => {
                     onClick={() => onChange(TRADE_LITERAL.BUY)}
                     className={`flex flex-1 items-center justify-center rounded-full px-1 py-1.5 body-5-highlight transition-colors ${
                         activeSide === TRADE_LITERAL.BUY
-                            ? 'base-green/20 text-green'
+                            ? 'bg-green/20 text-green'
                             : 'bg-transparent text-secondary'
                     }`}
                 >
@@ -31,7 +31,7 @@ export const TradePanelSideTabs = ({ activeSide, onChange }: Props) => {
                     onClick={() => onChange(TRADE_LITERAL.SELL)}
                     className={`flex flex-1 items-center justify-center rounded-full px-1 py-1.5 body-5-highlight transition-colors ${
                         activeSide === TRADE_LITERAL.SELL
-                            ? 'base-red/20 text-red'
+                            ? 'bg-red/20 text-red'
                             : 'bg-transparent text-secondary'
                     }`}
                 >

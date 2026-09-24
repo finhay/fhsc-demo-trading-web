@@ -7,6 +7,8 @@
  * App-only tokens (Leaf không có) + bridge text/system để Tailwind variant
  * (hover:text-*, before:border-highlight…) vẫn resolve.
  * Surface background dùng class Leaf `base-*` — không khai --color cho base.
+ * Radius: app owns `--radius-*` (Tailwind defaults) — pin sau import Leaf để
+ * không bị token Leaf `--radius-xl = spacing-xl` (24px) đè `rounded-xl`.
  */
 @theme {
     --color-overlay: #252525e5;
@@ -28,6 +30,15 @@
     --color-secondary: var(--text-secondary);
     --color-tertiary: var(--text-tertiary);
     --color-quaternary: var(--text-quaternary);
+
+    --radius-xs: 0.125rem;
+    --radius-sm: 0.25rem;
+    --radius-md: 0.375rem;
+    --radius-lg: 0.5rem;
+    --radius-xl: 0.75rem;
+    --radius-2xl: 1rem;
+    --radius-3xl: 1.5rem;
+    --radius-4xl: 2rem;
 
     --animate-marquee: marquee 25s linear infinite;
     --animate-fadeIn: fadeIn 0.3s ease-in;

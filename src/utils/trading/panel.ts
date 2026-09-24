@@ -16,8 +16,8 @@ export const getTradingFieldBg = (
 ): string => {
     if (disabled) return 'base-tertiary opacity-50';
     if (!hasValue) return 'base-tertiary';
-    if (side === 'buy') return 'base-green/20';
-    if (side === 'sell') return 'base-red/20';
+    if (side === 'buy') return 'bg-green/20';
+    if (side === 'sell') return 'bg-red/20';
     return 'base-tertiary';
 };
 

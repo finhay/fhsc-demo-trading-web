@@ -128,12 +128,12 @@ export const getSessionText = (sessionInExchange: string): string => {
 };
 
 export const getFlashBgFromColor = (textColorClass: string): string => {
-    if (textColorClass.includes('text-red')) return 'base-red/70';
-    if (textColorClass.includes('text-orange')) return 'base-orange/70';
-    if (textColorClass.includes('text-highlight')) return 'base-highlight/70';
-    if (textColorClass.includes('text-blue')) return 'base-blue/70';
-    if (textColorClass.includes('text-purple')) return 'base-purple/70';
-    return 'base-orange/70';
+    if (textColorClass.includes('text-red')) return 'bg-red/70';
+    if (textColorClass.includes('text-orange')) return 'bg-orange/70';
+    if (textColorClass.includes('text-highlight')) return 'bg-highlight/70';
+    if (textColorClass.includes('text-blue')) return 'bg-blue/70';
+    if (textColorClass.includes('text-purple')) return 'bg-purple/70';
+    return 'bg-orange/70';
 };
 
 type StockPriceMessageSource = {

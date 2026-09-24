@@ -302,10 +302,10 @@ const mergeIboardRowCellBg = (
         nextCellBgForSymbol.changePct = bgFromKey('change');
     }
     if (update.totalVol !== undefined && update.totalVol !== target.totalVol) {
-        nextCellBgForSymbol.totalVol = 'base-orange/70';
+        nextCellBgForSymbol.totalVol = 'bg-orange/70';
     }
     if (update.totalVal !== undefined && update.totalVal !== target.totalVal) {
-        nextCellBgForSymbol.totalVal = 'base-orange/70';
+        nextCellBgForSymbol.totalVal = 'bg-orange/70';
     }
 
     if (update.bid1 !== undefined && update.bid1 !== target.bid1) {
@@ -347,10 +347,10 @@ const mergeIboardRowCellBg = (
     }
 
     if (update.foreignBought !== undefined && update.foreignBought !== target.foreignBought) {
-        nextCellBgForSymbol.foreignBought = 'base-orange/70';
+        nextCellBgForSymbol.foreignBought = 'bg-orange/70';
     }
     if (update.foreignSold !== undefined && update.foreignSold !== target.foreignSold) {
-        nextCellBgForSymbol.foreignSold = 'base-orange/70';
+        nextCellBgForSymbol.foreignSold = 'bg-orange/70';
     }
 
     return nextCellBgForSymbol;
