@@ -118,9 +118,12 @@ Leaf `border-*` (viền lấy thang base / system):
 ## Radius
 
 Bo góc do **app** sở hữu qua utility Tailwind (`rounded-xl`…). Scale `--radius-*`
-được pin mặc định Tailwind trong `@theme` của [`globals.css`](../../src/styles/globals.css)
-(`--radius-xl: 0.75rem` = 12px) — tránh Leaf token `--radius-xl` (từng map
-`spacing-xl` = 24px) đè `rounded-xl`. Không phụ thuộc Leaf cho border-radius.
+được pin mặc định Tailwind trong `@theme` **và** lại trên `:root` trong
+[`globals.css`](../../src/styles/globals.css) (`--radius-xl: 0.75rem` = 12px).
+
+Chỉ pin `@theme` không đủ trên build prod: Leaf ≥0.1.2 khai báo
+`--radius-xl: var(--spacing-xl)` (=24px) trên `:root` và đứng sau `@theme` trong
+CSS emit → cascade thua. Block `:root` của app phải đứng sau import Leaf.
 
 ---
 

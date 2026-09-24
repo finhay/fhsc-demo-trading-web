@@ -7,8 +7,10 @@
  * App-only tokens (Leaf không có) + bridge text/system để Tailwind variant
  * (hover:text-*, before:border-highlight…) vẫn resolve.
  * Surface background dùng class Leaf `base-*` — không khai --color cho base.
- * Radius: app owns `--radius-*` (Tailwind defaults) — pin sau import Leaf để
- * không bị token Leaf `--radius-xl = spacing-xl` (24px) đè `rounded-xl`.
+ * Radius: app owns `--radius-*` (Tailwind defaults). Pin trong `@theme` (để
+ * utility generate) VÀ lại trên `:root` bên dưới — Leaf ≥0.1.2 ghi
+ * `--radius-xl: var(--spacing-xl)` (=24px) trên `:root` sau khi `@theme` được
+ * emit, nên chỉ pin `@theme` sẽ thua cascade trên build prod.
  */
 @theme {
     --color-overlay: #252525e5;
@@ -48,6 +50,18 @@
     --animate-shimmer: shimmer 2s infinite ease-in-out;
     --animate-prixClipFix: prixClipFix 2s linear infinite;
     --animate-bubbleIn: bubbleIn 1s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* Cascade thắng Leaf tokens.css `:root { --radius-xl: var(--spacing-xl) }` */
+:root {
+    --radius-xs: 0.125rem;
+    --radius-sm: 0.25rem;
+    --radius-md: 0.375rem;
+    --radius-lg: 0.5rem;
+    --radius-xl: 0.75rem;
+    --radius-2xl: 1rem;
+    --radius-3xl: 1.5rem;
+    --radius-4xl: 2rem;
 }
 
 @keyframes marquee {
