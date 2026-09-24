@@ -353,7 +353,7 @@
   dependencies:
     tslib "^2.4.1"
 
-"@finhay-pro/leaf-design-system@^0.1.1":
+"@finhay-pro/leaf-design-system@0.1.1":
   version "0.1.1"
   resolved "https://registry.yarnpkg.com/@finhay-pro/leaf-design-system/-/leaf-design-system-0.1.1.tgz#366b50ad3c63f22d7a7ce6b77dc9f760b3e26334"
   integrity sha512-5D+PbYXDUxA6kU35hfo8D971BVOZ2gfciXtVdmOyYOM7So6x2LG68PZYkYuaxAC6sCEApzrxHkSu9kCK9XMA2g==
