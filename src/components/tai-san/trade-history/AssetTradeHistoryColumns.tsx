@@ -62,11 +62,14 @@ export const getPaperOrderHistoryColumns = (): ColumnDef<PaperOrder, unknown>[] 
         meta: { align: 'right' } satisfies SortableColMeta,
     },
     {
-        id: 'price',
-        accessorKey: 'price',
-        header: ({ column }) => <SortableHeader label={'Giá đặt'} column={column} align="right" />,
+        id: 'average_price',
+        accessorKey: 'average_price',
+        header: ({ column }) => <SortableHeader label={'Giá khớp'} column={column} align="right" />,
         meta: { align: 'right' } satisfies SortableColMeta,
-        cell: ({ getValue }) => formatNumberVN((getValue<number>() ?? 0) / 1000),
+        cell: ({ getValue }) => {
+            const value = getValue<number | null>();
+            return value == null ? '-' : formatNumberVN(value / 1000);
+        },
     },
     {
         id: 'fill_quantity',

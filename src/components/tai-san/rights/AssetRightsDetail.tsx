@@ -31,45 +31,59 @@ export const AssetRightsDetail = ({ right }: Props) => {
 
     return (
         <section className="flex h-full flex-1 flex-col gap-4 overflow-y-auto">
-            <div className="flex flex-col gap-2">
-                <AssetRightsRow label={'Loại sự kiện'} value={eventTypeLabel} />
-                <div className="flex items-center justify-between gap-2">
-                    <span className="body-4 text-secondary">{'Trạng thái'}</span>
-                    <span className={`body-4 ${statusColor}`}>{right.status}</span>
-                </div>
-                <AssetRightsRow
-                    label={'Ngày đăng ký cuối cùng'}
-                    value={formatDateOrDash(right.record_date)}
-                />
-                <AssetRightsRow label={'Tỷ lệ'} value={right.ratio || '--'} />
-                {isRightsOffering && (
+            <AssetRightsRow label={'Loại sự kiện'} value={eventTypeLabel} />
+            <div className="flex items-center justify-between gap-2">
+                <span className="body-4 text-secondary">{'Trạng thái'}</span>
+                <span className={`body-4 ${statusColor}`}>{right.status}</span>
+            </div>
+            <AssetRightsRow
+                label={'Ngày đăng ký cuối cùng'}
+                value={formatDateOrDash(right.record_date)}
+            />
+            <AssetRightsRow
+                label={'Ngày giao dịch không hưởng quyền'}
+                value={formatDateOrDash(right.ex_date)}
+            />
+            {isRightsOffering ? (
+                <>
+                    <AssetRightsRow
+                        label={'Tỷ lệ sở hữu/quyền'}
+                        value={right.ownership_to_right_ratio || '--'}
+                    />
+                    {right.right_to_share_ratio && (
+                        <AssetRightsRow
+                            label={'Tỷ lệ quyền/được mua'}
+                            value={right.right_to_share_ratio}
+                        />
+                    )}
                     <AssetRightsRow
                         label={'Giá mua'}
                         value={formatExercisePrice(right.exercise_price)}
                     />
-                )}
-            </div>
-            <div className="flex flex-col gap-2 border-t border-tertiary pt-4">
+                </>
+            ) : (
+                <AssetRightsRow label={'Tỷ lệ'} value={right.ownership_to_right_ratio || '--'} />
+            )}
+            <div className="h-px w-full shrink-0 base-tertiary" />
+            <AssetRightsRow
+                label={'Số lượng sở hữu'}
+                value={formatNumberVN(right.owned_quantity, { decimals: 0 })}
+            />
+            {isCashDividend ? (
                 <AssetRightsRow
-                    label={'Số lượng cổ phiếu sở hữu'}
-                    value={`${formatNumberVN(right.owned_quantity, { decimals: 0 })} CP`}
+                    label={'Cổ tức bằng tiền (sau thuế)'}
+                    value={`${formatNumberVN(right.dividend_amount, { trimTrailingZeros: true })}đ`}
                 />
-                {isCashDividend ? (
-                    <AssetRightsRow
-                        label={'Cổ tức bằng tiền (sau thuế)'}
-                        value={`${formatNumberVN(right.dividend_amount, { trimTrailingZeros: true })}đ`}
-                    />
-                ) : (
-                    <AssetRightsRow
-                        label={isRightsOffering ? 'Số lượng được mua' : 'Số lượng được nhận'}
-                        value={`${formatNumberVN(right.entitled_quantity, { decimals: 0 })} CP`}
-                    />
-                )}
+            ) : (
                 <AssetRightsRow
-                    label={'Ngày nhận dự kiến'}
-                    value={formatDateOrDash(right.deliver_at)}
+                    label={isRightsOffering ? 'Số lượng được mua' : 'Số lượng được nhận'}
+                    value={formatNumberVN(right.entitled_quantity, { decimals: 0 })}
                 />
-            </div>
+            )}
+            <AssetRightsRow
+                label={'Ngày nhận dự kiến'}
+                value={formatDateOrDash(right.deliver_at)}
+            />
         </section>
     );
 };
