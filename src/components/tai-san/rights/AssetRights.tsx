@@ -86,7 +86,7 @@ export const AssetRights = () => {
         <>
             {selectedRight && (
                 <Dialog
-                    title={`Chi tiết mã ${selectedRight.symbol}`.trim()}
+                    title={`Chi tiết quyền ${selectedRight.symbol}`.trim()}
                     maxWidth="max-w-2xl"
                     onClose={handleCloseDetail}
                 >
@@ -139,8 +139,8 @@ export const AssetRights = () => {
                                                         {typeLabel}
                                                     </span>
                                                     <span className="shrink-0 body-5 text-secondary whitespace-nowrap">
-                                                        {'Ngày đăng ký cuối cùng'}:{' '}
-                                                        {formatDateOrDash(right.record_date)}
+                                                        {'Ngày GDKHQ'}:{' '}
+                                                        {formatDateOrDash(right.ex_date)}
                                                     </span>
                                                 </div>
                                             </button>
