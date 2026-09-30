@@ -114,14 +114,14 @@ export const makeBuyQtyValidator =
 export const makeTradePanelQtyValidator =
     (
         maxQtyValidator: (input: { value: string }) => string | undefined,
-        isLOOrder: boolean,
+        isRoundLotOnly: boolean,
         divisibleError: string,
     ) =>
     ({ value }: { value: string }) => {
         const qty = parseQuantity(value);
         const maxErr = maxQtyValidator({ value });
         if (maxErr) return maxErr;
-        if (!isLOOrder && qty > 0 && qty % 100 !== 0) {
+        if (isRoundLotOnly && qty > 0 && qty % 100 !== 0) {
             return divisibleError;
         }
         return undefined;

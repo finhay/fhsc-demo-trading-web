@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 
 import { TAB_INFORMATION, TRADE_LITERAL } from '@/constants/trading';
+import { fetchPaperMarketSessions } from '@/services/api/paper-trading/market';
 import { fetchPaperOrderBook } from '@/services/api/paper-trading/orders';
 import { registerResettableStore } from '@/stores/reset-registry';
 import type { TradeOrderBookRow } from '@/types/pages/trading';
@@ -19,6 +20,12 @@ type TradingState = {
     ordersRequestId: number;
     selectedTabInfor: string;
     isChartFullscreen: boolean;
+
+    orderTypes: string[];
+    isLoadingOrderTypes: boolean;
+    orderTypesRequestId: number;
+    /** `phase` của sàn — rỗng khi chưa lấy được phiên */
+    exchangeSession: string;
 };
 
 type TradingActions = {
@@ -28,12 +35,14 @@ type TradingActions = {
     setSellQuantity: (qty: number) => void;
     setActiveTradeSide: (side: string) => void;
     setSelectedTabInfor: (tab: string) => void;
+    resetOrderTypes: () => void;
 
     toggleChartFullscreen: () => void;
     addPlacedOrdersToBook: (rows: TradeOrderBookRow[]) => void;
     patchOrdersInBook: (patches: Partial<TradeOrderBookRow>[]) => void;
 
     fetchOrders: (accountId: string, options?: { silent?: boolean }) => Promise<void>;
+    fetchOrderTypes: (exchange: string) => Promise<void>;
 
     resetStore: () => void;
 };
@@ -49,6 +58,10 @@ const initialState: TradingState = {
     ordersRequestId: 0,
     selectedTabInfor: TAB_INFORMATION[0].key,
     isChartFullscreen: false,
+    orderTypes: [],
+    isLoadingOrderTypes: false,
+    orderTypesRequestId: 0,
+    exchangeSession: '',
 };
 
 export const useTradingStore = create<TradingState & TradingActions>((set, get) => ({
@@ -60,6 +73,7 @@ export const useTradingStore = create<TradingState & TradingActions>((set, get) 
     setSellQuantity: (qty: number) => set({ sellQuantity: qty }),
     setActiveTradeSide: (side: string) => set({ activeTradeSide: side }),
     setSelectedTabInfor: (tab: string) => set({ selectedTabInfor: tab }),
+    resetOrderTypes: () => set({ orderTypes: [], exchangeSession: '' }),
 
     toggleChartFullscreen: () => set((state) => ({ isChartFullscreen: !state.isChartFullscreen })),
 
@@ -96,6 +110,28 @@ export const useTradingStore = create<TradingState & TradingActions>((set, get) 
         } finally {
             if (get().ordersRequestId !== requestId) return;
             set({ isLoadingOrders: false });
+        }
+    },
+
+    /** API trả phiên của mọi sàn — chỉ giữ loại lệnh của sàn đang xem. */
+    fetchOrderTypes: async (exchange: string) => {
+        const requestId = get().orderTypesRequestId + 1;
+        set({ isLoadingOrderTypes: true, orderTypesRequestId: requestId });
+        try {
+            const { data, error_code } = await fetchPaperMarketSessions();
+            if (get().orderTypesRequestId !== requestId) return;
+
+            if (isSuccessApi(error_code)) {
+                const session = (data ?? []).find((item) => item.exchange === exchange);
+                set({
+                    orderTypes: session?.available_order_types || [],
+                    exchangeSession: session?.phase || '',
+                });
+            }
+        } catch {
+        } finally {
+            if (get().orderTypesRequestId !== requestId) return;
+            set({ isLoadingOrderTypes: false });
         }
     },
 

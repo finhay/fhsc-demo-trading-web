@@ -6,10 +6,12 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { SubAccounts } from '@/components/common/assets/SubAccounts';
 import { TradePanelInfoBar } from '@/components/giao-dich/panel/controls/TradePanelInfoBar';
+import { TradePanelOrderTypes } from '@/components/giao-dich/panel/controls/TradePanelOrderTypes';
 import { TradePanelSideTabs } from '@/components/giao-dich/panel/controls/TradePanelSideTabs';
 import { TradePanelForm, TradePanelSubmit } from '@/components/giao-dich/panel/form/TradePanelForm';
 import { TradePanelOverlays } from '@/components/giao-dich/panel/overlays/TradePanelOverlays';
 import { SUB_ACCOUNT_PERMISSION } from '@/constants/common';
+import { PAPER_ROUND_LOT_ONLY_ORDER_TYPES } from '@/constants/paper-trading';
 import { ORDER_SIDE, ORDER_TYPE_KEY, TRADE_LITERAL, TRADE_UI_CONFIG } from '@/constants/trading';
 import {
     fetchPaperAccountBuyingPower,
@@ -53,7 +55,7 @@ export const TradePanel = ({ initialSide, initialPrice }: TradePanelProps = {}) 
     );
 
     const [activeSide, setActiveSide] = useState<string>(initialSide ?? TRADE_LITERAL.BUY);
-    const [selectedOrderType] = useState<string>(ORDER_TYPE_KEY.LO);
+    const [selectedOrderType, setSelectedOrderType] = useState<string>(ORDER_TYPE_KEY.LO);
     const [maxQtty, setMaxQtty] = useState(0);
     const [maxSell, setMaxSell] = useState(0);
     const [buyPercentage, setBuyPercentage] = useState(0);
@@ -66,7 +68,6 @@ export const TradePanel = ({ initialSide, initialPrice }: TradePanelProps = {}) 
     const { activeSubAccount } = useAuthStore();
     const { selectedStock } = useStockInfoStore();
     const { accountId, fetchAsset } = usePaperAccountStore();
-
     const {
         buyPrice: storeBuyPrice,
         buyQuantity: storeBuyQuantity,
@@ -77,6 +78,10 @@ export const TradePanel = ({ initialSide, initialPrice }: TradePanelProps = {}) 
         setSellPrice: setStoreSellPrice,
         setSellQuantity: setStoreSellQuantity,
         setActiveTradeSide,
+        orderTypes,
+        fetchOrderTypes,
+        exchangeSession,
+        resetOrderTypes,
     } = useTradingStore();
 
     const form = useForm({
@@ -89,6 +94,18 @@ export const TradePanel = ({ initialSide, initialPrice }: TradePanelProps = {}) 
     });
 
     const isLO = selectedOrderType === ORDER_TYPE_KEY.LO;
+    const isRoundLotOnly = PAPER_ROUND_LOT_ONLY_ORDER_TYPES.has(selectedOrderType);
+    /** Chưa lấy được phiên thì vẫn cho đặt LO như trước. */
+    const isSessionUnknown = !exchangeSession;
+    const isSessionClosed = !isSessionUnknown && orderTypes.length === 0;
+
+    const displayOrderTypes = useMemo<string[]>(() => {
+        if (orderTypes.length > 0) return orderTypes;
+        return isSessionUnknown ? [ORDER_TYPE_KEY.LO] : [];
+    }, [orderTypes, isSessionUnknown]);
+
+    const isOrderTypeAllowedInSession =
+        orderTypes.length === 0 ? !isSessionClosed : orderTypes.includes(selectedOrderType);
 
     const canTrade = !!activeSubAccount?.permissions?.some(
         (permission) =>
@@ -101,12 +118,13 @@ export const TradePanel = ({ initialSide, initialPrice }: TradePanelProps = {}) 
             makePriceValidator(
                 selectedStock?.floor ?? 0,
                 selectedStock?.ceiling ?? 0,
-                true,
+                isLO,
                 selectedStock?.exchange ?? '',
                 selectedStock?.stockType ?? '',
                 selectedStock?.symbol ?? '',
             ),
         [
+            isLO,
             selectedStock?.floor,
             selectedStock?.ceiling,
             selectedStock?.exchange,
@@ -117,13 +135,13 @@ export const TradePanel = ({ initialSide, initialPrice }: TradePanelProps = {}) 
 
     const validateBuyQty = makeTradePanelQtyValidator(
         makeBuyQtyValidator(maxQtty),
-        isLO,
+        isRoundLotOnly,
         'KL phải chia hết cho 100',
     );
 
     const validateSellQty = makeTradePanelQtyValidator(
         makeSellQtyValidator(maxSell),
-        isLO,
+        isRoundLotOnly,
         'KL phải chia hết cho 100',
     );
 
@@ -203,9 +221,11 @@ export const TradePanel = ({ initialSide, initialPrice }: TradePanelProps = {}) 
     );
 
     const requestAvailableTrade = useCallback(
-        (side: string, price: number, options?: { immediate?: boolean }) => {
+        (side: string, inputPrice: number, options?: { immediate?: boolean }) => {
             const symbol = selectedStock?.symbol;
             if (!accountId || !symbol) return;
+            // Lệnh mua MTL/ATO/ATC bị tạm giữ tiền theo giá trần.
+            const price = isLO ? inputPrice : (selectedStock?.ceiling ?? 0);
             // API sức mua tính theo giá — chưa có giá thì đừng hỏi với giá 0.
             if (side === TRADE_LITERAL.BUY && price <= 0) return;
 
@@ -226,7 +246,7 @@ export const TradePanel = ({ initialSide, initialPrice }: TradePanelProps = {}) 
             }
             priceDebounceRef.current = setTimeout(fire, 500);
         },
-        [accountId, selectedStock?.symbol, fetchTradeCapacity],
+        [accountId, selectedStock?.symbol, selectedStock?.ceiling, isLO, fetchTradeCapacity],
     );
 
     const bumpFormPrice = useCallback(
@@ -303,13 +323,13 @@ export const TradePanel = ({ initialSide, initialPrice }: TradePanelProps = {}) 
 
             setPendingOrder({
                 side,
-                price: rawPrice,
+                price: isLO ? rawPrice : 0,
                 orderType: selectedOrderType,
                 orderLots: buildOrderLotSplits(qty),
                 stockType: selectedStock?.stockType ?? '',
             });
         },
-        [form, selectedOrderType, selectedStock],
+        [form, isLO, selectedOrderType, selectedStock],
     );
 
     const handlePlaceOrderSuccess = useCallback(() => {
@@ -415,6 +435,37 @@ export const TradePanel = ({ initialSide, initialPrice }: TradePanelProps = {}) 
             setStoreSellQuantity(0);
         };
     }, []);
+
+    /** Phiên đổi theo giờ nên loại lệnh được phép cũng đổi — hỏi lại định kỳ. */
+    useEffect(() => {
+        resetOrderTypes();
+        setSelectedOrderType(ORDER_TYPE_KEY.LO);
+
+        const exchange = selectedStock?.exchange;
+        if (!exchange) return;
+        fetchOrderTypes(exchange);
+        const timer = setInterval(
+            () => fetchOrderTypes(exchange),
+            TRADE_UI_CONFIG.MARKET_SESSION_REFRESH_MS,
+        );
+        return () => clearInterval(timer);
+    }, [selectedStock?.symbol, selectedStock?.exchange, fetchOrderTypes, resetOrderTypes]);
+
+    /** Loại lệnh đang chọn không còn được phép trong phiên mới → chọn loại đầu tiên. */
+    useEffect(() => {
+        if (orderTypes.length > 0 && !orderTypes.includes(selectedOrderType)) {
+            setSelectedOrderType(orderTypes[0]);
+        }
+    }, [orderTypes]);
+
+    useEffect(() => {
+        if (parseQuantity(form.getFieldValue('buyQuantity')) > 0) {
+            form.validateField('buyQuantity', 'change');
+        }
+        if (parseQuantity(form.getFieldValue('sellQuantity')) > 0) {
+            form.validateField('sellQuantity', 'change');
+        }
+    }, [isRoundLotOnly, form]);
 
     useEffect(() => {
         setActiveTradeSide(activeSide);
@@ -528,11 +579,11 @@ export const TradePanel = ({ initialSide, initialPrice }: TradePanelProps = {}) 
     }, [maxSell, form]);
 
     useEffect(() => {
-        if (storeBuyPrice > 0) {
+        if (storeBuyPrice > 0 && isLO) {
             form.setFieldValue('buyPrice', formatBoardPrice(storeBuyPrice));
             requestAvailableTrade(TRADE_LITERAL.BUY, storeBuyPrice, { immediate: false });
         }
-    }, [storeBuyPrice, form, requestAvailableTrade]);
+    }, [storeBuyPrice, isLO, form, requestAvailableTrade]);
 
     useEffect(() => {
         if (storeBuyQuantity > 0) {
@@ -547,11 +598,11 @@ export const TradePanel = ({ initialSide, initialPrice }: TradePanelProps = {}) 
     }, [storeBuyQuantity, maxQtty]);
 
     useEffect(() => {
-        if (storeSellPrice > 0) {
+        if (storeSellPrice > 0 && isLO) {
             form.setFieldValue('sellPrice', formatBoardPrice(storeSellPrice));
             requestAvailableTrade(TRADE_LITERAL.SELL, storeSellPrice, { immediate: false });
         }
-    }, [storeSellPrice, form, requestAvailableTrade]);
+    }, [storeSellPrice, isLO, form, requestAvailableTrade]);
 
     useEffect(() => {
         if (storeSellQuantity > 0) {
@@ -587,10 +638,17 @@ export const TradePanel = ({ initialSide, initialPrice }: TradePanelProps = {}) 
                 ) : (
                     <>
                         <div className="flex min-h-0 w-full flex-1 flex-col items-center gap-2 overflow-y-auto">
+                            <TradePanelOrderTypes
+                                orderTypes={displayOrderTypes}
+                                selectedOrderType={selectedOrderType}
+                                onSelectOrderType={setSelectedOrderType}
+                            />
                             <TradePanelInfoBar infoItems={infoItems} />
                             <TradePanelForm
                                 form={form}
                                 activeConfig={activeConfig}
+                                isLO={isLO}
+                                selectedOrderType={selectedOrderType}
                                 requestAvailableTrade={requestAvailableTrade}
                                 bumpFormPrice={bumpFormPrice}
                                 bumpQty={bumpQty}
@@ -602,6 +660,7 @@ export const TradePanel = ({ initialSide, initialPrice }: TradePanelProps = {}) 
                             form={form}
                             activeConfig={activeConfig}
                             isLO={isLO}
+                            isOrderTypeAllowedInSession={isOrderTypeAllowedInSession}
                             symbol={selectedStock?.symbol ?? ''}
                             canTrade={canTrade}
                             onOpenConfirm={handleOpenConfirm}

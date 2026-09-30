@@ -101,6 +101,9 @@ export const LOT_TABS = [{ key: LOT_TYPE.EVEN }, { key: LOT_TYPE.ODD }] as const
 
 export const ORDER_TYPE_KEY = {
     LO: 'LO',
+    MTL: 'MTL',
+    ATO: 'ATO',
+    ATC: 'ATC',
 } as const;
 
 export const ORDER_SIDE = {
@@ -118,6 +121,7 @@ export const TRADE_UI_CONFIG = {
     DEFAULT_QUANTITY: 100,
     MAX_ORDER_QTY_PER_REQUEST: 500000,
     FLASH_HIGHLIGHT_MS: 500,
+    MARKET_SESSION_REFRESH_MS: 30000,
 } as const;
 
 export const TRADE_PAGE_META = {

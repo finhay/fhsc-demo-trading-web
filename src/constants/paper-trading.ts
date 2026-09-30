@@ -9,6 +9,20 @@ export const PAPER_ORDER_SIDE = {
 
 export const PAPER_ORDER_TYPE = {
     LO: 'LO',
+    MTL: 'MTL',
+    ATO: 'ATO',
+    ATC: 'ATC',
+} as const;
+
+/** Loại lệnh chỉ nhận lô chẵn (bội số của 100). */
+export const PAPER_ROUND_LOT_ONLY_ORDER_TYPES: ReadonlySet<string> = new Set([
+    PAPER_ORDER_TYPE.ATO,
+    PAPER_ORDER_TYPE.ATC,
+]);
+
+export const PAPER_ORDER_STATUS_CODE = {
+    CANCELED: '3',
+    REJECTED: '6',
 } as const;
 
 export const PAPER_ORDER_CHANNEL = 'ONLINE';

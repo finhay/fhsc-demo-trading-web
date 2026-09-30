@@ -1,10 +1,15 @@
-import { ORDER_STATUS, ORDER_TYPE } from '@/constants/trading';
+import { ORDER_STATUS, ORDER_TYPE, ORDER_TYPE_KEY } from '@/constants/trading';
 import type { OrderStatusTone, TradeOrderBookRow } from '@/types/pages/trading';
 
 export const getOrderStatusColor = (tone: OrderStatusTone): string => {
     if (tone === 'success') return 'text-green';
     if (tone === 'error') return 'text-red';
     return 'text-secondary';
+};
+
+export const isLimitOrderType = (priceType?: string | null): boolean => {
+    const pt = (priceType ?? '').trim().toUpperCase();
+    return !pt || pt === ORDER_TYPE_KEY.LO;
 };
 
 export const formatPlacedPriceCell = (
