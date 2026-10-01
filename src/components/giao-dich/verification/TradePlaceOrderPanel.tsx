@@ -140,8 +140,8 @@ export const TradePlaceOrderPanel = ({ symbol, pendingOrder, onClose, onSuccess 
                                     <dt className="body-4 shrink-0 text-secondary">{'Giá'}</dt>
                                     <dd className="body-4 text-primary">{priceDisplay}</dd>
                                 </div>
-                                <div className="flex w-full items-start justify-between gap-2">
-                                    <dl className="flex w-full items-start justify-between gap-2">
+                                {!isMarket && (
+                                    <div className="flex w-full items-start justify-between gap-2">
                                         <dt className="body-4 shrink-0 text-secondary">
                                             {isBuy ? 'Tổng tiền mua' : 'Tổng tiền bán'}
                                         </dt>
@@ -152,8 +152,8 @@ export const TradePlaceOrderPanel = ({ symbol, pendingOrder, onClose, onSuccess 
                                                       trimTrailingZeros: true,
                                                   })}đ`}
                                         </dd>
-                                    </dl>
-                                </div>
+                                    </div>
+                                )}
                             </dl>
                         </Fragment>
                     ))}
