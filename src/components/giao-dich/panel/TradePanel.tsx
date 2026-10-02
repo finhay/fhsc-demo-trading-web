@@ -26,6 +26,7 @@ import { isSuccessApi } from '@/utils/common';
 import { formatBoardPrice, formatNumberVN } from '@/utils/format';
 import {
     buildOrderLotSplits,
+    calcPercentageFromQty,
     calcQtyFromPercentage,
     getBestPriceForSide,
     getStepSize,
@@ -283,7 +284,7 @@ export const TradePanel = ({ initialSide, initialPrice }: TradePanelProps = {}) 
             const clamped = Math.max(0, qty);
             form.setFieldValue(field, clamped > 0 ? formatNumberVN(clamped, { decimals: 0 }) : '');
             setStore(clamped);
-            setPct(max > 0 ? Math.min(100, Math.round((clamped / max) * 100)) : 0);
+            setPct(calcPercentageFromQty(clamped, max));
             form.validateField(field, 'change');
         },
         [form, maxQtty, maxSell, setStoreBuyQuantity, setStoreSellQuantity],
@@ -550,7 +551,7 @@ export const TradePanel = ({ initialSide, initialPrice }: TradePanelProps = {}) 
             lastDefaultQtyRef.current.buy = defaultQty;
             form.setFieldValue('buyQuantity', formatNumberVN(defaultQty, { decimals: 0 }));
         }
-        setBuyPercentage(Math.min(100, Math.round((buyQty / maxQtty) * 100)));
+        setBuyPercentage(calcPercentageFromQty(buyQty, maxQtty));
         form.validateField('buyQuantity', 'change');
     }, [maxQtty, form]);
 
@@ -574,7 +575,7 @@ export const TradePanel = ({ initialSide, initialPrice }: TradePanelProps = {}) 
             lastDefaultQtyRef.current.sell = defaultQty;
             form.setFieldValue('sellQuantity', formatNumberVN(defaultQty, { decimals: 0 }));
         }
-        setSellPercentage(Math.min(100, Math.round((sellQty / maxSell) * 100)));
+        setSellPercentage(calcPercentageFromQty(sellQty, maxSell));
         form.validateField('sellQuantity', 'change');
     }, [maxSell, form]);
 
@@ -593,7 +594,7 @@ export const TradePanel = ({ initialSide, initialPrice }: TradePanelProps = {}) 
 
     useEffect(() => {
         if (storeBuyQuantity > 0 && maxQtty > 0) {
-            setBuyPercentage(Math.min(100, Math.round((storeBuyQuantity / maxQtty) * 100)));
+            setBuyPercentage(calcPercentageFromQty(storeBuyQuantity, maxQtty));
         }
     }, [storeBuyQuantity, maxQtty]);
 
@@ -612,7 +613,7 @@ export const TradePanel = ({ initialSide, initialPrice }: TradePanelProps = {}) 
 
     useEffect(() => {
         if (storeSellQuantity > 0 && maxSell > 0) {
-            setSellPercentage(Math.min(100, Math.round((storeSellQuantity / maxSell) * 100)));
+            setSellPercentage(calcPercentageFromQty(storeSellQuantity, maxSell));
         }
     }, [storeSellQuantity, maxSell]);
 

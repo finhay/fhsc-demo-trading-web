@@ -7,7 +7,7 @@ import { TradeTotalField } from '@/components/giao-dich/panel/form/TradeTotalFie
 import { TRADE_LITERAL } from '@/constants/trading';
 import { type TradePanelActiveConfig, type TradePanelFormInstance } from '@/types/pages/trading';
 import { formatBoardPrice, formatNumberVN, formatNumberVNInput } from '@/utils/format';
-import { parsePrice, parseQuantity } from '@/utils/trading/panel';
+import { calcPercentageFromQty, parsePrice, parseQuantity } from '@/utils/trading/panel';
 
 type Props = {
     form: TradePanelFormInstance;
@@ -106,13 +106,7 @@ export const TradePanelForm = ({
                                 field.handleChange(formatted);
                                 const qty = parseQuantity(formatted);
                                 activeConfig.setStoreQty(qty);
-                                const percent =
-                                    activeConfig.maxQty > 0
-                                        ? Math.min(
-                                              100,
-                                              Math.round((qty / activeConfig.maxQty) * 100),
-                                          )
-                                        : 0;
+                                const percent = calcPercentageFromQty(qty, activeConfig.maxQty);
                                 if (activeConfig.key === TRADE_LITERAL.BUY) {
                                     setBuyPercentage(percent);
                                 } else {
@@ -223,7 +217,7 @@ export const TradePanelSubmit = ({
                             }}
                             className={`flex w-full items-center justify-center rounded-full px-4 py-2 body-4-highlight transition-opacity ${
                                 isDisabled
-                                    ? 'cursor-not-allowed bg-disabled text-disabled'
+                                    ? 'cursor-not-allowed bg-disabled text-tertiary'
                                     : activeConfig.ctaEnabledClass
                             }`}
                         >

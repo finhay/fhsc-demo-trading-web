@@ -166,7 +166,7 @@ export const TradePlaceOrderPanel = ({ symbol, pendingOrder, onClose, onSuccess 
                     disabled={isLoading}
                     className={`body-4-highlight flex w-full items-center justify-center rounded-full px-4 py-2 transition-opacity ${
                         isLoading
-                            ? 'bg-disabled text-disabled cursor-not-allowed'
+                            ? 'bg-disabled text-tertiary cursor-not-allowed'
                             : isBuy
                               ? 'base-highlight text-quaternary'
                               : 'base-red text-primary'

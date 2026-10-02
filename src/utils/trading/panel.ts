@@ -177,6 +177,12 @@ export const calcQtyFromPercentage = (pct: number, max: number): number => {
     return pct >= 100 ? max : Math.round((pct / 100) * max);
 };
 
+/** KL > 0 thì tối thiểu 1% để slider không nằm ở vạch 0% như chưa nhập. */
+export const calcPercentageFromQty = (qty: number, max: number): number => {
+    if (qty <= 0 || max <= 0) return 0;
+    return Math.min(100, Math.max(1, Math.round((qty / max) * 100)));
+};
+
 export const stepIncreaseVolume = (volume: number) => {
     if (volume % 100 === 0) {
         return 100;

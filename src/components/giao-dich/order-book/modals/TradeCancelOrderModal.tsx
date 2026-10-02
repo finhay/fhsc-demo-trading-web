@@ -127,7 +127,7 @@ export const TradeCancelOrderModal = ({
                         disabled={isLoading}
                         className={`flex-1 py-2 rounded-xl body-4-highlight transition-colors ${
                             isLoading
-                                ? 'bg-disabled text-disabled cursor-not-allowed'
+                                ? 'bg-disabled text-tertiary cursor-not-allowed'
                                 : 'base-red text-primary hover:opacity-90'
                         }`}
                     >

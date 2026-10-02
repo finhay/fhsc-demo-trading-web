@@ -204,7 +204,7 @@ export const RegisterPassword = () => {
                     className={`w-2/3 body-4-highlight rounded-full px-4 py-2 transition-all ${
                         canSubmit
                             ? 'base-highlight text-quaternary hover:opacity-90'
-                            : 'bg-disabled text-disabled cursor-not-allowed'
+                            : 'bg-disabled text-tertiary cursor-not-allowed'
                     }`}
                 >
                     {'Xong'}

@@ -16,6 +16,7 @@ export const PAPER_ORDER_TYPE = {
 
 /** Loại lệnh chỉ nhận lô chẵn (bội số của 100). */
 export const PAPER_ROUND_LOT_ONLY_ORDER_TYPES: ReadonlySet<string> = new Set([
+    PAPER_ORDER_TYPE.MTL,
     PAPER_ORDER_TYPE.ATO,
     PAPER_ORDER_TYPE.ATC,
 ]);

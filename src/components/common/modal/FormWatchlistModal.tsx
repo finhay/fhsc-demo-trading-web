@@ -108,7 +108,7 @@ export const FormWatchlistModal: FC<Props> = ({ open, onClose, mode, watchlist }
                     disabled={!isSubmittable}
                     className={`w-full rounded-xl px-4 py-2 body-4-highlight transition-all ${
                         !isSubmittable
-                            ? 'cursor-not-allowed bg-disabled text-disabled'
+                            ? 'cursor-not-allowed bg-disabled text-tertiary'
                             : 'base-highlight text-quaternary hover:bg-(--text-highlight)/80'
                     }`}
                 >

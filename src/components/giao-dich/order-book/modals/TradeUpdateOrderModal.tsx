@@ -451,7 +451,7 @@ export const TradeUpdateOrderModal = ({
                         disabled={!canSubmit || isLoading}
                         className={`w-full py-2 rounded-xl body-4-highlight transition-colors ${
                             !canSubmit || isLoading
-                                ? 'bg-disabled text-disabled cursor-not-allowed'
+                                ? 'bg-disabled text-tertiary cursor-not-allowed'
                                 : 'base-highlight text-quaternary hover:opacity-90'
                         }`}
                     >
