@@ -114,14 +114,14 @@ export const makeBuyQtyValidator =
 export const makeTradePanelQtyValidator =
     (
         maxQtyValidator: (input: { value: string }) => string | undefined,
-        isLOOrder: boolean,
+        isRoundLotOnly: boolean,
         divisibleError: string,
     ) =>
     ({ value }: { value: string }) => {
         const qty = parseQuantity(value);
         const maxErr = maxQtyValidator({ value });
         if (maxErr) return maxErr;
-        if (!isLOOrder && qty > 0 && qty % 100 !== 0) {
+        if (isRoundLotOnly && qty > 0 && qty % 100 !== 0) {
             return divisibleError;
         }
         return undefined;
@@ -175,6 +175,12 @@ export const buildPlacementOrders = (orderLots: OrderLotSplit[]): PlacementOrder
 
 export const calcQtyFromPercentage = (pct: number, max: number): number => {
     return pct >= 100 ? max : Math.round((pct / 100) * max);
+};
+
+/** KL > 0 thì tối thiểu 1% để slider không nằm ở vạch 0% như chưa nhập. */
+export const calcPercentageFromQty = (qty: number, max: number): number => {
+    if (qty <= 0 || max <= 0) return 0;
+    return Math.min(100, Math.max(1, Math.round((qty / max) * 100)));
 };
 
 export const stepIncreaseVolume = (volume: number) => {

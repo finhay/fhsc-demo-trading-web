@@ -2,17 +2,18 @@ import type { PaperTradingResponse } from '@/types/paper-trading/common';
 
 export type PaperOrderSide = 'NB' | 'NS';
 
-export type PaperOrderType = 'LO';
+export type PaperOrderType = 'LO' | 'MTL' | 'ATO' | 'ATC';
 
 export type PlacePaperOrderPayload = {
     /** Để rỗng → server tự sinh UUID */
     cl_ord_id: string;
     side: PaperOrderSide;
     symbol: string;
-    /** Lô chẵn — bội số của 100 */
+    /** ATO/ATC chỉ nhận lô chẵn — bội số của 100 */
     quantity: number;
     type: PaperOrderType;
-    limit_price: number;
+    /** Chỉ bắt buộc với LO */
+    limit_price?: number;
     channel: string;
 };
 
@@ -82,7 +83,8 @@ export type PaperOrder = {
     text: string | null;
 };
 
-export type PaperOrderResponse = PaperTradingResponse<PaperOrder>;
+/** Đặt lệnh trả mảng: 1 lệnh, hoặc 2 lệnh nếu bị tách lô chẵn/lô lẻ. */
+export type PaperOrderResponse = PaperTradingResponse<PaperOrder[]>;
 
 export type PaperOrderHistoryParams = {
     /** YYYY-MM-DD — bắt buộc */

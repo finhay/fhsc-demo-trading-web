@@ -2,7 +2,11 @@
 
 import { Fragment, useMemo } from 'react';
 
-import { PAPER_ORDER_CHANNEL, PAPER_ORDER_SIDE, PAPER_ORDER_TYPE } from '@/constants/paper-trading';
+import {
+    PAPER_ORDER_CHANNEL,
+    PAPER_ORDER_SIDE,
+    PAPER_ORDER_STATUS_CODE,
+} from '@/constants/paper-trading';
 import { ORDER_TYPE_KEY, TRADE_UI_CONFIG } from '@/constants/trading';
 import { toast } from '@/hooks/lib/useToast';
 import { placePaperOrder } from '@/services/api/paper-trading/orders';
@@ -10,9 +14,18 @@ import { useLoadingStore } from '@/stores/common/useLoadingStore';
 import { usePaperAccountStore } from '@/stores/paper-trading/usePaperAccountStore';
 import { useTradingStore } from '@/stores/trading/useTradingStore';
 import type { PendingOrder, PlacementOrder } from '@/types/pages/trading';
+import type { PaperOrder, PaperOrderType } from '@/types/paper-trading/orders';
 import { getApiErrorMessage, isSuccessApi } from '@/utils/common';
 import { formatNumberVN } from '@/utils/format';
 import { buildPlacementOrders } from '@/utils/trading/panel';
+
+/**
+ * Lệnh vẫn được tạo nhưng Bị từ chối, hoặc bị huỷ ngay mà chưa khớp gì (MTL không có đối ứng).
+ * MTL khớp một phần rồi huỷ phần còn lại vẫn tính là thành công.
+ */
+const isFailedPlacement = (order: PaperOrder) =>
+    order.status_code === PAPER_ORDER_STATUS_CODE.REJECTED ||
+    (order.status_code === PAPER_ORDER_STATUS_CODE.CANCELED && !order.fill_quantity);
 
 type Props = {
     symbol: string;
@@ -50,34 +63,46 @@ export const TradePlaceOrderPanel = ({ symbol, pendingOrder, onClose, onSuccess 
         startLoading();
 
         let placedCount = 0;
+        let hasCreatedOrder = false;
 
         try {
             for (const order of placementOrders) {
-                const { error_code, message } = await placePaperOrder(accountId, {
+                const { error_code, message, data } = await placePaperOrder(accountId, {
                     cl_ord_id: '',
                     side: isBuy ? PAPER_ORDER_SIDE.BUY : PAPER_ORDER_SIDE.SELL,
                     symbol,
                     quantity: order.qty,
-                    type: PAPER_ORDER_TYPE.LO,
-                    limit_price: price,
+                    type: orderType as PaperOrderType,
+                    ...(isMarket ? {} : { limit_price: price }),
                     channel: PAPER_ORDER_CHANNEL,
                 });
 
-                if (isSuccessApi(error_code)) {
-                    placedCount += 1;
-                } else {
+                if (!isSuccessApi(error_code)) {
                     toast.error(message || 'Có lỗi xảy ra, vui lòng thử lại');
                     break;
                 }
+
+                hasCreatedOrder = true;
+                const failedOrder = (data ?? []).find(isFailedPlacement);
+                if (failedOrder) {
+                    toast.error('Đặt lệnh không thành công', {
+                        description: failedOrder.text || failedOrder.status || undefined,
+                    });
+                    break;
+                }
+                placedCount += 1;
+            }
+
+            if (hasCreatedOrder) {
+                // Refresh sổ lệnh từ API list (shape PaperOrderBookItem).
+                fetchOrders(accountId, { silent: true });
+                fetchAsset();
             }
 
             if (placedCount === placementOrders.length) {
                 toast.success('Đặt lệnh thành công', {
                     description: placeSuccessDetail,
                 });
-                // Refresh sổ lệnh từ API list (shape PaperOrderBookItem).
-                fetchOrders(accountId, { silent: true });
-                fetchAsset();
                 onSuccess();
             }
         } catch (err: unknown) {
@@ -106,9 +131,7 @@ export const TradePlaceOrderPanel = ({ symbol, pendingOrder, onClose, onSuccess 
                             <dl className="flex flex-col gap-1">
                                 <p className="body-4 text-primary">{getBlockTitle(order)}</p>
                                 <div className="flex w-full items-start justify-between gap-2">
-                                    <dt className="body-4 shrink-0 text-secondary">
-                                        {'Số lượng'}
-                                    </dt>
+                                    <dt className="body-4 shrink-0 text-secondary">{'Số lượng'}</dt>
                                     <dd className="body-4 text-primary">
                                         {formatNumberVN(order.qty, { decimals: 0 })} {'cp'}
                                     </dd>
@@ -117,19 +140,20 @@ export const TradePlaceOrderPanel = ({ symbol, pendingOrder, onClose, onSuccess 
                                     <dt className="body-4 shrink-0 text-secondary">{'Giá'}</dt>
                                     <dd className="body-4 text-primary">{priceDisplay}</dd>
                                 </div>
-                                <div className="flex w-full items-start justify-between gap-2">
-                                    <dl className="flex w-full items-start justify-between gap-2">
+                                {!isMarket && (
+                                    <div className="flex w-full items-start justify-between gap-2">
                                         <dt className="body-4 shrink-0 text-secondary">
                                             {isBuy ? 'Tổng tiền mua' : 'Tổng tiền bán'}
                                         </dt>
                                         <dd className="body-4 text-primary">
-                                            {formatNumberVN(order.qty * price, {
-                                                trimTrailingZeros: true,
-                                            })}
-                                            {'đ'}
+                                            {isMarket
+                                                ? '--'
+                                                : `${formatNumberVN(order.qty * price, {
+                                                      trimTrailingZeros: true,
+                                                  })}đ`}
                                         </dd>
-                                    </dl>
-                                </div>
+                                    </div>
+                                )}
                             </dl>
                         </Fragment>
                     ))}
@@ -142,7 +166,7 @@ export const TradePlaceOrderPanel = ({ symbol, pendingOrder, onClose, onSuccess 
                     disabled={isLoading}
                     className={`body-4-highlight flex w-full items-center justify-center rounded-full px-4 py-2 transition-opacity ${
                         isLoading
-                            ? 'bg-disabled text-disabled cursor-not-allowed'
+                            ? 'bg-disabled text-tertiary cursor-not-allowed'
                             : isBuy
                               ? 'base-highlight text-quaternary'
                               : 'base-red text-primary'

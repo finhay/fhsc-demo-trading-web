@@ -7,11 +7,13 @@ import { TradeTotalField } from '@/components/giao-dich/panel/form/TradeTotalFie
 import { TRADE_LITERAL } from '@/constants/trading';
 import { type TradePanelActiveConfig, type TradePanelFormInstance } from '@/types/pages/trading';
 import { formatBoardPrice, formatNumberVN, formatNumberVNInput } from '@/utils/format';
-import { parsePrice, parseQuantity } from '@/utils/trading/panel';
+import { calcPercentageFromQty, parsePrice, parseQuantity } from '@/utils/trading/panel';
 
 type Props = {
     form: TradePanelFormInstance;
     activeConfig: TradePanelActiveConfig;
+    isLO: boolean;
+    selectedOrderType: string;
     requestAvailableTrade: (side: string, price: number, options?: { immediate?: boolean }) => void;
     bumpFormPrice: (side: string, direction: string) => void;
     bumpQty: (side: string, direction: string) => void;
@@ -22,6 +24,8 @@ type Props = {
 export const TradePanelForm = ({
     form,
     activeConfig,
+    isLO,
+    selectedOrderType,
     requestAvailableTrade,
     bumpFormPrice,
     bumpQty,
@@ -46,10 +50,11 @@ export const TradePanelForm = ({
                 >
                     {(field) => (
                         <TradeStepperInput
-                            value={field.state.value}
+                            value={isLO ? field.state.value : selectedOrderType}
                             label={'Giá'}
-                            hasValue={parsePrice(field.state.value) > 0}
+                            hasValue={!isLO || parsePrice(field.state.value) > 0}
                             side={activeConfig.stepperSide}
+                            disabled={!isLO}
                             onChange={(v) => {
                                 const formatted = formatNumberVNInput(v, {
                                     mode: 'decimal',
@@ -76,7 +81,7 @@ export const TradePanelForm = ({
                             onDecrement={() =>
                                 bumpFormPrice(activeConfig.key, TRADE_LITERAL.DECREASE)
                             }
-                            error={field.state.meta.errors[0]?.toString()}
+                            error={isLO ? field.state.meta.errors[0]?.toString() : undefined}
                         />
                     )}
                 </form.Field>
@@ -101,13 +106,7 @@ export const TradePanelForm = ({
                                 field.handleChange(formatted);
                                 const qty = parseQuantity(formatted);
                                 activeConfig.setStoreQty(qty);
-                                const percent =
-                                    activeConfig.maxQty > 0
-                                        ? Math.min(
-                                              100,
-                                              Math.round((qty / activeConfig.maxQty) * 100),
-                                          )
-                                        : 0;
+                                const percent = calcPercentageFromQty(qty, activeConfig.maxQty);
                                 if (activeConfig.key === TRADE_LITERAL.BUY) {
                                     setBuyPercentage(percent);
                                 } else {
@@ -136,30 +135,32 @@ export const TradePanelForm = ({
                     onChange={activeConfig.onPctChange}
                     active={activeConfig.key === TRADE_LITERAL.BUY}
                 />
-                <form.Subscribe
-                    selector={(s) => ({
-                        pv: s.values[activeConfig.priceField],
-                        qv: s.values[activeConfig.qtyField],
-                    })}
-                >
-                    {({ pv, qv }) => {
-                        const price = parsePrice(pv);
-                        const qty = parseQuantity(qv);
-                        const hasVal = price > 0 && qty > 0;
-                        return (
-                            <TradeTotalField
-                                label={activeConfig.totalLabel}
-                                value={
-                                    hasVal
-                                        ? `${formatNumberVN(price * qty, { trimTrailingZeros: true })}${'đ'}`
-                                        : '0đ'
-                                }
-                                hasValue={hasVal}
-                                side={activeConfig.stepperSide}
-                            />
-                        );
-                    }}
-                </form.Subscribe>
+                {isLO && (
+                    <form.Subscribe
+                        selector={(s) => ({
+                            pv: s.values[activeConfig.priceField],
+                            qv: s.values[activeConfig.qtyField],
+                        })}
+                    >
+                        {({ pv, qv }) => {
+                            const price = parsePrice(pv);
+                            const qty = parseQuantity(qv);
+                            const hasVal = price > 0 && qty > 0;
+                            return (
+                                <TradeTotalField
+                                    label={activeConfig.totalLabel}
+                                    value={
+                                        hasVal
+                                            ? `${formatNumberVN(price * qty, { trimTrailingZeros: true })}${'đ'}`
+                                            : '0đ'
+                                    }
+                                    hasValue={hasVal}
+                                    side={activeConfig.stepperSide}
+                                />
+                            );
+                        }}
+                    </form.Subscribe>
+                )}
             </fieldset>
         </form>
     );
@@ -169,6 +170,7 @@ type SubmitProps = {
     form: TradePanelFormInstance;
     activeConfig: TradePanelActiveConfig;
     isLO: boolean;
+    isOrderTypeAllowedInSession: boolean;
     symbol: string;
     canTrade: boolean;
     onOpenConfirm: (side: string) => void;
@@ -178,6 +180,7 @@ export const TradePanelSubmit = ({
     form,
     activeConfig,
     isLO,
+    isOrderTypeAllowedInSession,
     symbol,
     canTrade,
     onOpenConfirm,
@@ -193,12 +196,14 @@ export const TradePanelSubmit = ({
                 })}
             >
                 {({ pv, qv, pErrors, qErrors }) => {
-                    const hasErrors = pErrors.length > 0 || qErrors.length > 0;
+                    const hasErrors = (isLO && pErrors.length > 0) || qErrors.length > 0;
                     const qty = parseQuantity(qv);
                     const hasMaxQty = activeConfig.maxQty > 0;
-                    const canSubmit = isLO
-                        ? parsePrice(pv) > 0 && qty > 0 && !hasErrors && hasMaxQty
-                        : qty > 0 && !hasErrors && hasMaxQty;
+                    const canSubmit =
+                        isOrderTypeAllowedInSession &&
+                        (isLO
+                            ? parsePrice(pv) > 0 && qty > 0 && !hasErrors && hasMaxQty
+                            : qty > 0 && !hasErrors && hasMaxQty);
                     const ctaLabel = `${activeConfig.ctaLabel} ${symbol}`;
                     const isDisabled = !canTrade || !canSubmit;
 
@@ -212,7 +217,7 @@ export const TradePanelSubmit = ({
                             }}
                             className={`flex w-full items-center justify-center rounded-full px-4 py-2 body-4-highlight transition-opacity ${
                                 isDisabled
-                                    ? 'cursor-not-allowed bg-disabled text-disabled'
+                                    ? 'cursor-not-allowed bg-disabled text-tertiary'
                                     : activeConfig.ctaEnabledClass
                             }`}
                         >

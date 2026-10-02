@@ -203,7 +203,7 @@ export const LoginForm = () => {
                     className={`w-2/3 body-4-highlight rounded-full px-4 py-2 transition-all ${
                         canSubmit && !isLoading
                             ? 'base-highlight text-quaternary hover:opacity-90'
-                            : 'bg-disabled text-disabled cursor-not-allowed'
+                            : 'bg-disabled text-tertiary cursor-not-allowed'
                     }`}
                 >
                     {'Đăng nhập'}
@@ -223,7 +223,7 @@ export const LoginForm = () => {
                     className={`w-2/3 body-4-highlight rounded-full px-4 py-2 transition-all mx-auto text-center border-none ${
                         watchedAccountType === ACCOUNT_TYPES[0].key
                             ? 'bg-success text-highlight cursor-pointer hover:opacity-90'
-                            : 'bg-disabled text-disabled cursor-not-allowed'
+                            : 'bg-disabled text-tertiary cursor-not-allowed'
                     }`}
                 >
                     {'Bạn chưa có tài khoản'}

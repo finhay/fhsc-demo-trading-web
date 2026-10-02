@@ -135,7 +135,7 @@ export const OTPVerification = ({
                             className={`body-4-highlight w-full rounded-full px-4 py-2 transition-all ${
                                 isValidOTP && !isLoading
                                     ? 'base-highlight text-quaternary hover:opacity-90'
-                                    : 'bg-disabled text-disabled'
+                                    : 'bg-disabled text-tertiary'
                             }`}
                         >
                             {'Xác thực'}
